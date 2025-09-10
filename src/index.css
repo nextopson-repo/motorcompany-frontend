@@ -1,0 +1,152 @@
+@import "tailwindcss";
+
+/* @import url('https://fonts.googleapis.com/css2?family=Libertinus+Serif:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap'); */
+*{
+    /* font-family: 'Poppins', sans-serif;
+    font-family: 'Libertinus Serif', serif; */
+    font-family: Roboto, sans-serif, system-ui, -apple-system;
+}
+@keyframes slideUpFade {
+    0% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+
+    20% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    80% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+}
+
+.animated-word {
+    display: inline-block;
+    animation: slideUpFade 3s ease-in-out infinite;
+}
+
+/* hero slider pagination */
+.custom-swiper-pagination {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 20;
+}
+
+/* Default bullets */
+.swiper-pagination-bullet {
+    opacity: 1;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    border: 1px solid #ffffff;
+}
+
+.custom-swiper-pagination .swiper-pagination-bullet {
+    opacity: 0.5;
+    width: 6px;
+    height: 55px;
+    transition: all 0.3s ease;
+}
+
+.custom-swiper-pagination .swiper-pagination-bullet-active {
+    opacity: 1;
+    background: #ffffff;
+}
+
+.swiper-horizontal>.swiper-pagination-bullets,
+.swiper-pagination-bullets.swiper-pagination-horizontal {
+    bottom: var(--swiper-pagination-bottom, 8px);
+    top: var(--swiper-pagination-top, auto);
+    left: 95%;
+    width: 100%;
+}
+
+@media screen and (max-width: 765px) {
+    .custom-swiper-pagination {
+        top: 75%;
+        transform: translateY(-75%);
+    }
+
+    /* .swiper-horizontal > .swiper-pagination-bullets, .swiper-pagination-bullets.swiper-pagination-horizontal {
+        left: 0;
+        width: 100%;
+    } */
+}
+
+/* Hero Background */
+.brand-bg {
+    background-image: url(/car-handle.png);
+    background-color: "#f8f8f8";
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center right;
+}
+
+
+/* Footer Background */
+.footer-bg {
+    background-image: linear-gradient(to top, rgba(255, 255, 255, 0.1), rgba(255, 0, 0, 0.2), rgba(255, 255, 255, 0.1)), url('/footer-bg-car.png');
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: contain;
+}
+
+@media screen and (max-width: 768px) {
+    .footer-bg {
+        background-image: linear-gradient(to top, rgba(255, 255, 255, 0.1), rgba(255, 0, 0, 0.2), rgba(255, 255, 255, 0.1)), none;
+        background-position: center;
+        background-size: cover;
+    }
+}
+
+/* Setting background */
+
+.setting-bg{
+    background-image: url("/setting-bg-img.png");
+    background-repeat: no-repeat;
+    background-position: top;
+    background-size: 100%, 40%;
+}
+
+/* login img */
+
+.loginBg{
+    background-image: url("/login-Img.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+
+/* in your global CSS */
+.custom-dash {
+  border-bottom: 1px dashed #cb202d;
+  border-image: repeating-linear-gradient(
+    to right,
+    #cb202d 0,
+    #cb202d 8px,
+    transparent 8px,
+    transparent 16px
+  ) 1;
+}
+
+
+.bg-car-handle{
+    background-image: url("/car-handle.png");
+    background-size: 20% 140%;
+    background-repeat: no-repeat;
+    background-position: right;
+}
