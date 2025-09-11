@@ -1,17 +1,41 @@
+import { useState } from "react";
 import CarCard from "./CarCard";
+import CarListHeader from "./CarListHeader";
 
-interface CarCardProps{
-  
+interface CarListProps {
+  cars: any;
+  city: string;
+  // searchTerm: string;
+  // setSearchTerm?: (term: string) => void;
+  // sortOption?: string;
+  // setSortOption?: (option: string) => void;
+  onLocationChange?: (location: string) => void;
+  filters: {
+    brand: string[];
+    bodyType: string[];
+    fuel: string[];
+    transmission: string[];
+    ownership: string[];
+    location: string[];
+    priceRange: [number, number];
+    yearRange: [number, number];
+  };
+  onFilterChange: (type: string, value: string | number) => void;
 }
 
-export default function CarList({ cars, filters }) {
+export default function CarList({ cars, filters }: CarListProps) {
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOption, setSortOption] = useState("yearNewToOld");
+  const [city, onFilterChange] = useState("");
+
   // 🔹 Apply filters before rendering
   const filteredCars = cars.filter((car: any) => {
     const {
       brand,
       fuel,
       transmission,
-      body,
+      bodyType,
       ownership,
       location,
       priceRange,
@@ -29,7 +53,7 @@ export default function CarList({ cars, filters }) {
       return false;
 
     // body type filter
-    if (body.length > 0 && !body.includes(car.bodyType)) return false;
+    if (bodyType.length > 0 && !bodyType.includes(car.bodyType)) return false;
 
     // ownership filter
     if (ownership.length > 0 && !ownership.includes(car.ownership))
@@ -45,10 +69,7 @@ export default function CarList({ cars, filters }) {
     }
 
     // price range filter
-    if (
-      car.carPrice < priceRange[0] ||
-      car.carPrice > priceRange[1]
-    ) {
+    if (car.carPrice < priceRange[0] || car.carPrice > priceRange[1]) {
       return false;
     }
 
@@ -64,18 +85,34 @@ export default function CarList({ cars, filters }) {
   });
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {filteredCars.length > 0 ? (
-        filteredCars.map((car: any) => (
-          <CarCard key={car.id} car={car} />
-        ))
-      ) : (
-        <p className="col-span-full text-center">No cars found</p>
-      )}
+    <div className="min-h-screen w-full">
+      <div className="max-w-6xl mx-auto px-2">
+        {/* Header */}
+        <CarListHeader
+          carCount={cars.length}
+          filters={filters}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          sortOption={sortOption}
+          setSortOption={setSortOption}
+          city={city}
+          onFilterChange={onFilterChange}
+        />
+
+        {/* Car Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredCars.length > 0 ? (
+            filteredCars.map((car: any) => (
+              <CarCard key={car.id} car={car} userData={car.user} />
+            ))
+          ) : (
+            <p className="col-span-full text-center">No cars found</p>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
-
 
 // import React, { useState } from "react";
 // import CarCard from "./CarCard";

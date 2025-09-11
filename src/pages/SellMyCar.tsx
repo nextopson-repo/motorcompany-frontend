@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useLocation } from "react-router-dom";
 import SellHero from "../components/sellMyCar/sellHero";
 import Testimonials from "../components/sellMyCar/Testimonals";
@@ -22,7 +22,7 @@ const SellMyCar: React.FC = () => {
   return (
     <>
       {editCar ? (
-        <SellHero editCar={editCar} />
+        <SellHero />
       ) : (
         // New listing mode
         <>

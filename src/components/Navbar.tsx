@@ -9,13 +9,15 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
-  const [userData, setUserData] = useState();
+  // const [userData, setUserData] = useState();
 
   const openSetting = () => navigate("/settings");
+  // console.log("userData:", userData);
+
 
   return (
     <nav className="w-full h-auto bg-white shadow-md fixed top-0 left-0 z-50">
@@ -132,7 +134,7 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
       <LoginModal
         isOpen={isLoginOpen}
         onClose={() => setIsLoginOpen(false)}
-        setUserData={setUserData}
+        // setUserData={setUserData}
       />
     </nav>
   );

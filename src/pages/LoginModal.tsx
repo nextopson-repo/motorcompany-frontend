@@ -92,6 +92,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
           onClose={() => setShowSignup(false)}
           onRegistered={handleSignupRegistered}
           mobileNumber={mobileNumber}
+          setMobileNumber={setMobileNumber}
         />
       ) : (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">

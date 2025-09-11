@@ -11,7 +11,6 @@ const HeroPage = () => {
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [citySearch, setCitySearch] = useState("");
 
-  // ✅ Auto-open after 5s (only first time per session)
   useEffect(() => {
     const alreadyShown = sessionStorage.getItem("locationModalShown");
     if (!alreadyShown) {
@@ -52,25 +51,3 @@ const HeroPage = () => {
 };
 
 export default HeroPage;
-
-
-
-// import Hero from '../components/Hero'
-// import FeaturedCars from '../components/FeaturedCars'
-// import HeroCategories from '../components/HeroCategories'
-// import PopularCities from '../components/PopularCities'
-// import BrandLogoCards from '../components/BrandLogoCards'
-
-// const HeroPage = () => {
-//   return (
-//     <div className="mt-24 min-h-screen max-w-7xl mx-auto px-2 xs:px-4 font-montserrat">
-//         <Hero />
-//         <FeaturedCars />
-//         <HeroCategories />
-//         <BrandLogoCards />
-//         <PopularCities />
-//       </div>
-//   )
-// }
-
-// export default HeroPage

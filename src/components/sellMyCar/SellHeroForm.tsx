@@ -84,7 +84,19 @@ function UploadOverlay({
 }: {
   onClose: () => void;
   onSubmit: () => void;
-  defaultValues: any;
+  defaultValues: {
+    brand?: string;
+    model?: string;
+    variant?: string;
+    manufacturingYear?: string | number;
+    fuelType?: string;
+    transmission?: string;
+    bodyType?: string;
+    ownership?: string;
+    price?: number | string;
+    kmDriven?: number | string;
+    seats?: number | string;
+  } | null;
 }) {
   const isEdit = !!defaultValues;
 
@@ -210,10 +222,23 @@ export default function SellHeroForm({
   defaultValues,
 }: {
   onBack: () => void;
-  onSubmit: (data: object) => void;
-  defaultValues: any;
+  onSubmit: (data: Record<string, unknown>) => void;
+  defaultValues: {
+    brand?: string;
+    model?: string;
+    variant?: string;
+    manufacturingYear?: string | number;
+    fuelType?: string;
+    transmission?: string;
+    bodyType?: string;
+    ownership?: string;
+    price?: number | string;
+    kmDriven?: number | string;
+    seats?: number | string;
+    registrationYear?: string | number;
+  } | null;
 }) {
-  const isEdit = !!defaultValues;
+  // const isEdit = !!defaultValues;
   const [step, setStep] = useState(1);
 
   const [brand, setBrand] = useState(defaultValues?.brand || "");

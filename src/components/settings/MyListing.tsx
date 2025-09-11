@@ -227,7 +227,7 @@ const MyListing = () => {
                     </span>
                   </button>
                   {/* 3 dots menu */}
-                  <div className="relative mt-[6px]" ref={(el) => (menuRefs.current[car.id] = el)}>
+                  <div className="relative mt-[6px]" ref={(el) => { menuRefs.current[car.id] = el; }}>
                     <EllipsisVerticalIcon
                       className="w-5 h-5 cursor-pointer"
                       onClick={() => handleMenuToggle(car.id)}

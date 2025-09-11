@@ -4,7 +4,6 @@ export interface Car {
   model: string;
   title: string;
   price: number;
-  oldPrice: number;
   location: { state: string; city: string };
   year: number;
   fuelTypes: string;
@@ -13,11 +12,9 @@ export interface Car {
   ownership: string;
   image: string;
   images: string[];
-  discount: number;
-  type: string;
-  seater: number;
+  discount: number;seats: number;
   mileage: number;
-  seller: "Dealer",
+  userType: "Dealer",
   gear: string;
   kms: number;
   views: number;
@@ -31,7 +28,6 @@ const seedCarsData: Car[] = [
     model: "Seltos",
     title: "Kia Seltos",
     price: 1695000,
-    oldPrice: 1795000,
     location: { state: "Madhya Pradesh", city: "Indore" },
     year: 2022,
     fuelTypes: "Petrol",
@@ -40,8 +36,7 @@ const seedCarsData: Car[] = [
     ownership: "First Owner",
     image: "/car-1.jpg",
     discount: 6,
-    type: "SUV",
-    seater: 5,
+    seats: 5,
     mileage: 16.8,
     kms: 500,
     images: ["/car-1.jpg", "/car-2.jpg", "/car-3.jpg", "/car-4.jpg"],
@@ -54,7 +49,7 @@ const seedCarsData: Car[] = [
       "Mileage": "16.8 kmpl",
       "Seating Capacity": "5"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "6-Speed Manual",
   },
   {
@@ -63,7 +58,6 @@ const seedCarsData: Car[] = [
     model: "Carens",
     title: "Kia Carens",
     price: 1590000,
-    oldPrice: 1690000,
     location: { state: "Madhya Pradesh", city: "Bhopal" },
     year: 2023,
     fuelTypes: "Diesel",
@@ -72,8 +66,7 @@ const seedCarsData: Car[] = [
     ownership: "First Owner",
     image: "/car-2.jpg",
     discount: 5,
-    type: "MUV",
-    seater: 7,
+    seats: 7,
     mileage: 15.4,
     kms: 500,
     images: ["/car-2.jpg", "/car-3.jpg", "/car-4.jpg", "/car-5.jpg", "/car-3.jpg", "/car-4.jpg"],
@@ -86,7 +79,7 @@ const seedCarsData: Car[] = [
       "Mileage": "15.4 kmpl",
       "Seating Capacity": "7"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "7-Speed DCT",
   },
   {
@@ -95,7 +88,6 @@ const seedCarsData: Car[] = [
     model: "Sonet",
     title: "Kia Sonet",
     price: 1190000,
-    oldPrice: 1290000,
     location: { state: "Utter Pradesh", city: "kanpur" },
     year: 2021,
     fuelTypes: "Petrol",
@@ -104,8 +96,7 @@ const seedCarsData: Car[] = [
     ownership: "Second Owner",
     image: "/car-3.jpg",
     discount: 8,
-    type: "SUV",
-    seater: 5,
+    seats: 5,
     mileage: 18.4,
     kms: 500,
     images: ["/car-3.jpg", "/car-4.jpg", "/car-5.jpg", "/car-6.jpg"],
@@ -118,7 +109,7 @@ const seedCarsData: Car[] = [
       "Mileage": "18.4 kmpl",
       "Seating Capacity": "5"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "5-Speed Manual",
   },
   {
@@ -127,7 +118,6 @@ const seedCarsData: Car[] = [
     model: "Creta",
     title: "Hyundai Creta",
     price: 1650000,
-    oldPrice: 1750000,
     location: { state: "Maharashtra", city: "Pune" },
     year: 2022,
     fuelTypes: "Diesel",
@@ -136,8 +126,7 @@ const seedCarsData: Car[] = [
     ownership: "First Owner",
     image: "/car-4.jpg",
     discount: 6,
-    type: "SUV",
-    seater: 5,
+    seats: 5,
     mileage: 17.1,
     kms: 500,
     images: ["/car-4.jpg", "/car-5.jpg", "/car-6.jpg", "/car-7.jpg"],
@@ -150,7 +139,7 @@ const seedCarsData: Car[] = [
       "Mileage": "17.1 kmpl",
       "Seating Capacity": "5"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "6-Speed AT",
   },
   {
@@ -159,7 +148,6 @@ const seedCarsData: Car[] = [
     model: "i20",
     title: "Hyundai i20",
     price: 950000,
-    oldPrice: 1050000,
     location: { state: "Maharashtra", city: "Pune" },
     year: 2021,
     fuelTypes: "Petrol",
@@ -168,8 +156,7 @@ const seedCarsData: Car[] = [
     ownership: "Second Owner",
     image: "/car-5.jpg",
     discount: 9,
-    type: "Hatchback",
-    seater: 5,
+    seats: 5,
     mileage: 20.1,
     kms: 500,
     images: ["/car-5.jpg", "/car-6.jpg", "/car-7.jpg", "/car-8.jpg"],
@@ -182,7 +169,7 @@ const seedCarsData: Car[] = [
       "Mileage": "20.1 kmpl",
       "Seating Capacity": "5"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "5-Speed Manual",
   },
   {
@@ -191,7 +178,6 @@ const seedCarsData: Car[] = [
     model: "Verna",
     title: "Hyundai Verna",
     price: 1450000,
-    oldPrice: 1550000,
     location: { state: "Utter Pradesh", city: "Lucknow" },
     year: 2020,
     fuelTypes: "Petrol",
@@ -200,8 +186,7 @@ const seedCarsData: Car[] = [
     ownership: "First Owner",
     image: "/car-6.jpg",
     discount: 6,
-    type: "Sedan",
-    seater: 5,
+    seats: 5,
     mileage: 17.8,
     kms: 500,
     images: ["/car-6.jpg", "/car-7.jpg", "/car-8.jpg", "/car-9.jpg"],
@@ -214,7 +199,7 @@ const seedCarsData: Car[] = [
       "Mileage": "17.8 kmpl",
       "Seating Capacity": "5"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "CVT",
   },
   {
@@ -223,7 +208,6 @@ const seedCarsData: Car[] = [
     model: "Fortuner",
     title: "Toyota Fortuner",
     price: 4890000,
-    oldPrice: 5090000,
     location: { state: "Utter Pradesh", city: "Lucknow" },
     year: 2024,
     fuelTypes: "Diesel",
@@ -232,8 +216,7 @@ const seedCarsData: Car[] = [
     ownership: "First Owner",
     image: "/car-7.jpg",
     discount: 4,
-    type: "SUV",
-    seater: 7,
+    seats: 7,
     mileage: 12.4,
     kms: 500,
     images: ["/car-7.jpg", "/car-8.jpg", "/car-9.jpg", "/car-10.jpg"],
@@ -246,7 +229,7 @@ const seedCarsData: Car[] = [
       "Mileage": "12.4 kmpl",
       "Seating Capacity": "7"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "6-Speed AT",
   },
   {
@@ -255,7 +238,6 @@ const seedCarsData: Car[] = [
     model: "Innova Crysta",
     title: "Toyota Innova Crysta",
     price: 2790000,
-    oldPrice: 2890000,
     location: { state: "Madhya Pradesh", city: "Bhopal" },
     year: 2023,
     fuelTypes: "Diesel",
@@ -264,8 +246,7 @@ const seedCarsData: Car[] = [
     ownership: "First Owner",
     image: "/car-8.jpg",
     discount: 3,
-    type: "MUV",
-    seater: 7,
+    seats: 7,
     mileage: 15.0,
     kms: 500,
     images: ["/car-8.jpg", "/car-9.jpg", "/car-10.jpg", "/car-11.jpg"],
@@ -278,7 +259,7 @@ const seedCarsData: Car[] = [
       "Mileage": "15.0 kmpl",
       "Seating Capacity": "7"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "5-Speed Manual",
   },
   {
@@ -287,7 +268,6 @@ const seedCarsData: Car[] = [
     model: "Glanza",
     title: "Toyota Glanza",
     price: 850000,
-    oldPrice: 950000,
     location: { state: "Utter Pradesh", city: "Lucknow" },
     year: 2020,
     fuelTypes: "Petrol",
@@ -296,8 +276,7 @@ const seedCarsData: Car[] = [
     ownership: "Second Owner",
     image: "/car-9.jpg",
     discount: 10,
-    type: "Hatchback",
-    seater: 5,
+    seats: 5,
     mileage: 22.1,
     kms: 500,
     images: ["/car-9.jpg", "/car-10.jpg", "/car-11.jpg", "/car-12.jpg"],
@@ -310,7 +289,7 @@ const seedCarsData: Car[] = [
       "Mileage": "22.1 kmpl",
       "Seating Capacity": "5"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "5-Speed Manual",
   },
   {
@@ -319,7 +298,6 @@ const seedCarsData: Car[] = [
     model: "City",
     title: "Honda City",
     price: 1390000,
-    oldPrice: 1490000,
     location: { state: "Gujarat", city: "Ahmedabad" },
     year: 2021,
     fuelTypes: "Petrol",
@@ -328,8 +306,7 @@ const seedCarsData: Car[] = [
     ownership: "First Owner",
     image: "/car-10.jpg",
     discount: 7,
-    type: "Sedan",
-    seater: 5,
+    seats: 5,
     mileage: 17.8,
     kms: 500,
     images: ["/car-10.jpg", "/car-11.jpg", "/car-12.jpg", "/car-1.jpg"],
@@ -342,7 +319,7 @@ const seedCarsData: Car[] = [
       "Mileage": "17.8 kmpl",
       "Seating Capacity": "5"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "5-Speed Manual",
   },
   {
@@ -351,7 +328,6 @@ const seedCarsData: Car[] = [
     model: "Swift",
     title: "Maruti Suzuki Swift",
     price: 725000,
-    oldPrice: 775000,
     location: { state: "Maharashtra", city: "Pune" },
     year: 2019,
     fuelTypes: "Petrol",
@@ -360,8 +336,7 @@ const seedCarsData: Car[] = [
     ownership: "Second Owner",
     image: "/car-11.jpg",
     discount: 6,
-    type: "Hatchback",
-    seater: 5,
+    seats: 5,
     mileage: 21.2,
     kms: 500,
     images: ["/car-11.jpg", "/car-12.jpg", "/car-1.jpg", "/car-2.jpg"],
@@ -374,7 +349,7 @@ const seedCarsData: Car[] = [
       "Mileage": "21.2 kmpl",
       "Seating Capacity": "5"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "5-Speed Manual",
   },
   {
@@ -383,7 +358,6 @@ const seedCarsData: Car[] = [
     model: "Creta",
     title: "Hyundai Creta",
     price: 1650000,
-    oldPrice: 1750000,
     location: { state: "Madhya Pradesh", city: "Bhopal" },
     year: 2022,
     fuelTypes: "Diesel",
@@ -392,8 +366,7 @@ const seedCarsData: Car[] = [
     ownership: "First Owner",
     image: "/car-12.jpg",
     discount: 6,
-    type: "SUV",
-    seater: 5,
+    seats: 5,
     mileage: 19.1,
     kms: 500,
     images: ["/car-12.jpg", "/car-1.jpg", "/car-2.jpg", "/car-3.jpg"],
@@ -406,7 +379,7 @@ const seedCarsData: Car[] = [
       "Mileage": "19.1 kmpl",
       "Seating Capacity": "5"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "6-Speed Automatic",
   },
   {
@@ -415,7 +388,6 @@ const seedCarsData: Car[] = [
     model: "Innova Crysta",
     title: "Toyota Innova Crysta",
     price: 2850000,
-    oldPrice: 3000000,
     location: { state: "Rajasthan", city: "Jaipur" },
     year: 2021,
     fuelTypes: "Diesel",
@@ -424,8 +396,7 @@ const seedCarsData: Car[] = [
     ownership: "First Owner",
     image: "/car-1.jpg",
     discount: 5,
-    type: "MPV",
-    seater: 7,
+    seats: 7,
     mileage: 14.6,
     kms: 500,
     images: ["/car-1.jpg", "/car-2.jpg", "/car-3.jpg", "/car-4.jpg"],
@@ -438,7 +409,7 @@ const seedCarsData: Car[] = [
       "Mileage": "14.6 kmpl",
       "Seating Capacity": "7"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "5-Speed Manual",
   },
   {
@@ -447,7 +418,6 @@ const seedCarsData: Car[] = [
     model: "Thar",
     title: "Mahindra Thar",
     price: 1650000,
-    oldPrice: 1750000,
     location: { state: "Rajasthan", city: "Jaipur" },
     year: 2023,
     fuelTypes: "Diesel",
@@ -456,8 +426,7 @@ const seedCarsData: Car[] = [
     ownership: "First Owner",
     image: "/car-2.jpg",
     discount: 6,
-    type: "SUV",
-    seater: 4,
+    seats: 4,
     mileage: 15.2,
     kms: 500,
     images: ["/car-2.jpg", "/car-3.jpg", "/car-4.jpg", "/car-5.jpg"],
@@ -470,7 +439,7 @@ const seedCarsData: Car[] = [
       "Mileage": "15.2 kmpl",
       "Seating Capacity": "4"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "6-Speed Manual",
   },
   {
@@ -479,7 +448,6 @@ const seedCarsData: Car[] = [
     model: "Nexon EV",
     title: "Tata Nexon EV",
     price: 1600000,
-    oldPrice: 1700000,
     location: { state: "Haryana", city: "Chandigarh" },
     year: 2024,
     fuelTypes: "Electric",
@@ -488,8 +456,7 @@ const seedCarsData: Car[] = [
     ownership: "First Owner",
     image: "/car-3.jpg",
     discount: 5,
-    type: "SUV",
-    seater: 5,
+    seats: 5,
     mileage: 312, // electric range in km
     kms: 500,
     images: ["/car-3.jpg", "/car-4.jpg", "/car-5.jpg", "/car-6.jpg"],
@@ -502,7 +469,7 @@ const seedCarsData: Car[] = [
       "Range": "312 km",
       "Seating Capacity": "5"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "Single Speed Automatic",
   },
   {
@@ -511,7 +478,6 @@ const seedCarsData: Car[] = [
     model: "Seltos",
     title: "Kia Seltos",
     price: 1750000,
-    oldPrice: 1850000,
     location: { state: "Haryana", city: "Chandigarh" },
     year: 2022,
     fuelTypes: "Petrol",
@@ -520,8 +486,7 @@ const seedCarsData: Car[] = [
     ownership: "First Owner",
     image: "/car-4.jpg",
     discount: 5,
-    type: "SUV",
-    seater: 5,
+    seats: 5,
     mileage: 16.5,
     kms: 500,
     images: ["/car-4.jpg", "/car-5.jpg", "/car-6.jpg", "/car-7.jpg"],
@@ -534,7 +499,7 @@ const seedCarsData: Car[] = [
       "Mileage": "16.5 kmpl",
       "Seating Capacity": "5"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "IVT Automatic",
   },
   {
@@ -543,7 +508,6 @@ const seedCarsData: Car[] = [
     model: "Verna",
     title: "Hyundai Verna",
     price: 1450000,
-    oldPrice: 1520000,
     location: { state: "Gujarat", city: "Ahmedabad" },
     year: 2020,
     fuelTypes: "Petrol",
@@ -552,8 +516,7 @@ const seedCarsData: Car[] = [
     ownership: "Second Owner",
     image: "/car-5.jpg",
     discount: 4,
-    type: "Sedan",
-    seater: 5,
+    seats: 5,
     mileage: 17.4,
     kms: 500,
     images: ["/car-5.jpg", "/car-6.jpg", "/car-7.jpg", "/car-8.jpg"],
@@ -566,7 +529,7 @@ const seedCarsData: Car[] = [
       "Mileage": "17.4 kmpl",
       "Seating Capacity": "5"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "6-Speed Manual",
   },
   {
@@ -575,7 +538,6 @@ const seedCarsData: Car[] = [
     model: "Fortuner",
     title: "Toyota Fortuner",
     price: 4250000,
-    oldPrice: 4400000,
     location: { state: "Telangana", city: "Hyderabad" },
     year: 2023,
     fuelTypes: "Diesel",
@@ -584,8 +546,7 @@ const seedCarsData: Car[] = [
     ownership: "First Owner",
     image: "/car-6.jpg",
     discount: 3,
-    type: "SUV",
-    seater: 7,
+    seats: 7,
     mileage: 12.9,
     kms: 500,
     images: ["/car-6.jpg", "/car-7.jpg", "/car-8.jpg", "/car-9.jpg"],
@@ -598,7 +559,7 @@ const seedCarsData: Car[] = [
       "Mileage": "12.9 kmpl",
       "Seating Capacity": "7"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "6-Speed Automatic",
   },
   {
@@ -607,7 +568,6 @@ const seedCarsData: Car[] = [
     model: "Baleno",
     title: "Maruti Suzuki Baleno",
     price: 850000,
-    oldPrice: 900000,
     location: { state: "Rajasthan", city: "Jaipur" },
     year: 2021,
     fuelTypes: "Petrol",
@@ -616,8 +576,7 @@ const seedCarsData: Car[] = [
     ownership: "First Owner",
     image: "/car-7.jpg",
     discount: 5,
-    type: "Hatchback",
-    seater: 5,
+    seats: 5,
     mileage: 22.3,
     kms: 500,
     images: ["/car-7.jpg", "/car-8.jpg", "/car-9.jpg", "/car-10.jpg"],
@@ -630,7 +589,7 @@ const seedCarsData: Car[] = [
       "Mileage": "22.3 kmpl",
       "Seating Capacity": "5"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "CVT Automatic",
   },
   {
@@ -639,7 +598,6 @@ const seedCarsData: Car[] = [
     model: "XUV700",
     title: "Mahindra XUV700",
     price: 2400000,
-    oldPrice: 2550000,
     location: { state: "Telangana", city: "Hyderabad" },
     year: 2022,
     fuelTypes: "Diesel",
@@ -648,8 +606,7 @@ const seedCarsData: Car[] = [
     ownership: "First Owner",
     image: "/car-8.jpg",
     discount: 6,
-    type: "SUV",
-    seater: 7,
+    seats: 7,
     mileage: 16.8,
     kms: 500,
     images: ["/car-8.jpg", "/car-9.jpg", "/car-10.jpg", "/car-11.jpg"],
@@ -662,7 +619,7 @@ const seedCarsData: Car[] = [
       "Mileage": "16.8 kmpl",
       "Seating Capacity": "7"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "6-Speed Automatic",
   },
   {
@@ -671,7 +628,6 @@ const seedCarsData: Car[] = [
     model: "i20",
     title: "Hyundai i20",
     price: 980000,
-    oldPrice: 1040000,
     location: { state: "Utter Pradesh", city: "Delhi" },
     year: 2020,
     fuelTypes: "Petrol",
@@ -680,8 +636,7 @@ const seedCarsData: Car[] = [
     ownership: "First Owner",
     image: "/car-9.jpg",
     discount: 6,
-    type: "Hatchback",
-    seater: 5,
+    seats: 5,
     mileage: 20.2,
     kms: 500,
     images: ["/car-9.jpg", "/car-10.jpg", "/car-11.jpg", "/car-12.jpg"],
@@ -694,7 +649,7 @@ const seedCarsData: Car[] = [
       "Mileage": "20.2 kmpl",
       "Seating Capacity": "5"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "CVT",
   },
   {
@@ -703,7 +658,6 @@ const seedCarsData: Car[] = [
     model: "Aura",
     title: "Hyundai Aura",
     price: 850000,
-    oldPrice: 900000,
     location: { state: "Telangana", city: "Hyderabad" },
     year: 2021,
     fuelTypes: "Petrol",
@@ -712,8 +666,7 @@ const seedCarsData: Car[] = [
     ownership: "First Owner",
     image: "/car-10.jpg",
     discount: 5,
-    type: "Sedan",
-    seater: 5,
+    seats: 5,
     mileage: 20.1,
     kms: 500,
     images: ["/car-10.jpg", "/car-11.jpg", "/car-12.jpg", "/car-1.jpg"],
@@ -726,7 +679,7 @@ const seedCarsData: Car[] = [
       "Mileage": "20.1 kmpl",
       "Seating Capacity": "5"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "5-Speed Manual",
   },
   {
@@ -735,7 +688,6 @@ const seedCarsData: Car[] = [
     model: "Alcazar",
     title: "Hyundai Alcazar",
     price: 2000000,
-    oldPrice: 2100000,
     location: { state: "Gujarat", city: "Ahmedabad" },
     year: 2022,
     fuelTypes: "Diesel",
@@ -744,8 +696,7 @@ const seedCarsData: Car[] = [
     ownership: "First Owner",
     image: "/car-11.jpg",
     discount: 5,
-    type: "SUV",
-    seater: 7,
+    seats: 7,
     mileage: 18.2,
     kms: 500,
     images: ["/car-11.jpg", "/car-12.jpg", "/car-1.jpg", "/car-2.jpg"],
@@ -758,7 +709,7 @@ const seedCarsData: Car[] = [
       "Mileage": "18.2 kmpl",
       "Seating Capacity": "7"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "6-Speed Automatic",
   },
   {
@@ -767,7 +718,6 @@ const seedCarsData: Car[] = [
     model: "Verna",
     title: "Hyundai Verna",
     price: 1500000,
-    oldPrice: 1600000,
     location: { state: "Maharashtra", city: "Pune" },
     year: 2023,
     fuelTypes: "Petrol",
@@ -776,8 +726,7 @@ const seedCarsData: Car[] = [
     ownership: "First Owner",
     image: "/car-12.jpg",
     discount: 6,
-    type: "Sedan",
-    seater: 5,
+    seats: 5,
     mileage: 19.2,
     kms: 500,
     images: ["/car-12.jpg", "/car-1.jpg", "/car-2.jpg", "/car-3.jpg"],
@@ -790,7 +739,7 @@ const seedCarsData: Car[] = [
       "Mileage": "19.2 kmpl",
       "Seating Capacity": "5"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "CVT",
   },
   {
@@ -799,7 +748,6 @@ const seedCarsData: Car[] = [
     model: "Innova HyCross",
     title: "Toyota Innova HyCross",
     price: 3000000,
-    oldPrice: 3150000,
     location: { state: "Rajasthan", city: "Jaipur" },
     year: 2024,
     fuelTypes: "Hybrid",
@@ -808,8 +756,7 @@ const seedCarsData: Car[] = [
     ownership: "First Owner",
     image: "/car-1.jpg",
     discount: 5,
-    type: "MPV",
-    seater: 7,
+    seats: 7,
     mileage: 21.1,
     kms: 500,
     images: ["/car-1.jpg", "/car-2.jpg", "/car-3.jpg", "/car-4.jpg"],
@@ -822,7 +769,7 @@ const seedCarsData: Car[] = [
       "Mileage": "21.1 kmpl",
       "Seating Capacity": "7"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "e-CVT",
   },
   {
@@ -831,7 +778,6 @@ const seedCarsData: Car[] = [
     model: "Fortuner",
     title: "Toyota Fortuner",
     price: 4500000,
-    oldPrice: 4700000,
     location: { state: "Telangana", city: "Hyderabad" },
     year: 2023,
     fuelTypes: "Diesel",
@@ -840,8 +786,7 @@ const seedCarsData: Car[] = [
     ownership: "First Owner",
     image: "/car-2.jpg",
     discount: 4,
-    type: "SUV",
-    seater: 7,
+    seats: 7,
     mileage: 14.2,
     kms: 500,
     images: ["/car-2.jpg", "/car-3.jpg", "/car-4.jpg", "/car-5.jpg"],
@@ -854,7 +799,7 @@ const seedCarsData: Car[] = [
       "Mileage": "14.2 kmpl",
       "Seating Capacity": "7"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "6-Speed Automatic",
   },
   {
@@ -863,7 +808,6 @@ const seedCarsData: Car[] = [
     model: "Glanza",
     title: "Toyota Glanza",
     price: 950000,
-    oldPrice: 1000000,
     location: { state: "Madhya Pradesh", city: "Bhopal" },
     year: 2021,
     fuelTypes: "Petrol",
@@ -872,8 +816,7 @@ const seedCarsData: Car[] = [
     ownership: "First Owner",
     image: "/car-3.jpg",
     discount: 5,
-    type: "Hatchback",
-    seater: 5,
+    seats: 5,
     mileage: 22.1,
     kms: 500,
     images: ["/car-3.jpg", "/car-4.jpg", "/car-5.jpg", "/car-6.jpg"],
@@ -886,7 +829,7 @@ const seedCarsData: Car[] = [
       "Mileage": "22.1 kmpl",
       "Seating Capacity": "5"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "5-Speed Manual",
   },
   {
@@ -895,7 +838,6 @@ const seedCarsData: Car[] = [
     model: "Carens",
     title: "Kia Carens",
     price: 1700000,
-    oldPrice: 1780000,
     location: { state: "Utter Pradesh", city: "Delhi" },
     year: 2022,
     fuelTypes: "Diesel",
@@ -904,8 +846,7 @@ const seedCarsData: Car[] = [
     ownership: "First Owner",
     image: "/car-4.jpg",
     discount: 4,
-    type: "MPV",
-    seater: 7,
+    seats: 7,
     mileage: 18.5,
     kms: 500,
     images: ["/car-4.jpg", "/car-5.jpg", "/car-6.jpg", "/car-7.jpg"],
@@ -918,7 +859,7 @@ const seedCarsData: Car[] = [
       "Mileage": "18.5 kmpl",
       "Seating Capacity": "7"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "6-Speed Automatic",
   },
   {
@@ -927,7 +868,6 @@ const seedCarsData: Car[] = [
     model: "EV6",
     title: "Kia EV6",
     price: 5000000,
-    oldPrice: 5200000,
     location: { state: "Maharashtra", city: "Pune" },
     year: 2024,
     fuelTypes: "Electric",
@@ -936,8 +876,7 @@ const seedCarsData: Car[] = [
     ownership: "First Owner",
     image: "/car-5.jpg",
     discount: 3,
-    type: "SUV",
-    seater: 5,
+    seats: 5,
     mileage: 0, // EV doesn't have mileage like ICE cars
     kms: 500,
     images: ["/car-5.jpg", "/car-6.jpg", "/car-7.jpg", "/car-8.jpg"],
@@ -950,7 +889,7 @@ const seedCarsData: Car[] = [
       "Range": "528 km",
       "Seating Capacity": "5"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "Single-Speed",
   },
   {
@@ -959,7 +898,6 @@ const seedCarsData: Car[] = [
     model: "Elevate",
     title: "Honda Elevate",
     price: 50000,
-    oldPrice: 1680000,
     location: { state: "Gujarat", city: "Ahmedabad" },
     year: 2023,
     fuelTypes: "Petrol",
@@ -968,8 +906,7 @@ const seedCarsData: Car[] = [
     ownership: "First Owner",
     image: "/car-6.jpg",
     discount: 5,
-    type: "SUV",
-    seater: 5,
+    seats: 5,
     mileage: 15.5,
     kms: 500,
     images: ["/car-6.jpg", "/car-7.jpg", "/car-8.jpg", "/car-9.jpg"],
@@ -982,7 +919,7 @@ const seedCarsData: Car[] = [
       "Mileage": "15.5 kmpl",
       "Seating Capacity": "5"
     },
-    seller: "Dealer",
+    userType: "Dealer",
     gear: "6-Speed Manual",
   },
 ];

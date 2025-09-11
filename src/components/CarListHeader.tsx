@@ -13,14 +13,14 @@ interface CarListHeaderProps {
   onLocationChange?: (location: string) => void;
   filters: {
     brand: string[];
-    body: string[];
+    bodyType: string[];
     fuel: string[];
     transmission: string[];
     ownership: string[];
     priceRange: [number, number];
     yearRange: [number, number];
   };
-  onFilterChange: (type: string, value: string) => void;
+  onFilterChange: (type: string, value: string | number) => void;
 }
 
 const CarListHeader: React.FC<CarListHeaderProps> = ({
@@ -28,11 +28,11 @@ const CarListHeader: React.FC<CarListHeaderProps> = ({
   setSearchTerm,
   sortOption,
   setSortOption,
-  carCount = 0,
   city,
   onLocationChange,
-  filters,
   onFilterChange,
+  carCount = 0,
+  filters,
 }) => {
   const [location, setLocation] = useState<string>(city);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);

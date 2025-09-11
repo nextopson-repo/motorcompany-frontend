@@ -290,7 +290,7 @@ const CarDetails = () => {
                   label: "Kms Driven",
                   value: `${car.kms.toLocaleString()} Kms`,
                 },
-                { label: "Seats", value: `${car.seater} Seats` },
+                { label: "Seats", value: `${car.seats} Seats` },
                 // { label: "Top Speed", value: "210 kmph" },
                 // { label: "No. of Cylinder", value: "4" },
                 { label: "Transmission", value: car.transmission },
@@ -339,7 +339,7 @@ const CarDetails = () => {
             <div className="text-xs font-semibold">
               <span>{car.kms} kms</span> |{" "}
               <span>
-                {car.bodyType} {car.seater}seater
+                {car.bodyType} {car.seats}seater
               </span>{" "}
               | <span>{car.mileage} kmpl</span> | <span>{car.fuelTypes}</span> |{" "}
               <span>{car.transmission}</span>

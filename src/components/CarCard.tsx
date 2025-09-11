@@ -3,6 +3,7 @@ import { formatPriceToLakh } from "../utils/formatPrice";
 import { Link } from "react-router-dom";
 import { ChevronRight, MapPin } from "lucide-react";
 import { AiFillHeart } from "react-icons/ai";
+// import { formatDistanceToNow } from "date-fns";
 
 interface Car {
   id: number;
@@ -15,14 +16,17 @@ interface Car {
   bodyType: string;
   ownership: string;
   mileage?: number;
-  seater?: number;
+  seats?: number;
   carImages?: { imageUrl: string }[];
   address?: { city?: string; state?: string };
-  user?: { name?: string }; // seller info
+  user?: { fullName?: string; userType?: string };
+  updatedAt: string;
+  createdAt: string;
 }
 
 interface CarCardProps {
-  car: Car;
+  car: Car | any;
+  userData?: any;
 }
 
 const CarCard: React.FC<CarCardProps> = ({ car }) => {
@@ -31,30 +35,40 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
     brand,
     model,
     carPrice,
-    manufacturingYear,
+    // manufacturingYear,
     fuelType,
     transmission,
     bodyType,
     ownership,
-    mileage,
-    seater,
+    // mileage,
+    seats,
     carImages,
     address,
     user,
+    updatedAt,
   } = car;
 
-  const image = carImages?.[0]?.imageUrl || "/placeholder-car.jpg";
+  const image = carImages?.[0]?.imageUrl || "/fallback-car-img.png";
+  // const updatedAgo = formatDistanceToNow(new Date(updatedAt), {
+  //   addSuffix: true,
+  // });
 
   return (
     <div className="bg-white rounded-md shadow-lg overflow-hidden flex flex-col w-auto relative">
-      {/* Image and Like/Share */}
+      {/* Image Section */}
       <div className="relative">
         <img
           src={image}
           alt={`${brand} ${model}`}
           className="w-full h-52 object-cover rounded-sm"
         />
-
+        {/* {discountPercent > 0 && (
+          <div className="absolute bottom-2 left-2 w-full">
+            <span className="text-[10px] bg-orange-400 text-white px-2 py-1 rounded-xs">
+              Deals: {discountPercent}% Off
+            </span>
+          </div>
+        )} */}
         <span className="absolute top-2 right-2 w-full gap-2 flex items-end justify-end">
           <button className="bg-white p-1 rounded-sm text-lg" aria-label="like">
             <AiFillHeart className="w-4 h-4 text-green-600" />
@@ -83,29 +97,29 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
           <h3 className="text-base font-semibold leading-tight text-gray-800 truncate">
             {brand} {model}
           </h3>
-          <span className="min-w-12 text-[10px]">New</span>
+          <span className="min-w-12 text-[10px]">{updatedAt}</span>
         </div>
+
         <p className="text-[10px] text-gray-800 whitespace-nowrap overflow-hidden text-ellipsis mb-1">
-          {manufacturingYear} • {fuelType} • {transmission} • {bodyType} •{" "}
-          {ownership}
-          {seater ? ` • ${seater} Seater` : ""}
-          {mileage ? ` • ${mileage} kmpl` : ""}
+           {bodyType} {seats ? ` ${seats} Seater` : ""} | {fuelType} | {transmission} | {ownership} owner
+          {/* {mileage ? ` | ${mileage} kmpl` : ""} */}
+          {/* {manufacturingYear} */}
         </p>
 
         <div className="flex items-end justify-between mb-4">
           <div className="space-y-1">
-            <p className="text-[10px] text-gray-500 mb-1">
-              {user?.name || "Dealer/Owner"} | {ownership}
+            <p className="text-[10px] text-gray-500 mb-1 capitalize">
+              {user?.fullName || "Unknown"} ({user?.userType || "Unknown"})
             </p>
-            <p className="flex items-center gap-1 text-[10px] bg-gray-300 rounded-sm w-fit py-[3px] px-2">
-              <MapPin size={11} /> {address?.city || "Unknown"},{" "}
-              {address?.state || ""}
+            <p className="flex items-center gap-1 text-[10px] capitalize bg-gray-300 rounded-sm w-fit py-[3px] px-2">
+              <MapPin size={11} /> {address?.city || "Unknown"}, { address?.state || ""}
             </p>
           </div>
           <span className="text-lg font-bold text-gray-900 -mb-[6px]">
             ₹ {formatPriceToLakh(carPrice)}
           </span>
         </div>
+
         <Link to={`/buy-car/${id}`} className="group">
           <button className="flex items-center mx-auto border border-gray-500 w-full justify-center gap-2 text-xs md:text-xs group-hover:text-gray-700 text-gray-900 py-[6px] rounded transition cursor-pointer">
             View More
@@ -120,8 +134,6 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
 };
 
 export default CarCard;
-
-
 
 // import React from "react";
 // import { formatPriceToLakh } from "../utils/formatPrice";

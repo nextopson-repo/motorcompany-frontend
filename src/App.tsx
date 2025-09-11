@@ -16,7 +16,7 @@ const App = () => {
   const location = useLocation();
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [citySearch, setCitySearch] = useState("");
-  const [selectedCity, setSelectedCity] = useState<string | null>(null);
+  const [selectedCity, setSelectedCity] = useState("");
   const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   const hideNavFooter = ["/register", "/forgot-password"];
@@ -26,6 +26,7 @@ const App = () => {
     setIsLocationModalOpen(false);
     localStorage.setItem("selectedCity", loc);
     console.log("Selected City:", loc);
+    console.log("SelectedCity:", selectedCity);
   };
 
   useEffect(() => {
@@ -54,7 +55,7 @@ const App = () => {
 
       <main className="min-h-screen z-0">
         <Routes>
-          <Route path="/" element={<HeroPage selectedCity={selectedCity} />} />
+          <Route path="/" element={<HeroPage />} />
           <Route path="/buy-car" element={<BuyCars />} />
           <Route path="/buy-car/:id" element={<CarDetail />} />
           <Route path="/saved" element={<Saved />} />

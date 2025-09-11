@@ -15,12 +15,12 @@ import { useAuth } from "../../context/AuthContext";
 export default function Profile() {
   const { user, setUser } = useAuth();
   const [editMode, setEditMode] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [loading] = useState(false);
+  const [error] = useState<string | null>(null);
 
   useEffect(() => {
     if (user) setUser(user);
-  }, []);
+  }, [user, setUser]);
 
   if (!user) {
     return (
@@ -35,12 +35,50 @@ export default function Profile() {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
-  // const handleSave = async(e) => {
-  //   e.preventDefault();
+  // const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
   //   setError(null);
 
-  //   if (!form) return;
-  //    setLoading(true);
+  //   if (!user) return;
+
+  //   const payload = {
+  //     userId: user.id,
+  //     fullName: user.fullName,
+  //     email: user.email,
+  //     userType: user.userType,
+  //     userProfileKey: user.userProfileKey,
+  //     socialMediaLinks: user.socialMediaLinks,
+  //     address: user.address,
+  //     landmark: user.landmark,
+  //     city: user.city,
+  //     pin: user.pin,
+  //   };
+
+  //   // Validate fields before sending request
+  //   if (!payload.fullName.trim()) {
+  //     setError("Full Name is required.");
+  //     return;
+  //   }
+
+  //   if (!payload.email.trim()) {
+  //     setError("Email is required.");
+  //     return;
+  //   }
+
+  //   // Simple email format validation
+  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  //   if (!emailRegex.test(user.email)) {
+  //     setError("Please enter a valid email address.");
+  //     return;
+  //   }
+
+  //   if (user.address && user.address.length > 200) {
+  //     setError("Address cannot exceed 200 characters.");
+  //     return;
+  //   }
+
+  //   setLoading(true);
+  //   console.log("Payload sending to backend:", payload);
 
   //   try {
   //     const res = await fetch(
@@ -48,103 +86,30 @@ export default function Profile() {
   //       {
   //         method: "POST",
   //         headers: { "Content-Type": "application/json" },
-  //         body: JSON.stringify({...form, form}),
+  //         body: JSON.stringify(payload),
   //       }
   //     );
   //     const data = await res.json();
-  //     console.log("profileData : ",data);
+  //     console.log("Profile Update Response:", data);
 
   //     if (res.ok) {
-  //       setUser(form); // update global context
+  //       // setUser(data.user); // update global context
+  //       const updatedUser = data.user;
+  //       setUser(updatedUser);
+  //       localStorage.setItem("user", JSON.stringify(updatedUser));
   //     } else {
-  //       setError(data.message);
+  //       setError(
+  //         data.message || "Something went wrong while saving the profile."
+  //       );
   //     }
   //   } catch (err) {
-  //     setError("Failed to save profile");
   //     console.error(err);
+  //     setError("Failed to save profile. Please try again.");
   //   } finally {
   //     setLoading(false);
+  //     setEditMode(false);
   //   }
-
-  //   setEditMode(false);
   // };
-  // console.log("userAboveHandleSave : ", user);
-
-  const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setError(null);
-
-    if (!user) return;
-
-    const payload = {
-      userId: user.id,
-      fullName: user.fullName,
-      email: user.email,
-      userType: user.userType,
-      userProfileKey: user.userProfileKey,
-      socialMediaLinks: user.socialMediaLinks,
-      address: user.address,
-      landmark: user.landmark,
-      city: user.city,
-      pin: user.pin,
-    };
-
-    // Validate fields before sending request
-    if (!payload.fullName.trim()) {
-      setError("Full Name is required.");
-      return;
-    }
-
-    if (!payload.email.trim()) {
-      setError("Email is required.");
-      return;
-    }
-
-    // Simple email format validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(user.email)) {
-      setError("Please enter a valid email address.");
-      return;
-    }
-
-    if (user.address && user.address.length > 200) {
-      setError("Address cannot exceed 200 characters.");
-      return;
-    }
-
-    setLoading(true);
-    console.log("Payload sending to backend:", payload);
-
-    try {
-      const res = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/v1/profile/profile-update`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        }
-      );
-      const data = await res.json();
-      console.log("Profile Update Response:", data);
-
-      if (res.ok) {
-        // setUser(data.user); // update global context
-        const updatedUser = data.user;
-        setUser(updatedUser);
-         localStorage.setItem("user", JSON.stringify(updatedUser));
-      } else {
-        setError(
-          data.message || "Something went wrong while saving the profile."
-        );
-      }
-    } catch (err) {
-      console.error(err);
-      setError("Failed to save profile. Please try again.");
-    } finally {
-      setLoading(false);
-      setEditMode(false);
-    }
-  };
 
   const handleCancel = () => {
     setUser(user);
@@ -159,7 +124,7 @@ export default function Profile() {
         {editMode ? (
           <div className="flex gap-3">
             <button
-              onClick={handleSave}
+              onClick={() => {/* handled via form submission below */}}
               disabled={loading}
               className="px-4 py-1 bg-black text-white rounded"
             >
