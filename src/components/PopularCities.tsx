@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 const cities = [
   { name: "Chandigarh", cars: 2023, img: "/Cities/Chandigarh.png" },
@@ -37,12 +37,12 @@ const fourCards = [
 ];
 
 const PopularCities: React.FC = () => {
-  const [search, setSearch] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
+  // const [search, setSearch] = useState("");
+  // const [isOpen, setIsOpen] = useState(false);
 
-  const filteredCities = cities.filter((city) =>
-    city.name.toLowerCase().includes(search.toLowerCase())
-  );
+  // const filteredCities = cities.filter((city) =>
+  //   city.name.toLowerCase().includes(search.toLowerCase())
+  // );
 
   return (
     <section className="w-full max-w-7xl font-montserrat pt-12">
@@ -59,9 +59,8 @@ const PopularCities: React.FC = () => {
       </div>
 
       {/* Search bar */}
-      <div className="flex justify-center mb-6">
+      {/* <div className="flex justify-center mb-6">
         <div className="relative w-80">
-          {/* Dropdown list */}
           {isOpen && (
             <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-auto">
               {filteredCities.length > 0 ? (
@@ -83,10 +82,10 @@ const PopularCities: React.FC = () => {
             </ul>
           )}
         </div>
-      </div>
+      </div> */}
 
       {/* Cities Grid */}
-      <div className="max-w-5xl mx-auto grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-8 border-b border-gray-300 px-14 pb-10">
+      <div className="max-w-5xl mx-auto grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-8 border-b border-gray-300 px-14 py-10">
         {cities.map((city) => (
           <div
             key={city.name}

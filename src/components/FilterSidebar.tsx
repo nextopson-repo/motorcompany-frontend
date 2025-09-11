@@ -140,7 +140,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
   );
 
   return (
-    <aside className="p-4 lg:pl-8 w-72">
+    <aside className="py-4 lg:pl-8 w-72">
       {/* Collapse Button */}
       <button
         onClick={() => setCollapsed(!collapsed)}

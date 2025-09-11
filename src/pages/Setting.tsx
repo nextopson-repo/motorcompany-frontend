@@ -17,7 +17,7 @@ const Setting = () => {
   return (
     <div className="relative w-full min-h-screen overflow-hidden">
       {/* Header */}
-      <div className="relative h-72 -m-18">
+      <div className="relative h-72 -m-8">
         <img
           src="/settings/main-bg.png"
           alt="header car"

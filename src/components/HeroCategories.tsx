@@ -19,7 +19,7 @@ const bodyTypes = [
 
 const HeroCategories: React.FC = () => {
   return (
-    <section className="w-full font-montserrat">
+    <section className="w-full font-montserrat my-6">
       {/* Categories */}
       <div className="text-center py-4">
         <p className="text-xs text-[#EE1422] font-semibold mb-4 flex items-center justify-center gap-5">

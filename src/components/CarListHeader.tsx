@@ -143,7 +143,6 @@ const CarListHeader: React.FC<CarListHeaderProps> = ({
 
       {/* Bottom Section */}
       <div className="w-full flex flex-wrap gap-2 mt-2">
-        {/* Normal filter chips */}
         {Object.entries(filters).map(([filterType, values]) =>
           Array.isArray(values)
             ? values.map((val) => (

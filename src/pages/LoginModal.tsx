@@ -7,22 +7,22 @@ import { X } from "lucide-react";
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
-  setUserData: React.Dispatch<React.SetStateAction<object>>;
+  // setUserData: React.Dispatch<React.SetStateAction<object>>;
 }
 
-export default function LoginModal({ isOpen, onClose, setUserData }: LoginModalProps) {
+export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const { login } = useAuth();
 
-  const [userId, setUserId] = useState<string | null>(null);
+  const [userId, setUserId] = useState("")
   const [step, setStep] = useState<"mobile" | "otp">("mobile");
-  const [mobileNumber, setMobileNumber] = useState();
+  const [mobileNumber, setMobileNumber] = useState("");
   const [showSignup, setShowSignup] = useState(false);
 
   // Reset state when modal closes or opens newly
   useEffect(() => {
     if (!isOpen) {
-      setUserId(null);
+      setUserId("");
       setStep("mobile");
       setShowSignup(false);
     }
@@ -64,7 +64,7 @@ export default function LoginModal({ isOpen, onClose, setUserData }: LoginModalP
 
     const data = await res.json();
 
-    setUserData(data.responseObject.user);
+    // setUserData(data.responseObject.user);
 
     if (data.success === true && data.responseObject.isFullyVerified) {
       login(data.responseObject.user, data.responseObject.token);

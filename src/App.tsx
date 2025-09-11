@@ -10,6 +10,7 @@ import Setting from "./pages/Setting";
 import Saved from "./components/settings/Saved";
 import LocationModal from "./components/LocationModal";
 import LoginModal from "./pages/LoginModal";
+import TopDealer from "./pages/TopDealer";
 
 const App = () => {
   const location = useLocation();
@@ -59,6 +60,7 @@ const App = () => {
           <Route path="/saved" element={<Saved />} />
           <Route path="sell" element={<Sell />} />
           <Route path="/settings/*" element={<Setting />} />
+          <Route path="/top-dealer" element={<TopDealer />} />
         </Routes>
       </main>
 

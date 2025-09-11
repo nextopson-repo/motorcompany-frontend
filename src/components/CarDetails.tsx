@@ -1,11 +1,19 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { carsData } from "../data/cars";
-import { FaArrowLeft, FaArrowRight, FaHeart } from "react-icons/fa";
-import { Flag, Flame, MapPin, Share2 } from "lucide-react";
+import { FaHeart } from "react-icons/fa";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Flag,
+  Flame,
+  MapPin,
+  Share2,
+  User,
+} from "lucide-react";
 import { formatPriceToLakh } from "../utils/formatPrice";
-import { BiCaretLeft, BiCaretRight } from "react-icons/bi";
 import CarsDetailsSlider from "./CarsDetailsSlider";
+import FindDealers from "./FindDealers";
 
 // Accordion item (future use)
 // const AccordionItem = ({ title, content, isOpen, onClick }) => {
@@ -173,23 +181,26 @@ const CarDetails = () => {
   // ];
 
   return (
-    <div className="max-w-7xl mx-auto p-2 md:p-6 mt-17 font-montserrat">
+    <div className="max-w-7xl mx-auto mt-20 font-montserrat">
       {/* Breadcrumb */}
-      <nav className="text-sm text-gray-500 mb-6">
+      <nav className="text-sm text-black mb-6 m-6">
         <Link to="/" className="hover:underline">
           Home
-        </Link>{" "}
-        /{" "}
+        </Link>
+        {" > "}
         <Link to="/buy-car" className="hover:underline">
           Buy Car
-        </Link>{" "}
-        / <span className="text-gray-800">{car.title}</span>
+        </Link>
+        {" > "}
+        <span className="text-black font-semibold underline underline-offset-3">
+          {car.title}
+        </span>
       </nav>
 
       {/* Parent Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 md:gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-13 m-6 md:gap-6">
         {/* LEFT SIDE */}
-        <div className="col-span-3 space-y-6">
+        <div className="col-span-9 space-y-6">
           {/* Main Image */}
           <div className="relative">
             <img
@@ -200,15 +211,15 @@ const CarDetails = () => {
             {/* Arrows */}
             <button
               onClick={handlePrevImage}
-              className="absolute top-1/2 left-4 -translate-y-1/2 bg-white border border-[#cb202d] p-2 rounded-full shadow hover:bg-gray-200 hover:scale-[1.02] cursor-pointer"
+              className="absolute top-1/2 left-2 -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-200 hover:scale-[1.02] cursor-pointer"
             >
-              <FaArrowLeft className="text-[#cb202d]" />
+              <ChevronLeft className="text-black" />
             </button>
             <button
               onClick={handleNextImage}
-              className="absolute top-1/2 right-4 -translate-y-1/2 bg-white border border-[#cb202d] p-2 rounded-full shadow hover:bg-gray-200 hover:scale-[1.02] cursor-pointer"
+              className="absolute top-1/2 right-2 -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-200 hover:scale-[1.02] cursor-pointer"
             >
-              <FaArrowRight className="text-[#cb202d]" />
+              <ChevronRight className="text-black" />
             </button>
           </div>
 
@@ -224,15 +235,15 @@ const CarDetails = () => {
                   thumbs.scrollBy({ left: -imgWidth - 8, behavior: "smooth" }); // -8 for gap
                 }
               }}
-              className="absolute left-0 z-10 bg-white border border-red-500 text-red-500 w-8 h-8 flex items-center justify-center rounded-full shadow hover:bg-red-500 hover:text-white transition"
+              className="absolute left-0 z-10 bg-gray-900  w-9 h-9 flex items-center justify-center rounded-full shadow hover:bg-gray-800 transition cursor-pointer"
             >
-              <BiCaretLeft />
+              <ChevronLeft className="text-white" />
             </button>
 
             {/* Thumbnails */}
             <div
               id="thumbs"
-              className="flex gap-2 overflow-x-auto scroll-smooth px-10"
+              className="grid grid-cols-4 gap-2 overflow-x-auto scroll-smooth px-5"
               style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             >
               {car.images.map((img, index) => (
@@ -240,10 +251,10 @@ const CarDetails = () => {
                   key={index}
                   src={img}
                   onClick={() => setMainImageIndex(index)}
-                  className={`w-40 h-[120px] object-cover rounded cursor-pointer border transition ${
+                  className={`w-40 h-[120px] object-cover rounded cursor-pointer border-2 transition ${
                     mainImageIndex === index
-                      ? "border-red-500"
-                      : "border-gray-300"
+                      ? "border-green-500"
+                      : "border-gray-50/5"
                   }`}
                   alt={`${car.title} - Image ${index + 1}`}
                 />
@@ -260,34 +271,36 @@ const CarDetails = () => {
                   thumbs.scrollBy({ left: imgWidth + 8, behavior: "smooth" });
                 }
               }}
-              className="absolute right-0 z-10 bg-white border border-red-500 text-red-500 w-8 h-8 flex items-center justify-center rounded-full shadow hover:bg-red-500 hover:text-white transition"
+              className="absolute right-0 z-10 bg-gray-900 w-9 h-9 flex items-center justify-center rounded-full shadow hover:bg-gray-800 transition cursor-pointer"
             >
-              <BiCaretRight />
+              <ChevronRight className="text-white" />
             </button>
           </div>
 
           {/* Car Overview Table */}
           <div className="bg-white py-6 rounded-lg shadow-md">
-            <h2 className="text-md md:text-xl font-bold px-6 py-2">Car Overview</h2>
+            <h2 className="text-md md:text-xl font-bold px-6 py-2">
+              Car Overview
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 text-sm md:px-6">
               {[
                 { label: "Registration Year", value: `${car.year}` },
-                { label: "Seats", value: `${car.seater} Seats` },
-                { label: "Top Speed", value: "210 kmph" },
-                { label: "No. of Cylinder", value: "4" },
-                { label: "Transmission", value: car.transmission },
-                { label: "Fuel", value: car.fuelTypes },
+                { label: "Year of Manufacture", value: `${car.year}` },
                 {
                   label: "Kms Driven",
                   value: `${car.kms.toLocaleString()} Kms`,
                 },
+                { label: "Seats", value: `${car.seater} Seats` },
+                // { label: "Top Speed", value: "210 kmph" },
+                // { label: "No. of Cylinder", value: "4" },
+                { label: "Transmission", value: car.transmission },
+                { label: "Fuel", value: car.fuelTypes },
                 {
                   label: "Engine",
                   value: car.specs.Engine || car.specs.Motor || "N/A",
                 },
                 { label: "Power", value: car.specs.Power || "N/A" },
-                { label: "Gearbox", value: car.gear },
-                { label: "Year of Manufacture", value: `${car.year}` },
+                // { label: "Gearbox", value: car.gear },
                 { label: "Drive Type", value: "FWD" },
               ].map((item, i, arr) => {
                 const isLastRow = i >= arr.length - 3; // last 3 items
@@ -295,11 +308,11 @@ const CarDetails = () => {
                   <div
                     key={i}
                     className={`p-4 flex items-center justify-between text-xs md:text-sm
-            ${(i + 1) % 3 !== 0 ? "md:border-r border-[#cb202d]/25" : ""}
-            ${!isLastRow ? "md:border-b border-[#cb202d]/25" : ""}`}
+            ${(i + 1) % 3 !== 0 ? "md:border-r border-gray-200" : ""}
+            ${!isLastRow ? "md:border-b border-gray-200" : ""}`}
                   >
                     <p className="text-gray-700">{item.label}</p>
-                    <p className="text-[#cb202d] font-medium">{item.value}</p>
+                    <p className="text-gray-900 font-medium">{item.value}</p>
                   </div>
                 );
               })}
@@ -308,67 +321,84 @@ const CarDetails = () => {
         </div>
 
         {/* RIGHT SIDE */}
-        <div className="col-span-2 space-y-6">
+        <div className="col-span-4 space-y-6">
           {/* Car Details Card */}
-          <div className="border border-[#cb202d] p-4 rounded-lg space-y-3 shadow">
+          <div className="border border-gray-100 p-4 rounded-lg space-y-3 shadow">
             <div className="flex items-start justify-between">
-              <h1 className="text-xl font-bold">{car.title}</h1>
-              <button className="text-red-500 hover:text-red-600 flex flex-col items-center gap-1 cursor-pointer hover:scale-[1.02]">
-                <FaHeart size={16} />
-                <span className="text-gray-500 text-[10px] leading-tight">
-                  146 People <br /> Liked
+              <h1 className="text-lg font-bold">{car.title}</h1>
+              <button className="text-green-500 flex flex-col items-center gap-1 cursor-pointer">
+                <span className="border border-gray-200 rounded-sm">
+                  <FaHeart size={14} className="m-1" />
+                </span>
+                <span className="min-w-10 text-gray-500 text-[9px] leading-tight">
+                  146 Liked
                 </span>
               </button>
             </div>
 
-            <div className="text-sm font-medium">
+            <div className="text-xs font-semibold">
               <span>{car.kms} kms</span> |{" "}
               <span>
-                {car.bodyType} {car.seater} seater
+                {car.bodyType} {car.seater}seater
               </span>{" "}
               | <span>{car.mileage} kmpl</span> | <span>{car.fuelTypes}</span> |{" "}
               <span>{car.transmission}</span>
             </div>
 
-            <p className="text-gray-500 flex text-sm">
-              <MapPin className="text-[#cb202d] mr-2 h-5 w-5" />{" "}
-              {car.location.city}, {car.location.state} - 450001
-            </p>
-
-            <div className="flex items-end gap-4 mb-3">
-              <p className="text-xl font-bold">
-                ₹ {formatPriceToLakh(car.price)}
+            <div className="flex items-end gap-2 mb-3">
+              <p className="text-lg font-bold">
+              Rs. {formatPriceToLakh(car.price)}
               </p>
-              <p className="text-[#cb202d] font-medium text-xs mb-1">
+              <p className="text-orange-600 font-semibold text-[10px] mb-1">
                 Make Your Offer
               </p>
             </div>
 
-            <div className="font-normal text-xs">
+            <div className="font-semibold text-[10px]">
               EMI starts{" "}
-              <span className="text-[#cb202d] hover:underline cursor-pointer">
+              <span className="font-normal text-green-500 hover:underline cursor-pointer">
                 @ Rs. 6203/mo
               </span>
             </div>
 
-            <button className="w-full bg-[#cb202d] text-white px-6 py-2 rounded-sm hover:bg-[#cb202d]/90 cursor-pointer">
+            {/* Dashed line */}
+            <div className="custom-dash"></div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <User className="text-gray-500 h-[14px] w-[14px]" />
+                <span className="text-black text-[10px] leading-tight font-semibold">
+                  Sourav Jha{" "}
+                  <span className="text-[8px] text-gray-700">(Owner)</span>
+                </span>
+              </div>
+
+              <div>
+                <p className="text-black flex items-center text-[10px]">
+                  <MapPin className="text-black mr-1 h-[14px] w-[14px]" />{" "}
+                  {car.location.city}, {car.location.state} - 450001
+                </p>
+              </div>
+            </div>
+
+            <button className="w-full bg-black text-white px-6 py-[6px] rounded-sm hover:bg-black/90 cursor-pointer">
               Contact Seller
             </button>
 
-            <p className="text-xs text-gray-500 flex items-center justify-center gap-1 pt-2">
-              <Flame className="text-[#cb202d] h-4 w-4" />
-              Trending Viewed By {car.views} users
+            <p className="text-[10px] text-gray-500 flex items-center justify-center gap-1 pt-1">
+              <Flame className="text-[#cb202d] h-[14px] w-[14px]" />
+              Trending Viewed By {car.views} user's
             </p>
           </div>
 
           {/* report ad and share buttons */}
-          <div className=" w-full flex text-gray-400 gap-6 justify-end px-6">
-            <span className="flex text-xs items-center gap-2 hover:scale-[1.02] cursor-pointer transition-all duration-300">
-              <Flag className="h-4 w-4" />
+          <div className=" w-full flex text-gray-400 gap-6 justify-end px-2">
+            <span className="flex text-[10px] items-center gap-2 hover:scale-[1.02] cursor-pointer transition-all duration-300">
+              <Flag className="h-[14px] w-[14px]" />
               <span className="underline font-light">Report ad</span>
             </span>
-            <span className="flex text-xs items-center gap-2 hover:scale-[1.02] cursor-pointer transition-all duration-300">
-              <Share2 className="h-4 w-4" />
+            <span className="flex text-[10px] items-center gap-2 hover:scale-[1.02] cursor-pointer transition-all duration-300">
+              <Share2 className="h-[14px] w-[14px]" />
               <span className="underline font-light">Share</span>
             </span>
           </div>
@@ -388,14 +418,31 @@ const CarDetails = () => {
         </div>
       </div>
 
+      {/* Car Towing Banner */}
+      <div className="relative max-w-7xl h-[300px] mx-5 p-10 flex flex-col justify-around">
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url(/carBanner.png)" }}
+        ></div>
+        <div className="absolute inset-0 bg-black opacity-40"></div>
+        <div className="relative z-10 text-white space-y-6">
+          <h1 className="font-semibold text-5xl">
+            Home Test Drive, <br /> Home Delivery
+          </h1>
+          <p className="text-3xl ">Buy Comfortably from your home</p>
+        </div>
+      </div>
+
       {/* slider */}
+      <div className="m-6">
+        <h2 className="text-xl font-semibold mt-10 py-4 px-2">Similar Cars</h2>
+        <CarsDetailsSlider carsData={carsData} />
+      </div>
 
-      <div>
-      {/* Your existing details section */}
-
-      <h2 className="text-xl font-semibold mt-10 py-4 px-2">Similar Cars</h2>
-      <CarsDetailsSlider carsData={carsData} />
-    </div>
+      {/* top dealer container */}
+      <div className="my-6">
+        <FindDealers />
+      </div>
     </div>
   );
 };

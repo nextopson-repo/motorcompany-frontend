@@ -52,7 +52,7 @@ const BuyPackages: React.FC = () => {
 
   return (
     <>
-      <div className="bg-white shadow rounded-xl p-6 max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         {/* Title */}
         <h2 className="text-2xl font-bold text-black">Buy Packages</h2>
         <p className="text-gray-500 text-sm mt-1">
@@ -76,7 +76,7 @@ const BuyPackages: React.FC = () => {
                     <label
                       key={id}
                       className={`flex flex-col items-center rounded-lg p-4 shadow-sm cursor-pointer transition bg-white ${
-                        isSelected ? "border-[#cb202d] ring-2 ring-[#cb202d]" : ""
+                        isSelected ? "border-gray-800 ring-2 ring-gray-800" : ""
                       }`}
                     >
                       <div className="flex items-center w-full px-2">
@@ -84,11 +84,11 @@ const BuyPackages: React.FC = () => {
                           type="checkbox"
                           checked={isSelected}
                           onChange={() => setSelected(id)}
-                          className="w-5 h-5 cursor-pointer accent-[#cb202d]"
+                          className="w-5 h-5 cursor-pointer accent-gray-800"
                         />
                         <p className="w-full font-medium text-center">{plan.ads}</p>
                       </div>
-                      <div className="w-full border-t border-dashed my-2"></div>
+                      <div className="w-full custom-dash my-2 "></div>
                       <p className="text-lg font-semibold">₹ {plan.price}/-</p>
                     </label>
                   );
@@ -104,7 +104,7 @@ const BuyPackages: React.FC = () => {
           onClick={() => setShowModal(true)}
           className={`w-full mt-10 py-3 rounded-lg font-semibold transition ${
             selected
-              ? "bg-[#cb202d] hover:bg-[#cb202d]/90 text-white cursor-pointer"
+              ? "bg-black hover:bg-black/90 text-white cursor-pointer"
               : "bg-gray-300 text-gray-500 cursor-not-allowed"
           }`}
         >
@@ -114,12 +114,12 @@ const BuyPackages: React.FC = () => {
 
       {/* Modal */}
       {showModal && selectedPlan && (
-        <div className="fixed inset-0 bg-black/30 flex justify-center items-center z-50 px-4">
+        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50 px-4">
           <div className="bg-white rounded-lg max-w-md w-full shadow-lg">
             {/* Header */}
-            <div className="flex justify-between items-center bg-black text-white p-4 rounded-t-lg">
+            <div className="flex justify-between items-center p-4 rounded-t-lg">
               <h2 className="text-lg font-semibold">Order Summary</h2>
-              <button onClick={() => setShowModal(false)} className="text-2xl cursor-pointer hover:text-[#cb202d] transition-all duration-300">
+              <button onClick={() => setShowModal(false)} className="text-2xl cursor-pointer hover:text-[#cb202d] transition-all duration-300 mr-2">
                 ✕
               </button>
             </div>

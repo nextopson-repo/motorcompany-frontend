@@ -5,6 +5,7 @@ import HeroCategories from "../components/HeroCategories";
 import PopularCities from "../components/PopularCities";
 import BrandLogoCards from "../components/BrandLogoCards";
 import LocationModal from "../components/LocationModal";
+import FindDealers from "../components/FindDealers";
 
 const HeroPage = () => {
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
@@ -27,9 +28,10 @@ const HeroPage = () => {
   };
 
   return (
-    <div className="mt-24 min-h-screen max-w-7xl mx-auto px-2 xs:px-4 font-montserrat">
+    <div className="mt-24 min-h-screen max-w-7xl mx-auto font-montserrat">
       <Hero />
       <FeaturedCars />
+      <FindDealers />
       <HeroCategories />
       <BrandLogoCards />
       <PopularCities />

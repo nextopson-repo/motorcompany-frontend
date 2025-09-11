@@ -133,13 +133,13 @@
 
 /* in your global CSS */
 .custom-dash {
-  border-bottom: 1px dashed #cb202d;
+  border-bottom: 1.5px dashed #515151;
   border-image: repeating-linear-gradient(
     to right,
-    #cb202d 0,
-    #cb202d 8px,
-    transparent 8px,
-    transparent 16px
+    #515151 0,
+    #515151 4px,
+    transparent 4px,
+    transparent 8px
   ) 1;
 }
 
