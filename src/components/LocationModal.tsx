@@ -1,5 +1,4 @@
-// src/components/LocationModal.tsx
-import { SearchIcon, X } from "lucide-react";
+import { MapPin, X } from "lucide-react";
 import React, { useMemo } from "react";
 import { carsData } from "../data/cars";
 
@@ -21,7 +20,7 @@ const LocationModal: React.FC<LocationModalProps> = ({
   const locationOptions = useMemo(() => {
     const unique = new Set<string>();
     carsData.forEach((c) => {
-      unique.add(`${c.location.city}, ${c.location.state}`);
+      unique.add(`${c.location.city}`);
     });
     return Array.from(unique);
   }, []);
@@ -53,34 +52,34 @@ const LocationModal: React.FC<LocationModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50">
+    <div className="fixed inset-0 z-50 font-roboto">
       <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-xs"
+        className="absolute inset-0 bg-black/40 backdrop-blur-[0.5px]"
         onClick={onClose}
       />
-      <div className="relative overflow-hidden mx-auto h-[85%] mt-10 w-[50%] max-w-5xl bg-white rounded-xl shadow-xl p-4">
+      <div className="relative overflow-hidden mx-auto h-[82%] mt-14 w-[50%] max-w-5xl bg-white rounded-xl shadow-xl">
         {/* heading */}
-        <div className="flex items-center justify-between pb-2 mb-4 border-b border-gray-300">
-          <h3 className="text-lg sm:text-xl font-semibold">Select your City</h3>
+        <div className="flex items-center justify-between p-3 px-8 border-b border-gray-100">
+          <h3 className="text-lg sm:text-lg font-semibold">Select your City</h3>
           <button onClick={onClose} className="p-1 rounded hover:bg-black/5">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* search bar */}
-        <div className="flex gap-3 mb-4">
-          <div className="flex-1 relative">
+        <div className="flex gap-5 pt-4 px-8">
+          <div className="w-full flex items-center border border-gray-300 rounded-sm pl-4">
+            <MapPin className="w-[18px] h-[18px] text-gray-500 mx-2" strokeWidth={1.3}/>
             <input
               value={citySearch}
               onChange={(e) => setCitySearch(e.target.value)}
               placeholder="Enter your City"
-              className="w-full border border-gray-400 rounded-sm pl-9 pr-3 py-2 text-sm"
+              className="w-full py-2 text-sm placeholder:text-gray-500"
             />
-            <SearchIcon className="w-4 h-4 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2" />
           </div>
           <button
             type="button"
-            className="bg-[#EE1422] text-white px-4 py-2 rounded-sm text-sm whitespace-nowrap flex items-center gap-2 cursor-pointer"
+            className="bg-[#EE1422] text-white px-3 py-2 rounded-sm text-sm whitespace-nowrap flex items-center gap-2 cursor-pointer"
           >
             <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -103,19 +102,19 @@ const LocationModal: React.FC<LocationModalProps> = ({
         </div>
 
         {/* location grid */}
-        <div className="w-full overflow-y-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 ">
+        <div className="w-full overflow-y-auto p-4 px-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 ">
           {filteredLocations.map((loc) => (
             <button
               key={loc}
               onClick={() => onLocationChange(loc)}
-              className="h-fit w-fit mx-2 hover:bg-gray-400/30 cursor-pointer p-2 rounded-md"
+              className="h-fit w-fit mx-2 hover:bg-gray-400/30 cursor-pointer p-1 rounded-md"
             >
               <img
                 src={cityImage(loc)}
                 alt={loc}
                 className="w-full h-full object-contain rounded-lg mx-auto"
               />
-              <div className="mt-2 text-sm font-medium text-center ">
+              <div className="mt-2 text-[12px] font-semibold text-center ">
                 {loc.split(",")[0]}
               </div>
             </button>
@@ -123,7 +122,7 @@ const LocationModal: React.FC<LocationModalProps> = ({
         </div>
 
         {/* footer image */}
-        <div className="absolute inset-[65%] left-0 -translateX-[10%] w-full h-1/2 opacity-30">
+        <div className="absolute inset-[65%] left-0 -translateX-[10%] w-full h-1/2 opacity-20">
           <img
             src="/Cities/cities-bg.png"
             alt="cities-bg"

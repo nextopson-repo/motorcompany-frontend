@@ -1,5 +1,4 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-// import { useState } from "react";
 import AccountSidebar from "../components/settings/SettingSidebar";
 import Profile from "../components/settings/Profile";
 import MyListing from "../components/settings/MyListing";
@@ -7,12 +6,10 @@ import BuyPackages from "../components/settings/BuyPackages";
 import BoughtPackages from "../components/settings/BoughtPackages";
 import Saved from "../components/settings/Saved";
 import { useAuth } from "../context/AuthContext";
+import InterestedBuyers from "../components/settings/IntrustedBuyers";
 
 const Setting = () => {
-  const { user, setUser } = useAuth();
-  // const [profile, setProfile] = useState();
-
-  console.log("setUser:", setUser);
+  const { user } = useAuth();
 
   return (
     <div className="relative w-full min-h-screen overflow-hidden">
@@ -46,7 +43,8 @@ const Setting = () => {
               <Route index element={<Navigate to="profile" replace />} />
               <Route path="profile" element={<Profile />} />
               <Route path="listings" element={<MyListing />} />
-              <Route path="sell" element={<Saved />} />
+              <Route path="enquiries" element={<Saved/> } />
+              <Route path="interested-buyers" element={<InterestedBuyers /> } />
               <Route path="saved" element={<Saved />} />
               <Route path="buy-packages" element={<BuyPackages />} />
               <Route path="bought-packages" element={<BoughtPackages />} />

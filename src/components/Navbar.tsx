@@ -1,4 +1,4 @@
-import { ChevronRight, Heart, MapPin, Menu, User } from "lucide-react";
+import { ChevronDown, Heart, MapPin, Menu, UserRound } from "lucide-react";
 import { useState, useRef } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -6,9 +6,10 @@ import LoginModal from "../pages/LoginModal";
 
 interface NavbarProps {
   onSelectCityClick: () => void;
+  selectedCity: string;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
+const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick, selectedCity }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -23,20 +24,20 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
     <nav className="w-full h-auto bg-white shadow-md fixed top-0 left-0 z-50">
       <div className="w-full max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
         {/* Logo */}
-        <div className="flex flex-col items-center px-4">
+        <div className="flex flex-col items-center px-3">
           <NavLink to="/" end>
-            <img src="/Brand-logo.png" alt="Logo" className="w-auto h-9" />
+            <img src="/Brand-logo.png" alt="Logo" className="w-auto h-10" />
           </NavLink>
         </div>
 
         {/* Desktop Nav Links */}
-        <div className="hidden md:flex items-center gap-8 w-[35%]">
+        <div className="hidden md:flex items-center gap-10 w-[35%]">
           <NavLink
             to="/"
             end
             className={({ isActive }) =>
               isActive
-                ? "text-[#EE1422] text-sm border-b-2 border-[#EE1422] font-bold"
+                ? "text-[#EE1422] text-sm underline underline-offset-3 font-semibold"
                 : "text-black hover:text-[#EE1422] text-sm transition"
             }
           >
@@ -46,17 +47,17 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
             to="/buy-car"
             className={({ isActive }) =>
               isActive
-                ? "text-[#EE1422] text-sm border-b-2 border-[#EE1422] font-bold"
+                ? "text-[#EE1422] text-sm underline underline-offset-3 font-semibold"
                 : "text-black hover:text-[#EE1422] text-sm transition"
             }
           >
-            Browse Car
+            Browse Cars
           </NavLink>
           <NavLink
             to="/sell"
             className={({ isActive }) =>
               (isActive
-                ? "text-[#EE1422] font-medium text-sm border-b-2 border-[#EE1422]"
+                ? "text-[#EE1422] text-sm underline underline-offset-3 font-semibold"
                 : "text-black hover:text-[#EE1422] text-sm") +
               " transition flex items-center gap-1"
             }
@@ -67,7 +68,7 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
 
         {/* Desktop Buttons */}
         <div
-          className="hidden md:flex items-center justify-center gap-4 relative"
+          className="hidden md:flex items-center justify-center gap-6 relative"
           ref={menuRef} // <-- wrapper ref here
         >
           <button
@@ -76,9 +77,9 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
           >
             <MapPin className="w-4 h-4" />
             <span className="ml-1 flex items-center gap-1">
-              Select City{" "}
+            {selectedCity ? selectedCity : "Select City"} 
               <span>
-                <ChevronRight className="h-4 w-4" />
+                <ChevronDown className="h-4 w-4" />
               </span>
             </span>
           </button>
@@ -116,8 +117,8 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
               className="px-4 py-2 rounded-md flex items-center gap-2 hover:text-[#EE1422] transition text-sm cursor-pointer"
               onClick={() => setIsLoginOpen(true)}
             >
-              <User className="w-5 h-5 border-2 rounded-full" />
-              Login/Sign Up
+              <UserRound className="w-[22px] h-[22px] border-[1.5px] rounded-full" strokeWidth={2}/>
+              Login / Register
             </button>
           )}
         </div>

@@ -11,6 +11,7 @@ import Saved from "./components/settings/Saved";
 import LocationModal from "./components/LocationModal";
 import LoginModal from "./pages/LoginModal";
 import TopDealer from "./pages/TopDealer";
+import ContactUs from "./pages/ContactUs";
 
 const App = () => {
   const location = useLocation();
@@ -25,9 +26,14 @@ const App = () => {
     setSelectedCity(loc);
     setIsLocationModalOpen(false);
     localStorage.setItem("selectedCity", loc);
-    console.log("Selected City:", loc);
-    console.log("SelectedCity:", selectedCity);
   };
+
+  useEffect(() => {
+    const savedCity = localStorage.getItem("selectedCity");
+    if (savedCity) {
+      setSelectedCity(savedCity);
+    }
+  }, []);
 
   useEffect(() => {
     const modalClosed = localStorage.getItem("locationModalClosed") === "true";
@@ -49,6 +55,7 @@ const App = () => {
       {!hideNavFooter.includes(location.pathname) && (
         <Navbar
           onSelectCityClick={() => setIsLocationModalOpen(true)}
+          selectedCity={selectedCity}
           // onLoginClick={() => setIsLoginOpen(true)} // ✅ Trigger login modal
         />
       )}
@@ -62,6 +69,7 @@ const App = () => {
           <Route path="sell" element={<Sell />} />
           <Route path="/settings/*" element={<Setting />} />
           <Route path="/top-dealer" element={<TopDealer />} />
+          <Route path="/contact-us" element={<ContactUs />} />
         </Routes>
       </main>
 

@@ -3,14 +3,14 @@ import React from "react";
 const cities = [
   { name: "Chandigarh", cars: 2023, img: "/Cities/Chandigarh.png" },
   { name: "Ahmedabad", cars: 2023, img: "/Cities/Ahemdabad.png" },
-  { name: "Pune", cars: 2023, img: "/Cities/Pune.png" },
-  { name: "Hyderabad", cars: 2023, img: "/Cities/Hyderabad.png" },
+  { name: "Pune", cars: 2023, img: "/Cities/pune.png" },
+  { name: "Hyderabad", cars: 2023, img: "/Cities/hyderabad.png" },
   { name: "Kanpur", cars: 2023, img: "/Cities/Kanpur.png" },
   { name: "Indore", cars: 2023, img: "/Cities/Indore.png" },
   { name: "Lucknow", cars: 2023, img: "/Cities/Lucknow.png" },
   { name: "Delhi", cars: 2023, img: "/Cities/Delhi.png" },
   { name: "Bhopal", cars: 2023, img: "/Cities/Bhopal.png" },
-  { name: "Jaipur", cars: 2023, img: "/Cities/Jaipur.png" },
+  { name: "Jaipur", cars: 2023, img: "/Cities/jaipur.png" },
 ];
 
 const fourCards = [
@@ -91,10 +91,9 @@ const PopularCities: React.FC = () => {
             key={city.name}
             className="flex flex-col items-center text-center space-y-0 md:space-y-1 cursor-pointer hover:scale-105 transition-transform"
           >
-            <div
-              className="w-30 h-22 bg-center bg-no-repeat bg-contain"
-              style={{ backgroundImage: `url(${city.img})` }}
-            />
+            <div className="w-24 h-20">
+              <img src={city.img} alt="city img" className="w-full h-full object-bottom object-contain"/>
+            </div>
             <p className="font-semibold text-sm md:text-md">{city.name}</p>
             <span className="text-gray-400 text-[10px] md:text-xs">
               {city.cars} Cars Available

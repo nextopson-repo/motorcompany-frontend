@@ -11,9 +11,9 @@ const heroImages = ["/Hero-car.png", "/hero-car-2.jpg", "/hero-car-3.jpg"];
 
 const Hero: React.FC = () => {
   return (
-    <div className="w-full md:max-w-7xl font-montserrat">
+    <div className="w-full md:max-w-7xl font-roboto">
       {/* Hero Slider */}
-      <div className="relative h-auto lg:min-h-[350px] md:m-6 rounded-lg overflow-hidden">
+      <div className="relative h-auto lg:min-h-[320px] md:m-6 rounded-lg overflow-hidden">
         <Swiper
           modules={[Autoplay, EffectFade]}
           autoplay={{ delay: 3000, disableOnInteraction: false }}
@@ -28,7 +28,7 @@ const Hero: React.FC = () => {
                 style={{ backgroundImage: `url(${img})` }}
               >
                 <div className="relative z-10 text-white px-3 md:px-6 w-[80%] md:max-w-xl md:-mt-24">
-                  <h1 className="text-2xl md:text-3xl font-semibold mb-4 leading-tight drop-shadow-lg">
+                  <h1 className="text-2xl md:text-[2.2rem] font-[600] mb-4 leading-tight drop-shadow-lg">
                     Turn Your Car into Cash — Fast, Fair & Hassle-Free
                   </h1>
                   <p className="text-sm md:text-md font-light leading-tight drop-shadow-md">
@@ -46,7 +46,7 @@ const Hero: React.FC = () => {
       </div>
 
       {/* Search Bar */}
-      <div className="relative z-20 -mt-28 ml-12 max-w-xs xs:max-w-md sm:max-w-xl md:max-w-2xl bg-white/95 rounded-lg p-4 md:p-4 space-y-3">
+      <div className="relative z-20 -mt-28 ml-12 max-w-xs xs:max-w-md sm:max-w-xl md:max-w-2xl bg-white/90 rounded-lg p-4 md:p-4 space-y-3">
         <div className="flex items-center justify-between">
           <p className="font-semibold text-sm md:text-xl text-center sm:text-left">
             Lets Find the perfect car for you

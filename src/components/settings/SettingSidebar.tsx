@@ -32,6 +32,7 @@ export default function SettingSidebar({
     { name: "My Listing", path: "/settings/listings" },
     { name: "Add Car", path: "/sell" },
     { name: "My Enqueries", path: "/settings/enquiries" },
+    { name: "Interested Buyers List", path: "/settings/interested-buyers" },
     { name: "Saved", path: "/settings/saved" },
     { name: "Buy Packages", path: "/settings/buy-packages" },
     { name: "Bought Packages & Billing", path: "/settings/bought-packages" },
@@ -59,7 +60,7 @@ export default function SettingSidebar({
           <p className="text-gray-500 text-sm">{role}</p>
 
           <div className="flex justify-center w-full mt-2">
-            <div className="border-b border-dashed border-gray-800 w-full"></div>
+            <div className="border-b border-dashed border-gray-800 w-full custom-dash"></div>
           </div>
         </div>
 

@@ -22,7 +22,7 @@ const Footer = () => {
     { page: "Careers", link: "/career" },
     { page: "Terms & Conditions", link: "/terms-and-conditions" },
     { page: "Privacy Policy", link: "/privacy-policy" },
-    { page: "Contact Us", link: "/contact" },
+    { page: "Contact Us", link: "/contact-us" },
   ];
 
   return (
