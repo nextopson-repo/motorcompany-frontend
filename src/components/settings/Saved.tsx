@@ -46,7 +46,7 @@ const Saved: React.FC = () => {
   
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="mx-auto">
       {/* Top bar */}
       <div className="grid grid-cols-3 justify-between items-center mb-4 md:mb-6 px-4 md:px-0">
         <div className="w-fit whitespace-nowrap col-span-3 md:col-span-1">
@@ -111,7 +111,7 @@ const Saved: React.FC = () => {
       </div>
 
       {/*Desktop Cars Grid */}
-      <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+      <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {filteredCars.map((cars) => (
           <CarCard key={cars.id} car = {cars} />
         ))}

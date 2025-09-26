@@ -22,7 +22,6 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
     fuelType,
     transmission,
     bodyType,
-    ownership,
     seats,
     carImages,
     address,
@@ -80,12 +79,12 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
             <h3 className="text-sm font-semibold leading-tight text-gray-800 truncate">
               {brand} {model}
             </h3>
-            <span className="min-w-12 text-[8px]">{"just now"}</span>
+            <span className="min-w-12 text-[8px] text-right">{"just now"}</span>
           </div>
 
           <p className="text-[9px] font-[500] text-black whitespace-nowrap overflow-hidden text-ellipsis mb-1">
             {bodyType} {seats ? ` ${seats} Seater` : ""} | {fuelType} |{" "}
-            {transmission} | {ownership}
+            {transmission}
           </p>
 
           <div className="flex items-end justify-between mb-3">

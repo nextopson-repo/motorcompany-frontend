@@ -5,6 +5,7 @@ import {
   ChevronDown,
   ChevronRight,
   Flag,
+  Flame,
   IdCard,
   List,
   Mail,
@@ -51,15 +52,15 @@ export default function SellerDetails() {
   return (
     <div className="grid lg:grid-cols-4 gap-8 mt-20 max-w-5xl mx-auto mb-4 overflow-hidden">
       {/* ---------- Left Seller Profile ---------- */}
-      <div className="col-span-1 w-full bg-white space-y-3 px-4 border-b border-gray-200 pb-6">
+      <div className="col-span-1 bg-white space-y-3 px-4 pb-6 h-fit">
         <div className="flex items-center gap-3">
           <img
             src={seller.avatar || "/default-avatar.png"}
             alt={seller.name || "Seller"}
             className="w-16 h-16 rounded-full border mb-3 object-cover"
           />
-          <span className="flex flex-col gap-1 mb-2 bg-red-200">
-            <h2 className="font-semibold text-md text-center capitalize whitespace-nowrap truncate text-ellipsis">
+          <span className="flex flex-col gap-1 mb-2">
+            <h2 className="max-w-[9rem] font-semibold text-md text-center capitalize whitespace-nowrap truncate text-ellipsis">
               {seller.name || "Unknown Seller"}
             </h2>
             <p className="text-gray-500 text-xs font-semibold">
@@ -124,7 +125,7 @@ export default function SellerDetails() {
       </div>
 
       {/* ---------- Right Car Listings ---------- */}
-      <div className="hidden col-span-3 w-full lg:flex flex-col gap-4">
+      <div className="hidden col-span-3 w-full lg:flex flex-col gap-4 mb-4">
         {seller.cars.length === 0 && (
           <div className="p-6 bg-white shadow rounded text-center text-gray-500">
             No cars listed by this seller yet.
@@ -168,12 +169,9 @@ export default function SellerDetails() {
                     Make your Offer
                   </span>
                 </p>
-                {car.emi && (
-                  <p className="text-[10px]">
-                    EMI starts
-                    <span className="text-green-600"> @ Rs.7899 / mo</span>
-                  </p>
-                )}
+                <p className="text-[10px] font-medium">
+                  3 days ago
+                </p>
               </span>
             </div>
 
@@ -186,8 +184,9 @@ export default function SellerDetails() {
                   {car.likes} people <br /> Liked
                 </p>
               </span>
-              <span className="text-[8px] whitespace-nowrap text-gray-500 mr-4">
-                Trending Viewed by {car.views} user's
+              <span className="text-[8px] whitespace-nowrap text-gray-500 mr-4 flex items-center gap-1">
+                <Flame className="text-[#cb202d] h-[12px] w-[12px]" />
+                 Trending Viewed by {car.views} user's
               </span>
             </div>
           </div>
@@ -195,7 +194,7 @@ export default function SellerDetails() {
       </div>
 
       {/* mobile carCards listing */}
-      <div className="flex items-center justify-between border-t border-gray-200 px-4 pt-6">
+      <div className="md:hidden flex items-center justify-between border-t border-gray-200 px-4 pt-6">
         <h1 className="text-lg font-semibold">Listed Cars</h1>
         <div className="flex items-center gap-2">
           <span className="flex items-center border border-gray-500 rounded-sm">
@@ -290,7 +289,7 @@ export default function SellerDetails() {
         </div>
       ) : (
         // Card View
-        <div className="grid grid-cols-1 gap-4 px-4">
+        <div className="md:hidden grid grid-cols-1 gap-4 px-4">
           {seller.cars.map((car) => (
             <div className="bg-white rounded-md shadow-lg overflow-hidden flex flex-col w-auto relative mb-3 lg:mb-0">
               <div className="relative">

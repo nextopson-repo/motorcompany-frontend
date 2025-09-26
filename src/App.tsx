@@ -14,6 +14,10 @@ import TopDealer from "./pages/TopDealer";
 import ContactUs from "./pages/ContactUs";
 import SellerDetails from "./pages/SellerDetails";
 import ScrollToTop from "./components/scrollToTop";
+import AppInitializer from "./components/AppInitializer";
+import { useDispatch } from "react-redux";
+import type { AppDispatch } from "./store/store";
+import { fetchCars } from "./store/slices/carSlice";
 
 const App = () => {
   const location = useLocation();
@@ -24,11 +28,12 @@ const App = () => {
 
   const hideNavFooter = ["/register", "/forgot-password"];
 
-  const handleLocationChange = (loc: string) => {
-    setSelectedCity(loc);
-    setIsLocationModalOpen(false);
-    localStorage.setItem("selectedCity", loc);
-  };
+  const dispatch = useDispatch<AppDispatch>();
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  // Fetch cars on mount
+    useEffect(() => {
+      dispatch(fetchCars(BACKEND_URL));
+    }, [BACKEND_URL, dispatch]);
 
   useEffect(() => {
     const savedCity = localStorage.getItem("selectedCity");
@@ -53,23 +58,24 @@ const App = () => {
   };
 
   useEffect(() => {
-  const anyModalOpen = isLoginOpen || isLocationModalOpen; 
+    const anyModalOpen = isLoginOpen || isLocationModalOpen;
 
-  if (anyModalOpen) {
-    document.body.style.overflow = "hidden";
-  } else {
-    document.body.style.overflow = "auto";
-  }
+    if (anyModalOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
 
-  return () => {
-    document.body.style.overflow = "auto";
-  };
-}, [isLoginOpen, isLocationModalOpen]);
-
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isLoginOpen, isLocationModalOpen]);
 
   return (
     <>
-    <ScrollToTop />
+      <AppInitializer />
+
+      <ScrollToTop />
       {!hideNavFooter.includes(location.pathname) && (
         <Navbar
           onSelectCityClick={() => setIsLocationModalOpen(true)}
@@ -91,13 +97,11 @@ const App = () => {
         </Routes>
       </main>
 
-      {/* ✅ Login Modal */}
       <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
 
       <LocationModal
         isOpen={isLocationModalOpen}
         onClose={handleCloseModal}
-        onLocationChange={handleLocationChange}
         citySearch={citySearch}
         setCitySearch={setCitySearch}
       />

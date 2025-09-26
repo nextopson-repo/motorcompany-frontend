@@ -1,8 +1,5 @@
-"use client";
-
 import type React from "react";
 import { useState } from "react";
-import { carsData } from "../../data/cars";
 import { ChevronUp, ChevronDown, ListFilter, Search } from "lucide-react";
 import { Disclosure } from "@headlessui/react";
 import { getTrackBackground, Range } from "react-range";
@@ -92,20 +89,20 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
 
   const allCollapsed = Object.values(sectionStates).every((state) => !state);
 
-  // ✅ Get min and max from dataset to use in sliders (if data exists)
-  const minPrice = carsData.length
-    ? Math.min(...carsData.map((c) => c.carPrice))
-    : 0;
-  const maxPrice = carsData.length
-    ? Math.max(...carsData.map((c) => c.carPrice))
-    : 10000000;
+  // ✅ Ensure slider values are always within bounds
+const safeRange = (values: [number, number] | null, min: number, max: number) => {
+  if (!values) return [min, max] as [number, number];
+  return [
+    Math.max(values[0], min),
+    Math.min(values[1], max),
+  ] as [number, number];
+};
 
-  const minYear = carsData.length
-    ? Math.min(...carsData.map((c) => c.manufacturingYear))
-    : 2000;
-  const maxYear = carsData.length
-    ? Math.max(...carsData.map((c) => c.manufacturingYear))
-    : new Date().getFullYear();
+  // ✅ Get min and max from dataset to use in sliders (if data exists)
+  const minPrice = filters.priceRange?.[0] ?? 0;
+  const maxPrice = filters.priceRange?.[1] ?? 10000000;
+  const minYear = filters.yearRange?.[0] ?? 2000;
+  const maxYear = filters.yearRange?.[1] ?? new Date().getFullYear();
 
   // ✅ Get dynamic options
   const brands = brandOptions;
@@ -116,10 +113,13 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
   const ownerships = ownershipOptions;
   const citiesByState: Record<string, string[]> = {};
   states.forEach((state) => {
-    citiesByState[state] = Array.from(
-      new Set(carsData.map((c) => c.address.city))
-    );
+    citiesByState[state] = []; // Populate dynamically from Redux if needed
   });
+  // states.forEach((state) => {
+  //   citiesByState[state] = Array.from(
+  //     new Set(carsData.map((c) => c.address.city))
+  //   );
+  // });
 
   const renderRange = (
     values: [number, number],
@@ -147,44 +147,66 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
         min={min || 0}
         max={max}
         onChange={(vals) => setValues([vals[0], vals[1]])}
-        renderTrack={({ props, children }) => {
-          const { key, ...rest } =
-            (props as {
-              key?: React.Key;
-            } & React.HTMLAttributes<HTMLDivElement>) || {};
+         renderTrack={({ props, children }) => (
+          <div
+            {...props}
+            className="h-[2px] rounded relative w-full"
+            style={{
+              background: getTrackBackground({
+                values,
+                colors: ["#D1D5DB", "#EF4444", "#D1D5DB"],
+                min,
+                max,
+              }),
+            }}
+          >
+            {children}
+          </div>
+        )}
+        // renderTrack={({ props, children }) => {
+        //   const { key, ...rest } =
+        //     (props as {
+        //       key?: React.Key;
+        //     } & React.HTMLAttributes<HTMLDivElement>) || {};
 
-          return (
-            <div
-              key={key}
-              {...rest}
-              className="h-[2px] rounded relative w-full"
-              style={{
-                background: getTrackBackground({
-                  values,
-                  colors: ["#D1D5DB", "#EF4444", "#D1D5DB"],
-                  min,
-                  max,
-                }),
-              }}
-            >
-              {children}
-            </div>
-          );
-        }}
-        renderThumb={({ props }) => {
-          const { key, ...rest } =
-            (props as {
-              key?: React.Key;
-            } & React.HTMLAttributes<HTMLDivElement>) || {};
+        //   return (
+        //     <div
+        //       key={key}
+        //       {...rest}
+        //       className="h-[2px] rounded relative w-full"
+        //       style={{
+        //         background: getTrackBackground({
+        //           values,
+        //           colors: ["#D1D5DB", "#EF4444", "#D1D5DB"],
+        //           min,
+        //           max,
+        //         }),
+        //       }}
+        //     >
+        //       {children}
+        //     </div>
+        //   );
+        // }}
+        renderThumb={({ props }) => (
+          <div
+            {...props}
+            className="h-[10px] w-[10px] bg-red-600 border border-white rounded-full cursor-pointer "
+          />
+        )}
+        // renderThumb={({ props }) => {
+        //   const { key, ...rest } =
+        //     (props as {
+        //       key?: React.Key;
+        //     } & React.HTMLAttributes<HTMLDivElement>) || {};
 
-          return (
-            <div
-              key={key}
-              {...rest}
-              className="h-[10px] w-[10px] bg-red-600 border border-white rounded-full cursor-pointer "
-            />
-          );
-        }}
+        //   return (
+        //     <div
+        //       key={key}
+        //       {...rest}
+        //       className="h-[10px] w-[10px] bg-red-600 border border-white rounded-full cursor-pointer "
+        //     />
+        //   );
+        // }}
       />
     </div>
   );
@@ -270,7 +292,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
               {sectionStates.priceRange && (
                 <div>
                   {renderRange(
-                    selectedFilters.priceRange,
+                     safeRange(selectedFilters.priceRange, minPrice, maxPrice),
                     (vals) =>
                       onSelectedFiltersChange({
                         ...selectedFilters,
@@ -376,7 +398,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
               {sectionStates.yearRange && (
                 <div>
                   {renderRange(
-                    selectedFilters.yearRange,
+                    safeRange(selectedFilters.yearRange, minYear, maxYear),
                     (vals) =>
                       onSelectedFiltersChange({
                         ...selectedFilters,

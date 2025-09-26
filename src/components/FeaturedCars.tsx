@@ -6,11 +6,16 @@ import "swiper/css/navigation";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import CarCard from "./CarCard";
-import { carsData } from "../data/cars";
+import { useSelector } from "react-redux";
+import type { RootState } from "../store/store";
+// import { carsData } from "../data/cars";
 
 const FeaturedCars: React.FC = () => {
+   const { cars } = useSelector(
+    (state: RootState) => state.cars
+  );
 
-  const carData = carsData;
+  // const carData = carsData;
 
   return (
     <section className="max-w-7xl mx-auto px-2 md:px-8 py-6 md:py-14 relative">
@@ -47,7 +52,7 @@ const FeaturedCars: React.FC = () => {
           nextEl: ".custom-next",
         }}
       >
-        {carData.map((car) => (
+        {cars.map((car) => (
           <SwiperSlide key={car.id} className="pb-4 md:pb-5">
             <CarCard car={car} />
           </SwiperSlide>

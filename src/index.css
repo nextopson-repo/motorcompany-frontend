@@ -1,6 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
 @import "tailwindcss";
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
 * {
     font-family: 'Roboto', system-ui, -apple-system, Roboto, 'Open Sans';
@@ -216,6 +217,13 @@ body{
 /* contact-us form shadow */
 .contact-form-shadow{
     box-shadow: 0px 4px 38.3px -1px rgba(0, 0, 0, 0.25);
+}
+
+/* buy packages cards shadow */
+
+.packages-cards{
+    box-shadow: 0px 1px 19.4px 0px rgba(0, 0, 0, 0.13);
+
 }
 
 

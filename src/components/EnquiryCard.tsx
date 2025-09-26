@@ -1,4 +1,4 @@
-import { Phone, MapPin, MessageCircle, EllipsisVertical } from "lucide-react";
+import { Phone, MapPin, MessageCircle, EllipsisVertical, Eye } from "lucide-react";
 import type { Enquiry } from "../store/slices/enqueriesSlice";
 import { formatPriceToLakh } from "../utils/formatPrice";
 import { useState, useRef, useEffect } from "react";
@@ -22,7 +22,7 @@ export default function EnquiryCard({ enquiry }: EnquiryCardProps){
   }, []);
 
   return (
-    <div className="flex flex-col rounded-sm md:rounded-md border border-gray-200 shadow-sm p-1 md:p-2 bg-white mb-2">
+    <div className="flex flex-col rounded-sm md:rounded-md border border-gray-200 shadow-sm p-1 md:p-2 bg-white mb-4">
       <div className="flex h-full w-full">  
         {/*left Car Image */}
         <div className="h-fit w-28 md:w-48 flex-shrink-0 relative">
@@ -43,12 +43,12 @@ export default function EnquiryCard({ enquiry }: EnquiryCardProps){
                 <h3 className="font-bold text-xs md:text-sm text-gray-900">
                   {enquiry.carTitle}
                 </h3>
-                <p className="text-[9px] md:text-xs mt-1 leading-tight text-gray-700">
+                <p className="text-[9px] md:text-[10px] font-medium mt-1 leading-tight text-gray-700">
                   {enquiry.kmDriven} | {enquiry.carType} | {enquiry.mileage} |{" "}
                   {enquiry.fuelType} | {enquiry.transmission}
                 </p>
-                <div className="hidden text-[9px] md:text-xs md:flex items-center mt-2 text-gray-700">
-                  <MapPin className="w-3 md:w-4 h-3 md:h-4 mr-1" />
+                <div className="hidden text-[9px] md:text-[10px] font-medium md:flex items-center mt-2 text-gray-700">
+                  <MapPin className="w-3 md:w-[14px] h-3 md:h-[14px] mr-1" />
                   {enquiry.location}
                 </div>
               </div>
@@ -58,9 +58,8 @@ export default function EnquiryCard({ enquiry }: EnquiryCardProps){
                 <p className="font-bold text-sm md:text-lg text-gray-900">
                   Rs. {formatPriceToLakh(enquiry.price)}
                 </p>
-                <p className="text-[10px] text-gray-600 mt-1">
-                  EMI starts @{" "}
-                  <span className="text-green-600">{enquiry.emi}</span>
+                <p className="text-[10px] text-gray-600 mt-1 flex items-center gap-1 font-medium">
+                  <span><Eye className="h-3 w-3 text-orange-500"/></span> 100 Impression Views
                 </p>
               </div>
             </div>

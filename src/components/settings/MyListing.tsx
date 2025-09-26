@@ -96,7 +96,7 @@ const MyListing = () => {
       {loading && <p className="text-gray-500 px-4 md:px-0">Loading...</p>}
       {error && <p className="text-red-500 px-4 md:px-0">{error}</p>}
 
-      <div className="space-y-2 md:space-y-4 px-2 md:px-0 py-4 md:py-0 ">
+      <div className="space-y-2 md:space-y-4 px-2 md:px-0 py-4 md:py-0">
         {listings.map((car) => (
           <div
             key={car.id}
@@ -133,14 +133,14 @@ const MyListing = () => {
                   {/* Title + Details */}
                   <div className="space-y-1 md:space-y-2">
                     <h3
-                      className={`font-semibold text-xs md:text-md ${
+                      className={`font-semibold text-xs md:text-sm ${
                         car.isSold ? "text-gray-500" : "text-gray-900"
                       }`}
                     >
                       {car.title}
                     </h3>
                     <p
-                      className={`text-[9px] md:text-xs mt-1 leading-tight ${
+                      className={`text-[9px] md:text-[10px] font-medium mt-1 leading-tight ${
                         car.isSold ? "text-gray-400" : "text-gray-900"
                       }`}
                     >
@@ -148,12 +148,12 @@ const MyListing = () => {
                       {car.seats} seater | {car.fuel} | {car.transmission}
                     </p>
                     <div
-                      className={`hidden text-[9px] md:text-xs md:flex items-center mt-2 ${
+                      className={`hidden text-[9px] md:text-[10px] md:flex items-center mt-2 font-medium ${
                         car.isSold ? "text-gray-400" : "text-gray-900"
                       }`}
                     >
                       <MapPinIcon
-                        className={`w-3 md:w-4 h-3 md:h-4 mr-1 ${
+                        className={`w-3 md:w-4 h-3 md:h-4 mr-1  ${
                           car.isSold ? "text-gray-400" : "text-gray-900"
                         }`}
                       />
@@ -162,14 +162,17 @@ const MyListing = () => {
                   </div>
 
                   {/* Price */}
-                  <div className="hidden md:block mt-3">
+                  <div className="hidden md:block ">
                     <p
-                      className={`font-bold text-sm md:text-lg flex items-center gap-2 ${
+                      className={`font-bold text-sm md:text-lg flex items-center gap-2 mb-2 ${
                         car.isSold ? "text-gray-500" : "text-gray-900"
                       }`}
                     >
                       Rs. {formatShortNumber(car.price)}
                     </p>
+                    <div className="text-left w-fit">
+                      <p className="text-[9px] font-medium text-end">Added on {car.time}</p>
+                    </div>
                   </div>
                 </div>
 
@@ -220,8 +223,14 @@ const MyListing = () => {
                             Mark as Sold
                           </div>
                           <div
+                            onClick={() => handleAction("Download Lead", car.id)}
+                            className="text-xs md:text-md px-4 py-1 md:py-2 hover:bg-gray-200 cursor-pointer"
+                          >
+                            Download Lead
+                          </div>
+                          <div
                             onClick={() => handleAction("Delete", car.id)}
-                            className="text-xs md:text-md px-4 py-1 md:py-2 hover:bg-gray-200 cursor-pointer text-green-500"
+                            className="text-xs md:text-md px-4 py-1 md:py-2 hover:bg-gray-200 cursor-pointer"
                           >
                             Delete
                           </div>
@@ -231,9 +240,6 @@ const MyListing = () => {
                   </div>
 
                   <div className="space-y-1 hidden md:block">
-                    <div>
-                      <p className="text-[9px] text-end">Added on {car.time}</p>
-                    </div>
                     <div className="flex items-center justify-end">
                       <div
                         className={`flex items-center justify-center gap-1 ${

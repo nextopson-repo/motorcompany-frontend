@@ -46,7 +46,7 @@ export default function Profile() {
   };
 
   return (
-    <main className="flex-1  mx-auto relative mb-8 md:mb-0">
+    <main className="flex-1 mx-auto relative mb-8 md:mb-0 ">
 
       {/* Header */}
       <div className="flex items-center gap-3 md:mb-6 bg-white text-black py-[6px] px-4 md:px-0 z-10">

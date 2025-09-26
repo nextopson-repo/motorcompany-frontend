@@ -40,7 +40,7 @@ export default function SettingSidebar({
 
   return (
     <>
-      <aside className="hidden w-60 bg-white rounded-sm shadow py-4 mb-4 md:flex flex-col items-center z-5">
+      <aside className="hidden w-60 h-fit bg-white rounded-sm shadow py-4 mb-4 md:flex flex-col items-center z-5">
         <div className="pb-4 px-4 w-full flex flex-col items-center relative">
           <div className="relative">
             <img

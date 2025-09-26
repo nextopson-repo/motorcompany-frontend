@@ -6,7 +6,8 @@ import "swiper/css/navigation";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import CarCard from "./CarCard";
-import { carsData } from "../data/cars";
+import { useSelector } from "react-redux";
+import type { RootState } from "../store/store";
 
 const bodyTypes = [
   { name: "Hatchback", vehicles: 26, img: "/CarCategories/hatchback.png" },
@@ -18,6 +19,9 @@ const bodyTypes = [
 ];
 
 const HeroCategories: React.FC = () => {
+  const { cars } = useSelector(
+    (state: RootState) => state.cars
+  );
   return (
     <section className="w-full mt-2 md:mt-6">
       {/* Categories */}
@@ -86,7 +90,7 @@ const HeroCategories: React.FC = () => {
             nextEl: ".custom-next2",
           }}
         >
-          {carsData.map((car) => (
+          {cars.map((car) => (
             <SwiperSlide key={car.id} className="pb-5">
               <CarCard car={car} />
             </SwiperSlide>

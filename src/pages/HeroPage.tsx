@@ -39,10 +39,6 @@ const HeroPage = () => {
       <LocationModal
         isOpen={isLocationModalOpen}
         onClose={handleClose}
-        onLocationChange={(loc) => {
-          console.log("Selected location:", loc);
-          handleClose();
-        }}
         citySearch={citySearch}
         setCitySearch={setCitySearch}
       />

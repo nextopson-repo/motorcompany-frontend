@@ -35,7 +35,7 @@ const BoughtPackages: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-none md:shadow-md">
+    <div className="w-full lg:w-3xl mx-auto bg-white rounded-lg shadow-none md:shadow-md">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center my-2 md:my-0 md:mb-4 px-4 md:px-0">
         <h2 className="text-md md:text-2xl font-bold text-black">

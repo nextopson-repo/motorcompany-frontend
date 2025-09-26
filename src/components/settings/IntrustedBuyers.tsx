@@ -26,11 +26,11 @@ const InterestedBuyers: React.FC = () => {
     sortOptions[0].label;
 
   return (
-    <div className=" max-w-7xl mx-auto">
+    <div className="mx-auto">
       {/* header */}
       <div className="w-full mb-4 md:mb-6 px-4 md:px-0 flex flex-col md:flex-row gap-2 md:gap-0 md:items-center justify-between ">
         <h2 className="text-md md:text-2xl font-bold py-2 md:py-0">Interested Buyers</h2>
-        {/* Sort dropdown */}
+        {/* dropdown */}
         <div className="relative flex md:flex-none w-full gap-2 md:gap-0 sm:w-auto">
           <span className="md:hidden w-full md:w-[60%] flex items-center gap-2 bg-gray-100 rounded-sm px-2 md:px-4 py-2">
             <SearchIcon className="w-3 md:w-4 h-3 md:h-4 text-black" />
@@ -54,7 +54,7 @@ const InterestedBuyers: React.FC = () => {
           </button>
 
           {isSortOpen && (
-            <div className="absolute right-0 mt-[1px] w-32 bg-gray-50 text-xs rounded-md shadow-lg z-20 p-1">
+            <div className="absolute right-0 mt-9 w-32 bg-gray-50 text-xs rounded-md shadow-lg z-20 p-1">
               {sortOptions.map((opt) => (
                 <button
                   key={opt.value}

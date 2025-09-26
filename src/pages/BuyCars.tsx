@@ -1,6 +1,6 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCars, setSelectedFilters } from "../store/slices/carSlice";
+import { setSelectedFilters } from "../store/slices/carSlice";
 import { FilterSidebar } from "../components/filters/FilterSidebar";
 import CarList from "../components/CarList";
 import FindDealers from "../components/FindDealers";
@@ -8,17 +8,14 @@ import type { AppDispatch, RootState } from "../store/store";
 
 export default function BuyCars() {
   const dispatch = useDispatch<AppDispatch>();
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  
 
   // Redux state
   const { cars, filters, selectedFilters, loading, error } = useSelector(
     (state: RootState) => state.cars
   );
 
-  // Fetch cars on mount
-  useEffect(() => {
-    dispatch(fetchCars(BACKEND_URL));
-  }, [BACKEND_URL, dispatch]);
+  
 
   // Memoized unique options for sidebar
   const brandOptions = useMemo(

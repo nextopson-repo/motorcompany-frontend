@@ -39,7 +39,7 @@ const Setting = () => {
           />
 
           {/* Main Content: Nested Routes */}
-          <div className="flex-1 bg-white md:shadow rounded-sm md:p-8">
+          <div className="w-fit flex-1 bg-white md:shadow rounded-sm md:p-8">
             <Routes>
               <Route index element={<Navigate to="profile" replace />} />
               <Route path="profile" element={<Profile />} />
