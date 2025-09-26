@@ -26,7 +26,7 @@ const InterestedBuyers: React.FC = () => {
     sortOptions[0].label;
 
   return (
-    <div className="mx-auto">
+    <div className="w-full mx-auto">
       {/* header */}
       <div className="w-full mb-4 md:mb-6 px-4 md:px-0 flex flex-col md:flex-row gap-2 md:gap-0 md:items-center justify-between ">
         <h2 className="text-md md:text-2xl font-bold py-2 md:py-0">Interested Buyers</h2>

@@ -44,7 +44,27 @@ export interface CarsState {
 
 // ---------------- Initial State ----------------
 const initialState: CarsState = {
-  cars: [],
+  cars: [
+    // ---------- Dummy car data for testing, DELETE AFTER TESTING ----------
+    {
+      id: "1",
+      brand: "C tron",
+      model: "sports X",
+      fuelType: "Petrol",
+      transmission: "Automatic",
+      bodyType: "Hatchback",
+      ownership: "First",
+      seats: 4,
+      carPrice: 1500000,
+      manufacturingYear: 2024,
+      kmDriven: 10000,
+      address: { state: "Maharashtra", city: "Pune" },
+      carImages: [{ imageUrl: "/hero-car-2.jpg" }],
+      user: { fullName: "Himesh Verma", userType: "Dealer", mobileNumber: 7896541230, },
+      updatedAt: new Date().toISOString(),
+    },
+    // -------------------
+  ],
   filters: {
     brand: [],
     fuel: [],

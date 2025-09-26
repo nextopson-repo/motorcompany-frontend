@@ -194,7 +194,7 @@ const CarDetails = () => {
           {/* */}
 
           {/*mobile Car Details Card */}
-          <div className="lg:hidden bg-white border border-gray-200 p-4 py-6 rounded-t-2xl space-y-3 shadow z-40 -mt-10">
+          <div className="lg:hidden bg-white border border-gray-200 p-4 py-6 rounded-2xl space-y-3 shadow z-40 -mt-10">
             <div className="flex justify-between">
               <div className="space-y-2">
                 <div className="flex items-start justify-between">
@@ -356,21 +356,42 @@ const CarDetails = () => {
           </div>
 
           {/* Car Overview Table */}
-          {/* <div className="bg-white lg:pt-4 border-b border-gray-200 pb-2 lg:rounded-lg shadow-md">
+          <div className="lg:hidden bg-white lg:pt-4 border-b border-gray-200 pb-2 rounded-2xl shadow-md border">
             <h2 className="text-md md:text-xl font-bold px-4 py-2">
               Car Overview
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 lg:px-6">
               {[
-                { label: "Year of Manufacture", value: manufactureYear },
                 {
-                  label: "Kms Driven",
-                  value: `${Number(kms).toLocaleString()} Kms`,
-                },
-                { label: "Seats", value: seats ? `${seats} Seats` : "N/A" },
-                { label: "Transmission", value: transmission || "N/A" },
-                { label: "Fuel", value: fuelType || "N/A" },
-                { label: "Drive Type", value: "FWD" },
+                      label: "Year of Manufacture",
+                      value: manufactureYear || "N/A",
+                    },
+                    {
+                      label: "Kms Driven",
+                      value: kms
+                        ? `${Number(kms).toLocaleString()} Kms`
+                        : "N/A",
+                    },
+                    {
+                      label: "Seats",
+                      value: seats ? `${seats} Seats` : "N/A",
+                    },
+                    { label: "Transmission", value: transmission || "N/A" },
+                    {
+                      label: "Year of Manufacture",
+                      value: manufactureYear || "N/A",
+                    },
+                    {
+                      label: "Kms Driven",
+                      value: kms
+                        ? `${Number(kms).toLocaleString()} Kms`
+                        : "N/A",
+                    },
+                    {
+                      label: "Seats",
+                      value: seats ? `${seats} Seats` : "N/A",
+                    },
+                    { label: "Transmission", value: transmission || "N/A" },
               ].map((item, i, arr) => {
                 const isLastRow = i >= arr.length - 3;
                 return (
@@ -392,7 +413,7 @@ const CarDetails = () => {
                 );
               })}
             </div>
-          </div> */}
+          </div>
         </div>
 
         {/* RIGHT SIDE */}
@@ -562,7 +583,7 @@ const CarDetails = () => {
           </div>
 
           {/* car overview dropdown */}
-          <div className="sticky z-40 space-y-2">
+          <div className="hidden md:block sticky z-40 space-y-2">
             <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 w-full max-w-md">
               <div
                 className="flex justify-between items-center cursor-pointer"
@@ -683,7 +704,7 @@ const CarDetails = () => {
       </div>
 
       {/* slider */}
-      <div className="px-4 lg:px-0 lg:m-6 border-t border-gray-200 ">
+      <div className="px-4 lg:px-0 lg:m-6 rounded-2xl border-gray-200 ">
         <div className="flex items-center justify-between mt-4 lg:mt-6">
           <h2 className="text-md lg:text-2xl font-semibold py-4 px-2">
             Similar Cars
