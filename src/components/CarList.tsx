@@ -1,110 +1,91 @@
-import { useState } from "react";
+import { useSelector } from "react-redux";
 import CarCard from "./CarCard";
 import CarListHeader from "./CarListHeader";
+import type { RootState } from "../store/store";
+import { useMemo } from "react";
+// import { setSearchTerm } from "../store/slices/carSlice";
 
-interface CarListProps {
-  cars: any;
-  city: string;
-  // searchTerm: string;
-  // setSearchTerm?: (term: string) => void;
-  // sortOption?: string;
-  // setSortOption?: (option: string) => void;
-  onLocationChange?: (location: string) => void;
-  filters: {
-    brand: string[];
-    bodyType: string[];
-    fuel: string[];
-    transmission: string[];
-    ownership: string[];
-    location: string[];
-    priceRange: [number, number];
-    yearRange: [number, number];
+
+export default function CarList() {
+  // const dispatch = useDispatch<AppDispatch>();
+
+  const { cars, filters, selectedFilters, searchTerm, sortOption } = useSelector(
+    (state: RootState) => state.cars
+  );
+
+  // Handler for search term change
+  // const handleSearchTermChange = (term: string) => {
+  //   dispatch(setSearchTerm(term));
+  // };
+
+
+  // Handler for location/city change
+  const handleLocationChange = (newCity: string) => {
+    // Update selectedFilters.location
+    // You can dispatch a setSelectedFilters action if needed
+    // Example: dispatch(setSelectedFilters({ location: [newCity] }))
+    console.log("newCity", newCity)
   };
-  onFilterChange: (type: string, value: string | number) => void;
-}
 
-export default function CarList({ cars, filters }: CarListProps) {
+  const filteredAndSortedCars = useMemo(() => {
+    const filtered = cars.filter((car) => {
+      const { brand, fuel, transmission, bodyType, ownership, location, priceRange, yearRange } =
+        selectedFilters;
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const [sortOption, setSortOption] = useState("yearNewToOld");
-  const [city, onFilterChange] = useState("");
+      if (brand.length && !brand.includes(car.brand || "")) return false;
+      if (fuel.length && !fuel.includes(car.fuelType || "")) return false;
+      if (transmission.length && !transmission.includes(car.transmission || "")) return false;
+      if (bodyType.length && !bodyType.includes(car.bodyType || "")) return false;
+      if (ownership.length && !ownership.includes(car.ownership || "")) return false;
+      if (location.length && !(location.includes(car.address?.state || "") || location.includes(car.address?.city || "")))
+        return false;
 
-  // 🔹 Apply filters before rendering
-  const filteredCars = cars.filter((car: any) => {
-    const {
-      brand,
-      fuel,
-      transmission,
-      bodyType,
-      ownership,
-      location,
-      priceRange,
-      yearRange,
-    } = filters;
+      if (priceRange && (car.carPrice! < priceRange[0] || car.carPrice! > priceRange[1])) return false;
+      if (yearRange && (car.manufacturingYear! < yearRange[0] || car.manufacturingYear! > yearRange[1]))
+        return false;
 
-    // brand filter
-    if (brand.length > 0 && !brand.includes(car.brand)) return false;
+      if (searchTerm && !`${car.brand} ${car.model}`.toLowerCase().includes(searchTerm.toLowerCase()))
+        return false;
 
-    // fuel filter
-    if (fuel.length > 0 && !fuel.includes(car.fuelType)) return false;
+      return true;
+    });
 
-    // transmission filter
-    if (transmission.length > 0 && !transmission.includes(car.transmission))
-      return false;
+    filtered.sort((a, b) => {
+      switch (sortOption) {
+        case "yearNewToOld":
+          return (b.manufacturingYear || 0) - (a.manufacturingYear || 0);
+        case "yearOldToNew":
+          return (a.manufacturingYear || 0) - (b.manufacturingYear || 0);
+        case "priceLowToHigh":
+          return (a.carPrice || 0) - (b.carPrice || 0);
+        case "priceHighToLow":
+          return (b.carPrice || 0) - (a.carPrice || 0);
+        default:
+          return 0;
+      }
+    });
 
-    // body type filter
-    if (bodyType.length > 0 && !bodyType.includes(car.bodyType)) return false;
-
-    // ownership filter
-    if (ownership.length > 0 && !ownership.includes(car.ownership))
-      return false;
-
-    // location filter (state/city)
-    if (
-      location.length > 0 &&
-      !location.includes(car.address?.state) &&
-      !location.includes(car.address?.city)
-    ) {
-      return false;
-    }
-
-    // price range filter
-    if (car.carPrice < priceRange[0] || car.carPrice > priceRange[1]) {
-      return false;
-    }
-
-    // year range filter
-    if (
-      car.manufacturingYear < yearRange[0] ||
-      car.manufacturingYear > yearRange[1]
-    ) {
-      return false;
-    }
-
-    return true;
-  });
+    return filtered;
+  }, [cars, selectedFilters, searchTerm, sortOption]);
 
   return (
-    <div className="min-h-screen w-full">
-      <div className="max-w-6xl mx-auto px-2">
+    <div className="min-h-screen w-full overflow-hidden pl-1 pb-2">
+      <div className="w-full lg:max-w-7xl mx-auto">
         {/* Header */}
         <CarListHeader
-          carCount={cars.length}
-          filters={filters}
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          sortOption={sortOption}
-          setSortOption={setSortOption}
-          city={city}
-          onFilterChange={onFilterChange}
+          carCount={filteredAndSortedCars.length}
+          filters={{
+            ...filters,
+            priceRange: filters.priceRange ?? [0, 10000000],
+            yearRange: filters.yearRange ?? [2000, 2025],
+          }}
+          onFilterChange={handleLocationChange}
         />
 
         {/* Car Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredCars.length > 0 ? (
-            filteredCars.map((car: any) => (
-              <CarCard key={car.id} car={car} userData={car.user} />
-            ))
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredAndSortedCars.length ? (
+            filteredAndSortedCars.map((car) => <CarCard key={car.id} car={car} />)
           ) : (
             <p className="col-span-full text-center">No cars found</p>
           )}

@@ -12,6 +12,8 @@ import LocationModal from "./components/LocationModal";
 import LoginModal from "./pages/LoginModal";
 import TopDealer from "./pages/TopDealer";
 import ContactUs from "./pages/ContactUs";
+import SellerDetails from "./pages/SellerDetails";
+import ScrollToTop from "./components/scrollToTop";
 
 const App = () => {
   const location = useLocation();
@@ -50,17 +52,32 @@ const App = () => {
     localStorage.setItem("locationModalClosed", "true");
   };
 
+  useEffect(() => {
+  const anyModalOpen = isLoginOpen || isLocationModalOpen; 
+
+  if (anyModalOpen) {
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "auto";
+  }
+
+  return () => {
+    document.body.style.overflow = "auto";
+  };
+}, [isLoginOpen, isLocationModalOpen]);
+
+
   return (
     <>
+    <ScrollToTop />
       {!hideNavFooter.includes(location.pathname) && (
         <Navbar
           onSelectCityClick={() => setIsLocationModalOpen(true)}
           selectedCity={selectedCity}
-          // onLoginClick={() => setIsLoginOpen(true)} // ✅ Trigger login modal
         />
       )}
 
-      <main className="min-h-screen z-0">
+      <main className="min-h-screen z-0 ">
         <Routes>
           <Route path="/" element={<HeroPage />} />
           <Route path="/buy-car" element={<BuyCars />} />
@@ -69,6 +86,7 @@ const App = () => {
           <Route path="sell" element={<Sell />} />
           <Route path="/settings/*" element={<Setting />} />
           <Route path="/top-dealer" element={<TopDealer />} />
+          <Route path="/seller-details/:userId" element={<SellerDetails />} />
           <Route path="/contact-us" element={<ContactUs />} />
         </Routes>
       </main>

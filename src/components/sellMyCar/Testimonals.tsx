@@ -1,7 +1,8 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
-import { FaChevronLeft, FaChevronRight, FaStar } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { IoStarSharp } from "react-icons/io5";
 import "swiper/css";
 
 const testimonials = [
@@ -75,42 +76,42 @@ const testimonials = [
     rating: 3.1,
     text: "Kia Syros Long Term Introduction: Third Time's The Cha Citroen eC3 1000 km",
     description:
-      "After fleeting experiences that left me with mixed feelings for Kia’s rather ingenious SUV, it is feelings for Kia’s rather is After fleeting experiences that left me with mixed feeling...",
+      "After fleeting experiences that left me with mixed feelings for Kia's rather ingenious SUV, it is feelings for Kia’s rather is After fleeting experiences that left me with mixed feeling...",
   },
 ];
 
 const Testimonials: React.FC = () => {
   return (
-    <section className="w-full mx-auto pt-12 pb-6 px-4 font-montserrat mb-4 relative">
+    <section className="w-full mx-auto md:pt-12 pb-4 md:pb-6 px-4 font-roboto mb-4 relative ">
       {/* Heading */}
-      <div className="text-xs text-center mb-10">
-        <p className="text-[#EE1422] font-semibold flex items-center justify-center gap-4">
-          <span className="w-10 h-[1.4px] bg-[#EE1422]/80"></span>
+      <div className="text-xs text-center mb-2 md:mb-4">
+        <p className="text-[#EE1422] text-[10px] md:text-xs font-semibold flex items-center justify-center gap-2 md:gap-4">
+          <span className="w-7 md:w-10  h-[1px] md:h-[1.4px] bg-[#EE1422]/80"></span>
           Testimonials
-          <span className="w-10 h-[1.4px] bg-[#EE1422]/80"></span>
+          <span className="w-7 md:w-10  h-[1px] md:h-[1.4px] bg-[#EE1422]/80"></span>
         </p>
-        <h2 className="text-xl md:text-[23px] leading-7.5 font-bold mt-4">
+        <h2 className="text-sm md:text-2xl font-bold mt-2 md:mt-4">
           Real Stories. Real Experiences. Real
-          <br className="hidden md:block" />
+          <br />
           Satisfaction.
         </h2>
-        <p className="text-[16px] max-w-2xl mx-auto mt-4 text-gray-800 leading-5.5 px-4">
+        <p className="text-[10px] md:text-[16px] max-w-2xl mx-auto mt-2 md:mt-4 text-black leading-2.7 md:leading-5.5 tracking-tight md:tracking-none md:px-4">
           Hear from our happy customers! Discover how our products/services have
           made a difference in their lives.
         </p>
       </div>
 
-      <button className="swiper-button-prev1 absolute top-[63%] -translateY-1/2 left-[2.5%] flex items-center justify-center bg-black/90 p-3 rounded-full text-white z-10 hover:scale-[1.1]">
-        <FaChevronLeft className="h-5 w-5" />
+      <button className="swiper-button-prev1 absolute top-[44%] md:top-[63%] -translateY-1/2 left-[2.5%] flex items-center justify-center bg-black/90 p-2 md:p-3 rounded-full text-white z-10 hover:scale-[1.1] active:scale-90">
+        <FaChevronLeft className="h-3 md:h-5 w-3 md:w-5" />
       </button>
-      <button className="swiper-button-next1 absolute top-[63%] -translateY-1/2 right-[2.5%] flex items-center justify-center bg-black/90 p-3 rounded-full text-white z-10 hover:scale-[1.1]">
-        <FaChevronRight className="h-5 w-5" />
+      <button className="swiper-button-next1 absolute top-[44%] md:top-[63%] -translateY-1/2 right-[2.5%] flex items-center justify-center bg-black/90 p-2 md:p-3 rounded-full text-white z-10 hover:scale-[1.1] active:scale-90">
+        <FaChevronRight className="h-3 md:h-5 w-3 md:w-5" />
       </button>
 
       {/* Swiper */}
       <Swiper
         modules={[Autoplay, Navigation]}
-        spaceBetween={24}
+        spaceBetween={32}
         slidesPerView={3}
         loop={true}
         autoplay={{ delay: 3000, disableOnInteraction: false }}
@@ -127,7 +128,7 @@ const Testimonials: React.FC = () => {
       >
         {testimonials.map((t) => (
           <SwiperSlide key={t.id}>
-            <div className="bg-white rounded-xl shadow-md p-4 relative h-full flex flex-col my-2">
+            <div className="bg-white rounded-md shadow-md p-4 relative h-full flex flex-col my-2">
               {/* Profile + Rating Row */}
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
@@ -143,10 +144,10 @@ const Testimonials: React.FC = () => {
                     </p>
                   </div>
                 </div>
-                <div className="text-right flex items-center gap-1 mt-[6px]">
-                  <div className="flex items-center gap-[2px] text-yellow-400 text-xs">
+                <div className="text-right flex items-center gap-2 mt-[6px]">
+                  <div className="flex items-center gap-[2.5px] text-yellow-400 text-[10px]">
                     {Array.from({ length: 5 }, (_, i) => (
-                      <FaStar key={i} />
+                      <IoStarSharp key={i} className="h-[10px] w-[10px]"/>
                     ))}
                   </div>
                   <p className="text-green-600 font-semibold text-[10px] mt-1">
@@ -156,12 +157,12 @@ const Testimonials: React.FC = () => {
               </div>
 
               {/* Title */}
-              <h3 className="text-xs md:text-sm mb-2 line-clamp-2">
+              <h3 className="text-xs mb-2 line-clamp-2 text-black font-medium">
                 {t.text} ...
               </h3>
 
               {/* Review Text */}
-              <p className="text-gray-800 text-xs relative z-10 flex-1">
+              <p className="text-black text-[11px] relative z-10 flex-1 tracking-tight">
                 {t.description}
               </p>
 
@@ -174,11 +175,11 @@ const Testimonials: React.FC = () => {
               </a>
 
               {/* Quote Watermark */}
-              <span className="absolute bottom-[8%] left-[65%] select-none pointer-events-none leading-none">
+              <span className="w-24 h-24 absolute bottom-[5%] left-[70%] select-none pointer-events-none leading-none">
                 <img
                   src="/quote-close.png"
                   alt="close quote"
-                  className="w-[85%] h-[85%]"
+                  className="w-full h-full"
                 />
               </span>
             </div>

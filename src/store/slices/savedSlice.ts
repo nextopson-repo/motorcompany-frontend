@@ -7,6 +7,7 @@ interface Car {
     carPrice: number;
     manufacturingYear: number;
     fuelType: string;
+    kms: number;
     transmission: string;
     bodyType: string;
     ownership: string;
@@ -34,6 +35,7 @@ const initialState: SavedState = {
             carPrice: 880000,
             manufacturingYear: 2020,
             fuelType: "Petrol",
+            kms: 20000,
             transmission: "Automatic",
             bodyType: "Hatchback",
             ownership: "2nd",
@@ -52,6 +54,7 @@ const initialState: SavedState = {
             carPrice: 1050000,
             manufacturingYear: 2020,
             fuelType: "Diesel",
+            kms: 20000,
             transmission: "Manual",
             bodyType: "SUV",
             ownership: "2nd",
@@ -70,6 +73,7 @@ const initialState: SavedState = {
             carPrice: 1050000,
             manufacturingYear: 2020,
             fuelType: "Petrol",
+            kms: 20000,
             transmission: "Manual",
             bodyType: "SUV",
             ownership: "2nd",
@@ -77,7 +81,7 @@ const initialState: SavedState = {
             seats: 7,
             // carImages?: { imageUrl:  }[],
             address: { city: "Indore", state: "Madhya Pradesh" },
-            user: { fullName: "niraj", userType: "dealer" },
+            user: { fullName: "Dhiraj", userType: "dealer" },
             updatedAt: "3 min ago",
             createdAt: "3 min ago",
         }

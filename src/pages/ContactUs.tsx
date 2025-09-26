@@ -63,18 +63,18 @@ export default function ContactUs() {
   ];
 
   return (
-    <div className="h-full max-w-8xl relative my-14 z-0 mx-auto">
-      <div className="w-full max-h-[500px] lg:max-h-[300px] absolute top-0 left-0 -z-1">
+    <div className="h-full max-w-8xl relative mt-12 md:my-14 z-0 mx-auto font-roboto ">
+      <div className="w-full h-[140px] md:h-auto md:max-h-[300px] absolute top-0 left-0 -z-1">
         <img
           src="/contact-us-bg.png"
           alt="contact us background"
-          className="w-full h-full  lg:object-cover object-center"
+          className="w-full h-full object-cover object-center"
         />
       </div>
 
-      <div className="min-h-1/3 max-w-2xl text-center lg:pt-32 pb-8 text-white mx-auto space-y-6">
-        <h1 className="text-3xl font-semibold">Feel Free to Get in Touch</h1>
-        <p className="text-sm">
+      <div className="min-h-1/3 px-4 md:px-0 max-w-[250px] md:max-w-2xl md:text-center pt-14 md:pt-32 pb-2 md:pb-8 text-white md:mx-auto md:space-y-6">
+        <h1 className="text-xs md:text-3xl font-semibold">Feel Free to Get in Touch</h1>
+        <p className="text-[8px] md:text-sm">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
           minim veniam, quis nostrud{" "}
@@ -82,12 +82,12 @@ export default function ContactUs() {
       </div>
 
       {/* contact us form here */}
-      <div className="max-w-5xl h-full mx-2 sm:mx-4 md:mx-auto grid grid-cols-1 md:grid-cols-2 bg-gray-100 rounded-xl shadow-lg overflow-hidden z-10">
+      <div className="max-w-4xl h-full md:mx-auto grid grid-cols-1 md:grid-cols-18 md:bg-gray-100 rounded-md overflow-hidden z-10 contact-form-shadow">
         {/* Left info panel */}
-        <div className="p-8 py-10 bg-gray-100 flex flex-col justify-between">
-          <div>
+        <div className="hidden col-span-8 p-8 py-10 bg-gray-100 md:flex flex-col justify-between">
+          <div className="mt-2">
             <h2 className="text-2xl font-bold mb-4">Get in touch</h2>
-            <p className="text-gray-600 mb-6 text-sm">
+            <p className="text-gray-600 mb-8 text-[10px]">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua.
             </p>
@@ -97,11 +97,11 @@ export default function ContactUs() {
                   <MapPin className="h-6 w-6 text-white" />
                 </span>
                 <div>
-                  <p className="font-semibold">Address</p>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-sm text-gray-800 mb-1 font-semibold">Address</p>
+                  <p className="text-black text-[10px]">
                     8502 Preston Rd, Inglewood, Maine 98380
                   </p>
-                  <p className="text-gray-600 text-sm">Maine 98380</p>
+                  <p className="text-black text-[10px]">Maine 98380</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -109,9 +109,9 @@ export default function ContactUs() {
                   <Mail className="h-6 w-6 text-white" />
                 </span>
                 <div>
-                  <p className="font-semibold">Email Us</p>
-                  <p className="text-gray-600 text-sm">example@email.com</p>
-                  <p className="text-gray-600 text-sm">example@email.com</p>
+                  <p className="text-sm text-gray-800 mb-1 font-semibold">Email Us</p>
+                  <p className="text-black text-[10px]">example@email.com</p>
+                  <p className="text-black text-[10px]">example@email.com</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -119,41 +119,41 @@ export default function ContactUs() {
                   <Phone className="h-6 w-6 text-white" />
                 </span>
                 <div>
-                  <p className="font-semibold">Call Us</p>
-                  <p className="text-gray-600 text-sm">+1 555 0126</p>
-                  <p className="text-gray-600 text-sm">+1 555 0126</p>
+                  <p className="text-sm text-gray-800 mb-1 font-semibold">Call Us</p>
+                  <p className="text-black text-[10px]">+1 555 0126</p>
+                  <p className="text-black text-[10px]">+1 555 0126</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="mt-6 flex items-center gap-3">
-            <span className="text-xl font-semibold mr-6">
+          <div className="my-4 flex items-center gap-3">
+            <span className="text-sm font-semibold mr-6">
               {" "}
               Contact With Us :
             </span>
-            <a href="#" className="bg-red-500 text-white p-2 rounded">
+            <a href="#" className="bg-red-500 text-white p-2 rounded-xs">
               <FacebookIcon className="h-4 w-4" />
             </a>
-            <a href="#" className="bg-red-500 text-white p-2 rounded">
+            <a href="#" className="bg-red-500 text-white p-2 rounded-xs">
               <LinkedinIcon className="h-4 w-4" />
             </a>
-            <a href="#" className="bg-red-500 text-white p-2 rounded">
+            <a href="#" className="bg-red-500 text-white p-2 rounded-xs">
               <YoutubeIcon className="h-4 w-4" />
             </a>
-            <a href="#" className="bg-red-500 text-white p-2 rounded">
+            <a href="#" className="bg-red-500 text-white p-2 rounded-xs">
               <InstagramIcon className="h-4 w-4" />
             </a>
           </div>
         </div>
 
         {/* Right form panel */}
-        <div className="p-6 shadow-2xl rounded-lg bg-white">
-          <h2 className="text-2xl font-bold mb-4">Send us a message</h2>
-          <form className="space-y-4" onSubmit={handleSubmit}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="col-span-10 px-2 md:px-8 py-4 md:py-8 rounded-lg md:bg-white contact-form-shadow">
+          <h2 className="text-xs md:text-2xl font-bold mb-4 text-center md:text-left">Send us a message</h2>
+          <form className="space-y-1 md:space-y-4" onSubmit={handleSubmit}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 md:gap-4">
               <span>
-                <label htmlFor="firstName" className="text-xs ">
+                <label htmlFor="firstName" className="text-[9px] md:text-xs">
                   First Name
                 </label>
                 <input
@@ -161,13 +161,13 @@ export default function ContactUs() {
                   name="firstName"
                   value={data.firstName}
                   onChange={handleChange}
-                  placeholder="First Name"
-                  className="bg-gray-100 rounded p-2 w-full placeholder:text-sm"
+                  placeholder="Jhon"
+                  className="bg-gray-100 text-xs rounded p-[6px] px-2 md:px-4 w-full placeholder:text-[10px]"
                   required
                 />
               </span>
               <span>
-                <label htmlFor="firstName" className="text-xs ">
+                <label htmlFor="firstName" className="text-[9px] md:text-xs">
                   Last Name
                 </label>
                 <input
@@ -175,15 +175,15 @@ export default function ContactUs() {
                   name="lastName"
                   value={data.lastName}
                   onChange={handleChange}
-                  placeholder="Last Name"
-                  className="bg-gray-100 rounded p-2 w-full placeholder:text-sm"
+                  placeholder="Doe"
+                  className="bg-gray-100 text-xs rounded p-[6px] px-2 md:px-4 w-full placeholder:text-[10px]"
                   required
                 />
               </span>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 md:gap-4">
               <span>
-                <label htmlFor="firstName" className="text-xs ">
+                <label htmlFor="firstName" className="text-[9px] md:text-xs ">
                   Phone
                 </label>
                 <input
@@ -191,13 +191,13 @@ export default function ContactUs() {
                   name="phone"
                   value={data.phone}
                   onChange={handleChange}
-                  placeholder="Phone"
-                  className="bg-gray-100 rounded p-2 w-full placeholder:text-sm"
+                  placeholder="9876543210"
+                  className="bg-gray-100 text-xs rounded p-[6px] px-2 md:px-4 w-full placeholder:text-[10px]"
                   required
                 />
               </span>
               <span>
-                <label htmlFor="firstName" className="text-xs ">
+                <label htmlFor="firstName" className="text-[9px] md:text-xs ">
                   Email
                 </label>
                 <input
@@ -205,14 +205,14 @@ export default function ContactUs() {
                   name="email"
                   value={data.email}
                   onChange={handleChange}
-                  placeholder="Email"
-                  className="bg-gray-100 rounded p-2 w-full placeholder:text-sm"
+                  placeholder="jhonfoe@xyz.com"
+                  className="bg-gray-100 text-xs rounded p-[6px] px-2 md:px-4 w-full placeholder:text-[10px]"
                   required
                 />
               </span>
             </div>
             <span>
-              <label htmlFor="firstName" className="text-xs ">
+              <label htmlFor="firstName" className="text-[9px] md:text-xs ">
                 Subject
               </label>
               <input
@@ -221,12 +221,12 @@ export default function ContactUs() {
                 value={data.subject}
                 onChange={handleChange}
                 placeholder="Subject"
-                className="bg-gray-100 rounded p-2 w-full placeholder:text-sm"
+                className="bg-gray-100 rounded p-[6px] px-2 md:px-4 w-full placeholder:text-[10px]"
                 required
               />
             </span>
             <span>
-              <label htmlFor="firstName" className="text-xs ">
+              <label htmlFor="firstName" className="text-[9px] md:text-xs ">
                 Message
               </label>
               <textarea
@@ -234,17 +234,17 @@ export default function ContactUs() {
                 value={data.message}
                 onChange={handleChange}
                 placeholder="Write your message here"
-                className="bg-gray-100 rounded p-2 w-full placeholder:text-sm h-32 resize-none"
+                className="bg-gray-100 text-xs rounded p-[6px] px-2 md:px-4 w-full placeholder:text-[10px] h-14 md:h-24 resize-none"
                 required
               />
             </span>
 
             <button
               type="submit"
-              className={`w-full py-2 px-4 rounded text-white ${
+              className={`w-full py-2 px-4 rounded-xs md:rounded text-white mt-2 md:mt-6 ${
                 status === "loading"
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-red-500 hover:bg-red-600"
+                  ? "text-xs bg-gray-400 cursor-not-allowed"
+                  : "text-xs bg-red-500 hover:bg-red-600"
               }`}
               disabled={status === "loading"}
             >
@@ -261,25 +261,88 @@ export default function ContactUs() {
             )}
           </form>
         </div>
+ 
+        {/*mobile Left info panel */}
+        <div className="md:hidden col-span-8 p-2 md:p-8 pt-4 md:py-10 flex flex-col justify-between">
+          <div className="mt-2 border-b border-gray-400 ">
+            <h2 className="text-xs text-center font-bold mb-4">Get in touch</h2>
+            <p className="text-gray-600 mb-4 text-[9px]">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <div className="flex items-start gap-2 col-span-2">
+                <span className="bg-red-500 rounded-full p-2">
+                  <MapPin className="h-3 w-3 text-white" />
+                </span>
+                <div>
+                  <p className="text-xs text-gray-800 mb-1 font-semibold">Address</p>
+                  <p className="text-black text-[10px]">
+                    8502 Preston Rd, Inglewood, Maine 98380
+                  </p>
+                  <p className="text-black text-[10px]">Maine 98380</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="bg-red-500 rounded-full p-2">
+                  <Mail className="h-3 w-3 text-white" />
+                </span>
+                <div>
+                  <p className="text-xs text-gray-800 mb-1 font-semibold">Email Us</p>
+                  <p className="text-black text-[10px]">example@email.com</p>
+                  <p className="text-black text-[10px]">example@email.com</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="bg-red-500 rounded-full p-2">
+                  <Phone className="h-3 w-3 text-white" />
+                </span>
+                <div>
+                  <p className="text-xs text-gray-800 mb-1 font-semibold">Call Us</p>
+                  <p className="text-black text-[10px]">+1 555 0126</p>
+                  <p className="text-black text-[10px]">+1 555 0126</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-4 flex items-center gap-3">
+            <span className="text-xs font-semibold">
+              Contact With Us :
+            </span>
+            <a href="#" className="bg-red-500 text-white p-1 rounded-xs">
+              <FacebookIcon className="h-3 w-3" />
+            </a>
+            <a href="#" className="bg-red-500 text-white p-1 rounded-xs">
+              <LinkedinIcon className="h-3 w-3" />
+            </a>
+            <a href="#" className="bg-red-500 text-white p-1 rounded-xs">
+              <YoutubeIcon className="h-3 w-3" />
+            </a>
+            <a href="#" className="bg-red-500 text-white p-1 rounded-xs">
+              <InstagramIcon className="h-3 w-3" />
+            </a>
+          </div>
+        </div>
       </div>
 
       {/* 4 cards end */}
-      <div className="max-w-7xl mx-auto bg-white p-6 rounded-sm grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 my-4 lg:my-10 px-14">
+      <div className="bg-white p-2 md:p-6 py-8 md:py-0 my-0 md:my-10 md:pt-4 rounded-sm grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-8  md:px-14">
         {fourCards.map((card, idx) => (
           <div
             key={idx}
-            className="flex items-center justify-center rounded-sm shadow-xs p-4 gap-3"
+            className="grid grid-cols-3 items-center justify-center rounded-sm p-2 md:p-4 py-4 md:py-7 md:gap-3 shadow-custom"
           >
             <img
               src={card.img}
               alt={card.title}
-              className="w-16 h-12 object-contain rounded-sm"
+              className="w-8 md:w-16 h-6 md:h-12 object-contain"
             />
-            <div className="flex flex-col gap-3">
-              <p className="text-md font-semibold text-gray-800 whitespace-nowrap overflow-hidden text-ellipsis">
+            <div className="col-span-2 flex flex-col md:gap-3">
+              <p className="text-[10px] md:text-md font-semibold text-gray-800 whitespace-nowrap overflow-hidden text-ellipsis">
                 {card.title}
               </p>
-              <p className="text-xs text-gray-800 whitespace-nowrap overflow-hidden text-ellipsis -mt-2">
+              <p className="text-[8px] md:text-xs font-semibold text-gray-800 whitespace-nowrap overflow-hidden text-ellipsis md:-mt-2">
                 {card.description}
               </p>
             </div>

@@ -95,20 +95,23 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
           setMobileNumber={setMobileNumber}
         />
       ) : (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl shadow-lg w-full max-w-2xl grid grid-cols-2 relative gap-8">
+        <div className="fixed inset-0 bg-black/50 lg:flex items-center justify-center z-50">
+          <div className="w-screen h-full lg:h-auto bg-white md:rounded-2xl shadow-lg md:w-full md:max-w-2xl grid md:grid-cols-2 relative md:gap-8">
             <button
               onClick={onClose}
-              className="absolute top-3 right-3 p-2 text-gray-500 cursor-pointer hover:text-red-500"
+              className="absolute top-3 right-4 lg:right-3 p-2 text-gray-500 cursor-pointer hover:text-red-500"
             >
-              <X className="h-7 w-7" />
+              <X className="w-5 lg:h-7 h-5 lg:w-7" />
             </button>
 
             {/* left side */}
-            <div><img src="/loginImg.png" alt="Login Image" className="w-full" /></div>
+            <div className="hidden md:block"><img src="/loginImg.png" alt="Login Image" className="w-full" /></div>
 
             {/* right side */}
-            <div className="p-6 flex flex-col justify-center">
+            <div className="px-2 md:p-6 mt-4 md:mt-0 flex flex-col justify-center">
+              {/* <div className="py-2">
+                <button className="flex items-center gap-2"><ArrowLeft /> Back</button>
+              </div> */}
               <h2 className="text-lg font-semibold mb-2">Log In / Register</h2>
               <p className="text-[10px] mb-4 leading-3.5">
                 For an enhanced experience, track your orders and receive
@@ -125,6 +128,9 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 setMobileNumber={setMobileNumber}
               />
             </div>
+
+            {/* left side */}
+            <div className="block md:hidden h-fit p-2 py-4"><img src="/loginImg.png" alt="Login Image" className="w-full h-full" /></div>
           </div>
         </div>
       )}

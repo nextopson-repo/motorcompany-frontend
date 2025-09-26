@@ -3,63 +3,69 @@ export default function HowItWorks() {
   const steps = [
     {
       icon: "/sellPage/Vehicle_information 1.png",
-      title: "List your car for Free",
+      title: (
+      <p className="tracking-tight md:tracking-normal">
+        List your <br className="block lg:hidden" /> car for Free
+      </p>
+    ),
       desc: "Our team verifies your vehicle details to ensure accuracy. Once approved, your car is listed on our platform for free and shared with interested buyers and verified channel partners.",
     },
     {
       icon: "/sellPage/connect-with-buyer.png",
-      title: "Connect with Buyers",
-      desc: "Engage with potential buyers and verified channel partners directly to negotiate a price and finalise the sale.",
+      title: (
+      <p className="tracking-tight md:tracking-normal">
+         Connect with <br className="block lg:hidden" /> Buyers
+      </p>
+    ),
+      desc: "Engage with potential buyers and verified channel partners directly to negotiate a price and finalize the sale.",
     },
     {
       icon: "/sellPage/sell-your-car.png",
       title: "Sell your car with Ease",
-      desc: "Complete the sale of your car at the agreed price—CarDekho charges no commission fees.",
+      desc: "Complete the sale of your car at the agreed price—Dhikcar charges no commission fees.",
     },
   ];
 
   return (
     <section className="w-full py-8 bg-white">
-      <div className="max-w-6xl mx-auto text-center px-6 relative">
+      <div className="max-w-7xl mx-auto text-center relative px-4 lg:px-6">
         {/* Section Header */}
-        {/* Small title */}
-        <p className="text-xs text-[#EE1422] font-semibold flex items-center justify-center gap-5 mb-4">
-          <span className="w-10 h-[1.25px] bg-[#EE1422]/80"></span>
+        <p className="text-[10px] lg:text-xs text-[#EE1422] font-semibold flex items-center justify-center gap-3 lg:gap-5">
+          <span className="w-7 lg:w-10 h-[1px] lg:h-[1.25px] bg-[#EE1422]/80"></span>
           How Dhikcar Works
-          <span className="w-10 h-[1.25px] bg-[#EE1422]/80"></span>
+          <span className="w-7 lg:w-10 h-[1px] lg:h-[1.25px] bg-[#EE1422]/80"></span>
         </p>
-        <h2 className="text-2xl md:text-2xl font-bold">
-          From Search to Sale – Here’s How It Works
+        <h2 className="text-sm lg:text-2xl font-bold mt-2 lg:mt-4">
+          From Search to Sale - Here's How It Works
         </h2>
-        <p className="text-gray-800 mt-4 max-w-xl mx-auto">
+        <p className="text-[10px] lg:text-base text-gray-800 mt-2 lg:mt-4 max-w-xl mx-auto leading-tight tracking-tight md:tracking-normal">
           DhikCar makes car buying and selling easy. Search, compare, and
           connect with trusted sellers or buyers—all in one place.
         </p>
 
         {/* Steps */}
-        <div className="relative mt-6 grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-8 items-start">
+        <div className="relative mt-5 grid grid-cols-3 gap-10 md:gap-6 items-start">
           {steps.map((step, i) => (
             <div
               key={i}
               className="flex flex-col items-center text-center relative z-10"
             >
-              <div className="bg-gray-200 w-36 h-36 flex items-center justify-center rounded-2xl shadow-sm">
-                <img src={step.icon} alt="step images" className="h-18" />
+              <div className="bg-[#EDEDED] w-12 lg:w-38 h-12 lg:h-38 flex items-center justify-center rounded-md shadow-sm">
+                <img src={step.icon} alt="step images" className="h-8 lg:h-22" />
               </div>
-              <h3 className="text-2xl text-gray-800 font-semibold mt-6">
+              <h3 className="text-xs lg:text-2xl text-gray-800 font-semibold mt-2 lg:mt-4">
                 {step.title}
               </h3>
-              <p className="text-gray-800 mt-4 text-[14px] leading-[1.2] max-w-xs">
+              <p className="hidden lg:block text-gray-800 mt-4 text-[16px] leading-[1.2] tracking-tight max-w-sm px-6">
                 {step.desc}
               </p>
             </div>
           ))}
 
-          <div className="absolute top-[30%] right-[28.5%] w-[150px]">
+          <div className="absolute top-[30%] right-[28.5%] w-[50px] lg:w-[150px] rotate-5 lg:rotate-0">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="200"
-              height="53"
+              className="w-[70px] lg:w-[200px] lg:h-[53px]"
               viewBox="0 0 303 53"
               fill="none"
             >
@@ -72,11 +78,10 @@ export default function HowItWorks() {
               />
             </svg>
           </div>
-          <div className="absolute top-[8%] left-[28.5%] w-[150px] rotate-180">
+          <div className="absolute top-[8%] left-[28.5%] w-[35px] lg:w-[150px] rotate-175 lg:rotate-180">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="200"
-              height="53"
+              className="w-[70px] lg:w-[200px] lg:h-[53px]"
               viewBox="0 0 303 53"
               fill="none"
             >

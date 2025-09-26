@@ -42,55 +42,59 @@ export default function FAQ() {
   };
 
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 py-10 relative -z-0">
+    <section className="w-full max-w-7xl mx-auto px-4 relative -z-0 pb-10 overflow-hidden">
       {/* Heading */}
-      <div className="max-w-2xl mx-auto text-center mb-8">
-         <p className="text-[#EE1422] font-semibold flex items-center justify-center gap-4">
-          <span className="w-10 h-[1.4px] bg-[#EE1422]/80"></span>
-          FAQ's
-          <span className="w-10 h-[1.4px] bg-[#EE1422]/80"></span>
+      <div className="max-w-2xl mx-auto text-center mb-4 lg:mb-8">
+         <p className="text-[#EE1422] text-[10px] lg:text-xs font-semibold flex items-center justify-center gap-2 lg:gap-4">
+          <span className="w-7 lg:w-10 h-[1px] lg:h-[1.4px] bg-[#EE1422]/80"></span>
+          FAQ
+          <span className="w-7 lg:w-10 h-[1px] lg:h-[1.4px] bg-[#EE1422]/80"></span>
         </p>
-        <h2 className="text-xl md:text-[23px] leading-7.5 font-bold mt-4">
-          Got Questions? We’ve Got Answers
+        <h2 className="text-sm lg:text-[23px]  lg:leading-7.5 font-bold mt-2 lg:mt-4">
+          Got Questions? We've Got Answers
         </h2>
-        <p className="text-[16px] max-w-2xl mx-auto mt-4 text-gray-800 leading-5.5 px-4">
-          Have questions? We’ve gathered the most common ones to help you get
+        <p className="text-[10px] lg:text-[16px] max-w-xl mx-auto mt-2 lg:mt-4 text-gray-800 leading-3 lg:leading-5.5 px-4">
+          Have questions? We've gathered the most common ones to help you get
           the answers you need—fast and easy.
         </p>
       </div>
 
       {/* Accordion */}
-      <div className="max-w-3xl mx-auto space-y-4 z-5 relative">
+      <div className="max-w-2xl mx-auto space-y-3 lg:space-y-6 z-5 relative">
         {faqs.map((faq, i) => (
           <div
             key={i}
-            className="bg-white/50 rounded-xl shadow-sm overflow-hidden transition-all"
+            className="bg-white/50 rounded-md shadow-md overflow-hidden transition-all"
           >
             <button
               onClick={() => toggle(i)}
-              className="flex justify-between items-center w-full px-5 py-4 text-left text-base font-medium focus:outline-none"
+              className="flex lg:items-center justify-between gap-2 w-full p-2 lg:p-5 text-left text-xs lg:text-base font-medium focus:outline-none"
             >
-              <span>{faq.question}</span>
-              <ChevronDown
-                className={`w-5 h-5 transform transition-transform duration-300 ${
+              <span className=" text-black">{faq.question}</span>
+              <span className="w-fit">
+                <ChevronDown
+                className={`w-4 lg:w-5 h-4 lg:h-5 transform transition-transform duration-300 ${
                   openIndex === i ? "rotate-180" : ""
                 }`}
               />
+              </span>
             </button>
+            
             <div
-              className={`px-5 pb-4 text-gray-600 text-sm md:text-base transition-all duration-300 ${
+              className={`px-2 lg:px-5 pb-4 text-gray-600 text-[10px] lg:text-sm tracking-tight transition-all duration-300 ${
                 openIndex === i ? "block" : "hidden"
               }`}
             >
-              {faq.answer}
+              <div className="custom-dash mb-4" />
+              <span className="text-black">{faq.answer}</span>
             </div>
           </div>
         ))}
       </div>
 
       {/* Background Image */}
-      <div className="absolute bottom-[10%] left-[73%] -translateY-[10%] z-0">
-        <img src="/sellPage/Faq-bg.png" alt="faq-bg"  className="w-[100%] h-[100%] object-contain object-right"/>
+      <div className="hidden lg:block h-auto w-[32%] absolute bottom-[2%] left-[68%] -translateY-[10%] z-0 overflow-hidden">
+        <img src="/sellPage/Faq-bg.png" alt="faq-bg"  className="w-[640px] h-[440px] object-contain object-right"/>
       </div>
     </section>
   );

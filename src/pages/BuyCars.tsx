@@ -1,130 +1,54 @@
-"use client";
-import { useState, useEffect, useMemo } from "react";
-import { FilterSidebar } from "../components/FilterSidebar";
+import { useEffect, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCars, setSelectedFilters } from "../store/slices/carSlice";
+import { FilterSidebar } from "../components/filters/FilterSidebar";
 import CarList from "../components/CarList";
 import FindDealers from "../components/FindDealers";
+import type { AppDispatch, RootState } from "../store/store";
 
 export default function BuyCars() {
+  const dispatch = useDispatch<AppDispatch>();
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-  type CarRecord = {
-    brand?: string;
-    fuelType?: string;
-    transmission?: string;
-    bodyType?: string;
-    ownership?: string;
-    address?: { state?: string; city?: string };
-    carPrice?: number;
-    manufacturingYear?: number;
-    [key: string]: unknown;
-  };
-  const [carsData, setCarsData] = useState<CarRecord[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  // ✅ Initialize filters with null for ranges to avoid invalid slider rendering
-  const [filters, setFilters] = useState({
-    brand: [] as string[],
-    fuel: [] as string[],
-    transmission: [] as string[],
-    bodyType: [] as string[],
-    ownership: [] as string[],
-    location: [] as string[],
-    priceRange: null as [number, number] | null,
-    yearRange: null as [number, number] | null,
-  });
+  // Redux state
+  const { cars, filters, selectedFilters, loading, error } = useSelector(
+    (state: RootState) => state.cars
+  );
 
-  // ✅ State to manage what user selects in the sidebar
-  const [selectedFilters, setSelectedFilters] = useState({
-    brand: [] as string[],
-    fuel: [] as string[],
-    transmission: [] as string[],
-    bodyType: [] as string[],
-    ownership: [] as string[],
-    location: [] as string[],
-    priceRange: [0, 0] as [number, number],
-    yearRange: [2000, new Date().getFullYear()] as [number, number],
-  });
-
-  console.log("selectedFilters:", selectedFilters);
-
-  // ✅ Fetch data from backend
+  // Fetch cars on mount
   useEffect(() => {
-    const fetchCars = async () => {
-      try {
-        setLoading(true);
-        const res = await fetch(`${BACKEND_URL}/api/v1/car/getAll`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userType: "Dealer" }),
-        });
+    dispatch(fetchCars(BACKEND_URL));
+  }, [BACKEND_URL, dispatch]);
 
-        const data = await res.json();
-        console.log("🚀 Cars fetched:", data.properties);
-
-        if (res.ok) {
-          setCarsData(data.properties || []);
-
-          if (data.properties?.length > 0) {
-            const prices = data.properties.map((c: CarRecord) => c.carPrice || 0);
-            const years = data.properties.map((c: CarRecord) => c.manufacturingYear || 0);
-
-            // ✅ Set the available filter ranges after fetching data
-            setFilters((prev) => ({
-              ...prev,
-              priceRange: [Math.min(...prices), Math.max(...prices)],
-              yearRange: [Math.min(...years), Math.max(...years)],
-            }));
-
-            // ✅ Initialize selectedFilters with actual range values
-            setSelectedFilters((prev) => ({
-              ...prev,
-              priceRange: [Math.min(...prices), Math.max(...prices)],
-              yearRange: [Math.min(...years), Math.max(...years)],
-            }));
-          }
-        } else {
-          setError(data.message || "Failed to fetch cars");
-        }
-      } catch (err) {
-        setError("Something went wrong");
-        console.error("Error fetching cars:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCars();
-  }, [BACKEND_URL]);
-
-  // ✅ Unique options derived from carsData
+  // Memoized unique options for sidebar
   const brandOptions = useMemo(
-    () => Array.from(new Set(carsData.map((c) => c.brand).filter((v): v is string => Boolean(v)))),
-    [carsData]
+    () => Array.from(new Set(cars.map((c) => c.brand).filter(Boolean))) as string[],
+    [cars]
   );
   const fuelOptions = useMemo(
-    () => Array.from(new Set(carsData.map((c) => c.fuelType).filter((v): v is string => Boolean(v)))),
-    [carsData]
+    () => Array.from(new Set(cars.map((c) => c.fuelType).filter(Boolean))) as string[],
+    [cars]
   );
   const transmissionOptions = useMemo(
-    () => Array.from(new Set(carsData.map((c) => c.transmission).filter((v): v is string => Boolean(v)))),
-    [carsData]
+    () => Array.from(new Set(cars.map((c) => c.transmission).filter(Boolean))) as string[],
+    [cars]
   );
-  const bodyOptions = useMemo(
-    () => Array.from(new Set(carsData.map((c) => c.bodyType).filter((v): v is string => Boolean(v)))),
-    [carsData]
+  const bodyTypeOptions = useMemo(
+    () => Array.from(new Set(cars.map((c) => c.bodyType).filter(Boolean))) as string[],
+    [cars]
   );
   const ownershipOptions = useMemo(
-    () => Array.from(new Set(carsData.map((c) => c.ownership).filter((v): v is string => Boolean(v)))),
-    [carsData]
+    () => Array.from(new Set(cars.map((c) => c.ownership).filter(Boolean))) as string[],
+    [cars]
   );
   const stateOptions = useMemo(
-    () => Array.from(new Set(carsData.map((c) => c.address?.state).filter((v): v is string => Boolean(v)))),
-    [carsData]
+    () => Array.from(new Set(cars.map((c) => c.address?.state).filter(Boolean))) as string[],
+    [cars]
   );
 
-  // ✅ Count helper
+  // Helper to get count for sidebar badges
   const getCount = (type: string, value: string) =>
-    carsData.filter((car: CarRecord) => {
+    cars.filter((car) => {
       switch (type) {
         case "brand":
           return car.brand === value;
@@ -144,20 +68,22 @@ export default function BuyCars() {
     }).length;
 
   return (
-    <main className="mt-20 min-h-screen relative">
-      <div className="relative grid grid-cols-12 gap-4 px-4">
+    <main className="max-w-7xl mx-auto mt-10 md:mt-16 lg:mt-20 min-h-screen relative">
+      <div className="relative flex gap-6 px-4 lg:pl-8">
         {/* Sidebar */}
-        <div className="col-span-3">
+        <div className="w-fit hidden lg:block">
           <div className="sticky top-20">
             <FilterSidebar
               filters={filters}
               selectedFilters={selectedFilters}
-              onSelectedFiltersChange={setSelectedFilters}
+              onSelectedFiltersChange={(newFilters) =>
+                dispatch(setSelectedFilters(newFilters))
+              }
               getCount={getCount}
               brandOptions={brandOptions}
               fuelOptions={fuelOptions}
               transmissionOptions={transmissionOptions}
-              bodyTypeOptions={bodyOptions}
+              bodyTypeOptions={bodyTypeOptions}
               ownershipOptions={ownershipOptions}
               stateOptions={stateOptions}
             />
@@ -165,13 +91,13 @@ export default function BuyCars() {
         </div>
 
         {/* Car List */}
-        <div className="col-span-9 py-4">
+        <div className="w-full py-4 lg:px-2">
           {loading ? (
             <p>Loading cars...</p>
           ) : error ? (
             <p className="text-red-500">{error}</p>
-          ) : carsData.length > 0 ? (
-            <CarList cars={carsData} filters={selectedFilters} city="" onFilterChange={() => {}} />
+          ) : cars.length > 0 ? (
+            <CarList />
           ) : (
             <p>No cars available</p>
           )}
@@ -179,7 +105,7 @@ export default function BuyCars() {
       </div>
 
       {/* Optional Section like FindDealers */}
-      <div className="my-6 px-4">
+      <div className="my-10 ">
         <FindDealers />
       </div>
     </main>

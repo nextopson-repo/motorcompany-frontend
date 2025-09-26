@@ -115,7 +115,7 @@ const AuthPanel: React.FC<AuthPanelProps> = ({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 overflow-hidden">
       {/* Mobile input form */}
       {step === "mobile" && (
         <form onSubmit={handleSendOtp} className="space-y-4">
@@ -127,18 +127,18 @@ const AuthPanel: React.FC<AuthPanelProps> = ({
               value={mobileNumber}
               onChange={(e) => setMobileNumber(e.target.value)}
               placeholder="9876543210"
-              className="flex-1 px-3 py-2 bg-gray-100 focus:outline-none text-black font-semibold"
+              className="flex-1 px-3 py-2 bg-gray-100 focus:outline-none text-black font-semibold placeholder:text-gray-400 placeholder:font-normal"
             />
           </div>
           <button
             type="submit"
             disabled={loading}
-            className="w-full text-white text-sm bg-red-500 hover:bg-red-600 py-2 rounded transition cursor-pointer disabled:opacity-50"
+            className="w-full text-white font-semibold text-sm bg-red-500 hover:bg-red-600 py-2 rounded transition cursor-pointer disabled:opacity-50 active:scale-95 active:bg-red-600"
           >
             {loading ? "Sending..." : "Verify Number"}
           </button>
           <div>
-            <p className="text-[10px] leading-3.5">By proceeding, I confirm that I have received, read, and agree to our <a href="#" className="text-semibold underline">Privacy Policy</a> and <a href="#" className="text-semibold underline">Terms & Conditions</a></p>
+            <p className="text-[9px] leading-3.5">By proceeding, I confirm that I have received, read, and agree to our <a href="#" className="font-semibold underline">Privacy Policy</a> and <a href="#" className="font-semibold underline">Terms & Conditions</a></p>
           </div>
         </form>
       )}
@@ -174,8 +174,8 @@ const AuthPanel: React.FC<AuthPanelProps> = ({
         </form>
       )}
 
-      {message && <p className="text-green-600 text-sm">{message}</p>}
-      {error && <p className="text-red-600 text-sm">{error}</p>}
+      {message && <p className="text-green-600 text-sm text-center lg:text-left">{message}</p>}
+      {error && <p className="text-red-600 text-sm text-center lg:text-left">{error}</p>}
     </div>
   );
 };

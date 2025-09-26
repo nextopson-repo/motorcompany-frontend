@@ -4,12 +4,18 @@ interface FiltersState {
   brand: string[];
   fuelType: string[];
   priceRange: [number, number];
+  modelYearRange: [number, number]; 
+  city: string | null;
+  ownership: "All" | "Dealer" | "Owner"; // dropdown selection
 }
 
 const initialState: FiltersState = {
   brand: [],
   fuelType: [],
   priceRange: [0, 10000000],
+  modelYearRange: [2000, new Date().getFullYear()],
+  city: null,
+  ownership: "All",
 };
 
 const filtersSlice = createSlice({
@@ -33,14 +39,27 @@ const filtersSlice = createSlice({
     setPriceRange(state, action: PayloadAction<[number, number]>) {
       state.priceRange = action.payload;
     },
+    setModelYearRange(state, action: PayloadAction<[number, number]>) {
+      state.modelYearRange = action.payload;
+    },
+    setCity(state, action: PayloadAction<string>) {
+      state.city = action.payload;
+    },
+    setOwnership(state, action: PayloadAction<"All" | "Dealer" | "Owner">) {
+      state.ownership = action.payload;
+    },
     resetFilters(state) {
       state.brand = [];
       state.fuelType = [];
       state.priceRange = [0, 10000000];
+       state.modelYearRange = [2000, new Date().getFullYear()];
+      state.city = null;
+      state.ownership = "All";
     },
   },
 });
 
-export const { toggleBrand, toggleFuel, setPriceRange, resetFilters } =
+export const { toggleBrand, toggleFuel, setPriceRange, setModelYearRange, resetFilters, setCity,
+  setOwnership } =
   filtersSlice.actions;
 export default filtersSlice.reducer;

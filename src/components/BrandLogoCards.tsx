@@ -76,17 +76,16 @@ const BrandLogoCards: React.FC = () => {
   ];
 
   return (
-    <section className="max-w-7xl mx-auto relative font-montserrat bg-[#F8F8F8] py-8 px-4 bg-car-handle">
+    <section className="max-w-7xl mx-auto relative bg-[#F8F8F8] py-4 md:py-8 md:pb-12  md:px-10 bg-car-handle">
       {/* Top Heading */}
-      <div className="mb-6 mx-auto">
-        <h2 className="text-lg md:text-xl font-semibold ml-4">
-          Popular Brands
-        </h2>
+      <div className="mb-3 md:mb-8 mx-auto px-4 md:px-0">
+        <h2 className=" text-sm md:text-2xl font-semibold">Popular Brands</h2>
       </div>
 
       {/* Slider */}
       <Swiper
-        slidesPerView={1}
+        spaceBetween={32}
+        slidesPerView={3.5}
         breakpoints={{
           640: { slidesPerView: 4 },
           1024: { slidesPerView: 8 },
@@ -100,27 +99,32 @@ const BrandLogoCards: React.FC = () => {
       >
         {brandLogos.map((car, idx) => (
           <SwiperSlide key={idx}>
-            <div className=" flex flex-col items-center justify-center space-y-3">
-                <img src={car.logo} alt={car.title} className="w-16 h-12 object-contain rounded-sm" />
-                <p className="text-md font-semibold text-gray-800 whitespace-nowrap overflow-hidden text-ellipsis">
+            <div className="bg-white rounded-sm p-2 md:p-4">
+              <div className="flex flex-col items-center justify-center space-y-2">
+                <img
+                  src={car.logo}
+                  alt={car.title}
+                  className="w-6 md:w-14 h-6 md:h-10 object-contain rounded-xs"
+                />
+                <p className="text-[10px] md:text-sm font-semibold text-black whitespace-nowrap overflow-hidden text-ellipsis">
                   {car.title}
                 </p>
-                <p className="text-xs text-gray-800 whitespace-nowrap overflow-hidden text-ellipsis -mt-2">
+                <p className="text-[7px] md:text-[10px] text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis -mt-2">
                   {car.description}
                 </p>
+              </div>
             </div>
           </SwiperSlide>
         ))}
       </Swiper>
 
       {/* Custom Navigation Buttons (now with class selectors) */}
-      <button className="custom-prev3 absolute left-[3%] md:left-4 top-[55%] sm:top-[60%] -translate-y-1/2 z-30 bg-gray-900 text-white shadow-lg p-2 rounded-full hover:bg-gray-700 cursor-pointer">
-        <ChevronLeft className="h-4 w-4 md:h-6 md:w-6" />
+      <button className="custom-prev3 absolute left-[3%] md:left-4 top-[55%] sm:top-[60%] -translate-y-1/2 z-30 bg-gray-500 md:bg-gray-900 text-white shadow-lg p-1 md:p-2 rounded-full hover:bg-gray-700 cursor-pointer">
+        <ChevronLeft className="h-3 w-3 md:h-6 md:w-6" />
       </button>
-      <button className="custom-next3 absolute right-[3%] md:right-2 top-[55%] sm:top-[60%] -translate-y-1/2 z-30 bg-gray-900 text-white shadow-lg p-2 rounded-full hover:bg-gray-700 cursor-pointer">
-        <ChevronRight className="h-4 w-4 md:h-6 md:w-6" />
+      <button className="custom-next3 absolute right-[3%] md:right-2 top-[55%] sm:top-[60%] -translate-y-1/2 z-30 bg-gray-500 md:bg-gray-900 text-white shadow-lg p-1 md:p-2 rounded-full hover:bg-gray-700 cursor-pointer">
+        <ChevronRight className="h-3 w-3 md:h-6 md:w-6" />
       </button>
-
     </section>
   );
 };

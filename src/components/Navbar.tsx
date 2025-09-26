@@ -1,4 +1,12 @@
-import { ChevronDown, Heart, MapPin, Menu, UserRound } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronRight,
+  Heart,
+  MapPin,
+  Menu,
+  UserRound,
+  X,
+} from "lucide-react";
 import { useState, useRef } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -13,21 +21,97 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick, selectedCity }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
+  const { logout } = useAuth();
+  const [showDialog, setShowDialog] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
-  // const [userData, setUserData] = useState();
 
   const openSetting = () => navigate("/settings");
-  // console.log("userData:", userData);
 
+  const handleConfirmLogout = () => {
+    logout();
+    navigate("/");
+    setShowDialog(false);
+  };
 
   return (
-    <nav className="w-full h-auto bg-white shadow-md fixed top-0 left-0 z-50">
-      <div className="w-full max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
+    <nav className="w-full h-12 md:h-auto bg-white shadow-md fixed top-0 left-0 z-50">
+      <div className="w-full max-w-7xl mx-auto px-4 py-2 flex items-center md:justify-between">
+        {/* Mobile Menu Button */}
+        <div className="md:hidden flex items-center">
+          <button onClick={() => setIsMobileMenuOpen(true)}>
+            <Menu className="w-5 h-5 text-black mt-1" />
+          </button>
+        </div>
+
         {/* Logo */}
         <div className="flex flex-col items-center px-3">
           <NavLink to="/" end>
-            <img src="/Brand-logo.png" alt="Logo" className="w-auto h-10" />
+            <img
+              src="/Brand-logo.png"
+              alt="Logo"
+              className="w-24 md:w-auto h-5 md:h-10"
+            />
           </NavLink>
+        </div>
+
+        {/* Mobile nav links */}
+        <div
+          className="w-full flex md:hidden items-center justify-end gap-4 relative pr-1"
+          ref={menuRef}
+        >
+          <button
+            className=" py-2 rounded-md text-[10px] flex flex-col items-center justify-center group"
+            onClick={() => navigate("/settings/saved")}
+          >
+            <Heart className="w-4 h-4" />
+          </button>
+
+          <button
+            onClick={onSelectCityClick}
+            className="rounded-sm py-2 text-xs flex items-center"
+          >
+            <MapPin className="w-4 h-4" />
+          </button>
+
+          {user ? (
+            <div
+              className="flex flex-col items-center gap-2 cursor-pointer select-none"
+              onClick={() => {
+                setIsRightSidebarOpen(true);
+                setIsMobileMenuOpen(false);
+              }}
+            >
+              {user.image ? (
+                <img
+                  src={user.image}
+                  alt="User Avatar"
+                  className="w-5 h-5 rounded-full object-cover"
+                />
+              ) : (
+                <img
+                  src="/default-men-logo.jpg"
+                  alt="User Avatar"
+                  className="w-5 h-5 rounded-full object-cover"
+                />
+              )}
+            </div>
+          ) : (
+            <button
+              className="py-2 rounded-md flex items-center gap-2"
+              onClick={() => {
+                setIsRightSidebarOpen(true);
+                setIsMobileMenuOpen(false);
+              }}
+              // onClick={() => setIsLoginOpen(true)}
+            >
+              <UserRound
+                className="w-4 h-4 border-[1.5px] rounded-full"
+                strokeWidth={2}
+              />
+            </button>
+          )}
         </div>
 
         {/* Desktop Nav Links */}
@@ -69,18 +153,16 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick, selectedCity }) => {
         {/* Desktop Buttons */}
         <div
           className="hidden md:flex items-center justify-center gap-6 relative"
-          ref={menuRef} // <-- wrapper ref here
+          ref={menuRef}
         >
           <button
             onClick={onSelectCityClick}
-            className="rounded-sm px-2 py-2 text-xs md:text-xs flex items-center cursor-pointer hover:text-[#EE1422]"
+            className="rounded-sm px-2 py-2 text-xs flex items-center cursor-pointer hover:text-[#EE1422]"
           >
             <MapPin className="w-4 h-4" />
             <span className="ml-1 flex items-center gap-1">
-            {selectedCity ? selectedCity : "Select City"} 
-              <span>
-                <ChevronDown className="h-4 w-4" />
-              </span>
+              {selectedCity ? selectedCity : "Select City"}
+              <ChevronDown className="h-4 w-4" />
             </span>
           </button>
 
@@ -92,51 +174,275 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick, selectedCity }) => {
           </button>
 
           {user ? (
-            <>
-              <div
-                className="flex flex-col items-center gap-2 cursor-pointer select-none"
-                onClick={openSetting}
-              >
-                {user.image ? (
-                  <img
-                    src={user.image}
-                    alt="User Avatar"
-                    className="w-8 h-8 rounded-full border-2 object-cover"
-                  />
-                ) : (
-                  <img
-                    src="/default-men-logo.jpg"
-                    alt="User Avatar"
-                    className="w-10 h-10 rounded-full object-cover mx-4 cursor-pointer hover:scale-[1.1] transition-all duration-500"
-                  />
-                )}
-              </div>
-            </>
+            <div
+              className="flex flex-col items-center gap-2 cursor-pointer select-none"
+              onClick={openSetting}
+            >
+              {user.image ? (
+                <img
+                  src={user.image}
+                  alt="User Avatar"
+                  className="w-7 h-7 rounded-full border-1 object-cover"
+                />
+              ) : (
+                <img
+                  src="/default-men-logo.jpg"
+                  alt="User Avatar"
+                  className="w-8 h-8 rounded-full object-cover mx-4 cursor-pointer hover:scale-[1.1] transition-all duration-500"
+                />
+              )}
+            </div>
           ) : (
             <button
               className="px-4 py-2 rounded-md flex items-center gap-2 hover:text-[#EE1422] transition text-sm cursor-pointer"
               onClick={() => setIsLoginOpen(true)}
             >
-              <UserRound className="w-[22px] h-[22px] border-[1.5px] rounded-full" strokeWidth={2}/>
+              <UserRound
+                className="w-[22px] h-[22px] border-[1.5px] rounded-full"
+                strokeWidth={2}
+              />
               Login / Register
             </button>
           )}
         </div>
+      </div>
 
-        {/* Mobile Menu Button */}
-        <div className="md:hidden">
-          <button onClick={() => navigate("/settings")}>
-            <Menu className="w-6 h-6 text-[#EE1422]" />
+      {/* Mobile left Sidebar Menu */}
+      <div
+        className={`fixed top-0 left-0 h-full w-[70%] bg-white shadow-lg transform transition-transform duration-300 z-50 ${
+          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="flex items-center justify-between p-4">
+          <img src="/Brand-logo.png" alt="Logo" className="h-5" />
+          <button onClick={() => setIsMobileMenuOpen(false)}>
+            <X className="w-5 h-5 text-black" />
+          </button>
+        </div>
+
+        <div className="flex flex-col p-4 gap-3">
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) =>
+              isActive ? "text-[#EE1422] text-sm" : "text-black text-sm"
+            }
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Home
+          </NavLink>
+          <NavLink
+            to="/buy-car"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className={({ isActive }) =>
+              isActive
+                ? "text-[#EE1422] text-sm flex items-center justify-between"
+                : "text-black text-sm flex items-center justify-between"
+            }
+          >
+            Browse Cars <ChevronRight className="h-4 w-4" />
+          </NavLink>
+          <NavLink
+            to="/sell"
+            className={({ isActive }) =>
+              isActive
+                ? "text-[#EE1422] text-sm flex items-center justify-between"
+                : "text-black text-sm flex items-center justify-between"
+            }
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Sell my car <ChevronRight className="h-4 w-4" />
+          </NavLink>
+          <NavLink
+            to="/settings/saved"
+            className={({ isActive }) =>
+              isActive
+                ? "text-[#EE1422] text-sm flex items-center justify-between"
+                : "text-black text-sm flex items-center justify-between"
+            }
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Wishlist <ChevronRight className="h-4 w-4" />
+          </NavLink>
+        </div>
+      </div>
+
+      {/* Mobile right Sidebar Menu */}
+      <div
+        className={`fixed top-0 right-0 h-full w-[75%] bg-white shadow-lg transform transition-transform duration-300 z-50 ${
+          isRightSidebarOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        <div className="flex items-center justify-between p-4 bg-[#EE1422] text-white">
+          <div
+            className="flex items-center gap-2"
+            onClick={() => setIsLoginOpen(true)}
+          >
+            <img
+              src={user?.image || "/default-men-logo.jpg"}
+              alt="User"
+              className="w-10 h-10 rounded-full border"
+            />
+            <div className="flex flex-col">
+              <span className="text-xs font-semibold">
+                {user?.fullName || "Login / Signup"}
+              </span>
+            </div>
+          </div>
+          <button onClick={() => setIsRightSidebarOpen(false)}>
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="flex flex-col p-4 gap-3">
+          <NavLink
+            to="/settings/profile"
+            className={({ isActive }) =>
+              isActive ? "text-[#EE1422] text-sm" : "text-black text-sm"
+            }
+            onClick={() => setIsRightSidebarOpen(false)}
+          >
+            Profile Settings
+          </NavLink>
+          <NavLink
+            to="/settings/listings"
+            className={({ isActive }) =>
+              isActive ? "text-[#EE1422] text-sm" : "text-black text-sm"
+            }
+            onClick={() => setIsRightSidebarOpen(false)}
+          >
+            My Listing
+          </NavLink>
+          <NavLink
+            to="/sell"
+            className={({ isActive }) =>
+              isActive ? "text-[#EE1422] text-sm" : "text-black text-sm"
+            }
+            onClick={() => setIsRightSidebarOpen(false)}
+          >
+            Add Car
+          </NavLink>
+          <NavLink
+            to="/settings/interested-buyers"
+            className={({ isActive }) =>
+              isActive ? "text-[#EE1422] text-sm" : "text-black text-sm"
+            }
+            onClick={() => setIsRightSidebarOpen(false)}
+          >
+            Interested Buyers
+          </NavLink>
+          <NavLink
+            to="/settings/enquiries"
+            className={({ isActive }) =>
+              isActive ? "text-[#EE1422] text-sm" : "text-black text-sm"
+            }
+            onClick={() => setIsRightSidebarOpen(false)}
+          >
+            My Enquiries
+          </NavLink>
+          <NavLink
+            to="/settings/saved"
+            className={({ isActive }) =>
+              isActive ? "text-[#EE1422] text-sm" : "text-black text-sm"
+            }
+            onClick={() => setIsRightSidebarOpen(false)}
+          >
+            Saved Cars
+          </NavLink>
+          <NavLink
+            to="/settings/buy-packages"
+            className={({ isActive }) =>
+              isActive ? "text-[#EE1422] text-sm" : "text-black text-sm"
+            }
+            onClick={() => setIsRightSidebarOpen(false)}
+          >
+            Buy Packages
+          </NavLink>
+          <NavLink
+            to="/settings/bought-packages"
+            className={({ isActive }) =>
+              isActive ? "text-[#EE1422] text-sm" : "text-black text-sm"
+            }
+            onClick={() => setIsRightSidebarOpen(false)}
+          >
+            Bought Packages
+          </NavLink>
+
+          <button
+            onClick={() => {setShowDialog(true); setIsRightSidebarOpen(false);}}
+            className="w-full py-[6px] mt-2 cursor-pointer text-sm transition text-red-500 border border-red-400 rounded-xs hover:bg-gray-200 active:scale-95 active:bg-red-500 active:text-white"
+          >
+            Logout
           </button>
         </div>
       </div>
 
-      {/* Inject login modal here */}
-      <LoginModal
-        isOpen={isLoginOpen}
-        onClose={() => setIsLoginOpen(false)}
-        // setUserData={setUserData}
-      />
+      {/* Logout Confirmation Dialog */}
+      {showDialog && (
+        <div className="h-screen fixed inset-0 flex items-center justify-center z-50 bg-black/50 px-4">
+          <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6 md:p-8 relative">
+            {/* Close Button */}
+            <button
+              onClick={() => setShowDialog(false)}
+              className="absolute top-4 right-4 text-gray-800 hover:text-red-500 cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Illustration (optional) */}
+            <div className="flex justify-center mb-4">
+              <img
+                src="/logout.png"
+                alt="logout illustration"
+                className="w-24 h-20"
+              />
+            </div>
+
+            {/* Title */}
+            <h2 className="text-sm md:text-lg font-semibold text-center tracking-tight mb-3">
+              Are you sure you want to log out?
+            </h2>
+
+            {/* Description */}
+            <p className="text-[10px] font-semibold text-black text-center leading-tight">
+              You can log back in anytime using your credentials. If you’re
+              trying to access a different account, there’s no need to log out.
+              Simply{" "}
+              <span className="text-green-600 underline cursor-pointer">
+                add another account
+              </span>{" "}
+              and switch between profiles without leaving your current session.
+            </p>
+
+            {/* Buttons */}
+            <div className="w-full flex justify-center gap-2 md:gap-6 mt-4 text-sm">
+              <button
+                onClick={() => setShowDialog(false)}
+                className="w-full md:w-auto md:px-14 py-2 text-md border rounded-sm cursor-pointer hover:bg-gray-300"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmLogout}
+                className="w-full md:w-auto md:px-14 py-2 text-md bg-black text-white rounded-sm cursor-pointer hover:bg-gray-800"
+              >
+                Log Out
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ✅ Backdrop for Right Sidebar */}
+      {isRightSidebarOpen && (
+        <div
+          className="h-screen fixed inset-0 bg-black/50 z-40"
+          onClick={() => setIsRightSidebarOpen(false)}
+        />
+      )}
+
+      {/* Login Modal */}
+      <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
     </nav>
   );
 };

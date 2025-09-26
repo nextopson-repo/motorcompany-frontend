@@ -40,8 +40,8 @@ export default function SettingSidebar({
 
   return (
     <>
-      <aside className="w-64 bg-white rounded-sm shadow py-6 flex flex-col items-center z-5">
-        <div className="pb-4 px-6 w-full flex flex-col items-center relative">
+      <aside className="hidden w-60 bg-white rounded-sm shadow py-4 mb-4 md:flex flex-col items-center z-5">
+        <div className="pb-4 px-4 w-full flex flex-col items-center relative">
           <div className="relative">
             <img
               src={imageUrl}
@@ -71,7 +71,7 @@ export default function SettingSidebar({
               <li key={link.path} className="relative group w-full">
                 <NavLink
                   to={link.path}
-                  className={`relative block px-6 py-2 cursor-pointer text-sm transition ${
+                  className={`relative block px-6 py-2 cursor-pointer text-sm font-semibold transition ${
                     isActive
                       ? "bg-[#0099FF]/10 text-[#0099FF] font-semibold"
                       : "hover:bg-gray-200 text-gray-700"
@@ -98,11 +98,11 @@ export default function SettingSidebar({
       {/* Logout Confirmation Dialog */}
       {showDialog && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50 px-4">
-          <div className="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 relative">
+          <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-8 relative">
             {/* Close Button */}
             <button
               onClick={() => setShowDialog(false)}
-              className="absolute top-4 right-4 text-gray-500 hover:text-black"
+              className="absolute top-4 right-4 text-gray-800 hover:text-red-500 cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -112,17 +112,17 @@ export default function SettingSidebar({
               <img
                 src="/logout.png"
                 alt="logout illustration"
-                className="w-44 h-36"
+                className="w-32 h-24"
               />
             </div>
 
             {/* Title */}
-            <h2 className="text-lg font-semibold text-center mb-2">
+            <h2 className="text-lg font-semibold text-center tracking-tight mb-3">
               Are you sure you want to log out?
             </h2>
 
             {/* Description */}
-            <p className="text-sm text-gray-600 text-center">
+            <p className="text-[10px] font-semibold text-black text-center leading-tight">
               You can log back in anytime using your credentials. If you’re
               trying to access a different account, there’s no need to log out.
               Simply{" "}
@@ -133,16 +133,16 @@ export default function SettingSidebar({
             </p>
 
             {/* Buttons */}
-            <div className="flex justify-center gap-6 mt-6 text-sm">
+            <div className="flex justify-center gap-6 mt-4 text-sm">
               <button
                 onClick={() => setShowDialog(false)}
-                className="px-14 py-2 border rounded-sm cursor-pointer hover:bg-gray-300"
+                className="px-14 py-2 text-md border rounded-sm cursor-pointer hover:bg-gray-300"
               >
                 Cancel
               </button>
               <button
                 onClick={handleConfirmLogout}
-                className="px-14 py-2 bg-black text-white rounded-sm cursor-pointer hover:bg-gray-800"
+                className="px-14 py-2 text-md bg-black text-white rounded-sm cursor-pointer hover:bg-gray-800"
               >
                 Log Out
               </button>

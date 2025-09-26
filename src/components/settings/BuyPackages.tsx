@@ -1,4 +1,5 @@
 // pages/settings/BuyPackages.tsx
+import { X } from "lucide-react";
 import React, { useState } from "react";
 
 interface Plan {
@@ -52,44 +53,44 @@ const BuyPackages: React.FC = () => {
 
   return (
     <>
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto px-4 md:px-0">
         {/* Title */}
-        <h2 className="text-2xl font-bold text-black">Buy Packages</h2>
-        <p className="text-gray-500 text-sm mt-1">
+        <h2 className=" text-md md:text-2xl font-bold text-black py-2 md:py-0">Buy Packages</h2>
+        <p className=" hidden md:block text-gray-500 text-sm mt-1">
           Lorem Ipsum Dolor Sit Amet Consectetur. Adipisicing Morbi Tellu
         </p>
 
         {/* Sections */}
-        <div className="space-y-8 mt-6">
+        <div className=" space-y-4 md:space-y-8 mt-2 md:mt-6">
           {packages.map((section, i) => (
             <div key={i}>
-              <h3 className="text-base font-semibold">
+              <h3 className="text-[10px] md:text-base font-semibold">
                 Post Ads & Features For{" "}
-                <span className="text-red-500">{section.months}</span>
+                <span className="text-red-500 text-[11px] md:text-base">{section.months}</span>
               </h3>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+              <div className="grid grid-cols-3 md:grid-cols-3 gap-2 md:gap-4 mt-2 md:mt-4">
                 {section.plans.map((plan, j) => {
                   const id = `${i}-${j}`;
                   const isSelected = selected === id;
                   return (
                     <label
                       key={id}
-                      className={`flex flex-col items-center rounded-lg p-4 shadow-sm cursor-pointer transition bg-white ${
+                      className={`flex flex-col items-center rounded-xs md:rounded-sm p-2 md:p-4 shadow-sm cursor-pointer transition bg-white ${
                         isSelected ? "border-gray-800 ring-2 ring-gray-800" : ""
                       }`}
                     >
-                      <div className="flex items-center w-full px-2">
+                      <div className="flex items-center gap-2 w-full md:w-fit md:px-2">
                         <input
                           type="checkbox"
                           checked={isSelected}
                           onChange={() => setSelected(id)}
-                          className="w-5 h-5 cursor-pointer accent-gray-800"
+                          className="w-3 md:w-5 h-3 md:h-5 cursor-pointer accent-gray-800"
                         />
-                        <p className="w-full font-medium text-center">{plan.ads}</p>
+                        <p className="w-full text-xs md:text-md md:text-center font-medium truncate">{plan.ads}</p>
                       </div>
                       <div className="w-full custom-dash my-2 "></div>
-                      <p className="text-lg font-semibold">₹ {plan.price}/-</p>
+                      <p className="text-xs md:text-lg font-semibold">₹ {plan.price}/-</p>
                     </label>
                   );
                 })}
@@ -102,7 +103,7 @@ const BuyPackages: React.FC = () => {
         <button
           disabled={!selected}
           onClick={() => setShowModal(true)}
-          className={`w-full mt-10 py-3 rounded-lg font-semibold transition ${
+          className={`w-full mt-5 md:mt-10 py-3 rounded-xs md:rounded-sm font-semibold transition ${
             selected
               ? "bg-black hover:bg-black/90 text-white cursor-pointer"
               : "bg-gray-300 text-gray-500 cursor-not-allowed"
@@ -118,17 +119,17 @@ const BuyPackages: React.FC = () => {
           <div className="bg-white rounded-lg max-w-md w-full shadow-lg">
             {/* Header */}
             <div className="flex justify-between items-center p-4 rounded-t-lg">
-              <h2 className="text-lg font-semibold">Order Summary</h2>
-              <button onClick={() => setShowModal(false)} className="text-2xl cursor-pointer hover:text-[#cb202d] transition-all duration-300 mr-2">
-                ✕
+              <h2 className="text-sm md:text-lg font-semibold">Order Summary</h2>
+              <button onClick={() => setShowModal(false)} className="cursor-pointer hover:text-[#cb202d] active:scale-95 active:text-[#cb202d] transition-all duration-300 mr-2">
+                <X className="w-5 md:w-6 h-5 md:h-6" />
               </button>
             </div>
 
-            <div className="p-4 space-y-4">
+            <div className="pt-0 md:pt-4 p-4 space-y-2 md:space-y-4">
               {/* Package Row */}
-              <div className="flex justify-between items-center border border-gray-400 rounded p-3">
-                <p className="text-sm font-medium">{selectedPlan.ads}</p>
-                <div className="flex items-center space-x-2 border rounded">
+              <div className="flex justify-between items-center border border-gray-400 rounded-xs md:rounded-sm p-3">
+                <p className="text-xs md:text-sm font-medium">{selectedPlan.ads}</p>
+                <div className="flex items-center text-xs md:text-base space-x-2 border rounded-xs md:rounded-sm">
                   <button
                     onClick={() => setQuantity((q) => Math.max(1, q - 1))}
                     className="border-r px-2 cursor-pointer"
@@ -143,29 +144,29 @@ const BuyPackages: React.FC = () => {
                     +
                   </button>
                 </div>
-                <p className="font-semibold">₹ {selectedPlan.price}/-</p>
+                <p className="text-xs md:text-base font-semibold">₹ {selectedPlan.price}/-</p>
               </div>
 
               {/* Price Details */}
-              <div className="border border-gray-400 rounded p-3">
-                <h3 className="font-semibold mb-2">Price Details</h3>
-                <div className="flex justify-between text-sm">
+              <div className="border border-gray-400 rounded-xs md:rounded-sm p-3">
+                <h3 className="text-sm md:text-base font-semibold mb-2">Price Details</h3>
+                <div className="flex justify-between text-xs md:text-sm">
                   <span>Price</span>
                   <span>₹ {selectedPlan.price * quantity}</span>
                 </div>
-                <div className="flex justify-between text-sm">
+                <div className="flex justify-between text-xs md:text-sm">
                   <span>GST (18%)</span>
                   <span>₹ {gst}</span>
                 </div>
                 <hr className="my-2" />
-                <div className="flex justify-between font-semibold text-[#cb202d]">
+                <div className="flex justify-between text-sm md:text-base font-semibold text-[#cb202d]">
                   <span>Total Amount</span>
                   <span>₹ {total}</span>
                 </div>
               </div>
 
               {/* Final Pay Button */}
-              <button className="w-full bg-[#cb202d] hover:bg-[#cb202d]/90 cursor-pointer text-white font-semibold py-3 rounded-lg transition">
+              <button className="w-full bg-[#cb202d] hover:bg-[#cb202d]/90 active:bg-[#cb202d]/90 active:scale-95 cursor-pointer text-white text-sm md:text-base font-semibold py-2 md:py-3 rounded-xs md:rounded-sm transition-all duration-300">
                 Continue to Pay
               </button>
             </div>

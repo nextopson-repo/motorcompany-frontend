@@ -8,6 +8,11 @@ import dealerReducer from "./slices/dealerSlice";
 import profileReducer from "./slices/profileSlice";
 import carsReducer from "./slices/carSlice";
 import filtersReducer from "./slices/filterSlice";
+import locationReducer from "./slices/locationSlice";
+import enquiriesReducer from "./slices/enqueriesSlice";
+import boughtPackagesReducer from "./slices/boughtPackagesSlice";
+import sellerDetailsReducer from "./slices/sellerDetailsSlice";
+
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +25,10 @@ export const store = configureStore({
     profile: profileReducer,
     cars: carsReducer,
     filters: filtersReducer,
+    location: locationReducer,
+    enquiries: enquiriesReducer,
+    boughtPackages: boughtPackagesReducer,
+    SellerDetails: sellerDetailsReducer,
   },
 });
 
