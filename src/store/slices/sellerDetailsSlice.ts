@@ -109,7 +109,7 @@ const sellerDetailsSlice = createSlice({
   name: "seller",
   initialState,
   reducers: {
-    setSeller(state, action: PayloadAction<SellerState>) {
+    setSeller(_, action: PayloadAction<SellerState>) {
       return action.payload;
     },
     clearSeller() {

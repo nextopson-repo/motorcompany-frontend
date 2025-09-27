@@ -7,6 +7,7 @@ import { setLocation } from "../store/slices/locationSlice";
 interface LocationModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onLocationChange?: (loc: string) => void;
   citySearch: string;
   setCitySearch: (val: string) => void;
 }
@@ -14,6 +15,7 @@ interface LocationModalProps {
 const LocationModal: React.FC<LocationModalProps> = ({
   isOpen,
   onClose,
+  onLocationChange,
   citySearch,
   setCitySearch,
 }) => {
@@ -53,6 +55,9 @@ const LocationModal: React.FC<LocationModalProps> = ({
 
   const handleSelectCity = (city: string) => {
     dispatch(setLocation(city));
+    if (onLocationChange) {
+      onLocationChange(city);
+    }
     onClose();
   };
 

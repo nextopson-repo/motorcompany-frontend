@@ -1,6 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { CarRecord } from "./carSlice";
 
-interface Car {
+interface Car extends CarRecord {
     id: number;
     brand: string;
     model: string;

@@ -11,8 +11,8 @@ type SelectedFilters = {
   transmission: string[];
   ownership: string[];
   location: string[];
-  priceRange: [number, number];
-  yearRange: [number, number];
+  priceRange: [number, number] | null;
+  yearRange: [number, number] | null;
 };
 
 interface FilterSidebarProps {
@@ -23,8 +23,8 @@ interface FilterSidebarProps {
     transmission: string[];
     ownership: string[];
     location: string[];
-    priceRange: [number, number];
-    yearRange: [number, number];
+    priceRange: [number, number] | null;
+    yearRange: [number, number] | null;
   };
   selectedFilters: SelectedFilters;
   onSelectedFiltersChange: (filters: SelectedFilters) => void;
