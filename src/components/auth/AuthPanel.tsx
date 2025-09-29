@@ -30,8 +30,7 @@ const AuthPanel: React.FC<AuthPanelProps> = ({
 
   // Countdown timer for resend OTP
   useEffect(() => {
-    let timer: number;
-    // let timer: NodeJS.Timeout;
+    let timer: NodeJS.Timeout;
     if (step === "otp" && resendCooldown > 0) {
       timer = setTimeout(() => setResendCooldown(resendCooldown - 1), 1000);
     }
