@@ -28,7 +28,7 @@ interface CarsDetailsSlider {
         loop={true}
       >
         {carsData.map((car, index) => (
-          <SwiperSlide key={index} className="py-2">
+          <SwiperSlide key={index} className="py-2 mx-1">
             <CarCard car={car} />
           </SwiperSlide>
         ))}

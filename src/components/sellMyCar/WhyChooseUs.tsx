@@ -53,12 +53,12 @@ export default function WhyChooseUs() {
         </p>
 
         {/* Main title */}
-        <h2 className="text-md lg:text-2xl md:text-lg font-bold mb-2 lg:mb-4">
+        <h2 className="text-sm lg:text-2xl md:text-lg font-bold mb-2 lg:mb-4">
           Why sell car to DhikCar?
         </h2>
 
         {/* Sub text */}
-        <p className="text-[10px] lg:text-base text-gray-900 max-w-xl mx-auto mb-4 lg:mb-8 leading-3 lg:leading-5.5">
+        <p className="text-[9px] lg:text-base text-gray-900 max-w-xl mx-auto mb-4 lg:mb-8 leading-3 lg:leading-5.5">
           Discover what sets us apart — trusted expertise, exceptional service,
           and a commitment to your success.
         </p>
@@ -81,7 +81,7 @@ export default function WhyChooseUs() {
               <h3 className="font-[600] text-xs lg:text-2xl text-gray-900 mb-2 lg:mb-4 leading-tight">
                 {feature.title}
               </h3>
-              <p className="text-black text-[10px] lg:text-[16px] leading-3 lg:leading-5.5">
+              <p className="text-black text-[9px] md:text-[10px] lg:text-[16px] leading-3 lg:leading-5.5">
                 {feature.description}
               </p>
             </div>

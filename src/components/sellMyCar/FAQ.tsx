@@ -53,7 +53,7 @@ export default function FAQ() {
         <h2 className="text-sm lg:text-[23px]  lg:leading-7.5 font-bold mt-2 lg:mt-4">
           Got Questions? We've Got Answers
         </h2>
-        <p className="text-[10px] lg:text-[16px] max-w-xl mx-auto mt-2 lg:mt-4 text-gray-800 leading-3 lg:leading-5.5 px-4">
+        <p className="text-[9px] md:text-[10px] lg:text-[16px] max-w-xl mx-auto mt-2 lg:mt-4 text-gray-800 leading-3 lg:leading-5.5 px-4">
           Have questions? We've gathered the most common ones to help you get
           the answers you need—fast and easy.
         </p>
@@ -64,11 +64,12 @@ export default function FAQ() {
         {faqs.map((faq, i) => (
           <div
             key={i}
-            className="bg-white/50 rounded-md shadow-md overflow-hidden transition-all"
+            className="bg-white/50 rounded-md overflow-hidden transition-all"
+            style={{ boxShadow: "0px 0px 10px -4px rgba(0, 0, 0, 0.12)",}}
           >
             <button
               onClick={() => toggle(i)}
-              className="flex lg:items-center justify-between gap-2 w-full p-2 lg:p-5 text-left text-xs lg:text-base font-medium focus:outline-none"
+              className="flex lg:items-center justify-between gap-2 w-full p-2 lg:p-5 text-left text-[11px] md:text-xs lg:text-base md:font-medium focus:outline-none"
             >
               <span className=" text-black">{faq.question}</span>
               <span className="w-fit">
@@ -81,7 +82,7 @@ export default function FAQ() {
             </button>
             
             <div
-              className={`px-2 lg:px-5 pb-4 text-gray-600 text-[10px] lg:text-sm tracking-tight transition-all duration-300 ${
+              className={`px-2 lg:px-5 pb-4 text-gray-600 text-[9px] md:text-[10px] lg:text-sm tracking-tight transition-all duration-300 ${
                 openIndex === i ? "block" : "hidden"
               }`}
             >

@@ -31,9 +31,9 @@ const App = () => {
   const dispatch = useDispatch<AppDispatch>();
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   // Fetch cars on mount
-    useEffect(() => {
-      dispatch(fetchCars(BACKEND_URL));
-    }, [BACKEND_URL, dispatch]);
+  useEffect(() => {
+    dispatch(fetchCars(BACKEND_URL));
+  }, [BACKEND_URL, dispatch]);
 
   useEffect(() => {
     const savedCity = localStorage.getItem("selectedCity");
@@ -52,10 +52,10 @@ const App = () => {
     }
   }, [location.pathname]);
 
-  const handleCloseModal = () => {
-    setIsLocationModalOpen(false);
-    localStorage.setItem("locationModalClosed", "true");
-  };
+  // const handleCloseModal = () => {
+  //   setIsLocationModalOpen(false);
+  //   localStorage.setItem("locationModalClosed", "true");
+  // };
 
   useEffect(() => {
     const anyModalOpen = isLoginOpen || isLocationModalOpen;
@@ -101,8 +101,8 @@ const App = () => {
 
       <LocationModal
         isOpen={isLocationModalOpen}
-        onClose={handleCloseModal}
-        citySearch={citySearch}
+        onClose={() => setIsLocationModalOpen(false)} 
+        citySearch={citySearch} 
         setCitySearch={setCitySearch}
       />
 

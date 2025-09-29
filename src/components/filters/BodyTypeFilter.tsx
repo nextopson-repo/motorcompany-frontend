@@ -54,7 +54,7 @@ const BodyTypeFilter: React.FC<Props> = ({ onClose }) => {
                   : ""
               }`}
             >
-              <div className="w-10 h-7 mb-2">
+              <div className="w-16 mb-2">
                 <img
                   src={bodyTypes.img}
                   alt={bodyTypes.name}

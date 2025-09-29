@@ -19,7 +19,6 @@ const LocationModal: React.FC<LocationModalProps> = ({
 }) => {
   const dispatch = useDispatch<AppDispatch>();
 
-  // Redux se cities uthao
   const locationOptions = useSelector(
     (state: RootState) => state.location.locations
   );
@@ -108,7 +107,7 @@ const LocationModal: React.FC<LocationModalProps> = ({
         </div>
 
         {/* footer background image */}
-        <div className="absolute inset-[65%] left-0 -translate-x-[10%] w-full h-1/2 opacity-20">
+        <div className="absolute inset-[65%] left-0 -translate-x-[0%] w-full h-1/2 opacity-20">
           <img
             src="/Cities/cities-bg.png"
             alt="cities-bg"

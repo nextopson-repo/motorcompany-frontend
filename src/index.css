@@ -7,7 +7,7 @@
     font-family: 'Roboto', system-ui, -apple-system, Roboto, 'Open Sans';
 }
 
-body{
+body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -193,7 +193,7 @@ body{
 }
 
 @media screen and (max-width: 475px) {
-    .custom-bg{
+    .custom-bg {
         background-image: none;
     }
 }
@@ -209,48 +209,58 @@ body{
 }
 
 /* CarCard shadow */
-.card-shadow-custom{
-    box-shadow: 0px 2px 10px 0.5px rgba(0,0,0,0.2);
-    
+.card-shadow-custom {
+    box-shadow: 0px 2px 10px 0.5px rgba(0, 0, 0, 0.2);
+
 }
 
 /* contact-us form shadow */
-.contact-form-shadow{
+.contact-form-shadow {
     box-shadow: 0px 4px 38.3px -1px rgba(0, 0, 0, 0.25);
 }
 
 /* buy packages cards shadow */
 
-.packages-cards{
+.packages-cards {
     box-shadow: 0px 1px 19.4px 0px rgba(0, 0, 0, 0.13);
 
+}
+
+@media screen and (max-width: 475px) {
+    .shadow-custom {
+        box-shadow: 0px 2px 12.4px 1px rgba(0, 0, 0, 0.09);
+    }
+    .contact-form-shadow {
+    box-shadow: 0px 4px 38.3px -1px rgba(0, 0, 0, 0.0);
+}
 }
 
 
 
 /* global.css */
 .scrollbar-light {
-  scrollbar-width: thin; /* Firefox ke liye */
-  scrollbar-color: rgba(0,0,0,0.15) transparent;
+    scrollbar-width: thin;
+    /* Firefox ke liye */
+    scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
 }
 
 .scrollbar-light::-webkit-scrollbar {
-  width: 4px;  
-  height: 4px;
+    width: 4px;
+    height: 4px;
 }
 
 .scrollbar-light::-webkit-scrollbar-track {
-  background: transparent;
+    background: transparent;
 }
 
 .scrollbar-light::-webkit-scrollbar-thumb {
-  background-color: rgba(0,0,0,0.15);
+    background-color: rgba(0, 0, 0, 0.15);
 }
 
 .scrollbar-light::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(0,0,0,0.3); 
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 .scrollbar-light::-webkit-scrollbar-button {
-  display: none;
+    display: none;
 }

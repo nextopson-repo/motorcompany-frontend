@@ -18,13 +18,13 @@ const Saved: React.FC = () => {
     .sort((a, b) => {
       switch (sortOption) {
         case "priceLowToHigh":
-          return a.carPrice - b.carPrice;
+          return (a.carPrice ?? 0) - (b.carPrice ?? 0);
         case "priceHighToLow":
-          return b.carPrice - a.carPrice;
+          return (b.carPrice ?? 0) - (a.carPrice ?? 0);
         case "yearNewToOld":
-          return b.manufacturingYear - a.manufacturingYear; // replace with year field if available
+          return (b.manufacturingYear ?? 0) - (a.manufacturingYear ?? 0);
         case "yearOldToNew":
-          return a.manufacturingYear - b.manufacturingYear;
+          return (a.manufacturingYear ?? 0) - (b.manufacturingYear ?? 0);
         default:
           return 0;
       }
@@ -42,8 +42,6 @@ const Saved: React.FC = () => {
   const currentSortLabel =
     sortOptions.find((o) => o.value === sortOption)?.label ||
     sortOptions[0].label;
-
-  
 
   return (
     <div className="mx-auto">
@@ -112,8 +110,8 @@ const Saved: React.FC = () => {
 
       {/*Desktop Cars Grid */}
       <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {filteredCars.map((cars) => (
-          <CarCard key={cars.id} car = {cars} />
+        {filteredCars.map((car) => (
+          <CarCard key={car.id} car={car} />
         ))}
       </div>
 
@@ -139,11 +137,12 @@ const Saved: React.FC = () => {
                 <div className="flex-1 px-2 flex flex-col justify-between">
                   <div className="space-y-1">
                     <h3 className="font-semibold text-xs text-gray-900">
-                      {car.brand} {car.model} {car.transmission} {car.manufacturingYear}
+                      {car.brand} {car.model} {car.transmission}{" "}
+                      {car.manufacturingYear}
                     </h3>
                     <p className="text-[9px] mt-1 leading-tight text-gray-900">
-                      {formatShortNumber(car.kms)} kms | {car.bodyType} {car.seats} seater | {car.fuelType} |{" "}
-                      {car.transmission}
+                      {formatShortNumber(car.kms)} kms | {car.bodyType}{" "}
+                      {car.seats} seater | {car.fuelType} | {car.transmission}
                     </p>
                   </div>
                 </div>

@@ -13,6 +13,7 @@ type SelectedFilters = {
   location: string[];
   priceRange: [number, number];
   yearRange: [number, number];
+  ownerType: "all" | "dealer" | "owner";
 };
 
 interface FilterSidebarProps {
@@ -25,6 +26,7 @@ interface FilterSidebarProps {
     location: string[];
     priceRange: [number, number];
     yearRange: [number, number];
+    ownerType: "all" | "dealer" | "owner";
   };
   selectedFilters: SelectedFilters;
   onSelectedFiltersChange: (filters: SelectedFilters) => void;
@@ -60,9 +62,6 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
     transmission: true,
     ownership: true,
   });
-  const [carOwnerFilter, setCarOwnerFilter] = useState<
-    "all" | "dealer" | "owner"
-  >("all");
 
   const toggleSection = (section: keyof typeof sectionStates) => {
     setSectionStates((prev) => ({
@@ -90,13 +89,17 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
   const allCollapsed = Object.values(sectionStates).every((state) => !state);
 
   // ✅ Ensure slider values are always within bounds
-const safeRange = (values: [number, number] | null, min: number, max: number) => {
-  if (!values) return [min, max] as [number, number];
-  return [
-    Math.max(values[0], min),
-    Math.min(values[1], max),
-  ] as [number, number];
-};
+  const safeRange = (
+    values: [number, number] | null,
+    min: number,
+    max: number
+  ) => {
+    if (!values) return [min, max] as [number, number];
+    return [Math.max(values[0], min), Math.min(values[1], max)] as [
+      number,
+      number
+    ];
+  };
 
   // ✅ Get min and max from dataset to use in sliders (if data exists)
   const minPrice = filters.priceRange?.[0] ?? 0;
@@ -147,7 +150,7 @@ const safeRange = (values: [number, number] | null, min: number, max: number) =>
         min={min || 0}
         max={max}
         onChange={(vals) => setValues([vals[0], vals[1]])}
-         renderTrack={({ props, children }) => (
+        renderTrack={({ props, children }) => (
           <div
             {...props}
             className="h-[2px] rounded relative w-full"
@@ -237,38 +240,37 @@ const safeRange = (values: [number, number] | null, min: number, max: number) =>
         )}
       </button>
 
-      {/* filter button */}
+      {/* Owner Type Filter */}
       <div className="text-sm text-center grid grid-cols-3 items-center rounded-sm border border-gray-200 mt-4 overflow-hidden">
-        <button
-          onClick={() => setCarOwnerFilter("all")}
-          className={`py-2 transition-all duration-200 ${
-            carOwnerFilter === "all"
-              ? "bg-black text-white"
-              : "bg-white text-gray-700 hover:bg-gray-50"
-          }`}
-        >
-          All Cars
-        </button>
-        <button
-          onClick={() => setCarOwnerFilter("dealer")}
-          className={`py-2 border-x border-gray-200 transition-all duration-200 ${
-            carOwnerFilter === "dealer"
-              ? "bg-black text-white"
-              : "bg-white text-gray-700 hover:bg-gray-50"
-          }`}
-        >
-          Dealer
-        </button>
-        <button
-          onClick={() => setCarOwnerFilter("owner")}
-          className={`py-2 transition-all duration-200 ${
-            carOwnerFilter === "owner"
-              ? "bg-black text-white"
-              : "bg-white text-gray-700 hover:bg-gray-50"
-          }`}
-        >
-          Owner
-        </button>
+        {["all", "dealer", "owner"].map((type) => {
+          const label =
+            type === "all"
+              ? "All Cars"
+              : type.charAt(0).toUpperCase() + type.slice(1);
+          const isActive = selectedFilters.ownerType === type;
+          return (
+            <button
+              key={type}
+              onClick={() =>
+                onSelectedFiltersChange({
+                  ...selectedFilters,
+                  ownerType: type as "all" | "dealer" | "owner",
+                })
+              }
+              className={`py-2 transition-all duration-200 ${
+                type === "dealer" || type === "owner"
+                  ? "border-x border-gray-200"
+                  : ""
+              } ${
+                isActive
+                  ? "bg-black text-white"
+                  : "bg-white text-gray-700 hover:bg-gray-50"
+              }`}
+            >
+              {label}
+            </button>
+          );
+        })}
       </div>
 
       {/* filter fields */}
@@ -292,7 +294,7 @@ const safeRange = (values: [number, number] | null, min: number, max: number) =>
               {sectionStates.priceRange && (
                 <div>
                   {renderRange(
-                     safeRange(selectedFilters.priceRange, minPrice, maxPrice),
+                    safeRange(selectedFilters.priceRange, minPrice, maxPrice),
                     (vals) =>
                       onSelectedFiltersChange({
                         ...selectedFilters,

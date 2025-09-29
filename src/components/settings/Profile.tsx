@@ -8,13 +8,14 @@ import {
   PinIcon,
   User,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import {
   updateField,
   type UserProfile,
   setUser,
+  fetchUserProfile,
 } from "../../store/slices/profileSlice";
 
 export default function Profile() {
@@ -22,6 +23,13 @@ export default function Profile() {
   const { user, loading, error } = useAppSelector((state) => state.profile);
 
   const [editMode, setEditMode] = useState(false);
+
+  // Fetch profile on mount
+  useEffect(() => {
+    if (!user) {
+      dispatch(fetchUserProfile());
+    }
+  }, [dispatch, user]);
 
   if (!user) {
     return (
@@ -47,7 +55,6 @@ export default function Profile() {
 
   return (
     <main className="w-full flex-1 mx-auto relative mb-8 md:mb-0 ">
-
       {/* Header */}
       <div className="flex items-center gap-3 md:mb-6 bg-white text-black py-[6px] px-4 md:px-0 z-10">
         <h1 className="text-md md:text-2xl font-semibold">My Profile</h1>
@@ -55,14 +62,13 @@ export default function Profile() {
 
       {/* Profile Image */}
       <div className="md:hidden flex justify-center mb-4 md:mb-6 relative">
-        
         <div className="block md:hidden absolute h-22 -z-0 w-full">
-        <img
-          src="/settings/main-bg.png"
-          alt="header car"
-          className="w-full h-full opacity-[60%] object-cover object-center"
-        />
-      </div>
+          <img
+            src="/settings/main-bg.png"
+            alt="header car"
+            className="w-full h-full opacity-[60%] object-cover object-center"
+          />
+        </div>
 
         <div className="relative pt-6">
           <img
@@ -147,7 +153,9 @@ export default function Profile() {
       </div>
 
       {/* errors log */}
-      <span><p className="text-red-500 text-xs md:text-sm">{error}</p></span>
+      <span>
+        <p className="text-red-500 text-xs md:text-sm">{error}</p>
+      </span>
 
       {/* Save / Cancel Buttons */}
       <div className="mt-4 md:mt-8 px-4 md:px-0">
@@ -218,8 +226,6 @@ const Field = ({
     )}
   </div>
 );
-
-
 
 // import {
 //   Building,

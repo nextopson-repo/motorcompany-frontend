@@ -26,7 +26,7 @@ function Dropdown({
 
   return (
     <div className="mb-1 relative">
-      <label className="text-xs">{label}</label>
+      <label className="text-[10px] md:text-xs">{label}</label>
       <input
         type="text"
         value={search || value}
@@ -194,11 +194,11 @@ export default function SellHero() {
             Home <span className="text-gray-300"> &gt; </span>{" "}
             <span className="font-medium underline underline-offset-3">Sell my Car</span>
           </p>
-          <h1 className="max-w-full w-full md:max-w-[80%] text-md md:text-3xl font-bold mb-3 md:mb-5 leading-tight">
+          <h1 className="max-w-full w-full md:max-w-[80%] text-md md:text-3xl font-semibold md:font-bold mb-3 md:mb-5 leading-tight">
             Sell your car faster, easier and hassle-free with DhikCar.com
           </h1>
-          <p className="text-[10px] md:text-base text-gray-200 md:mb-7">
-            India’s trusted platform for quick and profitable car sales. List
+          <p className="font-light md:font-semibold text-[10px] md:text-base text-gray-200 md:mb-7">
+            India's trusted platform for quick and profitable car sales. List
             today and watch buyers come to you!
           </p>
 
@@ -258,7 +258,7 @@ export default function SellHero() {
         </div>
 
         {/* Right Form Card */}
-        <div className="bg-white rounded-lg shadow-lg p-4 md:p-6 md:m-4 col-span-3">
+        <div className="bg-white rounded-lg shadow-md md:shadow-lg border border-gray-200 p-4 md:p-6 md:m-4 col-span-3">
           {showForm && (
             <SellHeroForm
               onBack={() => setShowForm(false)}
@@ -269,13 +269,13 @@ export default function SellHero() {
 
           {!showForm && !editCar && (
             <div>
-              <h2 className="text-sm mb-2 md:mb-3">
+              <h2 className="text-xs md:text-sm mb-2 md:mb-3">
                 New to <span className="font-semibold">Dhikcar</span>? Let's get
                 you started
               </h2>
 
               {/* User Type */}
-              <label htmlFor="userType" className="text-xs">
+              <label htmlFor="userType" className="text-[10px] md:text-xs">
                 User Type
               </label>
               <div className="grid grid-cols-3 gap-3 md:gap-5 mb-2 md:mb-4 text-[10px] md:text-xs mt-1">

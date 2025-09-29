@@ -356,7 +356,11 @@ const CarDetails = () => {
           </div>
 
           {/* Car Overview Table */}
-          <div className="lg:hidden bg-white lg:pt-4 border-b border-gray-200 pb-2 rounded-2xl shadow-md border">
+          <div className="lg:hidden bg-white lg:pt-4 border-b border-gray-100 pb-2 rounded-2xl border"
+          style={{
+            boxShadow: "0 1px 5px 1px rgb(0, 0, 0, 0.15)",
+          }}
+          >
             <h2 className="text-md md:text-xl font-bold px-4 py-2">
               Car Overview
             </h2>
@@ -704,9 +708,13 @@ const CarDetails = () => {
       </div>
 
       {/* slider */}
-      <div className="px-4 lg:px-0 lg:m-6 rounded-2xl border-gray-200 ">
-        <div className="flex items-center justify-between mt-4 lg:mt-6">
-          <h2 className="text-md lg:text-2xl font-semibold py-4 px-2">
+      <div className="pb-3 lg:m-6 rounded-2xl border border-gray-100 "
+      style={{
+        boxShadow: "0 1px 10px 1px rgb(0, 0, 0, 0.15)"
+      }}
+      >
+        <div className="flex items-center justify-between mt-4 lg:mt-6 px-4 lg:px-0">
+          <h2 className="text-md lg:text-2xl font-semibold py-3 ">
             Similar Cars
           </h2>
           <button

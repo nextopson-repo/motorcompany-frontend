@@ -16,7 +16,7 @@ export default function FindDealers() {
             Can't find your Desired Car! Don't Worry <span className="absolute -top-[35%] md:-top-2 lg:-top-4 left-[66%] md:left-[77%] lg:left-[70%] -translateX-1/2"><img src="/find-dealer-heading-top.png" alt="design" className="h-3 md:h-6 w-4 md:w-8"/></span>
           </h2> */}
           <h2 className="text-[0.70rem] md:text-[1.6rem] font-bold text-gray-800">
-            Can't find your Desired Car! Don't {" "} 
+            Can't find your Desired Car! Don't{" "}
             <span className="relative inline-block">
               Worry
               <img
@@ -28,11 +28,12 @@ export default function FindDealers() {
           </h2>
 
           <p className="text-gray-800 max-w-[75%] lg:max-w-[85%] md:max-w-auto text-[9px] md:text-sm leading-[1.3] md:leading-4 tracking-tight">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.{" "}
+            Struggling to find the perfect car? DhikCar connects you with
+            trusted dealers so you can explore a wide range of vehicles, compare
+            prices,
             <span className="hidden md:inline">
-              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
+              and get expert guidance to make your car buying or selling
+              experience smooth, fast, and reliable.
             </span>
           </p>
         </div>

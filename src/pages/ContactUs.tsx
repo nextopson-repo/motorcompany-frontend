@@ -63,33 +63,38 @@ export default function ContactUs() {
   ];
 
   return (
-    <div className="h-full max-w-8xl relative mt-12 md:my-14 z-0 mx-auto font-roboto ">
-      <div className="w-full h-[140px] md:h-auto md:max-h-[300px] absolute top-0 left-0 -z-1">
+    <div className="bg-white h-full max-w-8xl relative mt-12 md:my-14 z-0 mx-auto font-roboto ">
+      <div className="bg-white w-full h-[140px] md:h-auto md:max-h-[300px] absolute top-0 left-0 -z-1">
         <img
-          src="/contact-us-bg.png"
+          src="/contact-us-bg-1.avif"
           alt="contact us background"
           className="w-full h-full object-cover object-center"
         />
       </div>
 
       <div className="min-h-1/3 px-4 md:px-0 max-w-[250px] md:max-w-2xl md:text-center pt-14 md:pt-32 pb-2 md:pb-8 text-white md:mx-auto md:space-y-6">
-        <h1 className="text-xs md:text-3xl font-semibold">Feel Free to Get in Touch</h1>
+        <h1 className="text-xs md:text-3xl font-semibold">
+          Feel Free to Get in Touch
+        </h1>
         <p className="text-[8px] md:text-sm">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud{" "}
+          Get in touch with us for any car sale, purchase, or resell inquiries.
+          Our dedicated team is here to assist you with quick support, reliable
+          guidance, and the best deals to make your car journey smooth and
+          hassle-free. Reach out today and let us help you drive your dream
+          forward.
         </p>
       </div>
 
       {/* contact us form here */}
-      <div className="max-w-4xl h-full md:mx-auto grid grid-cols-1 md:grid-cols-18 md:bg-gray-100 rounded-md overflow-hidden z-10 contact-form-shadow">
+      <div className="max-w-4xl h-full md:mx-auto px-2 md:px-0 grid grid-cols-1 md:grid-cols-18 md:bg-gray-100 rounded-md overflow-hidden z-10 contact-form-shadow">
         {/* Left info panel */}
         <div className="hidden col-span-8 p-8 py-10 bg-gray-100 md:flex flex-col justify-between">
           <div className="mt-2">
             <h2 className="text-2xl font-bold mb-4">Get in touch</h2>
             <p className="text-gray-600 mb-8 text-[10px]">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Have questions or need assistance with buying, selling, or
+              reselling your car? Our team is here to provide fast support and
+              reliable guidance.
             </p>
             <div className="space-y-6 border-b border-gray-400 pb-6">
               <div className="flex items-start gap-3">
@@ -97,7 +102,9 @@ export default function ContactUs() {
                   <MapPin className="h-6 w-6 text-white" />
                 </span>
                 <div>
-                  <p className="text-sm text-gray-800 mb-1 font-semibold">Address</p>
+                  <p className="text-sm text-gray-800 mb-1 font-semibold">
+                    Address
+                  </p>
                   <p className="text-black text-[10px]">
                     8502 Preston Rd, Inglewood, Maine 98380
                   </p>
@@ -109,7 +116,9 @@ export default function ContactUs() {
                   <Mail className="h-6 w-6 text-white" />
                 </span>
                 <div>
-                  <p className="text-sm text-gray-800 mb-1 font-semibold">Email Us</p>
+                  <p className="text-sm text-gray-800 mb-1 font-semibold">
+                    Email Us
+                  </p>
                   <p className="text-black text-[10px]">example@email.com</p>
                   <p className="text-black text-[10px]">example@email.com</p>
                 </div>
@@ -119,7 +128,9 @@ export default function ContactUs() {
                   <Phone className="h-6 w-6 text-white" />
                 </span>
                 <div>
-                  <p className="text-sm text-gray-800 mb-1 font-semibold">Call Us</p>
+                  <p className="text-sm text-gray-800 mb-1 font-semibold">
+                    Call Us
+                  </p>
                   <p className="text-black text-[10px]">+1 555 0126</p>
                   <p className="text-black text-[10px]">+1 555 0126</p>
                 </div>
@@ -149,7 +160,9 @@ export default function ContactUs() {
 
         {/* Right form panel */}
         <div className="col-span-10 px-2 md:px-8 py-4 md:py-8 rounded-lg md:bg-white contact-form-shadow">
-          <h2 className="text-xs md:text-2xl font-bold mb-4 text-center md:text-left">Send us a message</h2>
+          <h2 className="text-xs md:text-2xl font-bold mb-4 text-center md:text-left">
+            Send us a message
+          </h2>
           <form className="space-y-1 md:space-y-4" onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 md:gap-4">
               <span>
@@ -261,9 +274,14 @@ export default function ContactUs() {
             )}
           </form>
         </div>
- 
+
         {/*mobile Left info panel */}
-        <div className="md:hidden col-span-8 p-2 md:p-8 pt-4 md:py-10 flex flex-col justify-between">
+        <div
+          className="bg-[#FFFAFA] md:hidden col-span-8 mt-2 md:mt-0 p-2 md:p-8 py-4 md:py-10 flex flex-col justify-between"
+          style={{
+            boxShadow: "0px 0px 45px -6px rgba(0, 0, 0, 0.07)",
+          }}
+        >
           <div className="mt-2 border-b border-gray-400 ">
             <h2 className="text-xs text-center font-bold mb-4">Get in touch</h2>
             <p className="text-gray-600 mb-4 text-[9px]">
@@ -276,7 +294,9 @@ export default function ContactUs() {
                   <MapPin className="h-3 w-3 text-white" />
                 </span>
                 <div>
-                  <p className="text-xs text-gray-800 mb-1 font-semibold">Address</p>
+                  <p className="text-xs text-gray-800 mb-1 font-semibold">
+                    Address
+                  </p>
                   <p className="text-black text-[10px]">
                     8502 Preston Rd, Inglewood, Maine 98380
                   </p>
@@ -288,7 +308,9 @@ export default function ContactUs() {
                   <Mail className="h-3 w-3 text-white" />
                 </span>
                 <div>
-                  <p className="text-xs text-gray-800 mb-1 font-semibold">Email Us</p>
+                  <p className="text-xs text-gray-800 mb-1 font-semibold">
+                    Email Us
+                  </p>
                   <p className="text-black text-[10px]">example@email.com</p>
                   <p className="text-black text-[10px]">example@email.com</p>
                 </div>
@@ -298,7 +320,9 @@ export default function ContactUs() {
                   <Phone className="h-3 w-3 text-white" />
                 </span>
                 <div>
-                  <p className="text-xs text-gray-800 mb-1 font-semibold">Call Us</p>
+                  <p className="text-xs text-gray-800 mb-1 font-semibold">
+                    Call Us
+                  </p>
                   <p className="text-black text-[10px]">+1 555 0126</p>
                   <p className="text-black text-[10px]">+1 555 0126</p>
                 </div>
@@ -307,9 +331,7 @@ export default function ContactUs() {
           </div>
 
           <div className="mt-4 flex items-center gap-3">
-            <span className="text-xs font-semibold">
-              Contact With Us :
-            </span>
+            <span className="text-xs font-semibold">Contact With Us :</span>
             <a href="#" className="bg-red-500 text-white p-1 rounded-xs">
               <FacebookIcon className="h-3 w-3" />
             </a>
@@ -327,7 +349,7 @@ export default function ContactUs() {
       </div>
 
       {/* 4 cards end */}
-      <div className="bg-white p-2 md:p-6 py-8 md:py-0 my-0 md:my-10 md:pt-4 rounded-sm grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-8  md:px-14">
+      <div className="bg-white p-2 md:p-6 py-8 md:py-0 mb-2 md:my-10 md:pt-4 rounded-sm grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-8 px-4 md:px-14">
         {fourCards.map((card, idx) => (
           <div
             key={idx}

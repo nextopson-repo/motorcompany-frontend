@@ -27,7 +27,7 @@ export default function HowItWorks() {
   ];
 
   return (
-    <section className="w-full py-8 bg-white">
+    <section className="w-full py-10 md:py-8 bg-white">
       <div className="max-w-7xl mx-auto text-center relative px-4 lg:px-6">
         {/* Section Header */}
         <p className="text-[10px] lg:text-xs text-[#EE1422] font-semibold flex items-center justify-center gap-3 lg:gap-5">
@@ -38,13 +38,13 @@ export default function HowItWorks() {
         <h2 className="text-sm lg:text-2xl font-bold mt-2 lg:mt-4">
           From Search to Sale - Here's How It Works
         </h2>
-        <p className="text-[10px] lg:text-base text-gray-800 mt-2 lg:mt-4 max-w-xl mx-auto leading-tight tracking-tight md:tracking-normal">
+        <p className="text-[9px] md:text-[10px] lg:text-base text-gray-800 mt-2 lg:mt-4 max-w-xl mx-auto leading-tight tracking-tight md:tracking-normal">
           DhikCar makes car buying and selling easy. Search, compare, and
           connect with trusted sellers or buyers—all in one place.
         </p>
 
         {/* Steps */}
-        <div className="relative mt-5 grid grid-cols-3 gap-10 md:gap-6 items-start">
+        <div className="relative mt-7 lg:mt-5 grid grid-cols-3 gap-10 md:gap-6 items-start">
           {steps.map((step, i) => (
             <div
               key={i}

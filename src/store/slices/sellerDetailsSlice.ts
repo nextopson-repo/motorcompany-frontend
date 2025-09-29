@@ -1,4 +1,8 @@
-import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  type PayloadAction,
+} from "@reduxjs/toolkit";
 import axios from "axios";
 
 // ---------- Interfaces ----------
@@ -54,55 +58,54 @@ const initialState: SellerState = {
 export const fetchSellerCars = createAsyncThunk<
   { seller: Omit<SellerState, "cars" | "loading" | "error">; cars: Car[] },
   { userId: string }
->(
-  "seller/fetchSellerCars",
-  async ({ userId }, { rejectWithValue }) => {
-    try {
-      const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-      const res = await axios.post(`${BACKEND_URL}/api/v1/car/get-user-cars`, { userId });
+>("seller/fetchSellerCars", async ({ userId }, { rejectWithValue }) => {
+  try {
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+    const res = await axios.post(`${BACKEND_URL}/api/v1/car/get-user-cars`, {
+      userId,
+    });
 
-      const data = res.data;
+    const data = res.data;
 
-      // Map backend cars to our Car interface
-      const cars: Car[] = data.cars.map((c: any) => ({
-        id: c.id,
-        title: c.title,
-        image: c.images?.[0] || "/fallback-car-img.png",
-        kms: c.kmDriven || 0,
-        type: c.bodyType || "",
-        seats: c.seats || 4,
-        mileage: c.mileage ? `${c.mileage} Kmpl` : "N/A",
-        fuel: c.fuel || "",
-        transmission: c.transmission || "",
-        location: `${c.address?.city || ""}, ${c.address?.state || ""}`,
-        price: c.price || 0,
-        emi: c.emi ? `₹ ${c.emi} /mo` : `₹ 7599 /mo`,
-        likes: c.likes || 1,
-        views: c.enquiries?.viewProperty || 1,
-      }));
+    // Map backend cars to our Car interface
+    const cars: Car[] = data.cars.map((c: any) => ({
+      id: c.id,
+      title: c.title,
+      image: c.images?.[0] || "/fallback-car-img.png",
+      kms: c.kmDriven || 0,
+      type: c.bodyType || "",
+      seats: c.seats || 4,
+      mileage: c.mileage ? `${c.mileage} Kmpl` : "N/A",
+      fuel: c.fuel || "",
+      transmission: c.transmission || "",
+      location: `${c.address?.city || ""}, ${c.address?.state || ""}`,
+      price: c.price || 0,
+      emi: c.emi ? `₹ ${c.emi} /mo` : `₹ 7599 /mo`,
+      likes: c.likes || 1,
+      views: c.enquiries?.viewProperty || 1,
+    }));
 
-      // Grab first car for seller info
-      const firstCar = data.cars?.[0] || {};
-      const seller = {
-        id: firstCar.ownerDetails?.id || "",
-        name: firstCar.ownerDetails?.name || "",
-        role: firstCar.ownerDetails?.role || "Owner",
-        joinDate: firstCar.ownerDetails?.joinDate || "10th September, 2025",
-        location: firstCar.address
-          ? `${firstCar.address.city}, ${firstCar.address.state}`
-          : "city, state",
-        email: firstCar.ownerDetails?.email || "",
-        phone: firstCar.ownerDetails?.mobileNumber || "",
-        verified: firstCar.ownerDetails?.verified || true,
-        avatar: firstCar.ownerDetails?.avatar || "/default-men-logo.jpg",
-      };
+    // Grab first car for seller info
+    const firstCar = data.cars?.[0] || {};
+    const seller = {
+      id: firstCar.ownerDetails?.id || "",
+      name: firstCar.ownerDetails?.name || "",
+      role: firstCar.ownerDetails?.role || "Owner",
+      joinDate: firstCar.ownerDetails?.joinDate || "10th September, 2025",
+      location: firstCar.address
+        ? `${firstCar.address.city}, ${firstCar.address.state}`
+        : "city, state",
+      email: firstCar.ownerDetails?.email || "",
+      phone: firstCar.ownerDetails?.mobileNumber || "",
+      verified: firstCar.ownerDetails?.verified || true,
+      avatar: firstCar.ownerDetails?.avatar || "/default-men-logo.jpg",
+    };
 
-      return { seller, cars };
-    } catch (err: any) {
-      return rejectWithValue(err.response?.data?.message || err.message);
-    }
+    return { seller, cars };
+  } catch (err: any) {
+    return rejectWithValue(err.response?.data?.message || err.message);
   }
-);
+});
 
 // ---------- Slice ----------
 const sellerDetailsSlice = createSlice({
@@ -110,7 +113,7 @@ const sellerDetailsSlice = createSlice({
   initialState,
   reducers: {
     setSeller(state, action: PayloadAction<SellerState>) {
-      return action.payload;
+      Object.assign(state, action.payload);
     },
     clearSeller() {
       return initialState;

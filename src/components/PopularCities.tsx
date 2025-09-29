@@ -158,16 +158,16 @@ const PopularCities: React.FC = () => {
       </div>
 
       {/* 4 cards end */}
-      <div className="bg-white p-2 py-4 md:py-10 rounded-sm md:rounded-none grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-8 lg:border-t border-gray-200  w-full lg:max-w-6xl mx-auto">
+      <div className="bg-white p-2 py-4 mb-2 md:mb-0 md:py-10 rounded-sm md:rounded-none grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-8 lg:border-t border-gray-200  w-full lg:max-w-6xl mx-auto">
         {fourCards.map((card, idx) => (
           <div
             key={idx}
-            className="grid grid-cols-3 items-center justify-center rounded-sm p-2 md:p-4 py-4 md:py-7 md:gap-3 shadow-custom"
+            className="grid grid-cols-3 items-center justify-center rounded-sm p-2 px-4 md:p-4 py-4 md:py-7 md:gap-3 shadow-custom"
           >
             <img
               src={card.img}
               alt={card.title}
-              className="w-8 md:w-16 h-6 md:h-12 object-contain"
+              className="w-8 md:w-16 h-7 md:h-12 object-contain"
             />
             <div className="col-span-2 flex flex-col md:gap-3">
               <p className="text-[10px] lg:text-[1rem] font-semibold text-gray-800 whitespace-nowrap overflow-hidden text-ellipsis">

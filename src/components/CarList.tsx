@@ -3,29 +3,11 @@ import CarCard from "./CarCard";
 import CarListHeader from "./CarListHeader";
 import type { RootState } from "../store/store";
 import { useMemo } from "react";
-// import { setSearchTerm } from "../store/slices/carSlice";
-
 
 export default function CarList() {
-  // const dispatch = useDispatch<AppDispatch>();
-
   const { cars, filters, selectedFilters, searchTerm, sortOption } = useSelector(
     (state: RootState) => state.cars
   );
-
-  // Handler for search term change
-  // const handleSearchTermChange = (term: string) => {
-  //   dispatch(setSearchTerm(term));
-  // };
-
-
-  // Handler for location/city change
-  const handleLocationChange = (newCity: string) => {
-    // Update selectedFilters.location
-    // You can dispatch a setSelectedFilters action if needed
-    // Example: dispatch(setSelectedFilters({ location: [newCity] }))
-    console.log("newCity", newCity)
-  };
 
   const filteredAndSortedCars = useMemo(() => {
     const filtered = cars.filter((car) => {
@@ -69,8 +51,8 @@ export default function CarList() {
   }, [cars, selectedFilters, searchTerm, sortOption]);
 
   return (
-    <div className="min-h-screen w-full overflow-hidden pl-1 pb-2">
-      <div className="w-full lg:max-w-7xl mx-auto">
+    <div className="min-h-screen w-full overflow-hidden lg:pl-1 pb-2">
+      <div className="w-full lg:max-w-7xl mx-auto ">
         {/* Header */}
         <CarListHeader
           carCount={filteredAndSortedCars.length}
@@ -79,11 +61,10 @@ export default function CarList() {
             priceRange: filters.priceRange ?? [0, 10000000],
             yearRange: filters.yearRange ?? [2000, 2025],
           }}
-          onFilterChange={handleLocationChange}
         />
 
         {/* Car Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-8 mx-4 md:mx-0">
           {filteredAndSortedCars.length ? (
             filteredAndSortedCars.map((car) => <CarCard key={car.id} car={car} />)
           ) : (

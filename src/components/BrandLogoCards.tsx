@@ -45,7 +45,7 @@ const BrandLogoCards: React.FC = () => {
     },
     {
       title: "Suzuki",
-      logo: "/CarsLogo/suzuki.png",
+      logo: "/CarsLogo/suzuki.avif",
       description: "120 Cars Available",
     },
     {
@@ -84,12 +84,14 @@ const BrandLogoCards: React.FC = () => {
 
       {/* Slider */}
       <Swiper
-        spaceBetween={32}
+      spaceBetween={20}
         slidesPerView={3.5}
         breakpoints={{
-          640: { slidesPerView: 4 },
-          1024: { slidesPerView: 8 },
           1280: { slidesPerView: 10 },
+          1024: { slidesPerView: 8 },
+          640: { slidesPerView: 4 },
+          475: { slidesPerView: 4, spaceBetween: 20, },
+          0: { slidesPerView: 4, spaceBetween: 20 },
         }}
         modules={[Navigation]}
         navigation={{

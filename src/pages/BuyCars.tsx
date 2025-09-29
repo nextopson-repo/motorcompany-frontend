@@ -8,38 +8,51 @@ import type { AppDispatch, RootState } from "../store/store";
 
 export default function BuyCars() {
   const dispatch = useDispatch<AppDispatch>();
-  
 
   // Redux state
   const { cars, filters, selectedFilters, loading, error } = useSelector(
     (state: RootState) => state.cars
   );
 
-  
-
   // Memoized unique options for sidebar
   const brandOptions = useMemo(
-    () => Array.from(new Set(cars.map((c) => c.brand).filter(Boolean))) as string[],
+    () =>
+      Array.from(new Set(cars.map((c) => c.brand).filter(Boolean))) as string[],
     [cars]
   );
   const fuelOptions = useMemo(
-    () => Array.from(new Set(cars.map((c) => c.fuelType).filter(Boolean))) as string[],
+    () =>
+      Array.from(
+        new Set(cars.map((c) => c.fuelType).filter(Boolean))
+      ) as string[],
     [cars]
   );
   const transmissionOptions = useMemo(
-    () => Array.from(new Set(cars.map((c) => c.transmission).filter(Boolean))) as string[],
+    () =>
+      Array.from(
+        new Set(cars.map((c) => c.transmission).filter(Boolean))
+      ) as string[],
     [cars]
   );
   const bodyTypeOptions = useMemo(
-    () => Array.from(new Set(cars.map((c) => c.bodyType).filter(Boolean))) as string[],
+    () =>
+      Array.from(
+        new Set(cars.map((c) => c.bodyType).filter(Boolean))
+      ) as string[],
     [cars]
   );
   const ownershipOptions = useMemo(
-    () => Array.from(new Set(cars.map((c) => c.ownership).filter(Boolean))) as string[],
+    () =>
+      Array.from(
+        new Set(cars.map((c) => c.ownership).filter(Boolean))
+      ) as string[],
     [cars]
   );
   const stateOptions = useMemo(
-    () => Array.from(new Set(cars.map((c) => c.address?.state).filter(Boolean))) as string[],
+    () =>
+      Array.from(
+        new Set(cars.map((c) => c.address?.state).filter(Boolean))
+      ) as string[],
     [cars]
   );
 
@@ -66,13 +79,23 @@ export default function BuyCars() {
 
   return (
     <main className="max-w-7xl mx-auto mt-10 md:mt-16 lg:mt-20 min-h-screen relative">
-      <div className="relative flex gap-6 px-4 lg:pl-8">
+      <div className="relative flex gap-6 lg:pl-8">
         {/* Sidebar */}
         <div className="w-fit hidden lg:block">
           <div className="sticky top-20">
             <FilterSidebar
-              filters={filters}
-              selectedFilters={selectedFilters}
+              filters={{
+                ...filters,
+                priceRange: filters.priceRange || [0, 10000000],
+                yearRange: filters.yearRange || [2000, 2025],
+                ownerType: filters.ownerType || "all",
+              }}
+              selectedFilters={{
+                ...selectedFilters,
+                priceRange: selectedFilters.priceRange || [0, 10000000],
+                yearRange: selectedFilters.yearRange || [2000, 2025],
+                ownerType: selectedFilters.ownerType || "all",
+              }}
               onSelectedFiltersChange={(newFilters) =>
                 dispatch(setSelectedFilters(newFilters))
               }

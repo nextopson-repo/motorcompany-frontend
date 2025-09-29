@@ -59,7 +59,7 @@ export default function EnquiryCard({ enquiry }: EnquiryCardProps){
                   Rs. {formatPriceToLakh(enquiry.price)}
                 </p>
                 <p className="text-[10px] text-gray-600 mt-1 flex items-center gap-1 font-medium">
-                  <span><Eye className="h-3 w-3 text-orange-500"/></span> 100 Impression Views
+                  <span><Eye className="h-3 w-3 text-orange-500"/></span> 100 Views
                 </p>
               </div>
             </div>

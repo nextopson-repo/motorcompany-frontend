@@ -1,8 +1,20 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../../store/store";
-import { ArrowLeft, Search } from "lucide-react";
-import { resetFilters, toggleBrand } from "../../store/slices/filterSlice";
+import {
+  ArrowLeft,
+  Search
+} from "lucide-react";
+import {
+  resetFilters,
+  toggleBrand,
+  toggleFuel,
+  setPriceRange,
+  setModelYearRange,
+  setCity,
+  setOwnership,
+  setModelKmDriven
+} from "../../store/slices/filterSlice";
 import { getTrackBackground, Range } from "react-range";
 
 interface AllFiltersProps {
@@ -44,7 +56,7 @@ const bodyTypes = [
   { id: 6, name: "Coupe", vehicles: 26, img: "/CarCategories/coupe1.png" },
 ];
 
-const cities = [
+ const cities = [
   { name: "Chandigarh", img: "/Cities/chandigarh-img.png" },
   { name: "Ahmedabad", img: "/Cities/ahmedabad-img.png" },
   { name: "Pune", img: "/Cities/pune-img.png" },
@@ -72,19 +84,14 @@ const filterOptions = [
 
 const AllFilters: React.FC<AllFiltersProps> = ({ onClose }) => {
   const dispatch = useDispatch();
-  const selectedYearRange = useSelector(
-    (state: RootState) => state.filters.modelYearRange
-  );
-  const currentYear = new Date().getFullYear();
-  const minYear = 2000
-  const selectedBrands = useSelector((s: RootState) => s.filters.brand);
-  const [selectedCity, setSelectedCity] = useState("");
-  const [values, setValues] = useState<[number, number]>(selectedYearRange);
+  const { brand, fuelType, priceRange, modelYearRange, city, modelKmDriven } =
+    useSelector((s: RootState) => s.filters);
+
   const [activeFilter, setActiveFilter] = useState("Brand + Models");
 
-  const handleBrandToggle = (brand: string) => {
-    dispatch(toggleBrand(brand));
-  };
+  // ---------- handlers ----------
+  const handleBrandToggle = (b: string) => dispatch(toggleBrand(b));
+  const handleFuelToggle = (f: string) => dispatch(toggleFuel(f));
 
   return (
     <div className="lg:hidden h-screen fixed inset-0 z-50 bg-white overflow-hidden">
@@ -96,20 +103,15 @@ const AllFilters: React.FC<AllFiltersProps> = ({ onClose }) => {
         </button>
       </div>
 
-      {/* main content */}
       <div className="grid grid-cols-4 h-[84vh]">
-        {/* left sidebar */}
-        <div className="col-span-1 bg-gray-50 flex flex-col text-xs whitespace-normal">
-          {filterOptions.map((item, i) => (
+        {/* left nav */}
+        <div className="col-span-1 bg-gray-50 flex flex-col text-[10px]">
+          {filterOptions.map((item) => (
             <button
-              key={i}
+              key={item}
               onClick={() => setActiveFilter(item)}
-              className={`px-3 py-3 text-left border-t border-x border-gray-300 last:border-b 
-                ${
-                  item === activeFilter
-                    ? "bg-black text-white"
-                    : "hover:bg-gray-100"
-                }`}
+              className={`px-2 py-3 text-left border-t border-x border-gray-300 whitespace-break-spaces last:border-b first-border-t-0
+                ${item === activeFilter ? "bg-black text-white" : "hover:bg-gray-100"}`}
             >
               {item}
             </button>
@@ -122,63 +124,43 @@ const AllFilters: React.FC<AllFiltersProps> = ({ onClose }) => {
           {activeFilter === "Price Range" && (
             <div className="p-4 space-y-3">
               <h2 className="font-semibold text-md mb-2">Price Range</h2>
-              <div className="flex flex-col space-y-4">
-                {/* Display selected years */}
-                <div className="flex justify-between text-xs">
-                  <span>{values[0]}</span>
-                  <span>{values[1]}</span>
-                </div>
-
-                {/* Range Slider */}
-                <Range
-                  values={values}
-                  step={1}
-                  min={minYear}
-                  max={currentYear}
-                  onChange={(vals) => setValues([vals[0], vals[1]])}
-                  renderTrack={({ props, children }) => {
-                    const { key, ...rest } =
-                      (props as {
-                        key?: React.Key;
-                      } & React.HTMLAttributes<HTMLDivElement>) || {};
-
-                    return (
-                      <div
-                        key={key}
-                        {...rest}
-                        className="h-[3px] w-full rounded relative"
-                        style={{
-                          background: getTrackBackground({
-                            values,
-                            colors: ["#D1D5DB", "#EF4444", "#D1D5DB"], 
-                            min: minYear,
-                            max: currentYear,
-                          }),
-                        }}
-                      >
-                        {children}
-                      </div>
-                    );
-                  }}
-                  renderThumb={({ props }) => {
-                    const { key, ...rest } =
-                      (props as {
-                        key?: React.Key;
-                      } & React.HTMLAttributes<HTMLDivElement>) || {};
-                    return (
-                      <div
-                        key={key}
-                        {...rest}
-                        className="h-4 w-4 bg-red-600 border border-white rounded-full cursor-pointer"
-                      />
-                    );
-                  }}
-                />
+              <div className="flex justify-between text-xs">
+                <span>₹{priceRange[0].toLocaleString()}</span>
+                <span>₹{priceRange[1].toLocaleString()}</span>
               </div>
+              <Range
+                values={priceRange}
+                step={50000}
+                min={0}
+                max={10000000}
+                onChange={(vals) => dispatch(setPriceRange([vals[0], vals[1]]))}
+                renderTrack={({ props, children }) => (
+                  <div
+                    {...props}
+                    className="h-[3px] w-full rounded bg-gray-200"
+                    style={{
+                      background: getTrackBackground({
+                        values: priceRange,
+                        colors: ["#D1D5DB", "#EF4444", "#D1D5DB"],
+                        min: 0,
+                        max: 10000000,
+                      }),
+                    }}
+                  >
+                    {children}
+                  </div>
+                )}
+                renderThumb={({ props }) => (
+                  <div
+                    {...props}
+                    className="h-4 w-4 bg-red-600 border border-white rounded-full cursor-pointer"
+                  />
+                )}
+              />
             </div>
           )}
 
-          {/* Brand + Models */}
+          {/* Brand */}
           {activeFilter === "Brand + Models" && (
             <div>
               <h2 className="px-4 pt-4 pb-2 font-semibold text-md">
@@ -200,12 +182,12 @@ const AllFilters: React.FC<AllFiltersProps> = ({ onClose }) => {
                   {topBrands.map((b) => (
                     <label
                       key={b.name}
-                      className="flex items-center justify-between py-2 text-xs"
+                      className="flex items-center justify-between py-2 text-[10px]"
                     >
                       <div className="flex items-center gap-2">
                         <input
                           type="checkbox"
-                          checked={selectedBrands.includes(b.name)}
+                          checked={brand.includes(b.name)}
                           onChange={() => handleBrandToggle(b.name)}
                           className="accent-red-500 w-4 h-4"
                         />
@@ -224,12 +206,12 @@ const AllFilters: React.FC<AllFiltersProps> = ({ onClose }) => {
                   {popularBrands.map((b) => (
                     <label
                       key={b.name}
-                      className="flex items-center justify-between py-2 text-xs"
+                      className="flex items-center justify-between py-2 text-[10px]"
                     >
                       <div className="flex items-center gap-2">
                         <input
                           type="checkbox"
-                          checked={selectedBrands.includes(b.name)}
+                          checked={brand.includes(b.name)}
                           onChange={() => handleBrandToggle(b.name)}
                           className="accent-red-500 w-4 h-4"
                         />
@@ -251,54 +233,67 @@ const AllFilters: React.FC<AllFiltersProps> = ({ onClose }) => {
 
           {/* Model Year */}
           {activeFilter === "Model Year" && (
-            <div className="p-4">
+            <div className="p-4 space-y-3">
               <h2 className="font-semibold text-md mb-2">Model Year</h2>
-              <select className="w-full border p-2 text-sm rounded">
-                <option>2025 & Newer</option>
-                <option>2020 - 2024</option>
-                <option>2015 - 2019</option>
-                <option>2010 - 2014</option>
-                <option>Older</option>
-              </select>
+              <div className="flex justify-between text-xs">
+                <span>{modelYearRange[0]}</span>
+                <span>{modelYearRange[1]}</span>
+              </div>
+              <Range
+                values={modelYearRange}
+                step={1}
+                min={2000}
+                max={new Date().getFullYear()}
+                onChange={(vals) => dispatch(setModelYearRange([vals[0], vals[1]]))}
+                renderTrack={({ props, children }) => (
+                  <div
+                    {...props}
+                    className="h-[3px] w-full rounded bg-gray-200"
+                    style={{
+                      background: getTrackBackground({
+                        values: modelYearRange,
+                        colors: ["#D1D5DB", "#EF4444", "#D1D5DB"],
+                        min: 2000,
+                        max: new Date().getFullYear(),
+                      }),
+                    }}
+                  >
+                    {children}
+                  </div>
+                )}
+                renderThumb={({ props }) => (
+                  <div
+                    {...props}
+                    className="h-4 w-4 bg-red-600 border border-white rounded-full cursor-pointer"
+                  />
+                )}
+              />
             </div>
           )}
 
           {/* Location */}
           {activeFilter === "Location" && (
             <div className="p-4">
-              <div className="">
-                <h2 className="font-semibold text-md mb-2">Location</h2>
-                <input
-                  type="text"
-                  placeholder="Enter city or state"
-                  className="w-full border p-2 rounded text-sm"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-x-[1vw] gap-y-4 mx-auto mt-4 h-full overflow-y-auto">
-                {cities.map((city) => (
+              <h2 className="font-semibold text-md mb-2">Select City</h2>
+              <div className="grid grid-cols-2 gap-4">
+                {cities.map((c) => (
                   <div
-                    key={city.name}
-                    onClick={() => setSelectedCity(city.name)}
-                    className={`flex flex-col items-center text-center cursor-pointer hover:scale-105 transition-transform p-1 rounded ${
-                      selectedCity === city.name ? "shadow-md scale-[1.05]" : ""
+                    key={c.name}
+                    onClick={() => dispatch(setCity(c.name))}
+                    className={`text-center rounded cursor-pointer ${
+                      city === c.name ? "bg-black text-white" : "hover:bg-gray-100"
                     }`}
                   >
-                    <div className="w-28 h-24 mb-2">
-                      <img
-                        src={city.img}
-                        alt={city.name}
-                        className="w-full h-full object-contain"
-                      />
-                    </div>
-                    <p className="font-semibold text-[10px]">{city.name}</p>
+                    <img src={c.img} alt={c.name} className="w-20 h-18 mx-auto" />
+                    <p className="text-[10px] mt-1">{c.name}</p>
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Body Type */}
-          {activeFilter === "Body Type" && (
+           {/* Body Type */}
+           {activeFilter === "Body Type" && (
             <div className="p-4 space-y-4">
               <h2 className="font-semibold text-md mb-2">Body Type</h2>
               {bodyTypes.map((type, id) => (
@@ -306,47 +301,74 @@ const AllFilters: React.FC<AllFiltersProps> = ({ onClose }) => {
                   key={id}
                   className="flex items-center justify-between text-sm"
                 >
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2">
                     <input type="checkbox" className="accent-red-500 w-4 h-4" />
-                    <span className="h-auto w-20">
+                    <span className="h-auto w-14">
                       <img src={type.img} alt={type.name} />
                     </span>
-                    <span className="font-semibold">{type.name}</span>
+                    <span className="font-semibold text-[10px]">{type.name}</span>
                   </div>
-                  <span>{type.vehicles}</span>
+                  <span className="text-[10px]">{type.vehicles}</span>
                 </label>
               ))}
             </div>
           )}
 
-          {/* Fuel Type */}
+          {/* Fuel */}
           {activeFilter === "Fuel Type" && (
-            <div className="p-4 space-y-4">
+            <div className="p-4 space-y-2">
               <h2 className="font-semibold text-md mb-2">Fuel Type</h2>
               {["Petrol", "Diesel", "CNG", "Electric", "Hybrid"].map((fuel) => (
-                <label
-                  key={fuel}
-                  className="flex items-center justify-between text-sm"
-                >
-                  <div className="flex items-center gap-2">
-                    <input type="checkbox" className="accent-red-500 w-4 h-4" />
-                    <span className="font-semibold">{fuel}</span>
-                  </div>
-                  <span>{"20"}</span>
+                <label key={fuel} className="flex items-center gap-2 text-[10px] mb-3">
+                  <input
+                    type="checkbox"
+                    checked={fuelType.includes(fuel)}
+                    onChange={() => handleFuelToggle(fuel)}
+                    className="accent-red-500 w-4 h-4"
+                  />
+                  {fuel}
                 </label>
               ))}
             </div>
           )}
 
           {/* Kilometer Driven */}
-          {activeFilter === "Kilometer Driven" && (
+           {activeFilter === "Kilometer Driven" && (
             <div className="p-4">
               <h2 className="font-semibold text-md mb-2">Kilometer Driven</h2>
-              <input type="range" min={0} max={200000} step={5000} />
-              <div className="flex justify-between text-xs text-gray-600">
-                <span>0 km</span>
-                <span>200,000 km</span>
+               <div className="flex justify-between text-xs mb-3">
+                <span>{modelKmDriven[0]}kms</span>
+                <span>{modelKmDriven[1]}kms</span>
               </div>
+              <Range
+                values={modelKmDriven}
+                step={10000}
+                min={0}
+                max={999999}
+                onChange={(vals) => dispatch(setModelKmDriven([vals[0], vals[1]]))}
+                renderTrack={({ props, children }) => (
+                  <div
+                    {...props}
+                    className="h-[3px] w-full rounded bg-gray-200"
+                    style={{
+                      background: getTrackBackground({
+                        values: modelKmDriven,
+                        colors: ["#D1D5DB", "#EF4444", "#D1D5DB"],
+                        min: 0,
+                        max: 999999,
+                      }),
+                    }}
+                  >
+                    {children}
+                  </div>
+                )}
+                renderThumb={({ props }) => (
+                  <div
+                    {...props}
+                    className="h-4 w-4 bg-red-600 border border-white rounded-full cursor-pointer"
+                  />
+                )}
+              />
             </div>
           )}
 
@@ -355,7 +377,7 @@ const AllFilters: React.FC<AllFiltersProps> = ({ onClose }) => {
             <div className="p-4 space-y-3">
               <h2 className="font-semibold text-md mb-2">No. of Seats</h2>
               {[2, 4, 5, 6, 7, "8+"].map((seat) => (
-                <label key={seat} className="flex items-center gap-2 text-sm">
+                <label key={seat} className="flex items-center gap-2 text-[10px]">
                   <input type="checkbox" className="accent-red-500 w-4 h-4" />
                   {seat} Seater
                 </label>
@@ -367,8 +389,8 @@ const AllFilters: React.FC<AllFiltersProps> = ({ onClose }) => {
           {activeFilter === "Transmission" && (
             <div className="p-4 space-y-3">
               <h2 className="font-semibold text-md mb-2">Transmission</h2>
-              {["Manual", "Automatic"].map((gear) => (
-                <label key={gear} className="flex items-center gap-2 text-sm">
+              {["Manual", "Automatic", "Hybrid"].map((gear) => (
+                <label key={gear} className="flex items-center gap-2 text-[10px]">
                   <input type="radio" name="transmission" />
                   {gear}
                 </label>
@@ -380,14 +402,17 @@ const AllFilters: React.FC<AllFiltersProps> = ({ onClose }) => {
           {activeFilter === "Ownership" && (
             <div className="p-4 space-y-3">
               <h2 className="font-semibold text-md mb-2">Ownership</h2>
-              {[
-                "First Owner",
-                "Second Owner",
-                "Third Owner",
-                "Fourth & Above",
-              ].map((own) => (
-                <label key={own} className="flex items-center gap-2 text-sm">
-                  <input type="checkbox" className="accent-red-500 w-4 h-4" />
+              {
+              [
+                "All",
+                "Dealer",
+                "Owner",
+              ]
+              .map((own: string) => (
+                <label key={own} className="flex items-center gap-2 text-[10px]">
+                  <input type="checkbox" className="accent-red-500 w-4 h-4" 
+                  onChange={(e) => dispatch(setOwnership(e.target.value as any))}
+                  />
                   {own}
                 </label>
               ))}
@@ -397,16 +422,16 @@ const AllFilters: React.FC<AllFiltersProps> = ({ onClose }) => {
       </div>
 
       {/* footer */}
-      <div className="fixed bottom-0 h-[9vh] w-full bg-white p-4 border-t border-gray-300 flex gap-3 z-10">
+      <div className="fixed bottom-0 w-full bg-white p-4 border-t border-gray-200 flex gap-3">
         <button
           onClick={() => dispatch(resetFilters())}
-          className="flex-1 border border-gray-300 rounded-md py-2 text-sm active:scale-95 active:bg-gray-400"
+          className="flex-1 border border-gray-300 rounded-md py-2 text-xs"
         >
           Clear Filter
         </button>
         <button
           onClick={onClose}
-          className="flex-1 bg-black/90 text-white rounded-md py-2 text-sm active:scale-95 active:bg-black"
+          className="flex-1 bg-black text-white rounded-md py-2 text-xs"
         >
           Show Cars
         </button>

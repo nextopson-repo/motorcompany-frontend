@@ -32,7 +32,7 @@ const InterestedBuyers: React.FC = () => {
         <h2 className="text-md md:text-2xl font-bold py-2 md:py-0">Interested Buyers</h2>
         {/* dropdown */}
         <div className="relative flex md:flex-none w-full gap-2 md:gap-0 sm:w-auto">
-          <span className="md:hidden w-full md:w-[60%] flex items-center gap-2 bg-gray-100 rounded-sm px-2 md:px-4 py-2">
+          <span className="md:hidden w-full md:w-[60%] flex items-center gap-2 bg-gray-100 border border-gray-200 rounded-sm px-2 md:px-4 py-2">
             <SearchIcon className="w-3 md:w-4 h-3 md:h-4 text-black" />
             <input
               type="text"
@@ -76,13 +76,13 @@ const InterestedBuyers: React.FC = () => {
       </div>
       
       {/* main Listing */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4 px-4 md:px-0">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-4 px-4 md:px-0 mb-10">
         {buyers.map((buyer) => (
           <div
             key={buyer.id}
             className="border border-gray-300 rounded-xs md:rounded-sm overflow-hidden shadow hover:shadow-lg transition-shadow"
           >
-            <div className="bg-[#24272C] text-white p-2 rounded-xs flex items-center justify-between">
+            <div className="bg-[#24272C] text-white p-2 py-[6px] md:py-2 rounded-xs flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div>
                   <img

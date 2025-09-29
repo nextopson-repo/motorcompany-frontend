@@ -1,4 +1,3 @@
-import React from "react";
 import { Search } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade } from "swiper/modules";
@@ -11,12 +10,15 @@ const heroImages = ["/Hero-car.png", "/hero-car-2.jpg", "/hero-car-3.jpg"];
 
 const Hero: React.FC = () => {
   return (
-    <div
-      className="w-full md:max-w-7xl px-2 md:px-0"
-    >
+    <div className="w-full md:max-w-7xl px-2 md:px-0">
       {/* mobile search bar */}
-      <div className="block lg:hidden my-2">
-        <div className="flex gap-2 items-center justify-between rounded-sm shadow-md">
+      <div className="block lg:hidden my-2 py-1">
+        <div
+          className="flex gap-2 items-center justify-between rounded-sm"
+          style={{
+            boxShadow: "0px 1px 20px 0px rgba(0, 0, 0, 0.15)",
+          }}
+        >
           {/* Search input with animated last word */}
           <div className="flex justify-between items-center w-full bg-white rounded-sm px-3 py-2 relative ">
             <div className="flex items-center">
@@ -40,7 +42,12 @@ const Hero: React.FC = () => {
       </div>
 
       {/* Hero Slider */}
-      <div className="relative h-[120px] md:min-h-[380px] md:m-6 rounded-sm md:rounded-lg overflow-hidden">
+      <div
+        className="relative h-[120px] md:min-h-[380px] md:m-6 rounded-sm md:rounded-lg overflow-hidden"
+        style={{
+          boxShadow: "0px 1px 20px 0px rgba(0, 0, 0, 0.15)",
+        }}
+      >
         <Swiper
           modules={[Autoplay, EffectFade]}
           autoplay={{ delay: 3000, disableOnInteraction: false }}
@@ -59,12 +66,13 @@ const Hero: React.FC = () => {
                     Turn Your Car into Cash — Fast, Fair & Hassle-Free
                   </h1>
                   <p className="text-[8px] md:text-sm font-normal leading-tight tracking-tight drop-shadow-md md:font-roboto pr-4">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed do eiusmod tempor
-                    <span className="hidden md:block">
-                      incididunt ut labore et dolore magna aliqua. Ut enim ad
-                      minim veniam, quis nostrud exercitation ullamco laboris
-                      nisi ut aliquip ex ea commodo consequat.
+                    धिकCAR makes buying and selling cars easy, fast, and
+                    reliable. Explore and find the perfect vehicle for your
+                    needs.
+                    <span className="hidden md:inline">
+                      Whether you want to sell your car or get your next ride,
+                      DhikCar provides a seamless, secure experience and trusted
+                      support every step of the way.
                     </span>
                   </p>
                 </div>

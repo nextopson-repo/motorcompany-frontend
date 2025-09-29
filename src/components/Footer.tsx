@@ -30,14 +30,14 @@ const Footer = () => {
       {/* Main Grid */}
       <div className="max-w-7xl mx-auto grid grid-cols-6 md:grid-cols-18 gap-4 items-end border-b border-gray-300 pt-4 md:pb-4">
         {/* Logo + Description */}
-        <div className="col-span-6 md:col-span-5 space-y-2 md:space-y-4 pr-8 text-gray-700 md:pb-4 px-4">
+        <div className="col-span-6 md:col-span-5 space-y-3 md:space-y-4 pr-8 text-gray-700 md:pb-4 px-4">
           <img
             src="/Brand-logo.png"
             alt="Dhikkar"
             className="h-5 md:h-10 w-auto"
           />
           <p className="text-[8px] md:text-[10px] font-semibold leading-[0.65rem] md:leading-[0.75rem] tracking-tight">
-            Motor Company is the most trusted way of buying and selling used
+            Dhikcar is the most trusted way of buying and selling used
             cars. Choose from over 5000 fully inspected second-hand car models.
           </p>
           <span className="flex items-center underline gap-2 text-[11px] font-semibold tracking-tighter group text-[#EE1422] hover:underline">
@@ -206,7 +206,7 @@ const Footer = () => {
             ride and ride what they want.
           </p>
           <a
-            href=""
+            href="/buy-car"
             className="text-[9px] text-black flex items-center font-semibold gap-1 mt-2"
           >
             Start Exploring{" "}

@@ -30,7 +30,7 @@ function Dropdown({
 
   return (
     <div className="w-full relative">
-      <label className="text-xs lg:text-sm">{label}</label>
+      <label className="text-[10px] md:text-xs lg:text-sm">{label}</label>
       <div
         onClick={onToggle}
         className="relative w-full flex items-center border border-gray-200 rounded-sm px-3 py-[6px] lg:py-2 mt-[2px] lg:mt-1 text-[10px] lg:text-xs cursor-pointer bg-white"
@@ -322,7 +322,7 @@ export default function SellHeroForm({
         </div>
 
         {/* Connector 1 */}
-        <div className="flex-1 border-t-2 border-dashed border-gray-300 mx-2"></div>
+        <div className="flex-1 border-t-[1.5px] lg:border-t-[2px] border-dashed border-gray-300 mx-2"></div>
 
         {/* Step 2 */}
         <div className="flex items-center">
@@ -338,7 +338,7 @@ export default function SellHeroForm({
         </div>
 
         {/* Connector 2 */}
-        <div className="flex-1 border-t-2 border-dashed border-gray-300 mx-2"></div>
+        <div className="flex-1 border-t-[1.5px] lg:border-t-[2px] border-dashed border-gray-300 mx-2"></div>
 
         {/* Step 3 */}
         <div className="flex items-center">
@@ -405,13 +405,13 @@ export default function SellHeroForm({
             // onChange={setVariant}
           />
           <div>
-            <label className="text-xs lg:text-sm">Manufacturing Year</label>
+            <label className="text-[10px] md:text-xs lg:text-sm">Manufacturing Year</label>
             <input
               type="text"
               value={manufactureYear}
               onChange={(e) => setManufactureYear(e.target.value)}
               placeholder="2000"
-              className="w-full border border-gray-200 rounded-sm px-3 py-[6px] lg:py-2 mt-[2px] lg:mt-1 text-[10px] lg:text-[10px]"
+              className="w-full border border-gray-200 rounded-sm px-3 py-[6px] lg:py-2 mt-[2px] lg:mt-1 text-[10px] lg:text-xs"
             />
           </div>
           <div className="flex justify-between pt-1 lg:pt-2 gap-3">
@@ -436,7 +436,7 @@ export default function SellHeroForm({
       {step === 2 && (
         <div className="space-y-1">
           <div>
-            <label htmlFor="fuelType" className="text-xs lg:text-sm">
+            <label htmlFor="fuelType" className="text-[10px] md:text-xs lg:text-sm">
               Fuel Type
             </label>
             <div className="grid grid-cols-4 gap-2 mb-2 lg:mb-4 text-[10px] lg:text-xs mt-1">
@@ -457,7 +457,7 @@ export default function SellHeroForm({
           </div>
 
           <div>
-            <label htmlFor="transmission" className="text-xs lg:text-sm">
+            <label htmlFor="transmission" className="text-[10px] md:text-xs lg:text-sm">
               Transmission
             </label>
             <div className="grid grid-cols-3 gap-2 mb-2 lg:mb-4 text-[10px] lg:text-xs mt-[2px] lg:mt-1">
@@ -478,24 +478,24 @@ export default function SellHeroForm({
           </div>
 
           <div>
-            <label className="text-xs lg:text-sm">KM Driven</label>
+            <label className="text-[10px] md:text-xs lg:text-sm">KM Driven</label>
             <input
               type="text"
               placeholder="50000km"
               value={kmDriven}
               onChange={(e) => setKmDriven(e.target.value)}
-              className="w-full border border-gray-300 rounded-sm px-3 py-[6px] lg:py-2 mt-[2px] lg:mt-1 text-[10px] lg:text-[10px]"
+              className="w-full border border-gray-300 rounded-sm px-3 py-[6px] lg:py-2 mt-[2px] lg:mt-1 text-[10px] lg:text-xs"
             />
           </div>
 
           <div>
-            <label className="text-xs lg:text-sm">Registration Year</label>
+            <label className="text-[10px] md:text-xs lg:text-sm">Registration Year</label>
             <input
               type="text"
               placeholder="Enter Registration Year"
               value={registrationYear}
               onChange={(e) => setRegistrationYear(e.target.value)}
-              className="w-full border border-gray-300 rounded-sm px-3 py-[6px] lg:py-2 mt-[2px] lg:mt-1 text-[10px] lg:text-[10px]"
+              className="w-full border border-gray-300 rounded-sm px-3 py-[6px] lg:py-2 mt-[2px] lg:mt-1 text-[10px] lg:text-xs"
             />
           </div>
 
@@ -520,18 +520,18 @@ export default function SellHeroForm({
       {step === 3 && (
         <div className="space-y-2 lg:space-y-3">
           <div>
-            <label className="text-xs lg:text-sm">No. of Seats</label>
+            <label className="text-[10px] md:text-xs lg:text-sm">No. of Seats</label>
             <input
               type="number"
               placeholder="5"
               value={seats}
               onChange={(e) => setSeats(e.target.value)}
-              className="w-full border border-gray-300 rounded-sm px-3 py-[6px] lg:py-2 mt-[2px] lg:mt-1 text-[10px] lg:text-[10px]"
+              className="w-full border border-gray-300 rounded-sm px-3 py-[6px] lg:py-2 mt-[2px] lg:mt-1 text-[10px] lg:text-xs"
             />
           </div>
 
           <div>
-            <label className="text-xs lg:text-sm">Ownership</label>
+            <label className="text-[10px] md:text-xs lg:text-sm">Ownership</label>
             <div className="grid grid-cols-4 gap-2 mb-1 lg:mb-2 text-[10px] lg:text-xs mt-[2px] lg:mt-1">
               {ownershipOptions.map((own) => (
                 <button
@@ -562,13 +562,13 @@ export default function SellHeroForm({
           />
 
           <div>
-            <label className="text-xs lg:text-sm">Price</label>
+            <label className="text-[10px] md:text-xs lg:text-sm">Price</label>
             <input
               type="text"
               value={price}
               onChange={(e) => setPrice(formatPrice(e.target.value))}
               placeholder="10,00,000"
-              className="w-full border border-gray-300 rounded-sm px-3 py-[6px] lg:py-2 mt-[2px] lg:mt-1 text-[10px] lg:text-[10px]"
+              className="w-full border border-gray-300 rounded-sm px-3 py-[6px] lg:py-2 mt-[2px] lg:mt-1 text-[10px] lg:text-xs"
             />
           </div>
 

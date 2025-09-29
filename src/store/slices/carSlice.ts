@@ -1,70 +1,27 @@
-import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
-
-// ---------------- Types ----------------
-export type CarRecord = {
-  id?: string | number;
-  brand?: string;
-  model?: string;
-  fuelType?: string;
-  transmission?: string;
-  bodyType?: string;
-  ownership?: string;
-  seats?: number;
-  carPrice?: number;
-  manufacturingYear?: number;
-  kmDriven?: number;
-  address?: { state?: string; city?: string };
-  carImages?: { imageUrl: string }[];
-  user?: { fullName?: string; userType?: string; mobileNumber?: number };
-  updatedAt?: string;
-  [key: string]: unknown;
-};
-
-export interface FiltersState {
-  brand: string[];
-  fuel: string[];
-  transmission: string[];
-  bodyType: string[];
-  ownership: string[];
-  location: string[];
-  priceRange: [number, number] | null;
-  yearRange: [number, number] | null;
-}
+import {
+  createSlice,
+  createAsyncThunk,
+  type PayloadAction,
+} from "@reduxjs/toolkit";
+import type { CarRecord, FiltersState } from "../../types/car";
 
 export interface CarsState {
   cars: CarRecord[];
   filters: FiltersState;
   selectedFilters: FiltersState;
   searchTerm: string;
-  sortOption: "yearNewToOld" | "yearOldToNew" | "priceLowToHigh" | "priceHighToLow";
+  sortOption:
+    | "yearNewToOld"
+    | "yearOldToNew"
+    | "priceLowToHigh"
+    | "priceHighToLow";
   selectedCar: CarRecord | null;
   loading: boolean;
   error: string | null;
 }
 
-// ---------------- Initial State ----------------
 const initialState: CarsState = {
-  cars: [
-    // ---------- Dummy car data for testing, DELETE AFTER TESTING ----------
-    {
-      id: "1",
-      brand: "C tron",
-      model: "sports X",
-      fuelType: "Petrol",
-      transmission: "Automatic",
-      bodyType: "Hatchback",
-      ownership: "First",
-      seats: 4,
-      carPrice: 1500000,
-      manufacturingYear: 2024,
-      kmDriven: 10000,
-      address: { state: "Maharashtra", city: "Pune" },
-      carImages: [{ imageUrl: "/hero-car-2.jpg" }],
-      user: { fullName: "Himesh Verma", userType: "Dealer", mobileNumber: 7896541230, },
-      updatedAt: new Date().toISOString(),
-    },
-    // -------------------
-  ],
+  cars: [],
   filters: {
     brand: [],
     fuel: [],
@@ -72,8 +29,9 @@ const initialState: CarsState = {
     bodyType: [],
     ownership: [],
     location: [],
-    priceRange: null,
-    yearRange: null,
+    priceRange: [0, 10000000],
+    yearRange: [2000, 2025],
+    ownerType: "all",
   },
   selectedFilters: {
     brand: [],
@@ -82,8 +40,9 @@ const initialState: CarsState = {
     bodyType: [],
     ownership: [],
     location: [],
-    priceRange: null,
-    yearRange: null,
+    priceRange: [0, 10000000],
+    yearRange: [2000, 2025],
+    ownerType: "all",
   },
   searchTerm: "",
   sortOption: "yearNewToOld",
@@ -92,46 +51,43 @@ const initialState: CarsState = {
   error: null,
 };
 
-// ---------------- Async Thunk ----------------
-export const fetchCars = createAsyncThunk<CarRecord[], string, { rejectValue: string }>(
-  "cars/fetchCars",
-  async (BACKEND_URL, { rejectWithValue }) => {
-    try {
-      const res = await fetch(`${BACKEND_URL}/api/v1/car/getAll`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userType: "Dealer" }),
-      });
+export const fetchCars = createAsyncThunk<
+  CarRecord[],
+  string,
+  { rejectValue: string }
+>("cars/fetchCars", async (BACKEND_URL, { rejectWithValue }) => {
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/v1/car/getAll`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userType: "Dealer" }),
+    });
 
-      const data = await res.json();
+    const data = await res.json();
 
-      if (!res.ok) {
-        return rejectWithValue(data.message || "Failed to fetch cars");
-      }
+    if (!res.ok) return rejectWithValue(data.message || "Failed to fetch cars");
 
-      return data.properties || [];
-    } catch (err) {
-      console.error("Fetch cars error:", err);
-      return rejectWithValue("Something went wrong");
-    }
+    return data.properties || [];
+  } catch (err) {
+    console.log("in carSlice", err);
+    return rejectWithValue("Something went wrong");
   }
-);
+});
 
-// ---------------- Slice ----------------
 const carSlice = createSlice({
   name: "cars",
   initialState,
   reducers: {
-    setSelectedFilters: (state, action: PayloadAction<Partial<FiltersState>>) => {
+    setSelectedFilters: (
+      state,
+      action: PayloadAction<Partial<FiltersState>>
+    ) => {
       state.selectedFilters = { ...state.selectedFilters, ...action.payload };
     },
     setSearchTerm: (state, action: PayloadAction<string>) => {
       state.searchTerm = action.payload;
     },
-    setSortOption: (
-      state,
-      action: PayloadAction<"yearNewToOld" | "yearOldToNew" | "priceLowToHigh" | "priceHighToLow">
-    ) => {
+    setSortOption: (state, action: PayloadAction<CarsState["sortOption"]>) => {
       state.sortOption = action.payload;
     },
     setSelectedCar: (state, action: PayloadAction<CarRecord | null>) => {
@@ -144,27 +100,30 @@ const carSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchCars.fulfilled, (state, action: PayloadAction<CarRecord[]>) => {
-        state.loading = false;
-        state.cars = action.payload;
+      .addCase(
+        fetchCars.fulfilled,
+        (state, action: PayloadAction<CarRecord[]>) => {
+          state.loading = false;
+          state.cars = action.payload;
 
-        if (action.payload.length > 0) {
-          const prices = action.payload.map((c) => c.carPrice || 0);
-          const years = action.payload.map((c) => c.manufacturingYear || new Date().getFullYear());
+          if (action.payload.length) {
+            const prices = action.payload.map((c) => c.carPrice || 0);
+            const years = action.payload.map(
+              (c) => c.manufacturingYear || new Date().getFullYear()
+            );
 
-          const minPrice = Math.min(...prices);
-          const maxPrice = Math.max(...prices);
-          const minYear = Math.min(...years);
-          const maxYear = Math.max(...years);
+            const minPrice = Math.min(...prices);
+            const maxPrice = Math.max(...prices);
+            const minYear = Math.min(...years);
+            const maxYear = Math.max(...years);
 
-          state.filters.priceRange = [minPrice, maxPrice];
-          state.filters.yearRange = [minYear, maxYear];
-
-          // ✅ Ensure selectedFilters are within bounds
-          state.selectedFilters.priceRange = [minPrice, maxPrice];
-          state.selectedFilters.yearRange = [minYear, maxYear];
+            state.filters.priceRange = [minPrice, maxPrice];
+            state.filters.yearRange = [minYear, maxYear];
+            state.selectedFilters.priceRange = [minPrice, maxPrice];
+            state.selectedFilters.yearRange = [minYear, maxYear];
+          }
         }
-      })
+      )
       .addCase(fetchCars.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Failed to fetch cars";
@@ -172,13 +131,19 @@ const carSlice = createSlice({
   },
 });
 
-// ---------------- Exports ----------------
-export const { setSelectedFilters, setSearchTerm, setSortOption, setSelectedCar } = carSlice.actions;
+export const {
+  setSelectedFilters,
+  setSearchTerm,
+  setSortOption,
+  setSelectedCar,
+} = carSlice.actions;
 export default carSlice.reducer;
 
-
-
-// import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
+// import {
+//   createSlice,
+//   createAsyncThunk,
+//   type PayloadAction,
+// } from "@reduxjs/toolkit";
 
 // // ---------------- Types ----------------
 // export type CarRecord = {
@@ -190,12 +155,12 @@ export default carSlice.reducer;
 //   bodyType?: string;
 //   ownership?: string;
 //   seats?: number;
-//   carPrice?: number ;
+//   carPrice?: number;
 //   manufacturingYear?: number;
-//   kmDrive?: number;
+//   kmDriven?: number;
 //   address?: { state?: string; city?: string };
 //   carImages?: { imageUrl: string }[];
-//   user?: { fullName?: string; userType?: string; mobileNumber?: number; };
+//   user?: { fullName?: string; userType?: string; mobileNumber?: number };
 //   updatedAt?: string;
 //   [key: string]: unknown;
 // };
@@ -216,7 +181,11 @@ export default carSlice.reducer;
 //   filters: FiltersState;
 //   selectedFilters: FiltersState;
 //   searchTerm: string;
-//   sortOption: "yearNewToOld" | "yearOldToNew" | "priceLowToHigh" | "priceHighToLow";
+//   sortOption:
+//     | "yearNewToOld"
+//     | "yearOldToNew"
+//     | "priceLowToHigh"
+//     | "priceHighToLow";
 //   selectedCar: CarRecord | null;
 //   loading: boolean;
 //   error: string | null;
@@ -224,27 +193,7 @@ export default carSlice.reducer;
 
 // // ---------------- Initial State ----------------
 // const initialState: CarsState = {
-//   cars: [
-//     // ---------- Dummy car data for testing, DELETE AFTER TESTING ----------
-//     {
-//       id: "1",
-//       brand: "C tron",
-//       model: "sports X",
-//       fuelType: "Petrol",
-//       transmission: "Automatic",
-//       bodyType: "Hatchback",
-//       ownership: "First",
-//       seats: 4,
-//       carPrice: 1500000,
-//       manufacturingYear: 2024,
-//       kmDriven: 10000,
-//       address: { state: "Maharashtra", city: "Pune" },
-//       carImages: [{ imageUrl: "/hero-car-2.jpg" }],
-//       user: { fullName: "Himesh Verma", userType: "Dealer", mobileNumber: 7896541230, },
-//       updatedAt: new Date().toISOString(),
-//     },
-//     // -------------------
-//   ],
+//   cars: [],
 //   filters: {
 //     brand: [],
 //     fuel: [],
@@ -262,8 +211,8 @@ export default carSlice.reducer;
 //     bodyType: [],
 //     ownership: [],
 //     location: [],
-//     priceRange: [0, 0],
-//     yearRange: [2000, new Date().getFullYear()],
+//     priceRange: null,
+//     yearRange: null,
 //   },
 //   searchTerm: "",
 //   sortOption: "yearNewToOld",
@@ -272,38 +221,43 @@ export default carSlice.reducer;
 //   error: null,
 // };
 
-
 // // ---------------- Async Thunk ----------------
-// export const fetchCars = createAsyncThunk<CarRecord[], string, { rejectValue: string }>(
-//   "cars/fetchCars",
-//   async (BACKEND_URL, { rejectWithValue }) => {
-//     try {
-//       const res = await fetch(`${BACKEND_URL}/api/v1/car/getAll`, {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ userType: "Dealer" }),
-//       });
+// export const fetchCars = createAsyncThunk<
+//   CarRecord[],
+//   string,
+//   { rejectValue: string }
+// >("cars/fetchCars", async (BACKEND_URL, { rejectWithValue }) => {
+//   try {
+//     const res = await fetch(`${BACKEND_URL}/api/v1/car/getAll`, {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify({ userType: "Dealer" }),
+//     });
 
-//       const data = await res.json();
+//     const data = await res.json();
 
-//       if (!res.ok) {
-//         return rejectWithValue(data.message || "Failed to fetch cars");
-//       }
-
-//       return data.properties || [];
-//     } catch (err) {
-//       console.error("Fetch cars error:", err);
-//       return rejectWithValue("Something went wrong");
+//     if (!res.ok) {
+//       return rejectWithValue(data.message || "Failed to fetch cars");
 //     }
+
+//     return (
+//       data.properties || []
+//     );
+//   } catch (err) {
+//     console.error("Fetch cars error:", err);
+//     return rejectWithValue("Something went wrong");
 //   }
-// );
+// });
 
 // // ---------------- Slice ----------------
 // const carSlice = createSlice({
 //   name: "cars",
 //   initialState,
 //   reducers: {
-//     setSelectedFilters: (state, action: PayloadAction<Partial<FiltersState>>) => {
+//     setSelectedFilters: (
+//       state,
+//       action: PayloadAction<Partial<FiltersState>>
+//     ) => {
 //       state.selectedFilters = { ...state.selectedFilters, ...action.payload };
 //     },
 //     setSearchTerm: (state, action: PayloadAction<string>) => {
@@ -311,7 +265,9 @@ export default carSlice.reducer;
 //     },
 //     setSortOption: (
 //       state,
-//       action: PayloadAction<"yearNewToOld" | "yearOldToNew" | "priceLowToHigh" | "priceHighToLow">
+//       action: PayloadAction<
+//         "yearNewToOld" | "yearOldToNew" | "priceLowToHigh" | "priceHighToLow"
+//       >
 //     ) => {
 //       state.sortOption = action.payload;
 //     },
@@ -325,21 +281,32 @@ export default carSlice.reducer;
 //         state.loading = true;
 //         state.error = null;
 //       })
-//       .addCase(fetchCars.fulfilled, (state, action: PayloadAction<CarRecord[]>) => {
-//         state.loading = false;
-//         state.cars = action.payload;
+//       .addCase(
+//         fetchCars.fulfilled,
+//         (state, action: PayloadAction<CarRecord[]>) => {
+//           state.loading = false;
+//           state.cars = action.payload;
 
-//         if (action.payload.length > 0) {
-//           const prices = action.payload.map((c) => c.carPrice || 0);
-//           const years = action.payload.map((c) => c.manufacturingYear || 0);
+//           if (action.payload.length > 0) {
+//             const prices = action.payload.map((c) => c.carPrice || 0);
+//             const years = action.payload.map(
+//               (c) => c.manufacturingYear || new Date().getFullYear()
+//             );
 
-//           state.filters.priceRange = [Math.min(...prices), Math.max(...prices)];
-//           state.filters.yearRange = [Math.min(...years), Math.max(...years)];
+//             const minPrice = Math.min(...prices);
+//             const maxPrice = Math.max(...prices);
+//             const minYear = Math.min(...years);
+//             const maxYear = Math.max(...years);
 
-//           state.selectedFilters.priceRange = [Math.min(...prices), Math.max(...prices)];
-//           state.selectedFilters.yearRange = [Math.min(...years), Math.max(...years)];
+//             state.filters.priceRange = [minPrice, maxPrice];
+//             state.filters.yearRange = [minYear, maxYear];
+
+//             // ✅ Ensure selectedFilters are within bounds
+//             state.selectedFilters.priceRange = [minPrice, maxPrice];
+//             state.selectedFilters.yearRange = [minYear, maxYear];
+//           }
 //         }
-//       })
+//       )
 //       .addCase(fetchCars.rejected, (state, action) => {
 //         state.loading = false;
 //         state.error = action.payload || "Failed to fetch cars";
@@ -348,5 +315,10 @@ export default carSlice.reducer;
 // });
 
 // // ---------------- Exports ----------------
-// export const { setSelectedFilters, setSearchTerm, setSortOption, setSelectedCar } = carSlice.actions;
+// export const {
+//   setSelectedFilters,
+//   setSearchTerm,
+//   setSortOption,
+//   setSelectedCar,
+// } = carSlice.actions;
 // export default carSlice.reducer;
