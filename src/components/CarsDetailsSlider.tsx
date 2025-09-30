@@ -20,8 +20,10 @@ interface CarsDetailsSlider {
           disableOnInteraction: false,
         }}
         breakpoints={{
-          640: { slidesPerView: 1 }, // Mobile
-          768: { slidesPerView: 3.5 }, // Tablet
+          
+          0: { slidesPerView: 1.2 }, // Mobile
+          640: { slidesPerView: 2.5 }, // Mobile
+          768: { slidesPerView: 2.5 }, // Tablet
           1024: { slidesPerView: 3.9 }, // Small desktop
           1280: { slidesPerView: 5 }, // Large desktop
         }}

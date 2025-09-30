@@ -53,9 +53,9 @@ const BuyPackages: React.FC = () => {
 
   return (
     <>
-      <div className="max-w-xl px-4 md:px-0">
+      <div className="max-w-xl sm:max-w-full px-4 md:px-0 sm:mb-10 lg:">
         {/* Title */}
-        <h2 className=" text-md md:text-2xl font-bold text-black py-2 md:py-0">
+        <h2 className=" text-md md:text-2xl font-bold text-black py-2 lg:py-0">
           Buy Packages
         </h2>
         <p className=" hidden md:block text-gray-500 text-xs mt-2">

@@ -18,7 +18,7 @@ const FeaturedCars: React.FC = () => {
   // const carData = carsData;
 
   return (
-    <section className="max-w-7xl mx-auto px-2 md:px-8 py-6 md:py-14 relative">
+    <section className="max-w-7xl mx-auto px-2 lg:px-8 py-6 lg:py-14 relative">
       {/* Top Heading */}
       <div className="text-xs text-center mb-5 mx-auto">
         <p className="text-[#EE1422]  text-[9px] md:text-xs font-bold mb-3 flex items-center justify-center gap-2 md:gap-5">
@@ -37,7 +37,7 @@ const FeaturedCars: React.FC = () => {
         slidesPerView={1.5}
         breakpoints={{
           1280: { slidesPerView: 4 },
-          1024: { slidesPerView: 3.9 },
+          1024: { slidesPerView: 3.3 },
           640: { slidesPerView: 2.5 },
           475: { slidesPerView: 1.5,
             spaceBetween: 24,

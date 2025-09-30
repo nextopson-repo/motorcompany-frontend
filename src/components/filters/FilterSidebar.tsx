@@ -224,7 +224,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
   };
 
   return (
-    <aside className="py-4 w-60 ">
+    <aside className="py-4 w-48 lg:w-60 ">
       <button
         onClick={toggleAllSections}
         className="flex items-center justify-between w-full p-2 px-4 border border-gray-200 rounded font-semibold hover:bg-gray-100"

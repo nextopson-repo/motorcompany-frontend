@@ -61,7 +61,7 @@ const LocationModal: React.FC<LocationModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50">
+    <div className="fixed inset-0 flex items-center justify-center z-50">
       {/* backdrop */}
       <div
         className="absolute inset-0 bg-black/40 backdrop-blur-[0.5px]"
@@ -69,7 +69,7 @@ const LocationModal: React.FC<LocationModalProps> = ({
       />
 
       {/* modal */}
-      <div className="relative overflow-hidden mx-auto h-[82%] mt-14 w-[95%] md:w-[50%] max-w-5xl bg-white rounded-md md:rounded-xl shadow-xl">
+      <div className="relative overflow-hidden mx-auto h-[82%] sm:h-[50%] lg:h-[82%] mt-14 w-[95%] sm:w-[75%] lg:w-[50%] max-w-5xl bg-white rounded-md md:rounded-xl shadow-xl">
         {/* header */}
         <div className="flex items-center justify-between p-2 md:p-3 px-2 md:px-8 border-b border-gray-100">
           <h3 className="text-xs sm:text-lg font-semibold">Select your City</h3>

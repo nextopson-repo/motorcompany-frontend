@@ -13,6 +13,7 @@ const Saved: React.FC = () => {
     (state: RootState) => state.saved
   );
 
+
   const filteredCars = cars
     .filter((c) => c.brand.toLowerCase().includes(searchTerm.toLowerCase()))
     .sort((a, b) => {
@@ -47,13 +48,13 @@ const Saved: React.FC = () => {
     <div className="mx-auto">
       {/* Top bar */}
       <div className="grid grid-cols-3 justify-between items-center mb-4 md:mb-6 px-4 md:px-0">
-        <div className="w-fit whitespace-nowrap col-span-3 md:col-span-1">
-          <h1 className="font-semibold text-md md:text-2xl py-2 md:py-0">
+        <div className="w-fit whitespace-nowrap col-span-3 lg:col-span-1">
+          <h1 className="font-semibold text-md md:text-2xl py-2 lg:py-0">
             Saved Cars
           </h1>
         </div>
-        <div className="w-full flex items-center md:justify-end gap-2 col-span-3 md:col-span-2">
-          <span className="w-full md:w-[50%] flex items-center gap-2 bg-gray-100 rounded-sm px-4 py-[5px] md:py-2">
+        <div className="w-full flex items-center lg:justify-end gap-2 col-span-3 lg:col-span-2">
+          <span className="w-full lg:w-[50%] flex items-center gap-2 bg-gray-100 rounded-sm px-4 py-[5px] md:py-2">
             <SearchIcon className="w-3 md:w-4 h-3 md:h-4 text-black" />
             <input
               type="text"
@@ -65,7 +66,7 @@ const Saved: React.FC = () => {
           </span>
 
           {/* Sort dropdown */}
-          <div className="hidden md:block relative w-full sm:w-auto">
+          <div className="hidden lg:block relative w-full sm:w-auto">
             <button
               onClick={() => setIsSortOpen(!isSortOpen)}
               className="bg-black text-white rounded-sm px-4 py-2 text-sm w-full sm:w-auto flex items-center justify-between border border-gray-300 transition cursor-pointer hover:bg-gray-800"
@@ -100,7 +101,7 @@ const Saved: React.FC = () => {
           </div>
 
           {/* Mobile sort button */}
-          <div className="block md:hidden h-full">
+          <div className="block lg:hidden h-full">
             <button className="flex items-center gap-1 text-[10px] font-semibold rounded-xs bg-black text-white py-1 px-2 ">
               <Calendar className="h-3 w-3" /> Today
             </button>
@@ -109,25 +110,25 @@ const Saved: React.FC = () => {
       </div>
 
       {/*Desktop Cars Grid */}
-      <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div className="hidden lg:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {filteredCars.map((car) => (
           <CarCard key={car.id} car={car} />
         ))}
       </div>
 
       {/* mobile Cars Grid */}
-      <div className="block md:hidden space-y-2 px-4">
+      <div className="block lg:hidden space-y-2 sm:space-y-4 px-4 sm:mb-10 lg:mb-0">
         {filteredCars.map((car) => (
           <div
             key={car.id}
             className="flex flex-row rounded-sm border border-gray-100 p-1"
           >
             {/* Left Image */}
-            <div className="h-fit w-28 flex-shrink-0 relative">
+            <div className="h-fit w-28 sm:w-36 flex-shrink-0 relative">
               <img
                 src={"/fallback-car-img.png"}
                 alt="car image"
-                className="w-full h-22 object-cover rounded-xs"
+                className="w-full h-22 sm:h-26 object-cover rounded-xs"
               />
             </div>
 

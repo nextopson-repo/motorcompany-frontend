@@ -54,7 +54,7 @@ export default function Profile() {
   };
 
   return (
-    <main className="w-full flex-1 mx-auto relative mb-8 md:mb-0 ">
+    <main className="w-full flex-1 mx-auto relative mb-8 lg:mb-0 ">
       {/* Header */}
       <div className="flex items-center gap-3 md:mb-6 bg-white text-black py-[6px] px-4 md:px-0 z-10">
         <h1 className="text-md md:text-2xl font-semibold">My Profile</h1>

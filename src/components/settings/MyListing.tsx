@@ -73,7 +73,7 @@ const MyListing = () => {
 
   return (
     <>
-      <div className="grid md:grid-cols-3 justify-between items-center md:mb-6 gap-1 md:gap-0 px-4 md:px-0 shadow-sm md:shadow-none pb-3 md:pb-0">
+      <div className="grid md:grid-cols-3 justify-between items-center md:mb-6 gap-1 md:gap-0 px-4 md:px-0 shadow-sm md:shadow-none pb-3 md:pb-0 mt-2">
         <h1 className="font-semibold text-md md:text-2xl py-2 md:py-0">
           My Listings
         </h1>
@@ -96,7 +96,7 @@ const MyListing = () => {
       {loading && <p className="text-gray-500 px-4 md:px-0">Loading...</p>}
       {error && <p className="text-red-500 px-4 md:px-0">{error}</p>}
 
-      <div className="space-y-2 md:space-y-4 px-2 md:px-0 py-4 md:py-0">
+      <div className="space-y-2 md:space-y-4 px-2 md:px-0 py-4 md:py-0 sm:mb-10 lg:mb-0">
         {listings.map((car) => (
           <div
             key={car.id}

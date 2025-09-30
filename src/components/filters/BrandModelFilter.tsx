@@ -283,7 +283,7 @@ const BrandModelFilter: React.FC<Props> = ({ onClose }) => {
         ) : (
           <>
             {/* Models Grid */}
-            <div className="grid grid-cols-3 gap-2 gap-y-4 max-w-xs mx-auto">
+            <div className="grid grid-cols-3 gap-2 sm:gap-4 gap-y-4 max-w-xs sm:max-w-xl mx-auto">
               {brands
                 .find((b) => b.title === selectedBrand)
                 ?.models.map((model) => (
@@ -349,7 +349,7 @@ const BrandModelFilter: React.FC<Props> = ({ onClose }) => {
 
         {/* Filter Buttons */}
         {!selectedBrand ? (
-          <div className="grid grid-cols-2 gap-3 mt-2 border-t border-gray-200 pt-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-6 mt-2 border-t border-gray-200 pt-4 sm:px-20">
             <button
               className="w-full py-1 bg-gray-200 rounded-xs text-xs active:scale-95"
               onClick={() => {
@@ -367,7 +367,7 @@ const BrandModelFilter: React.FC<Props> = ({ onClose }) => {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-3 mt-2 border-t border-gray-200 pt-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-6 mt-2 border-t border-gray-200 pt-4 sm:px-20">
             <button
               className="w-full py-1 bg-gray-200 rounded-xs text-xs active:scale-95"
               onClick={() => setSelectedBrand(null)}

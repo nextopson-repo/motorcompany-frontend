@@ -275,7 +275,7 @@ const AllFilters: React.FC<AllFiltersProps> = ({ onClose }) => {
           {activeFilter === "Location" && (
             <div className="p-4">
               <h2 className="font-semibold text-md mb-2">Select City</h2>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {cities.map((c) => (
                   <div
                     key={c.name}
@@ -422,7 +422,7 @@ const AllFilters: React.FC<AllFiltersProps> = ({ onClose }) => {
       </div>
 
       {/* footer */}
-      <div className="fixed bottom-0 w-full bg-white p-4 border-t border-gray-200 flex gap-3">
+      <div className="fixed bottom-0 w-full bg-white p-4 border-t border-gray-200 flex gap-3 sm:gap-6 sm:px-20">
         <button
           onClick={() => dispatch(resetFilters())}
           className="flex-1 border border-gray-300 rounded-md py-2 text-xs"

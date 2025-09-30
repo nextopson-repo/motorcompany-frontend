@@ -78,11 +78,11 @@ export default function SignupModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white lg:rounded-2xl shadow-lg w-full h-full lg:h-auto max-w-2xl lg:grid lg:grid-cols-2 relative lg:gap-8">
+    <div className="fixed inset-0 bg-black/50 sm:flex items-center justify-center z-50">
+      <div className="bg-white sm:rounded-2xl shadow-lg w-full h-full sm:h-auto max-w-2xl sm:grid sm:grid-cols-2 relative sm:gap-8">
         {/* Left side image */}
         <div>
-          <img src="/loginImg.png" alt="Signup" className="hidden lg:block w-full" />
+          <img src="/loginImg.png" alt="Signup" className="hidden sm:block w-full" />
         </div>
 
         {/* Right side form */}
@@ -134,7 +134,7 @@ export default function SignupModal({
         </div>
 
         {/* left side */}
-            <div className="block lg:hidden h-fit p-2"><img src="/loginImg.png" alt="Login Image" className="w-full h-full object-bottom"/></div>
+            <div className="block sm:hidden h-fit p-2"><img src="/loginImg.png" alt="Login Image" className="w-full h-full object-bottom"/></div>
       </div>
     </div>
   );

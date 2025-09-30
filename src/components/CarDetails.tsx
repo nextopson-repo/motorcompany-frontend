@@ -120,7 +120,7 @@ const CarDetails = () => {
             <img
               src={visibleImages[mainImageIndex]}
               alt={title}
-              className="w-full h-56 lg:h-96 object-cover lg:rounded-lg shadow"
+              className="w-full h-56 sm:h-68 lg:h-96 object-cover lg:rounded-lg shadow"
             />
             {/* Arrows */}
             <button
@@ -707,7 +707,7 @@ const CarDetails = () => {
         </div>
       </div>
 
-      {/* slider */}
+      {/* similar cars slider */}
       <div className="pb-3 lg:m-6 rounded-2xl border border-gray-100 "
       style={{
         boxShadow: "0 1px 10px 1px rgb(0, 0, 0, 0.15)"

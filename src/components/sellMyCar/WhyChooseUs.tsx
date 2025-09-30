@@ -43,7 +43,7 @@ const features = [
 
 export default function WhyChooseUs() {
   return (
-    <section className="md:py-6 bg-white px-4 lg:px-0">
+    <section className="lg:py-6 bg-white px-4 lg:px-0">
       <div className="max-w-6xl mx-auto text-center">
         {/* Small title */}
         <p className="text-[10px] lg:text-xs text-[#EE1422] font-semibold flex items-center justify-center gap-3 lg:gap-5 mb-2 lg:mb-4">
@@ -53,7 +53,7 @@ export default function WhyChooseUs() {
         </p>
 
         {/* Main title */}
-        <h2 className="text-sm lg:text-2xl md:text-lg font-bold mb-2 lg:mb-4">
+        <h2 className="text-sm lg:text-2xl font-bold mb-2 lg:mb-4">
           Why sell car to DhikCar?
         </h2>
 
@@ -64,7 +64,7 @@ export default function WhyChooseUs() {
         </p>
 
         {/* Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8 sm:mx-16 lg:mx-0">
           {features.map((feature, idx) => (
             <div
               key={idx}
@@ -81,7 +81,7 @@ export default function WhyChooseUs() {
               <h3 className="font-[600] text-xs lg:text-2xl text-gray-900 mb-2 lg:mb-4 leading-tight">
                 {feature.title}
               </h3>
-              <p className="text-black text-[9px] md:text-[10px] lg:text-[16px] leading-3 lg:leading-5.5">
+              <p className="sm:max-w-[75%] lg:max-w-full text-black text-[9px] md:text-[10px] lg:text-[16px] leading-3 lg:leading-5.5">
                 {feature.description}
               </p>
             </div>

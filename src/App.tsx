@@ -72,7 +72,7 @@ const App = () => {
   }, [isLoginOpen, isLocationModalOpen]);
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <AppInitializer />
 
       <ScrollToTop />
@@ -83,7 +83,7 @@ const App = () => {
         />
       )}
 
-      <main className="min-h-screen z-0 ">
+      <main className="flex-1 z-0 ">
         <Routes>
           <Route path="/" element={<HeroPage />} />
           <Route path="/buy-car" element={<BuyCars />} />
@@ -107,7 +107,7 @@ const App = () => {
       />
 
       {!hideNavFooter.includes(location.pathname) && <Footer />}
-    </>
+    </div>
   );
 };
 

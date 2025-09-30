@@ -10,7 +10,7 @@ const heroImages = ["/Hero-car.png", "/hero-car-2.jpg", "/hero-car-3.jpg"];
 
 const Hero: React.FC = () => {
   return (
-    <div className="w-full md:max-w-7xl px-2 md:px-0">
+    <div className="w-full lg:max-w-7xl px-2 lg:px-0">
       {/* mobile search bar */}
       <div className="block lg:hidden my-2 py-1">
         <div
@@ -43,7 +43,7 @@ const Hero: React.FC = () => {
 
       {/* Hero Slider */}
       <div
-        className="relative h-[120px] md:min-h-[380px] md:m-6 rounded-sm md:rounded-lg overflow-hidden"
+        className="relative h-[120px] sm:min-h-[245px] lg:min-h-[380px] lg:m-6 rounded-sm md:rounded-lg overflow-hidden"
         style={{
           boxShadow: "0px 1px 20px 0px rgba(0, 0, 0, 0.15)",
         }}
@@ -58,18 +58,18 @@ const Hero: React.FC = () => {
           {heroImages.map((img, idx) => (
             <SwiperSlide key={idx}>
               <div
-                className="h-full md:h-[400px] flex items-center bg-cover bg-center"
+                className="h-full lg:h-[400px] flex items-center bg-cover bg-center"
                 style={{ backgroundImage: `url(${img})` }}
               >
-                <div className="relative z-10 text-white px-4 md:px-0 w-[70%] md:max-w-xl -mt-6 md:-mt-24 md:pl-8">
-                  <h1 className="text-xs md:text-3xl font-semibold mb-2 md:mb-4 leading-tight tracking-wide drop-shadow-lg">
+                <div className="relative z-10 text-white px-4 lg:px-0 w-[70%] sm:max-w-sm lg:max-w-xl -mt-6 lg:-mt-24 lg:pl-8">
+                  <h1 className="text-xs sm:text-xl lg:text-3xl font-semibold mb-2 lg:mb-4 leading-tight tracking-wide drop-shadow-lg">
                     Turn Your Car into Cash — Fast, Fair & Hassle-Free
                   </h1>
-                  <p className="text-[8px] md:text-sm font-normal leading-tight tracking-tight drop-shadow-md md:font-roboto pr-4">
+                  <p className="text-[8px] sm:text-xs lg:text-sm font-normal leading-tight tracking-tight drop-shadow-md lg:font-roboto pr-4">
                     धिकCAR makes buying and selling cars easy, fast, and
                     reliable. Explore and find the perfect vehicle for your
                     needs.
-                    <span className="hidden md:inline">
+                    <span className="hidden sm:inline">
                       Whether you want to sell your car or get your next ride,
                       DhikCar provides a seamless, secure experience and trusted
                       support every step of the way.

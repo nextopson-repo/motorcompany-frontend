@@ -59,7 +59,7 @@ const PopularCities: React.FC = () => {
   };
 
   return (
-    <section className="w-full max-w-7xl pt-6 md:pt-12 custom-bg">
+    <section className="w-full max-w-7xl pt-6 lg:pt-12 custom-bg">
       {/* Heading */}
       <div className="text-center">
         <p className="text-[#EE1422] font-semibold text-[9px] md:text-xs mb-2 md:mb-4 flex items-center justify-center gap-3 md:gap-5">
@@ -73,7 +73,7 @@ const PopularCities: React.FC = () => {
       </div>
 
       {/* Mobile Slider */}
-      <div className="md:hidden relative pt-6 pb-8">
+      <div className="sm:hidden relative pt-6 pb-8">
         {/* Cities Container - 2 rows × 3 columns */}
         <div className="grid grid-cols-3 gap-4 gap-y-6 max-w-xs mx-auto">
           {getCurrentCities().map((city) => (
@@ -140,13 +140,13 @@ const PopularCities: React.FC = () => {
       </div>
 
       {/* Desktop Cities Grid */}
-      <div className="max-w-4xl mx-auto hidden md:grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 md:gap-8 pt-4 pb-4 md:pb-12">
+      <div className="max-w-4xl mx-auto hidden sm:grid sm:grid-cols-5 gap-2 lg:gap-8 pt-4 pb-4 lg:pb-12">
         {cities.map((city) => (
           <div
             key={city.name}
-            className="flex flex-col items-center text-center md:space-y-1 cursor-pointer hover:scale-105 transition-transform"
+            className="flex flex-col items-center text-center lg:space-y-1 cursor-pointer hover:scale-105 transition-transform"
           >
-            <div className="w-12 md:w-24 h-9 md:h-20">
+            <div className="w-12 lg:w-24 h-9 lg:h-20">
               <img src={city.img} alt="city img" className="w-full h-full object-bottom object-contain"/>
             </div>
             <p className="font-semibold text-[9px] md:text-[13px] mt-2">{city.name}</p>
@@ -158,7 +158,7 @@ const PopularCities: React.FC = () => {
       </div>
 
       {/* 4 cards end */}
-      <div className="bg-white p-2 py-4 mb-2 md:mb-0 md:py-10 rounded-sm md:rounded-none grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-8 lg:border-t border-gray-200  w-full lg:max-w-6xl mx-auto">
+      <div className="bg-white p-2 py-4 mb-2 md:mb-0 lg:py-10 rounded-sm md:rounded-none grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-3 md:gap-8 lg:border-t border-gray-200 w-full lg:max-w-6xl mx-auto">
         {fourCards.map((card, idx) => (
           <div
             key={idx}
@@ -170,10 +170,10 @@ const PopularCities: React.FC = () => {
               className="w-8 md:w-16 h-7 md:h-12 object-contain"
             />
             <div className="col-span-2 flex flex-col md:gap-3">
-              <p className="text-[10px] lg:text-[1rem] font-semibold text-gray-800 whitespace-nowrap overflow-hidden text-ellipsis">
+              <p className="text-[10px] sm:text-xs lg:text-[1rem] font-semibold text-gray-800 whitespace-nowrap overflow-hidden text-ellipsis">
                 {card.title}
               </p>
-              <p className="text-[8px] md:text-xs font-semibold lg:font-normal text-gray-800 whitespace-nowrap overflow-hidden text-ellipsis md:-mt-2">
+              <p className="text-[8px] sm: lg:text-xs font-semibold lg:font-normal text-gray-800 whitespace-nowrap overflow-hidden text-ellipsis md:-mt-2">
                 {card.description}
               </p>
             </div>

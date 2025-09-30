@@ -39,26 +39,28 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick, selectedCity }) => {
     <nav className="w-full h-12 md:h-auto bg-white shadow-md fixed top-0 left-0 z-50">
       <div className="w-full max-w-7xl mx-auto px-4 py-2 flex items-center md:justify-between">
         {/* Mobile Menu Button */}
-        <div className="md:hidden flex items-center">
-          <button onClick={() => setIsMobileMenuOpen(true)}>
-            <Menu className="w-5 h-5 text-black mt-1" />
-          </button>
-        </div>
+        <div className="flex gap-3">
+          <div className="lg:hidden flex items-center">
+            <button onClick={() => setIsMobileMenuOpen(true)}>
+              <Menu className="w-5 h-5 text-black mt-1" />
+            </button>
+          </div>
 
-        {/* Logo */}
-        <div className="flex flex-col items-center px-3">
-          <NavLink to="/" end>
-            <img
-              src="/Brand-logo.png"
-              alt="Logo"
-              className="w-24 md:w-auto h-5 md:h-10"
-            />
-          </NavLink>
+          {/* Logo */}
+          <div className="flex flex-col items-center px-3">
+            <NavLink to="/" end>
+              <img
+                src="/Brand-logo.png"
+                alt="Logo"
+                className="w-24 md:w-auto h-5 md:h-9"
+              />
+            </NavLink>
+          </div>
         </div>
 
         {/* Mobile nav links */}
         <div
-          className="w-full flex md:hidden items-center justify-end gap-4 relative pr-1"
+          className="w-full flex lg:hidden items-center justify-end gap-4 relative pr-1"
           ref={menuRef}
         >
           <button
@@ -115,7 +117,7 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick, selectedCity }) => {
         </div>
 
         {/* Desktop Nav Links */}
-        <div className="hidden md:flex items-center gap-10 w-[35%]">
+        <div className="hidden lg:flex items-center gap-10 w-[35%]">
           <NavLink
             to="/"
             end
@@ -152,7 +154,7 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick, selectedCity }) => {
 
         {/* Desktop Buttons */}
         <div
-          className="hidden md:flex items-center justify-center gap-6 relative"
+          className="hidden lg:flex items-center justify-center gap-6 relative"
           ref={menuRef}
         >
           <button
@@ -209,7 +211,7 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick, selectedCity }) => {
 
       {/* Mobile left Sidebar Menu */}
       <div
-        className={`fixed top-0 left-0 h-full w-[70%] bg-white shadow-lg transform transition-transform duration-300 z-50 ${
+        className={`fixed top-0 left-0 h-full w-[70%] sm:w-[35%] bg-white shadow-lg transform transition-transform duration-300 z-50 ${
           isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -269,7 +271,7 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick, selectedCity }) => {
 
       {/* Mobile right Sidebar Menu */}
       <div
-        className={`fixed top-0 right-0 h-full w-[75%] bg-white shadow-lg transform transition-transform duration-300 z-50 ${
+        className={`fixed top-0 right-0 h-full w-[75%] sm:w-[35%] bg-white shadow-lg transform transition-transform duration-300 z-50 ${
           isRightSidebarOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -369,7 +371,10 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick, selectedCity }) => {
           </NavLink>
 
           <button
-            onClick={() => {setShowDialog(true); setIsRightSidebarOpen(false);}}
+            onClick={() => {
+              setShowDialog(true);
+              setIsRightSidebarOpen(false);
+            }}
             className="w-full py-[6px] mt-2 cursor-pointer text-sm transition text-red-500 border border-red-400 rounded-xs hover:bg-gray-200 active:scale-95 active:bg-red-500 active:text-white"
           >
             Logout

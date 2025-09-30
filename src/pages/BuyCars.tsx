@@ -79,7 +79,7 @@ export default function BuyCars() {
 
   return (
     <main className="max-w-7xl mx-auto mt-10 md:mt-16 lg:mt-20 min-h-screen relative">
-      <div className="relative flex gap-6 lg:pl-8">
+      <div className="relative flex gap-6 lg:pl-8 lg:pr-4">
         {/* Sidebar */}
         <div className="w-fit hidden lg:block">
           <div className="sticky top-20">
@@ -111,7 +111,7 @@ export default function BuyCars() {
         </div>
 
         {/* Car List */}
-        <div className="w-full py-4 lg:px-2">
+        <div className="w-full py-4 sm:px-6 lg:px-2">
           {loading ? (
             <p>Loading cars...</p>
           ) : error ? (

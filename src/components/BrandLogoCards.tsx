@@ -89,7 +89,7 @@ const BrandLogoCards: React.FC = () => {
         breakpoints={{
           1280: { slidesPerView: 10 },
           1024: { slidesPerView: 8 },
-          640: { slidesPerView: 4 },
+          640: { slidesPerView: 6 },
           475: { slidesPerView: 4, spaceBetween: 20, },
           0: { slidesPerView: 4, spaceBetween: 20 },
         }}

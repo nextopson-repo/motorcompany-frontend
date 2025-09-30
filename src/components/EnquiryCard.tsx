@@ -1,6 +1,6 @@
 import { Phone, MapPin, MessageCircle, EllipsisVertical, Eye } from "lucide-react";
 import type { Enquiry } from "../store/slices/enqueriesSlice";
-import { formatPriceToLakh } from "../utils/formatPrice";
+import { formatPriceToL, formatPriceToLakh } from "../utils/formatPrice";
 import { useState, useRef, useEffect } from "react";
 
 interface EnquiryCardProps {
@@ -47,7 +47,7 @@ export default function EnquiryCard({ enquiry }: EnquiryCardProps){
                   {enquiry.kmDriven} | {enquiry.carType} | {enquiry.mileage} |{" "}
                   {enquiry.fuelType} | {enquiry.transmission}
                 </p>
-                <div className="hidden text-[9px] md:text-[10px] font-medium md:flex items-center mt-2 text-gray-700">
+                <div className="hidden text-[9px] md:text-[10px] font-medium lg:flex items-center mt-2 text-gray-700">
                   <MapPin className="w-3 md:w-[14px] h-3 md:h-[14px] mr-1" />
                   {enquiry.location}
                 </div>
@@ -65,7 +65,7 @@ export default function EnquiryCard({ enquiry }: EnquiryCardProps){
             </div>
 
             {/* Right Top Menu + Owner Info (desktop) */}
-            <div className="h-full md:w-[18vw] flex flex-col items-end justify-between">
+            <div className="h-full sm:w-[30vw] lg:w-[18vw] flex flex-col items-end justify-between">
               {/* 3-dot menu */}
               <div
                 className="block md:hidden relative mt-1 md:mt-[6px]"
@@ -137,7 +137,7 @@ export default function EnquiryCard({ enquiry }: EnquiryCardProps){
             </div>
             {/* Price */}
             <p className="font-bold text-xs text-gray-900">
-              Rs. {formatPriceToLakh(enquiry.price)}
+              Rs. {formatPriceToL(enquiry.price)}
             </p>
           </div>
         </div>
@@ -165,11 +165,11 @@ export default function EnquiryCard({ enquiry }: EnquiryCardProps){
           <div className="flex gap-1 mr-1">
             <button className="bg-white border border-gray-300 px-[6px] py-[6px] md:py-1 rounded-sm text-[9px] flex items-center gap-1 hover:bg-black hover:text-white transition active:bg-black active:text-white active:scale-95">
               <Phone size={12} />
-              <span className="hidden md:block">Call</span>
+              <span className="hidden sm:block">Call</span>
             </button>
             <button className="bg-white border border-gray-300 px-[6px] py-[6px] md:py-1 rounded-sm text-[9px] flex items-center gap-1 hover:bg-black hover:text-white transition active:bg-black active:text-white active:scale-95">
               <MessageCircle size={12} />
-              <span className="hidden md:block">WhatsApp</span>
+              <span className="hidden sm:block">WhatsApp</span>
             </button>
           </div>
         </div>

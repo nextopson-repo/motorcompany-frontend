@@ -64,7 +64,7 @@ export default function CarList() {
         />
 
         {/* Car Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-8 mx-4 md:mx-0">
+        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-2 md:gap-8 mx-4 sm:mx-0">
           {filteredAndSortedCars.length ? (
             filteredAndSortedCars.map((car) => <CarCard key={car.id} car={car} />)
           ) : (

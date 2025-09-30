@@ -95,7 +95,7 @@ const CarListHeader: React.FC<CarListHeaderProps> = ({
           <span className="underline underline-offset-3">Used Cars</span>
         </div>
 
-        <div className="flex w-full lg:w-auto flex-1 gap-3 px-4 md:px-0">
+        <div className="flex w-full lg:w-auto flex-1 gap-3 px-4 sm:px-0">
           {/* Search */}
           <span className="w-full flex items-center gap-2 bg-gray-100 lg:bg-transparent border border-gray-200 rounded-sm px-2 lg:px-4 py-2">
             <SearchIcon className="w-3 md:w-4 h-3 md:h-4 text-black" strokeWidth={1.5} />
@@ -155,7 +155,7 @@ const CarListHeader: React.FC<CarListHeaderProps> = ({
       </div>
 
       {/* Horizontal Scrollable Filter Bar Buttons  */}
-       <div className="lg:hidden px-4">
+       <div className="lg:hidden px-4 sm:px-0">
          <FilterBar />
        </div>
 

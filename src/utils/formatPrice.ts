@@ -6,6 +6,14 @@ export function formatPriceToLakh(price: any): string {
   return `${formatted} Lakhs`;
 }
 
+export function formatPriceToL(price: any): string {
+  if (!Number.isFinite(price)) return "";
+
+  const inLakh = price / 100000;
+  const formatted = inLakh % 1 === 0 ? inLakh : inLakh.toFixed(1);
+  return `${formatted} L`;
+}
+
 export const formatShortNumber = (num: any, isKm = false) => {
     if (!num) return isKm ? "0 km" : "0";
     if (num >= 10000000)

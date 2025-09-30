@@ -27,7 +27,7 @@ const HeroPage = () => {
   };
 
   return (
-    <div className="mt-14 md:mt-24 min-h-screen max-w-7xl mx-auto">
+    <div className="mt-14 lg:mt-24 min-h-screen max-w-7xl mx-auto">
       <Hero />
       <FeaturedCars />
       <FindDealers />

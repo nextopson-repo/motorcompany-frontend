@@ -95,8 +95,8 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
           setMobileNumber={setMobileNumber}
         />
       ) : (
-        <div className="fixed inset-0 bg-black/50 lg:flex items-center justify-center z-50">
-          <div className="w-screen h-full lg:h-auto bg-white md:rounded-2xl shadow-lg md:w-full md:max-w-2xl grid md:grid-cols-2 relative md:gap-8">
+        <div className="fixed inset-0 bg-black/50 sm:flex items-center justify-center z-50">
+          <div className="w-screen h-full sm:h-auto bg-white md:rounded-2xl shadow-lg sm:w-full sm:max-w-2xl grid sm:grid-cols-2 relative sm:gap-8">
             <button
               onClick={onClose}
               className="absolute top-3 right-4 lg:right-3 p-2 text-gray-500 cursor-pointer hover:text-red-500"
@@ -105,7 +105,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             </button>
 
             {/* left side */}
-            <div className="hidden md:block"><img src="/loginImg.png" alt="Login Image" className="w-full" /></div>
+            <div className="hidden sm:block"><img src="/loginImg.png" alt="Login Image" className="w-full" /></div>
 
             {/* right side */}
             <div className="px-2 md:p-6 mt-4 md:mt-0 flex flex-col justify-center">
@@ -130,7 +130,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             </div>
 
             {/* left side */}
-            <div className="block md:hidden h-fit p-2 py-4"><img src="/loginImg.png" alt="Login Image" className="w-full h-full" /></div>
+            <div className="block sm:hidden h-fit p-2 py-4"><img src="/loginImg.png" alt="Login Image" className="w-full h-full" /></div>
           </div>
         </div>
       )}

@@ -52,41 +52,43 @@ export default function SellerDetails() {
   return (
     <div className="grid lg:grid-cols-4 gap-8 mt-20 max-w-5xl mx-auto mb-4 overflow-hidden">
       {/* ---------- Left Seller Profile ---------- */}
-      <div className="col-span-1 bg-white space-y-3 px-4 pb-6 h-fit">
-        <div className="flex items-center gap-3">
-          <img
-            src={seller.avatar || "/default-avatar.png"}
-            alt={seller.name || "Seller"}
-            className="w-16 h-16 rounded-full border mb-3 object-cover"
-          />
-          <span className="flex flex-col gap-1 mb-2">
-            <h2 className="max-w-[9rem] font-semibold text-md text-center capitalize whitespace-nowrap truncate text-ellipsis">
-              {seller.name || "Unknown Seller"}
-            </h2>
-            <p className="text-gray-500 text-xs font-semibold">
-              {seller.role || "Dealer"}
+      <div className="col-span-1 bg-white space-y-4 px-4 h-fit sm:w-lg lg:w-full">
+        <div>
+          <div className="flex items-center gap-3">
+            <img
+              src={seller.avatar || "/default-avatar.png"}
+              alt={seller.name || "Seller"}
+              className="w-16 h-16 rounded-full border mb-3 object-cover"
+            />
+            <span className="flex flex-col gap-1 mb-2">
+              <h2 className="max-w-[9rem] sm:max-w-[11rem] lg:max-w-[9rem] font-semibold text-md sm:text-lg lg:text-sm text-center capitalize whitespace-nowrap truncate text-ellipsis">
+                {seller.name || "Unknown Seller"}
+              </h2>
+              <p className="text-gray-500 text-xs sm:text-sm lg:text-[10px] lg:text-xs font-semibold">
+                {seller.role || "Dealer"}
+              </p>
+            </span>
+          </div>
+          {seller.joinDate && (
+            <p className="text-[10px] sm:text-sm lg:text-[10px] text-gray-600">
+              Joined on {seller.joinDate}
             </p>
-          </span>
+          )}
         </div>
 
-        {seller.joinDate && (
-          <p className="text-[10px] text-gray-600">
-            Joined on {seller.joinDate}
-          </p>
-        )}
-
-        {seller.location && (
-          <p className="text-[10px] flex items-center gap-1">
+        <div className="space-y-1">
+          {seller.location && (
+          <p className="text-[10px] sm:text-sm lg:text-[10px] flex items-center gap-1">
             <MapPin className="h-[14px] w-[14px] mb-[2px]" /> {seller.location}
           </p>
         )}
         {seller.email && (
-          <p className="text-[10px] break-words flex items-center gap-1">
+          <p className="text-[10px] sm:text-sm lg:text-[10px] break-words flex items-center gap-1">
             <Mail className="h-3 w-3" /> {seller.email}
           </p>
         )}
         {seller.phone && (
-          <p className="text-[10px] flex items-center justify-between">
+          <p className="text-[10px] sm:text-sm lg:text-[10px] flex items-center justify-between">
             <span className="flex items-center gap-1">
               <Phone className="h-3 w-3" /> {seller.phone}
             </span>
@@ -113,12 +115,13 @@ export default function SellerDetails() {
             )}
           </p>
         )}
+        </div>
 
-        <div className="mt-4 flex flex-col gap-3 w-full">
-          <button className="text-xs bg-black text-white px-4 py-[6px] rounded-sm hover:bg-gray-900 flex items-center justify-center gap-2">
+        <div className="mt-4 flex flex-col sm:flex-row gap-3 w-full">
+          <button className="w-full text-xs sm:text-[10px] bg-black text-white px-4 py-[6px] rounded-sm hover:bg-gray-900 flex items-center justify-center gap-2 whitespace-nowrap">
             <Share2 className="h-3 w-3" /> Share Profile
           </button>
-          <button className="text-xs border px-4 py-[6px] rounded-sm text-gray-700 hover:bg-gray-100 flex items-center justify-center gap-2">
+          <button className="w-full text-xs sm:text-[10px] border px-4 py-[6px] rounded-sm text-gray-700 hover:bg-gray-100 flex items-center justify-center gap-2 whitespace-nowrap">
             <Flag className="h-3 w-3" /> Report User
           </button>
         </div>
@@ -169,9 +172,7 @@ export default function SellerDetails() {
                     Make your Offer
                   </span>
                 </p>
-                <p className="text-[10px] font-medium">
-                  3 days ago
-                </p>
+                <p className="text-[10px] font-medium">3 days ago</p>
               </span>
             </div>
 
@@ -186,15 +187,15 @@ export default function SellerDetails() {
               </span>
               <span className="text-[8px] whitespace-nowrap text-gray-500 mr-4 flex items-center gap-1">
                 <Flame className="text-[#cb202d] h-[12px] w-[12px]" />
-                 Trending Viewed by {car.views} user's
+                Trending Viewed by {car.views} user's
               </span>
             </div>
           </div>
         ))}
       </div>
 
-      {/* mobile carCards listing */}
-      <div className="md:hidden flex items-center justify-between border-t border-gray-200 px-4 pt-6">
+      {/* mobile carCards listing header */}
+      <div className="lg:hidden flex items-center justify-between border-t border-gray-200 px-4 pt-6 sm:pt-4">
         <h1 className="text-lg font-semibold">Listed Cars</h1>
         <div className="flex items-center gap-2">
           <span className="flex items-center border border-gray-500 rounded-sm">
@@ -227,14 +228,14 @@ export default function SellerDetails() {
 
       {viewMode === "list" ? (
         // List View
-        <div className="block md:hidden space-y-2 px-4">
+        <div className="block lg:hidden space-y-2 sm:space-y-4 px-4">
           {seller.cars.map((car) => (
             <div
               key={car.id}
               className="flex flex-row rounded-sm border border-gray-100 p-1"
             >
               {/* Left Image */}
-              <div className="h-fit w-28 flex-shrink-0 relative">
+              <div className="h-fit w-28 sm:w-36 flex-shrink-0 relative">
                 <img
                   src={"/fallback-car-img.png"}
                   alt="car image"
@@ -289,7 +290,7 @@ export default function SellerDetails() {
         </div>
       ) : (
         // Card View
-        <div className="md:hidden grid grid-cols-1 gap-4 px-4">
+        <div className="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-4 px-4">
           {seller.cars.map((car) => (
             <div className="bg-white rounded-md shadow-lg overflow-hidden flex flex-col w-auto relative mb-3 lg:mb-0">
               <div className="relative">

@@ -176,10 +176,10 @@ export default function SellHero() {
   };
 
   return (
-    <section className="relative w-full max-w-8xl mx-auto h-[235px] lg:h-[88vh] bg-black mb-[300px] lg:mb-0 mt-12 md:mt-10">
+    <section className="relative w-full max-w-8xl mx-auto h-[326px] sm:h-[28rem] lg:h-[88vh] bg-black mb-[230px] sm:mb-5 lg:mb-0 mt-12 lg:mt-10">
       {/* Background Image */}
       <div
-        className="h-[35vh] md:h-auto absolute inset-0 bg-cover bg-no-repeat opacity-60 mb-1"
+        className="h-auto sm:h-auto lg:h-auto absolute inset-0 bg-cover bg-no-repeat opacity-60 mb-1"
         style={{
           backgroundImage: "url('/sell-my-car-hero-bg.jpg')",
           backgroundPosition: "center calc(100% - 75%)",
@@ -187,22 +187,22 @@ export default function SellHero() {
       />
 
       {/* Overlay Content */}
-      <div className="relative max-w-7xl h-auto lg:h-[93vh] mx-auto px-4 md:px-6 grid grid-cols-1 md:grid-cols-9 items-center md:gap-10 backdrop-blur-[3px]">
+      <div className="relative max-w-7xl h-full lg:h-[93vh] mx-auto px-4 lg:px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-9 items-center md:gap-10 backdrop-blur-[3px]">
         {/* Left Content */}
-        <div className="h-full w-full text-white col-span-6 mt-0 lg:mt-28 md:px-2 pr-8 md:pr-0 py-8 md:py-0">
-          <p className="hidden md:block text-sm mb-14">
+        <div className="h-full w-full text-white lg:col-span-6 mt-0 sm:mt-14 lg:mt-28 md:px-2 pr-8 lg:pr-0 py-8 lg:py-0">
+          <p className="hidden lg:block text-sm mb-14">
             Home <span className="text-gray-300"> &gt; </span>{" "}
             <span className="font-medium underline underline-offset-3">Sell my Car</span>
           </p>
-          <h1 className="max-w-full w-full md:max-w-[80%] text-md md:text-3xl font-semibold md:font-bold mb-3 md:mb-5 leading-tight">
+          <h1 className="max-w-full w-full lg:max-w-[80%] text-md lg:text-3xl font-semibold lg:font-bold mb-3 lg:mb-5 leading-tight">
             Sell your car faster, easier and hassle-free with DhikCar.com
           </h1>
-          <p className="font-light md:font-semibold text-[10px] md:text-base text-gray-200 md:mb-7">
+          <p className="font-light lg:font-semibold text-[10px] lg:text-base text-gray-200 lg:mb-7">
             India's trusted platform for quick and profitable car sales. List
             today and watch buyers come to you!
           </p>
 
-          <ul className="hidden md:block space-y-8 text-xl">
+          <ul className="hidden sm:block space-y-4 lg:space-y-8 text-sm lg:text-xl sm:mt-8 lg:mt-0">
             <li className="flex items-center gap-4">
               <span className="w-7 h-7 rounded-full bg-white flex items-center justify-center text-[#EE1422]">
                 <svg
@@ -258,7 +258,7 @@ export default function SellHero() {
         </div>
 
         {/* Right Form Card */}
-        <div className="bg-white rounded-lg shadow-md md:shadow-lg border border-gray-200 p-4 md:p-6 md:m-4 col-span-3">
+        <div className="sm:w-72 bg-white rounded-lg shadow-md lg:shadow-lg border border-gray-200 p-4 lg:p-6 sm:mt-6 sm:m-4 lg:col-span-3">
           {showForm && (
             <SellHeroForm
               onBack={() => setShowForm(false)}
@@ -269,7 +269,7 @@ export default function SellHero() {
 
           {!showForm && !editCar && (
             <div>
-              <h2 className="text-xs md:text-sm mb-2 md:mb-3">
+              <h2 className="text-xs lg:text-sm mb-2 lg:mb-3">
                 New to <span className="font-semibold">Dhikcar</span>? Let's get
                 you started
               </h2>

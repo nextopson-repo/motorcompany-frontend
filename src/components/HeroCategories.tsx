@@ -37,7 +37,7 @@ const HeroCategories: React.FC = () => {
       </div>
 
       {/* Body Type Grid */}
-      <div className="grid grid-cols-3 md:grid-cols-6 gap-4 px-4 md:px-18">
+      <div className="grid grid-cols-3 md:grid-cols-6 gap-4 px-4 sm:px-12 lg:px-18">
         {bodyTypes.map((type) => (
           <div
             key={type.name}
@@ -46,7 +46,7 @@ const HeroCategories: React.FC = () => {
             <img
               src={type.img}
               alt={type.name}
-              className="w-auto h-auto md:w-32 md:h-18 object-contain mb-2"
+              className="w-auto h-auto sm:w-28 sm:h-16 md:w-32 md:h-18 object-contain mb-2"
             />
             <span className="flex flex-col items-center">
               <p className="font-semibold text-[9px] md:text-xs">{type.name}</p>
@@ -81,7 +81,7 @@ const HeroCategories: React.FC = () => {
               spaceBetween:24,
              },
             640: { slidesPerView: 2.5 },
-            1024: { slidesPerView: 3.9 },
+            1024: { slidesPerView: 3.3 },
             1280: { slidesPerView: 4 },
           }}
           modules={[Navigation]}

@@ -26,14 +26,14 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="w-full max-w-7xl mx-auto md:border-t bg-[#F7F7F7] border-gray-300 md:px-8">
+    <footer className="w-full max-w-7xl mx-auto md:border-t bg-[#F7F7F7] border-gray-300 md:px-4 lg:px-8">
       {/* Main Grid */}
-      <div className="max-w-7xl mx-auto grid grid-cols-6 md:grid-cols-18 gap-4 items-end border-b border-gray-300 pt-4 md:pb-4">
+      <div className="max-w-7xl mx-auto grid grid-cols-6 lg:grid-cols-18 gap-4 lg:items-end border-b border-gray-300 pt-4 md:pb-4">
         {/* Logo + Description */}
-        <div className="col-span-6 md:col-span-5 space-y-3 md:space-y-4 pr-8 text-gray-700 md:pb-4 px-4">
+        <div className="col-span-6 lg:col-span-5 space-y-3 md:space-y-4 pr-8 text-gray-700 md:pb-4 px-4">
           <img
             src="/Brand-logo.png"
-            alt="Dhikkar"
+            alt="Dhikcar"
             className="h-5 md:h-10 w-auto"
           />
           <p className="text-[8px] md:text-[10px] font-semibold leading-[0.65rem] md:leading-[0.75rem] tracking-tight">
@@ -124,7 +124,7 @@ const Footer = () => {
         </div>
 
         {/* Car For Sell col 1 */}
-        <div className="col-span-3 md:col-span-3 md:px-3 pl-4">
+        <div className="col-span-3 lg:col-span-3 md:px-3 pl-4">
           <h4 className="text-sm md:text-md font-semibold text-gray-900 mb-2">
             Car for Sale
           </h4>
@@ -140,7 +140,7 @@ const Footer = () => {
         </div>
 
         {/* Car For Sell col 2 */}
-        <div className="col-span-3 mt-6 md:pl-10 pr-4">
+        <div className="col-span-3 mt-6 lg:pl-10 xl:pr-4">
           <ul className="space-y-[6px] text-[10px] md:text-[10px] font-semibold text-gray-700 xl:text-xs">
             {carForSaleCities2.map((cities, index) => (
               <li key={index}>
@@ -152,7 +152,7 @@ const Footer = () => {
           </ul>
         </div>
 
-        <div className="col-span-6 md:col-span-3 md:mt-6 md:pl-16 px-4">
+        <div className="col-span-6 md:col-span-3 lg:col-span-3 lg:mt-6 lg:pl-16 px-4">
           <h4 className="block md:hidden text-sm md:text-md font-semibold text-gray-900 mb-2">
             Company
           </h4>
@@ -197,11 +197,11 @@ const Footer = () => {
         </div>
 
         {/* Newsletter */}
-        <div className="col-span-6 md:col-span-4 bg-[#CBCBCB] md:rounded-md p-3 space-y-1 md:ml-12 px-4 md:px-2 pb-10 md:pb-3">
-          <img src="/Brand-logo.png" alt="Dhikkar-logo" className="h-4 w-fit" />
+        <div className="w-auto md:w-56 lg:w-auto col-span-6 md:col-span-3 lg:col-span-4 bg-[#CBCBCB] md:rounded-md p-3 space-y-1 lg:ml-12 px-4 md:px-2 pb-10 lg:pb-3">
+          <img src="/Brand-logo.png" alt="Dhikcar-logo" className="h-4 w-fit" />
           <h4 className="text-[9px] font-semibold">Found Car in you City</h4>
           <p className="text-[8px] tracking-tight leading-2.5">
-            Dhikcar is India’s fastest growing technology enabled cars
+            Dhikcar is India's fastest growing technology enabled cars
             brokerage. Our mission is to make people happy what they want to
             ride and ride what they want.
           </p>
@@ -218,7 +218,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom Strip */}
-      <div className="text-sm font-semibold text-center md:text-left hidden md:flex flex-col md:flex-row items-center justify-between py-4 max-w-7xl mx-auto gap-2">
+      <div className="text-sm font-semibold text-center md:text-left hidden lg:flex flex-col lg:flex-row items-center justify-between py-4 max-w-7xl mx-auto gap-2">
         <p className="flex items-center gap-2 text-gray-800 text-[13px]">
           <Copyright className="h-4 w-4" /> Copyright {new Date().getFullYear()}{" "}
           | All Rights Reserved

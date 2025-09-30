@@ -43,7 +43,7 @@ const BodyTypeFilter: React.FC<Props> = ({ onClose }) => {
       <h3 className="font-semibold mb-2">Select a Car Brand</h3>
 
       <div className="lg:hidden relative pt-2 pb-4">
-        <div className="grid grid-cols-3 gap-2 gap-y-4 max-w-xs mx-auto">
+        <div className="grid grid-cols-3 gap-2 gap-y-4 max-w-xs sm:max-w-xl mx-auto">
           {getCurrentBodyTypes().map((bodyTypes) => (
             <div
               key={bodyTypes.id}
@@ -69,7 +69,7 @@ const BodyTypeFilter: React.FC<Props> = ({ onClose }) => {
           ))}
         </div>
 
-        <div className="w-full flex items-center justify-around px-24 mt-6">
+        <div className="w-full flex items-center justify-around px-24 sm:px-44 mt-6">
           {/* Navigation Arrows */}
           <button
             onClick={prevSlide}
@@ -120,7 +120,7 @@ const BodyTypeFilter: React.FC<Props> = ({ onClose }) => {
         </div>
 
         {/* Filter Buttons */}
-        <div className="grid grid-cols-2 gap-3 mt-6">
+        <div className="grid grid-cols-2 gap-3 sm:gap-6 mt-6 sm:px-20">
           <button
             className="w-full py-1 bg-gray-200 rounded-xs text-xs active:scale-95"
             onClick={() => {

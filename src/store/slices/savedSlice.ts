@@ -8,7 +8,65 @@ interface SavedState {
 }
 
 const initialState: SavedState = {
-  cars: [],
+  cars: [
+    {
+      id: 1,
+      brand: "Hyundai",
+      model: "Exterior",
+      carPrice: 880000,
+      manufacturingYear: 2020,
+      fuelType: "Petrol",
+      kms: 20000,
+      transmission: "Automatic",
+      bodyType: "Hatchback",
+      ownership: "2nd",
+      mileage: 19.4,
+      seats: 5,
+      // carImages?: { imageUrl:  }[],
+      address: { city: "Indore", state: "Madhya Pradesh" },
+      user: { fullName: "Dhiraj", userType: "owner" },
+      updatedAt: "2 days ago",
+      createdAt: "2 days ago",
+    },
+    {
+      id: 2,
+      brand: "Hyundai",
+      model: "Verna",
+      carPrice: 880000,
+      manufacturingYear: 2020,
+      fuelType: "Petrol",
+      kms: 20000,
+      transmission: "Automatic",
+      bodyType: "Hatchback",
+      ownership: "2nd",
+      mileage: 19.4,
+      seats: 5,
+      // carImages?: { imageUrl:  }[],
+      address: { city: "Indore", state: "Madhya Pradesh" },
+      user: { fullName: "Dhiraj", userType: "owner" },
+      updatedAt: "2 days ago",
+      createdAt: "2 days ago",
+    },
+    {
+      id: 3,
+      brand: "Hyundai",
+      model: "Creta",
+      carPrice: 880000,
+      manufacturingYear: 2020,
+      fuelType: "Petrol",
+      kms: 20000,
+      transmission: "Automatic",
+      bodyType: "Hatchback",
+      ownership: "2nd",
+      mileage: 19.4,
+      seats: 5,
+      // carImages?: { imageUrl:  }[],
+      address: { city: "Indore", state: "Madhya Pradesh" },
+      user: { fullName: "Dhiraj", userType: "owner" },
+      updatedAt: "2 days ago",
+      createdAt: "2 days ago",
+    },
+  ],
   searchTerm: "",
   sortOption: "popularity",
 };
@@ -17,22 +75,33 @@ const savedSlice = createSlice({
   name: "saved",
   initialState,
   reducers: {
-    setSavedCars: (state, action: PayloadAction<CarRecord[]>) => { state.cars = action.payload; },
+    setSavedCars: (state, action: PayloadAction<CarRecord[]>) => {
+      state.cars = action.payload;
+    },
     addSavedCar: (state, action: PayloadAction<CarRecord>) => {
-      if (!state.cars.find((c) => c.id === action.payload.id)) state.cars.push(action.payload);
+      if (!state.cars.find((c) => c.id === action.payload.id))
+        state.cars.push(action.payload);
     },
     removeSavedCar: (state, action: PayloadAction<number>) => {
       state.cars = state.cars.filter((c) => c.id !== action.payload);
     },
-    setSearchTerm: (state, action: PayloadAction<string>) => { state.searchTerm = action.payload; },
-    setSortOption: (state, action: PayloadAction<string>) => { state.sortOption = action.payload; },
+    setSearchTerm: (state, action: PayloadAction<string>) => {
+      state.searchTerm = action.payload;
+    },
+    setSortOption: (state, action: PayloadAction<string>) => {
+      state.sortOption = action.payload;
+    },
   },
 });
 
-export const { setSavedCars, addSavedCar, removeSavedCar, setSearchTerm, setSortOption } = savedSlice.actions;
+export const {
+  setSavedCars,
+  addSavedCar,
+  removeSavedCar,
+  setSearchTerm,
+  setSortOption,
+} = savedSlice.actions;
 export default savedSlice.reducer;
-
-
 
 // import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 // import type { CarRecord } from "../../types/car";

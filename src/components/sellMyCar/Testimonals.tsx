@@ -90,12 +90,12 @@ const Testimonials: React.FC = () => {
           Testimonials
           <span className="w-7 md:w-10  h-[1px] md:h-[1.4px] bg-[#EE1422]/80"></span>
         </p>
-        <h2 className="text-sm md:text-2xl font-bold mt-2 md:mt-4">
+        <h2 className="text-sm lg:text-2xl font-bold mt-2 md:mt-4">
           Real Stories. Real Experiences. Real
           <br />
           Satisfaction.
         </h2>
-        <p className="text-[9px] md:text-[16px] md:max-w-2xl mx-auto mt-2 md:mt-4 text-black leading-2.7 md:leading-5.5 tracking-tight md:tracking-none md:px-4">
+        <p className="text-[9px] lg:text-[16px] lg:max-w-2xl mx-auto mt-2 lg:mt-4 text-black leading-2.7 md:leading-5.5 tracking-tight md:tracking-none md:px-4">
           Hear from our happy customers! Discover how our products/services have
           made a difference in their lives.
         </p>
@@ -116,9 +116,9 @@ const Testimonials: React.FC = () => {
         loop={true}
         autoplay={{ delay: 3000, disableOnInteraction: false }}
         breakpoints={{
-          1024: { slidesPerView: 3 },
-          640: { slidesPerView: 2 },
-          0: { slidesPerView: 1 },
+          1024: { slidesPerView: 3, spaceBetween: 32 },
+          640: { slidesPerView: 2, spaceBetween: 5 },
+          0: { slidesPerView: 1, spaceBetween:5 },
         }}
         navigation={{
           nextEl: ".swiper-button-next1",
@@ -142,8 +142,8 @@ const Testimonials: React.FC = () => {
                     className="w-11 h-11 rounded-full object-cover"
                   />
                   <div className="space-y-1">
-                    <p className="font-medium text-xs md:text-sm whitespace-nowrap truncate text-ellipsis">{t.name}</p>
-                    <p className="text-gray-500 text-thin text-[8px] md:text-[10px]">
+                    <p className="font-medium text-xs lg:text-sm whitespace-nowrap truncate text-ellipsis">{t.name}</p>
+                    <p className="text-gray-500 text-thin text-[8px] lg:text-[10px]">
                       {t.date} | {t.location}
                     </p>
                   </div>
@@ -161,12 +161,12 @@ const Testimonials: React.FC = () => {
               </div>
 
               {/* Title */}
-              <h3 className="text-[11px] md:text-xs mb-2 line-clamp-2 text-black font-medium">
+              <h3 className="text-[11px] lg:text-xs mb-2 line-clamp-2 text-black font-medium">
                 {t.text} ...
               </h3>
 
               {/* Review Text */}
-              <p className="text-black text-[10px] md:text-[11px] relative z-10 flex-1 tracking-tight">
+              <p className="text-black text-[10px] lg:text-[11px] relative z-10 flex-1 tracking-tight">
                 {t.description}
               </p>
 

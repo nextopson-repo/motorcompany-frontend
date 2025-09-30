@@ -10,8 +10,8 @@ export default function Enquiries() {
   );
 
   return (
-    <div className="mx-auto -m-1 px-4 md:px-0">
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 md:mb-6">
+    <div className="mx-auto -m-1 px-4 md:px-0 sm:mb-10 lg:mb-0">
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 lg:mb-6 sm:mt-3 lg:mt-0">
         <h1 className="text-md md:text-2xl text-[#24272C] font-bold py-3 md:py-0 md:flex">
           <span className="hidden md:block mr-2">My</span> Enquiries
         </h1>

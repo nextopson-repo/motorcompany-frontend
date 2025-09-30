@@ -28,7 +28,7 @@ const InterestedBuyers: React.FC = () => {
   return (
     <div className="w-full mx-auto">
       {/* header */}
-      <div className="w-full mb-4 md:mb-6 px-4 md:px-0 flex flex-col md:flex-row gap-2 md:gap-0 md:items-center justify-between ">
+      <div className="w-full mb-4 lg:mb-6 px-4 md:px-0 flex flex-col md:flex-row gap-2 md:gap-0 md:items-center justify-between sm:mt-2 lg:mt-0">
         <h2 className="text-md md:text-2xl font-bold py-2 md:py-0">Interested Buyers</h2>
         {/* dropdown */}
         <div className="relative flex md:flex-none w-full gap-2 md:gap-0 sm:w-auto">
@@ -76,7 +76,7 @@ const InterestedBuyers: React.FC = () => {
       </div>
       
       {/* main Listing */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-4 px-4 md:px-0 mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-4 md:gap-4 px-4 md:px-0 mb-10">
         {buyers.map((buyer) => (
           <div
             key={buyer.id}

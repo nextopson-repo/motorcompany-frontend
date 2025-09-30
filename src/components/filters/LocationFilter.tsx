@@ -48,7 +48,7 @@ const LocationFilter: React.FC<Props> = ({ onClose }) => {
       <h3 className="font-semibold mb-1">Select City</h3>
 
       <div className="lg:hidden relative pt-2 pb-4">
-        <div className="grid grid-cols-3 gap-2 gap-y-4 max-w-xs mx-auto">
+        <div className="grid grid-cols-3 gap-2 gap-y-4 max-w-xs sm:max-w-lg mx-auto">
           {getCurrentCities().map((city) => (
             <div
               key={city.name}
@@ -123,7 +123,7 @@ const LocationFilter: React.FC<Props> = ({ onClose }) => {
         </div>
 
         {/* Filter Buttons */}
-        <div className="grid grid-cols-2 gap-3 mt-6">
+        <div className="grid grid-cols-2 gap-3 sm:gap-6 mt-6 sm:px-20">
           <button
             className="w-full py-1 bg-gray-200 rounded-xs text-xs active:scale-95"
             onClick={() => {

@@ -32,7 +32,7 @@ const ModelYearFilter: React.FC<Props> = ({ onClose }) => {
     <div className="fixed left-0 bottom-0 w-full bg-white shadow-lg rounded-t-lg px-4 py-4 z-20 border border-gray-200">
       <h3 className="font-semibold mb-4">Select Model Year Range</h3>
 
-      <div className="flex flex-col space-y-4">
+      <div className="flex flex-col space-y-4 sm:px-16">
         {/* Display selected years */}
         <div className="flex justify-between text-xs">
           <span>{values[0]}</span>
@@ -83,7 +83,7 @@ const ModelYearFilter: React.FC<Props> = ({ onClose }) => {
       </div>
 
       {/* Buttons */}
-      <div className="grid grid-cols-2 gap-3 mt-6">
+      <div className="grid grid-cols-2 gap-3 sm:gap-6 mt-6 sm:px-20">
         <button
           className="w-full py-1 bg-gray-200 rounded-xs text-xs active:scale-95"
           onClick={() => {
