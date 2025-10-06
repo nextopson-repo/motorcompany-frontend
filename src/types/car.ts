@@ -26,11 +26,7 @@ export interface FiltersState {
   bodyType: string[];
   ownership: string[];
   location: string[];
-  // priceRange: [number, number];
-  // yearRange: [number, number];
-  // ownerType: string[];
   ownerType: "all" | "owner" | "dealer"; // single value
-  // ownerType: ("all" | "owner" | "dealer")[]; // change from string to array
   priceRange: [number, number]; // remove | null
   yearRange: [number, number]; // remove | null
 }

@@ -5,75 +5,88 @@ import "swiper/css";
 import "swiper/css/navigation";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { updateSelectedFilter } from "../store/slices/carSlice";
+import { useDispatch } from "react-redux";
+import type { AppDispatch } from "../store/store";
+import { useNavigate } from "react-router-dom";
 
 const BrandLogoCards: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const Navigate = useNavigate();
+
   const brandLogos = [
     {
-      title: "Tata",
+      Brand: "Tata",
       logo: "/CarsLogo/tata-motors.png",
       description: "120 Cars Available",
     },
     {
-      title: "Honda",
+      Brand: "Honda",
       logo: "/CarsLogo/honda.png",
       description: "120 Cars Available",
     },
     {
-      title: "Mahindra",
+      Brand: "Mahindra",
       logo: "/CarsLogo/mahindra.png",
       description: "120 Cars Available",
     },
     {
-      title: "Hyundai",
+      Brand: "Hyundai",
       logo: "/CarsLogo/hyundai.png",
       description: "120 Cars Available",
     },
     {
-      title: "Ford",
+      Brand: "Ford",
       logo: "/CarsLogo/ford.png",
       description: "120 Cars Available",
     },
     {
-      title: "Volkswagen",
+      Brand: "Volkswagen",
       logo: "/CarsLogo/volkswagon.png",
       description: "120 Cars Available",
     },
     {
-      title: "Maruti Suzuki",
+      Brand: "Maruti Suzuki",
       logo: "/CarsLogo/maruti-suzuki.png",
       description: "120 Cars Available",
     },
     {
-      title: "Suzuki",
+      Brand: "Suzuki",
       logo: "/CarsLogo/suzuki.avif",
       description: "120 Cars Available",
     },
     {
-      title: "Audi",
+      Brand: "Audi",
       logo: "/CarsLogo/Audi.png",
       description: "120 Cars Available",
     },
     {
-      title: "BMW",
+      Brand: "BMW",
       logo: "/CarsLogo/BMW.png",
       description: "120 Cars Available",
     },
     {
-      title: "Range Rover",
+      Brand: "Range Rover",
       logo: "/CarsLogo/RangeRover.png",
       description: "20 Cars Available",
     },
     {
-      title: "Ferrari",
+      Brand: "Ferrari",
       logo: "/CarsLogo/Ferrari.png",
       description: "5 Cars Available",
     },
     {
-      title: "Lamborghini",
+      Brand: "Lamborghini",
       logo: "/CarsLogo/Lamborghini.png",
       description: "4 Cars Available",
     },
   ];
+
+   // in city card click handler
+  const handleBrandClick = (brandName: string) => {
+    dispatch(updateSelectedFilter({ key: 'Brand', value: [brandName] }));
+    Navigate('/buy-car');
+  };
 
   return (
     <section className="max-w-7xl mx-auto relative bg-[#F8F8F8] py-4 md:py-8 md:pb-12  md:px-10 bg-car-handle">
@@ -101,15 +114,17 @@ const BrandLogoCards: React.FC = () => {
       >
         {brandLogos.map((car, idx) => (
           <SwiperSlide key={idx}>
-            <div className="bg-white rounded-sm p-2 md:p-4">
+            <div className="bg-white rounded-sm p-2 md:p-4"
+            onClick={() => handleBrandClick(car.Brand)}
+            >
               <div className="flex flex-col items-center justify-center space-y-2">
                 <img
                   src={car.logo}
-                  alt={car.title}
+                  alt={car.Brand}
                   className="w-6 md:w-14 h-6 md:h-10 object-contain rounded-xs"
                 />
                 <p className="text-[10px] md:text-sm font-semibold text-black whitespace-nowrap overflow-hidden text-ellipsis">
-                  {car.title}
+                  {car.Brand}
                 </p>
                 <p className="text-[7px] md:text-[10px] text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis -mt-2">
                   {car.description}

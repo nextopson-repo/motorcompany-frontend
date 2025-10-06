@@ -5,10 +5,49 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/effect-fade";
 import { BiCaretDown } from "react-icons/bi";
-
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "../store/store";
+import { fetchCars, updateSelectedFilter } from "../store/slices/carSlice";
+import { useNavigate } from "react-router-dom";
+import { setSearchTerm } from "../store/slices/savedSlice";
 const heroImages = ["/Hero-car.png", "/hero-car-2.jpg", "/hero-car-3.jpg"];
 
 const Hero: React.FC = () => {
+  const selectedFilters = useSelector((state: RootState) => state.cars.selectedFilters);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const navigate = useNavigate();
+  const [searchMode, setSearchMode] = useState<"model" | "budget">("model");
+  const [query, setQuery] = useState("");
+
+  const handleSearch = () => {
+    if (!query.trim()) return;
+    if (searchMode === "model") {
+      dispatch(setSearchTerm(query));
+      dispatch(fetchCars({ searchTerm: query }));
+    } else {
+      const maxPrice = Number(query);
+      if (!isNaN(maxPrice)) {
+        dispatch(
+          updateSelectedFilter({
+            key: "priceRange",
+            value: [0, maxPrice],
+          })
+        );
+        dispatch(
+          fetchCars({
+            selectedFilters: {
+              ...selectedFilters,
+              priceRange: [0, maxPrice],
+            },
+          })
+        );
+      }
+    }
+    navigate("/buy-car");
+  };
+
   return (
     <div className="w-full lg:max-w-7xl px-2 lg:px-0">
       {/* mobile search bar */}
@@ -90,10 +129,24 @@ const Hero: React.FC = () => {
             Lets Find the perfect car for you
           </p>
           <div className="border-[1px] border-gray-200 bg-white rounded-md ">
-            <button className="text-xs px-8 py-2 rounded-l-sm hover:text-white hover:bg-[#EE1422]">
+            <button
+              className={`text-xs px-8 py-2 rounded-l-sm ${
+                searchMode === "model"
+                  ? "bg-[#EE1422] text-white"
+                  : "hover:text-white hover:bg-[#EE1422]"
+              }`}
+              onClick={() => setSearchMode("model")}
+            >
               By Model
             </button>
-            <button className="text-xs px-8 py-2 rounded-r-sm  hover:text-white hover:bg-[#EE1422]">
+            <button
+              className={`text-xs px-8 py-2 rounded-r-sm ${
+                searchMode === "budget"
+                  ? "bg-[#EE1422] text-white"
+                  : "hover:text-white hover:bg-[#EE1422]"
+              }`}
+               onClick={() => setSearchMode("budget")}
+            >
               By Budget
             </button>
           </div>
@@ -103,19 +156,26 @@ const Hero: React.FC = () => {
           <div className="flex justify-between items-center w-full bg-white rounded-sm px-3 py-2 relative ">
             <div className="flex items-center">
               <Search className="text-gray-400 mr-2" size={16} />
-              <span className="text-gray-400 text-xs md:text-xs whitespace-nowrap">
-                Search Car by Model
-              </span>
               <input
-                type="text"
-                className="absolute left-9 top-0 md:w-[90%] h-full opacity-0 cursor-text z-20"
+                type={searchMode === "budget" ? "number" : "text"}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder={
+                  searchMode === "model"
+                    ? "Search Car by Model"
+                    : "Search Car by Budget"
+                }
+                className="absolute left-9 top-0 md:w-[90%] h-full z-20 px-2 text-sm"
               />
             </div>
             <span>
               <BiCaretDown className="text-black text-xs md:text-xs whitespace-nowrap" />
             </span>
           </div>
-          <button className="text-white font-semibold bg-gray-900 px-8 py-[7px] rounded-sm cursor-pointer hover:bg-gray-700 ">
+          <button
+            className="text-white font-semibold bg-gray-900 px-8 py-[7px] rounded-sm cursor-pointer hover:bg-gray-700 "
+            onClick={handleSearch}
+          >
             Search
           </button>
         </div>

@@ -9,16 +9,22 @@ import {
 } from "lucide-react";
 import { useState, useRef } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
 import LoginModal from "../pages/LoginModal";
+import { useAuth } from "../context/useAuth";
+
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "../store/store";
+import { selectAuth } from "../store/slices/authSlices/authSlice";
+import { openLogin } from "../store/slices/authSlices/loginModelSlice";
 
 interface NavbarProps {
   onSelectCityClick: () => void;
-  selectedCity: string;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick, selectedCity }) => {
-  const { user } = useAuth();
+const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
+  const dispatch = useDispatch();
+  const { user, token } = useSelector(selectAuth);
+  // const { user } = useAuth();
   const navigate = useNavigate();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -34,6 +40,16 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick, selectedCity }) => {
     navigate("/");
     setShowDialog(false);
   };
+
+  const handleAccess = () => {
+    if (!user || !token) {
+      dispatch(openLogin());
+      return;
+    }
+    console.log("User logged in, allow car upload");
+  };
+
+  const location = useSelector((state: RootState) => state.location.location);
 
   return (
     <nav className="w-full h-12 md:h-auto bg-white shadow-md fixed top-0 left-0 z-50">
@@ -163,14 +179,20 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick, selectedCity }) => {
           >
             <MapPin className="w-4 h-4" />
             <span className="ml-1 flex items-center gap-1">
-              {selectedCity ? selectedCity : "Select City"}
+              {location ? location : "Select City"}
               <ChevronDown className="h-4 w-4" />
             </span>
           </button>
 
           <button
             className="px-2 py-2 rounded-md transition text-[10px] cursor-pointer flex flex-col items-center justify-center group hover:text-[#EE1422]"
-            onClick={() => navigate("/settings/saved")}
+            onClick={() => {
+              if (user) {
+                navigate("/settings/saved");
+              } else {
+                handleAccess(); 
+              }
+            }}
           >
             <Heart className="w-4 h-4 hover:text-[#EE1422]" /> Favorite
           </button>
@@ -278,7 +300,11 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick, selectedCity }) => {
         <div className="flex items-center justify-between p-4 bg-[#EE1422] text-white">
           <div
             className="flex items-center gap-2"
-            onClick={() => setIsLoginOpen(true)}
+            onClick={() => {
+              if (!user) {
+                setIsLoginOpen(true);
+              }
+            }}
           >
             <img
               src={user?.image || "/default-men-logo.jpg"}
@@ -370,15 +396,17 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick, selectedCity }) => {
             Bought Packages
           </NavLink>
 
-          <button
-            onClick={() => {
-              setShowDialog(true);
-              setIsRightSidebarOpen(false);
-            }}
-            className="w-full py-[6px] mt-2 cursor-pointer text-sm transition text-red-500 border border-red-400 rounded-xs hover:bg-gray-200 active:scale-95 active:bg-red-500 active:text-white"
-          >
-            Logout
-          </button>
+          {user && (
+            <button
+              onClick={() => {
+                setShowDialog(true);
+                setIsRightSidebarOpen(false);
+              }}
+              className="w-full py-[6px] mt-2 cursor-pointer text-sm transition text-red-500 border border-red-400 rounded-xs hover:bg-gray-200 active:scale-95 active:bg-red-500 active:text-white"
+            >
+              Logout
+            </button>
+          )}
         </div>
       </div>
 

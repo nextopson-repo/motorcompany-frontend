@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
@@ -6,16 +6,17 @@ import "swiper/css/navigation";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import CarCard from "./CarCard";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../store/store";
-// import { carsData } from "../data/cars";
+// import { fetchCars } from "../store/slices/carSlice";
 
 const FeaturedCars: React.FC = () => {
-   const { cars } = useSelector(
-    (state: RootState) => state.cars
-  );
+  const featuredCars = useSelector((state: RootState) => state.cars.cars);
+  // const dispatch = useDispatch();
 
-  // const carData = carsData;
+  // useEffect(() => {
+  //   dispatch(fetchCars());
+  // }, [dispatch]);
 
   return (
     <section className="max-w-7xl mx-auto px-2 lg:px-8 py-6 lg:py-14 relative">
@@ -37,14 +38,11 @@ const FeaturedCars: React.FC = () => {
         slidesPerView={1.5}
         breakpoints={{
           1280: { slidesPerView: 4 },
+          1100: { slidesPerView: 4 },
           1024: { slidesPerView: 3.3 },
           640: { slidesPerView: 2.5 },
-          475: { slidesPerView: 1.5,
-            spaceBetween: 24,
-           },
-          0: { slidesPerView: 1.5,
-            spaceBetween: 24,
-           },
+          475: { slidesPerView: 1.5, spaceBetween: 24 },
+          0: { slidesPerView: 1.5, spaceBetween: 24 },
         }}
         modules={[Navigation]}
         navigation={{
@@ -52,11 +50,15 @@ const FeaturedCars: React.FC = () => {
           nextEl: ".custom-next",
         }}
       >
-        {cars.map((car) => (
-          <SwiperSlide key={car.id} className="pb-4 md:pb-5">
-            <CarCard car={car} />
-          </SwiperSlide>
-        ))}
+        {featuredCars && featuredCars.length > 0 ? (
+          featuredCars.map((car) => (
+            <SwiperSlide key={car.id} className="pb-4 md:pb-5">
+              <CarCard car={car} />
+            </SwiperSlide>
+          ))
+        ) : (
+          <p>No featured cars found.</p>
+        )}
       </Swiper>
 
       {/* Custom Navigation Buttons (now with class selectors) */}
@@ -74,7 +76,7 @@ const FeaturedCars: React.FC = () => {
         </button>
       </div>
     </section>
-  ); 
+  );
 };
 
 export default FeaturedCars;

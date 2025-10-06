@@ -1,4 +1,9 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setLocation } from "../store/slices/locationSlice";
+import type { AppDispatch } from "../store/store";
+import { updateSelectedFilter } from "../store/slices/carSlice";
+import { useNavigate } from "react-router-dom";
 
 const cities = [
   { name: "Chandigarh", cars: 2023, img: "/Cities/Chandigarh.png" },
@@ -37,9 +42,11 @@ const fourCards = [
 ];
 
 const PopularCities: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const [currentSlide, setCurrentSlide] = useState(0);
   const citiesPerSlide = 6; // 2 rows × 3 columns
   const totalSlides = Math.ceil(cities.length / citiesPerSlide);
+  const Navigate = useNavigate();
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % totalSlides);
@@ -57,6 +64,13 @@ const PopularCities: React.FC = () => {
     const startIndex = currentSlide * citiesPerSlide;
     return cities.slice(startIndex, startIndex + citiesPerSlide);
   };
+
+  // in city card click handler
+const handleCityClick = (cityName: string) => {
+  dispatch(setLocation(cityName));
+  dispatch(updateSelectedFilter({ key: 'location', value: [cityName] }));
+  Navigate('/buy-car');
+};
 
   return (
     <section className="w-full max-w-7xl pt-6 lg:pt-12 custom-bg">
@@ -80,6 +94,7 @@ const PopularCities: React.FC = () => {
             <div
               key={city.name}
               className="flex flex-col items-center text-center cursor-pointer hover:scale-105 transition-transform"
+              onClick={() => handleCityClick(city.name)}
             >
               <div className="w-12 h-9 mb-2">
                 <img 
@@ -145,6 +160,7 @@ const PopularCities: React.FC = () => {
           <div
             key={city.name}
             className="flex flex-col items-center text-center lg:space-y-1 cursor-pointer hover:scale-105 transition-transform"
+            onClick={() => handleCityClick(city.name)}
           >
             <div className="w-12 lg:w-24 h-9 lg:h-20">
               <img src={city.img} alt="city img" className="w-full h-full object-bottom object-contain"/>
@@ -185,103 +201,3 @@ const PopularCities: React.FC = () => {
 };
 
 export default PopularCities;
-
-// import React from "react";
-
-// const cities = [
-//   { name: "Chandigarh", cars: 2023, img: "/Cities/Chandigarh.png" },
-//   { name: "Ahmedabad", cars: 2023, img: "/Cities/Ahemdabad.png" },
-//   { name: "Pune", cars: 2023, img: "/Cities/pune.png" },
-//   { name: "Hyderabad", cars: 2023, img: "/Cities/hyderabad.png" },
-//   { name: "Kanpur", cars: 2023, img: "/Cities/Kanpur.png" },
-//   { name: "Indore", cars: 2023, img: "/Cities/Indore.png" },
-//   { name: "Lucknow", cars: 2023, img: "/Cities/Lucknow.png" },
-//   { name: "Delhi", cars: 2023, img: "/Cities/Delhi.png" },
-//   { name: "Bhopal", cars: 2023, img: "/Cities/Bhopal.png" },
-//   { name: "Jaipur", cars: 2023, img: "/Cities/jaipur.png" },
-// ];
-
-// const fourCards = [
-//   {
-//     title: "India's #1",
-//     img: "/Indias.png",
-//     description: "Largest Car Portal",
-//   },
-//   {
-//     title: "Cars Sold",
-//     img: "/carSold.png",
-//     description: "Every 4 Minute",
-//   },
-//   {
-//     title: "Offers",
-//     img: "/offers.png",
-//     description: "Stay Updated Pay less",
-//   },
-//   {
-//     title: "Compare",
-//     img: "/compare.png",
-//     description: "Decode the right car",
-//   },
-// ];
-
-// const PopularCities: React.FC = () => {
-// return (
-//     <section className="w-full max-w-7xl pt-4 md:pt-12 md:custom-bg">
-//       {/* Heading */}
-//       <div className="text-center">
-//         <p className="text-[#EE1422] font-semibold text-[9px] md:text-xs mb-2 md:mb-4 flex items-center justify-center gap-3 md:gap-5">
-//           <span className="w-7 md:w-10 h-[1px] md:h-[1.5px] bg-[#EE1422]"></span>
-//           Location based Cars
-//           <span className="w-7 md:w-10 h-[1px] md:h-[1.5px] bg-[#EE1422]"></span>
-//         </p>
-//         <h2 className="text-sm md:text-2xl font-bold md:font-semibold">
-//           Search by Popular Cities
-//         </h2>
-//       </div>
-
-//       {/* Cities Grid */}
-//       <div className="max-w-4xl mx-auto hidden md:grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 md:gap-8 md:border-b border-gray-200 pt-4 pb-4 md:pb-12">
-//         {cities.map((city) => (
-//           <div
-//             key={city.name}
-//             className="flex flex-col items-center text-center md:space-y-1 cursor-pointer hover:scale-105 transition-transform"
-//           >
-//             <div className="w-12 md:w-24 h-9 md:h-20">
-//               <img src={city.img} alt="city img" className="w-full h-full object-bottom object-contain"/>
-//             </div>
-//             <p className="font-semibold text-[9px] md:text-[13px] mt-2">{city.name}</p>
-//             <span className="text-gray-400 text-[7px] md:text-[10px] mt-[1px] md:mt-0">
-//               {city.cars} Cars Available
-//             </span>
-//           </div>
-//         ))}
-//       </div>
-
-//       {/* 4 cards end */}
-//       <div className="bg-white p-2 md:p-6 py-4 md:py-10 rounded-sm grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-8  md:px-14">
-//         {fourCards.map((card, idx) => (
-//           <div
-//             key={idx}
-//             className="grid grid-cols-3 items-center justify-center rounded-sm p-2 md:p-4 py-4 md:py-7 md:gap-3 shadow-custom"
-//           >
-//             <img
-//               src={card.img}
-//               alt={card.title}
-//               className="w-8 md:w-16 h-6 md:h-12 object-contain"
-//             />
-//             <div className="col-span-2 flex flex-col md:gap-3">
-//               <p className="text-[10px] md:text-md font-semibold text-gray-800 whitespace-nowrap overflow-hidden text-ellipsis">
-//                 {card.title}
-//               </p>
-//               <p className="text-[8px] md:text-xs font-semibold text-gray-800 whitespace-nowrap overflow-hidden text-ellipsis md:-mt-2">
-//                 {card.description}
-//               </p>
-//             </div>
-//           </div>
-//         ))}
-//       </div>
-//     </section>
-//   );
-// };
-
-// export default PopularCities;

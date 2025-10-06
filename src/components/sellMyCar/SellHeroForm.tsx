@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Upload, ChevronDown, Search, X } from "lucide-react";
+import { ChevronDown, Search } from "lucide-react";
+import ImageUploadOverlay from "../ImageUploadOverlay";
 
 // ---------- Dropdown ----------
 
@@ -35,8 +36,13 @@ function Dropdown({
         onClick={onToggle}
         className="relative w-full flex items-center border border-gray-200 rounded-sm px-3 py-[6px] lg:py-2 mt-[2px] lg:mt-1 text-[10px] lg:text-xs cursor-pointer bg-white"
       >
-        <Search className="w-3 lg:w-[14px] h-3 lg:h-[14px] text-red-500 mr-2" strokeWidth={1.2}/>
-        <span className="text-[10px] flex-1 text-gray-600">{value || placeholder}</span>
+        <Search
+          className="w-3 lg:w-[14px] h-3 lg:h-[14px] text-red-500 mr-2"
+          strokeWidth={1.2}
+        />
+        <span className="text-[10px] flex-1 text-gray-600">
+          {value || placeholder}
+        </span>
         <ChevronDown
           className={`w-4 h-4 text-gray-400 transition-transform ${
             isOpen ? "rotate-180" : ""
@@ -121,71 +127,6 @@ const carData: Record<string, { model: string; variants: string[] }[]> = {
   ],
 };
 
-// ---------- Upload Overlay ----------
-function UploadOverlay({
-  onClose,
-  onSubmit,
-  defaultValues,
-}: {
-  onClose: () => void;
-  onSubmit: () => void;
-  defaultValues: {
-    brand?: string;
-    model?: string;
-    variant?: string;
-    manufacturingYear?: string | number;
-    fuelType?: string;
-    transmission?: string;
-    bodyType?: string;
-    ownership?: string;
-    price?: number | string;
-    kmDriven?: number | string;
-    seats?: number | string;
-  } | null;
-}) {
-  const isEdit = !!defaultValues;
-
-  return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center lg:justify-end z-50 overflow-hidden">
-      <div className="bg-white rounded-sm p-7 pt-10 max-w-[350px] relative shadow-lg lg:mr-12">
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-3 text-gray-500 hover:text-red-500"
-        >
-          <X className="w-5 h-5" />
-        </button>
-
-        {!isEdit ? (
-          <div className="border-2 rounded-sm border-dashed border-gray-800 rounded-sm-lg px-6 py-4 flex flex-col items-center justify-center">
-            <Upload className="w-7 lg:w-10 h-7 lg:h-10 text-gray-500 mb-2" />
-            <p className=" text-xs lg:text-sm">Choose a file or drag & drop it here</p>
-            <p className="text-[10px] lg:text-xs text-gray-700 mb-3">
-              jpeg, jpg and png formats, up to 20 MB
-            </p>
-            <button className="border px-6 py-1 text-[10px] lg:text-xs rounded-xs cursor-pointer text-black hover:bg-gray-200 hover:scale-[1.1] active:scale-95 active:bg-gray-200">
-              Upload
-            </button>
-          </div>
-        ) : (
-          <div className="rounded-sm-lg py-4 flex flex-col items-center justify-center">
-            <p className=" text-xs lg:text-sm">Choose a file or drag & drop it here</p>
-            <p className="text-[10px] lg:text-sm">
-              Click on "Update Car Details" to save the changes
-            </p>
-          </div>
-        )}
-
-        <button
-          onClick={onSubmit}
-          className="w-full bg-black text-white text-xs lg:text-sm py-2 rounded-xs mt-4 hover:bg-black/80 active:bg-black/80 active:scale-95"
-        >
-          {defaultValues ? "Update Car Details" : "Post Car"}
-        </button>
-      </div>
-    </div>
-  );
-}
-
 // ---------- Realistic Dropdown Data ----------
 const fuelTypeOptions = ["Petrol", "Diesel", "CNG", "Electric"];
 const transmissionOptions = ["Manual", "Automatic"];
@@ -205,6 +146,8 @@ export default function SellHeroForm({
   onBack,
   onSubmit,
   defaultValues,
+  uploadedImages,
+  setUploadedImages,
 }: {
   onBack: () => void;
   onSubmit: (data: Record<string, unknown>) => void;
@@ -222,8 +165,9 @@ export default function SellHeroForm({
     seats?: number | string;
     registrationYear?: string | number;
   } | null;
+  uploadedImages: File[];
+  setUploadedImages: React.Dispatch<React.SetStateAction<File[]>>;
 }) {
-  // const isEdit = !!defaultValues;
   const [step, setStep] = useState(1);
   const [brand, setBrand] = useState(defaultValues?.brand || "");
   const [model, setModel] = useState(defaultValues?.model || "");
@@ -288,7 +232,10 @@ export default function SellHeroForm({
       seats,
       registrationYear,
       kmDriven,
+      uploadedImages,
     };
+
+    console.log("payload", payload)
     onSubmit(payload);
 
     try {
@@ -354,7 +301,9 @@ export default function SellHeroForm({
         </div>
       </div>
 
-      <h2 className="text-xs lg:text-md font-semibold mb-1 lg:mb-4">Enter Car Details</h2>
+      <h2 className="text-xs lg:text-md font-semibold mb-1 lg:mb-4">
+        Enter Car Details
+      </h2>
 
       {/* STEP 1 */}
       {step === 1 && (
@@ -405,7 +354,9 @@ export default function SellHeroForm({
             // onChange={setVariant}
           />
           <div>
-            <label className="text-[10px] md:text-xs lg:text-sm">Manufacturing Year</label>
+            <label className="text-[10px] md:text-xs lg:text-sm">
+              Manufacturing Year
+            </label>
             <input
               type="text"
               value={manufactureYear}
@@ -415,13 +366,16 @@ export default function SellHeroForm({
             />
           </div>
           <div className="flex justify-between pt-1 lg:pt-2 gap-3">
-            {defaultValues? "" : 
-            <button
-              onClick={onBack}
-              className="bg-gray-50 text-gray-400 border border-gray-200 text-xs lg:text-sm  px-6 py-[6px] lg:py-2 rounded-xs cursor-pointer active:scale-90"
-            >
-              Back
-            </button>}
+            {defaultValues ? (
+              ""
+            ) : (
+              <button
+                onClick={onBack}
+                className="bg-gray-50 text-gray-400 border border-gray-200 text-xs lg:text-sm  px-6 py-[6px] lg:py-2 rounded-xs cursor-pointer active:scale-90"
+              >
+                Back
+              </button>
+            )}
             <button
               onClick={nextStep}
               className="bg-[#24272C] text-white text-xs lg:text-sm font-semibold w-full py-[6px] lg:py-2 rounded-xs cursor-pointer active:scale-90"
@@ -436,7 +390,10 @@ export default function SellHeroForm({
       {step === 2 && (
         <div className="space-y-1">
           <div>
-            <label htmlFor="fuelType" className="text-[10px] md:text-xs lg:text-sm">
+            <label
+              htmlFor="fuelType"
+              className="text-[10px] md:text-xs lg:text-sm"
+            >
               Fuel Type
             </label>
             <div className="grid grid-cols-4 gap-2 mb-2 lg:mb-4 text-[10px] lg:text-xs mt-1">
@@ -457,7 +414,10 @@ export default function SellHeroForm({
           </div>
 
           <div>
-            <label htmlFor="transmission" className="text-[10px] md:text-xs lg:text-sm">
+            <label
+              htmlFor="transmission"
+              className="text-[10px] md:text-xs lg:text-sm"
+            >
               Transmission
             </label>
             <div className="grid grid-cols-3 gap-2 mb-2 lg:mb-4 text-[10px] lg:text-xs mt-[2px] lg:mt-1">
@@ -478,7 +438,9 @@ export default function SellHeroForm({
           </div>
 
           <div>
-            <label className="text-[10px] md:text-xs lg:text-sm">KM Driven</label>
+            <label className="text-[10px] md:text-xs lg:text-sm">
+              KM Driven
+            </label>
             <input
               type="text"
               placeholder="50000km"
@@ -489,7 +451,9 @@ export default function SellHeroForm({
           </div>
 
           <div>
-            <label className="text-[10px] md:text-xs lg:text-sm">Registration Year</label>
+            <label className="text-[10px] md:text-xs lg:text-sm">
+              Registration Year
+            </label>
             <input
               type="text"
               placeholder="Enter Registration Year"
@@ -520,7 +484,9 @@ export default function SellHeroForm({
       {step === 3 && (
         <div className="space-y-2 lg:space-y-3">
           <div>
-            <label className="text-[10px] md:text-xs lg:text-sm">No. of Seats</label>
+            <label className="text-[10px] md:text-xs lg:text-sm">
+              No. of Seats
+            </label>
             <input
               type="number"
               placeholder="5"
@@ -531,7 +497,9 @@ export default function SellHeroForm({
           </div>
 
           <div>
-            <label className="text-[10px] md:text-xs lg:text-sm">Ownership</label>
+            <label className="text-[10px] md:text-xs lg:text-sm">
+              Ownership
+            </label>
             <div className="grid grid-cols-4 gap-2 mb-1 lg:mb-2 text-[10px] lg:text-xs mt-[2px] lg:mt-1">
               {ownershipOptions.map((own) => (
                 <button
@@ -590,9 +558,11 @@ export default function SellHeroForm({
       )}
 
       {showOverlay && (
-        <UploadOverlay
+        <ImageUploadOverlay
           onClose={() => setShowOverlay(false)}
-          onSubmit={handleSubmit}
+          
+          onFinalSubmit={(urls) => {setUploadedImages(urls); console.log("urls",urls)}}
+          carDetailsSubmit={()=>{handleSubmit()}}
           defaultValues={defaultValues}
         />
       )}

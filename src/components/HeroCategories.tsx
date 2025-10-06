@@ -19,9 +19,7 @@ const bodyTypes = [
 ];
 
 const HeroCategories: React.FC = () => {
-  const { cars } = useSelector(
-    (state: RootState) => state.cars
-  );
+  const cars = useSelector((state: RootState) => state.cars.cars);
   return (
     <section className="w-full mt-2 md:mt-6">
       {/* Categories */}
@@ -82,6 +80,7 @@ const HeroCategories: React.FC = () => {
              },
             640: { slidesPerView: 2.5 },
             1024: { slidesPerView: 3.3 },
+            1100: { slidesPerView: 4 },
             1280: { slidesPerView: 4 },
           }}
           modules={[Navigation]}
@@ -90,11 +89,15 @@ const HeroCategories: React.FC = () => {
             nextEl: ".custom-next2",
           }}
         >
-          {cars.map((car) => (
-            <SwiperSlide key={car.id} className="pb-5">
+          {cars && cars.length > 0 ? (
+          cars.map((car) => (
+            <SwiperSlide key={car.id} className="pb-4 md:pb-5">
               <CarCard car={car} />
             </SwiperSlide>
-          ))}
+          ))
+        ) : (
+          <p>No featured cars found.</p>
+        )}
         </Swiper>
 
         {/* Custom Navigation Buttons (now with class selectors) */}

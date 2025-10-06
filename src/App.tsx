@@ -15,16 +15,17 @@ import ContactUs from "./pages/ContactUs";
 import SellerDetails from "./pages/SellerDetails";
 import ScrollToTop from "./components/scrollToTop";
 import AppInitializer from "./components/AppInitializer";
-import { useDispatch } from "react-redux";
-import type { AppDispatch } from "./store/store";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "./store/store";
 import { fetchCars } from "./store/slices/carSlice";
+import { closeLogin } from "./store/slices/authSlices/loginModelSlice";
 
 const App = () => {
   const location = useLocation();
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [citySearch, setCitySearch] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
+
+  const { isOpen } = useSelector((state: RootState) => state.loginModel);
 
   const hideNavFooter = ["/register", "/forgot-password"];
 
@@ -36,29 +37,7 @@ const App = () => {
   }, [BACKEND_URL, dispatch]);
 
   useEffect(() => {
-    const savedCity = localStorage.getItem("selectedCity");
-    if (savedCity) {
-      setSelectedCity(savedCity);
-    }
-  }, []);
-
-  useEffect(() => {
-    const modalClosed = localStorage.getItem("locationModalClosed") === "true";
-    if (!modalClosed && location.pathname === "/") {
-      const timer = setTimeout(() => {
-        setIsLocationModalOpen(true);
-      }, 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [location.pathname]);
-
-  // const handleCloseModal = () => {
-  //   setIsLocationModalOpen(false);
-  //   localStorage.setItem("locationModalClosed", "true");
-  // };
-
-  useEffect(() => {
-    const anyModalOpen = isLoginOpen || isLocationModalOpen;
+    const anyModalOpen = isOpen || isLocationModalOpen;
 
     if (anyModalOpen) {
       document.body.style.overflow = "hidden";
@@ -69,7 +48,7 @@ const App = () => {
     return () => {
       document.body.style.overflow = "auto";
     };
-  }, [isLoginOpen, isLocationModalOpen]);
+  }, [isOpen, isLocationModalOpen]);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -77,10 +56,7 @@ const App = () => {
 
       <ScrollToTop />
       {!hideNavFooter.includes(location.pathname) && (
-        <Navbar
-          onSelectCityClick={() => setIsLocationModalOpen(true)}
-          selectedCity={selectedCity}
-        />
+        <Navbar onSelectCityClick={() => setIsLocationModalOpen(true)} />
       )}
 
       <main className="flex-1 z-0 ">
@@ -97,12 +73,12 @@ const App = () => {
         </Routes>
       </main>
 
-      <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+      <LoginModal isOpen={isOpen} onClose={() => dispatch(closeLogin())} />
 
       <LocationModal
         isOpen={isLocationModalOpen}
-        onClose={() => setIsLocationModalOpen(false)} 
-        citySearch={citySearch} 
+        onClose={() => setIsLocationModalOpen(false)}
+        citySearch={citySearch}
         setCitySearch={setCitySearch}
       />
 

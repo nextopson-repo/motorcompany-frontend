@@ -1,14 +1,13 @@
-// src/store/locationSlice.ts
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 interface LocationState {
   location: string;
-  locations: string[]; // all available cities
+  locations: string[]; 
 }
 
 const initialState: LocationState = {
-  location: "Kolkata",
-  locations: [], // initially empty, later populate from carsData
+  location: "All City",
+  locations: [],
 };
 
 const locationSlice = createSlice({

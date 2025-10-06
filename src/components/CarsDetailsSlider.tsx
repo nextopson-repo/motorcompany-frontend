@@ -1,7 +1,7 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
-import CarCard from "./CarCard"; // your CarCard component
+import CarCard from "./CarCard";
 
 interface CarsDetailsSlider {
     carsData: any[];
@@ -20,12 +20,16 @@ interface CarsDetailsSlider {
           disableOnInteraction: false,
         }}
         breakpoints={{
-          
-          0: { slidesPerView: 1.2 }, // Mobile
-          640: { slidesPerView: 2.5 }, // Mobile
-          768: { slidesPerView: 2.5 }, // Tablet
-          1024: { slidesPerView: 3.9 }, // Small desktop
-          1280: { slidesPerView: 5 }, // Large desktop
+          1280: { slidesPerView: 4 },
+          1100: { slidesPerView: 4 },
+          1024: { slidesPerView: 3.3 },
+          640: { slidesPerView: 2.5 },
+          475: { slidesPerView: 1.5,
+            spaceBetween: 24,
+           },
+          0: { slidesPerView: 1.5,
+            spaceBetween: 24,
+           },
         }}
         loop={true}
       >

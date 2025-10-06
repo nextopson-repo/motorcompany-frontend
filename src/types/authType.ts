@@ -1,5 +1,3 @@
-import { createContext } from "react";
-
 export type AuthContextType = {
   user: any | null;
   token: string | null;
@@ -8,5 +6,3 @@ export type AuthContextType = {
   logout: () => void;
   updateUser: (payload: any) => void;
 };
-
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);

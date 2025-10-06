@@ -20,18 +20,17 @@ import CarsDetailsSlider from "./CarsDetailsSlider";
 import FindDealers from "./FindDealers";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
-import { carsData } from "../data/cars";
 
 const CarDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-
-  // safe selection from Redux: cars slice might contain { cars: [], selectedCar: {...} }
   const carsState = useSelector(
     (state: RootState) => state.cars as any | undefined
   );
   const selectedCar = carsState?.selectedCar ?? null;
   const cars = Array.isArray(carsState?.cars) ? carsState!.cars : [];
+  
+
 
   const [showSellerPopup, setShowSellerPopup] = useState(false);
   const [mainImageIndex, setMainImageIndex] = useState(0);
@@ -53,21 +52,14 @@ const CarDetails = () => {
     );
   }
 
-  // ----- Images: support multiple shapes -----
-  const rawImages =
-    car.carImages ?? car.carDetailsImages ?? car.image ?? car.images ?? [];
-  const images: string[] = Array.isArray(rawImages)
-    ? rawImages
-        .map((img: any) =>
-          typeof img === "string"
-            ? img
-            : img?.imageUrl ?? img?.url ?? img?.path ?? img?.src ?? ""
-        )
-        .filter(Boolean)
-    : [];
+  // Normalize all car images to URLs
+  const images: string[] =
+    car.carImages?.map((img: any) => img.presignedUrl).filter(Boolean) ||
+    car.carDetailsImages?.map((img: any) => img.presignedUrl).filter(Boolean) ||
+    car.images?.map((img: any) => img.presignedUrl).filter(Boolean) ||
+    (car.image ? [car.image] : []);
 
-  const fallback = "/fallback-car-img.png";
-  const visibleImages = images.length ? images : [fallback];
+  const visibleImages = images.length > 0 ? images : ["/fallback-car-img.png"];
 
   // safe prev/next using visibleImages.length
   const handlePrevImage = () =>
@@ -356,10 +348,11 @@ const CarDetails = () => {
           </div>
 
           {/* Car Overview Table */}
-          <div className="lg:hidden bg-white lg:pt-4 border-b border-gray-100 pb-2 rounded-2xl border"
-          style={{
-            boxShadow: "0 1px 5px 1px rgb(0, 0, 0, 0.15)",
-          }}
+          <div
+            className="lg:hidden bg-white lg:pt-4 border-b border-gray-100 pb-2 rounded-2xl border"
+            style={{
+              boxShadow: "0 1px 5px 1px rgb(0, 0, 0, 0.15)",
+            }}
           >
             <h2 className="text-md md:text-xl font-bold px-4 py-2">
               Car Overview
@@ -367,35 +360,31 @@ const CarDetails = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 lg:px-6">
               {[
                 {
-                      label: "Year of Manufacture",
-                      value: manufactureYear || "N/A",
-                    },
-                    {
-                      label: "Kms Driven",
-                      value: kms
-                        ? `${Number(kms).toLocaleString()} Kms`
-                        : "N/A",
-                    },
-                    {
-                      label: "Seats",
-                      value: seats ? `${seats} Seats` : "N/A",
-                    },
-                    { label: "Transmission", value: transmission || "N/A" },
-                    {
-                      label: "Year of Manufacture",
-                      value: manufactureYear || "N/A",
-                    },
-                    {
-                      label: "Kms Driven",
-                      value: kms
-                        ? `${Number(kms).toLocaleString()} Kms`
-                        : "N/A",
-                    },
-                    {
-                      label: "Seats",
-                      value: seats ? `${seats} Seats` : "N/A",
-                    },
-                    { label: "Transmission", value: transmission || "N/A" },
+                  label: "Year of Manufacture",
+                  value: manufactureYear || "N/A",
+                },
+                {
+                  label: "Kms Driven",
+                  value: kms ? `${Number(kms).toLocaleString()} Kms` : "N/A",
+                },
+                {
+                  label: "Seats",
+                  value: seats ? `${seats} Seats` : "N/A",
+                },
+                { label: "Transmission", value: transmission || "N/A" },
+                {
+                  label: "Year of Manufacture",
+                  value: manufactureYear || "N/A",
+                },
+                {
+                  label: "Kms Driven",
+                  value: kms ? `${Number(kms).toLocaleString()} Kms` : "N/A",
+                },
+                {
+                  label: "Seats",
+                  value: seats ? `${seats} Seats` : "N/A",
+                },
+                { label: "Transmission", value: transmission || "N/A" },
               ].map((item, i, arr) => {
                 const isLastRow = i >= arr.length - 3;
                 return (
@@ -708,10 +697,11 @@ const CarDetails = () => {
       </div>
 
       {/* similar cars slider */}
-      <div className="pb-3 lg:m-6 rounded-2xl border border-gray-100 "
-      style={{
-        boxShadow: "0 1px 10px 1px rgb(0, 0, 0, 0.15)"
-      }}
+      <div
+        className="pb-3 lg:p-6 rounded-2xl lg:rounded-none border lg:border-none border-gray-100 "
+        style={{
+          boxShadow: "0 1px 10px 1px rgb(0, 0, 0, 0.15)",
+        }}
       >
         <div className="flex items-center justify-between mt-4 lg:mt-6 px-4 lg:px-0">
           <h2 className="text-md lg:text-2xl font-semibold py-3 ">
@@ -727,7 +717,7 @@ const CarDetails = () => {
             <ChevronRight className="h-3 lg:h-4 w-3 lg:w-4 text-white" />
           </button>
         </div>
-        <CarsDetailsSlider carsData={carsData} />
+        <CarsDetailsSlider carsData={cars} />
       </div>
 
       {/* top dealer container */}

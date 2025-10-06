@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import SellHeroForm from "./SellHeroForm";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
+import { resetUploadState, uploadCar } from "../../store/slices/carUploadSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectAuth } from "../../store/slices/authSlices/authSlice";
+import { openLogin } from "../../store/slices/authSlices/loginModelSlice";
 
 interface DropdownProps {
   label: string;
@@ -33,7 +38,7 @@ function Dropdown({
         onFocus={() => setOpen(true)}
         onChange={(e) => {
           setSearch(e.target.value);
-          onChange(""); 
+          onChange("");
         }}
         placeholder={placeholder}
         className="w-full rounded mt-1 px-4 py-[6px] md:py-2 text-[10px] md:text-xs border border-gray-200 placeholder:text-[10px] focus:ring-1 focus:ring-gray-800/50 outline-none"
@@ -68,17 +73,31 @@ function Dropdown({
 }
 
 export default function SellHero() {
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  const loginDispatch = useDispatch();
+  const { user, token } = useSelector(selectAuth);
   const navigate = useNavigate();
-  const location = useLocation();
 
+  const handleAccess = () => {
+    if (!user || !token) {
+      loginDispatch(openLogin());
+      return;
+    }
+    console.log("User logged in, allow car upload");
+  };
+
+  const location = useLocation();
+  const dispatch = useAppDispatch();
+  const { success } = useAppSelector((state) => state.carUpload);
+
+  // State variables same as original
   const [showForm, setShowForm] = useState(false);
   const [userType, setUserType] = useState<"owner" | "dealer">("owner");
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
   const [locality, setLocality] = useState("");
-  const [user, setUser] = useState<any>();
+  const [currentUser, setCurrentUser] = useState<any>();
   const [editCar, setEditCar] = useState<any>(null);
+  const [uploadedImages, setUploadedImages] = useState<File[]>([]);
 
   const locationData: Record<string, Record<string, string[]>> = {
     "Madhya Pradesh": {
@@ -114,7 +133,7 @@ export default function SellHero() {
     const savedToken = localStorage.getItem("token");
     const savedUser = localStorage.getItem("user");
     if (savedToken && savedUser) {
-      setUser(JSON.parse(savedUser));
+      setCurrentUser(JSON.parse(savedUser));
     }
 
     // ✅ if navigated with editCar data
@@ -128,13 +147,50 @@ export default function SellHero() {
     }
   }, [location]);
 
+  // const handleFinalSubmit = async (carData: any) => {
+  //   const payload = {
+  //     carId: editCar?.id || null, // ✅ Pass carId if editing
+  //     userId: currentUser?.id,
+  //     carName: `${carData.brand || editCar?.brand} ${
+  //       carData.model || editCar?.model
+  //     } ${carData.variant || editCar?.variant}`,
+  //     brand: carData.brand || editCar?.brand,
+  //     model: carData.model || editCar?.model,
+  //     variant: carData.variant || editCar?.variant,
+  //     fuelType: carData.fuelType || editCar?.fuelType,
+  //     transmission: carData.transmission || editCar?.transmission,
+  //     bodyType: carData.bodyType || editCar?.bodyType,
+  //     ownership: carData.ownership || editCar?.ownership,
+  //     manufacturingYear: carData.manufactureYear || editCar?.manufacturingYear,
+  //     registrationYear: carData.registrationYear || editCar?.registrationYear,
+  //     isSale: "Sell",
+  //     carPrice: Number(
+  //       String(carData.price || editCar?.price).replace(/,/g, "")
+  //     ),
+  //     kmDriven: Number(carData.kmDriven || editCar?.kmDriven),
+  //     seats: Number(carData.seats || editCar?.seats),
+  //     isSold: false,
+  //     addressCity: city || editCar?.address?.city || "",
+  //     addressState: state || editCar?.address?.state || "",
+  //     addressLocality: locality || editCar?.address?.locality || "",
+  //     carImages: carData.images?.length
+  //       ? carData.images
+  //       : editCar?.carImages || [],
+  //   };
+
+  //   console.log("🚀 Final Payload:", payload); // debugging ke liye hai ye
+  //   dispatch(uploadCar(payload));
+  // };
+
   const handleFinalSubmit = async (carData: any) => {
-    const payload = {
-      carId: editCar?.id || null, // ✅ Pass carId if editing
-      userId: user?.id,
-      carName: `${carData.brand || editCar?.brand} ${
-        carData.model || editCar?.model
-      } ${carData.variant || editCar?.variant}`,
+    const formData = new FormData();
+
+    formData.append("userId", currentUser?.id);
+    formData.append("isSale", "Sell");
+    formData.append("isSold", "false");
+
+    Object.entries({
+      carId: editCar?.id || null,
       brand: carData.brand || editCar?.brand,
       model: carData.model || editCar?.model,
       variant: carData.variant || editCar?.variant,
@@ -144,36 +200,37 @@ export default function SellHero() {
       ownership: carData.ownership || editCar?.ownership,
       manufacturingYear: carData.manufactureYear || editCar?.manufacturingYear,
       registrationYear: carData.registrationYear || editCar?.registrationYear,
-      isSale: "Sell",
-      carPrice: Number(
-        String(carData.price || editCar?.price).replace(/,/g, "")
-      ),
-      kmDriven: Number(carData.kmDriven || editCar?.kmDriven),
-      seats: Number(carData.seats || editCar?.seats),
-      isSold: false,
+      carPrice: String(carData.price || editCar?.price).replace(/,/g, ""),
+      kmDriven: carData.kmDriven || editCar?.kmDriven,
+      seats: carData.seats || editCar?.seats,
       addressCity: city || editCar?.address?.city || "",
       addressState: state || editCar?.address?.state || "",
       addressLocality: locality || editCar?.address?.locality || "",
-      carImages: carData.images?.length
-        ? carData.images
-        : editCar?.carImages || [], // ✅ use new images if uploaded
-    };
+    }).forEach(([key, value]) => formData.append(key, value?.toString() || ""));
 
-    console.log("🚀 Final Payload:", payload);
-
-    try {
-      await fetch(`${BACKEND_URL}/api/v1/car/create-update`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+    // ✅ Add all image files
+    if (carData.images?.length) {
+      carData.images.forEach((file: File) => {
+        console.log("Appending file:", file.name, file.size);
+        formData.append("carImages", file);
       });
-
-      navigate("/"); // ✅ redirect after save
-    } catch (err) {
-      console.error("❌ Error:", err);
-      alert("Something went wrong!");
     }
+
+    console.log("image :", uploadedImages); ///image debugging
+    // ✅ Debugging: FormData content
+    for (let pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
+    }
+
+    dispatch(uploadCar(formData));
   };
+
+  useEffect(() => {
+    if (success) {
+      dispatch(resetUploadState());
+      navigate("/");
+    }
+  }, [success, dispatch, navigate]);
 
   return (
     <section className="relative w-full max-w-8xl mx-auto h-[326px] sm:h-[28rem] lg:h-[88vh] bg-black mb-[230px] sm:mb-5 lg:mb-0 mt-12 lg:mt-10">
@@ -192,7 +249,9 @@ export default function SellHero() {
         <div className="h-full w-full text-white lg:col-span-6 mt-0 sm:mt-14 lg:mt-28 md:px-2 pr-8 lg:pr-0 py-8 lg:py-0">
           <p className="hidden lg:block text-sm mb-14">
             Home <span className="text-gray-300"> &gt; </span>{" "}
-            <span className="font-medium underline underline-offset-3">Sell my Car</span>
+            <span className="font-medium underline underline-offset-3">
+              Sell my Car
+            </span>
           </p>
           <h1 className="max-w-full w-full lg:max-w-[80%] text-md lg:text-3xl font-semibold lg:font-bold mb-3 lg:mb-5 leading-tight">
             Sell your car faster, easier and hassle-free with DhikCar.com
@@ -262,8 +321,16 @@ export default function SellHero() {
           {showForm && (
             <SellHeroForm
               onBack={() => setShowForm(false)}
-              onSubmit={handleFinalSubmit}
-              defaultValues={editCar} 
+              onSubmit={(carData) => {
+                console.log(
+                  "🖼️ Uploaded Images received from Overlay:",
+                  uploadedImages
+                );
+                handleFinalSubmit({ ...carData, images: uploadedImages });
+              }}
+              defaultValues={editCar}
+              uploadedImages={uploadedImages}
+              setUploadedImages={setUploadedImages}
             />
           )}
 
@@ -338,7 +405,13 @@ export default function SellHero() {
               </div>
 
               <button
-                onClick={() => setShowForm(true)}
+                onClick={() => {
+                  if (user) {
+                    setShowForm(true);
+                  } else {
+                    handleAccess();
+                  }
+                }}
                 className="w-full text-xs md:text-base mt-4 bg-[#24272C] text-white py-[6px] md:py-2 rounded-xs hover:bg-black transition"
               >
                 Next

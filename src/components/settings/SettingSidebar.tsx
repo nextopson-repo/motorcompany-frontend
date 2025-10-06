@@ -1,7 +1,7 @@
 import { CameraIcon, X } from "lucide-react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
 import { useState } from "react";
+import { useAuth } from "../../context/useAuth";
 
 interface SettingSidebarProps {
   name: string;

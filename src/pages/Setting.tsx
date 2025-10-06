@@ -1,13 +1,13 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import AccountSidebar from "../components/settings/SettingSidebar";
 import Profile from "../components/settings/Profile";
-import MyListing from "../components/settings/MyListing";
+import {MyListing} from "../components/settings/MyListing";
 import BuyPackages from "../components/settings/BuyPackages";
 import BoughtPackages from "../components/settings/BoughtPackages";
 import Saved from "../components/settings/Saved";
-import { useAuth } from "../context/AuthContext";
 import InterestedBuyers from "../components/settings/IntrustedBuyers";
 import Enquiries from "../components/settings/Enquiries";
+import { useAuth } from "../context/useAuth";
 
 const Setting = () => {
   const { user } = useAuth();

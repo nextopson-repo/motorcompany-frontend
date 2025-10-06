@@ -1,5 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./slices/userSlice";
+import authReducer from "./slices/authSlices/authSlice";
+import loginModelReducer from "./slices/authSlices/loginModelSlice";
 import contactReducer from "./slices/contactSlice";
 import buyersReducer from "./slices/buyersSlice";
 import savedReducer from "./slices/savedSlice";
@@ -12,10 +14,14 @@ import locationReducer from "./slices/locationSlice";
 import enquiriesReducer from "./slices/enqueriesSlice";
 import boughtPackagesReducer from "./slices/boughtPackagesSlice";
 import sellerDetailsReducer from "./slices/sellerDetailsSlice";
+import carUploadReducer from "./slices/carUploadSlice";
 
 
 export const store = configureStore({
   reducer: {
+    auth: authReducer,
+    loginModel: loginModelReducer,
+    carUpload: carUploadReducer,
     user: userReducer,
     contact: contactReducer,
     buyers: buyersReducer,

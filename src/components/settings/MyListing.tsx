@@ -15,9 +15,10 @@ import {
 } from "../../store/slices/listingsSlice";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 
-const MyListing = () => {
-  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
-  const menuRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
+export const MyListing = () => {
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const menuRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
@@ -31,15 +32,15 @@ const MyListing = () => {
     dispatch(fetchUserCars());
   }, [dispatch]);
 
-  const handleMenuToggle = (id: number) => {
+  const handleMenuToggle = (id: string) => {
     setOpenMenuId(openMenuId === id ? null : id);
   };
 
-  const handleAction = (action: string, id: number) => {
+  const handleAction = (action: string, id: string) => {
     if (action === "Mark as Sold") {
-      dispatch(markCarAsSold(id));
+      dispatch(markCarAsSold(id)).then(() => dispatch(fetchUserCars()));
     } else if (action === "Delete") {
-      dispatch(deleteCar(id));
+      dispatch(deleteCar(id)).then(() => dispatch(fetchUserCars()));
     }
     setOpenMenuId(null);
   };
@@ -61,6 +62,10 @@ const MyListing = () => {
     };
   }, [openMenuId]);
 
+  const filteredListings = listings.filter((car) =>
+    car.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   const formatShortNumber = (num: number, isKm = false) => {
     if (!num) return isKm ? "0 km" : "0";
     if (num >= 10000000)
@@ -74,9 +79,7 @@ const MyListing = () => {
   return (
     <>
       <div className="grid md:grid-cols-3 justify-between items-center md:mb-6 gap-1 md:gap-0 px-4 md:px-0 shadow-sm md:shadow-none pb-3 md:pb-0 mt-2">
-        <h1 className="font-semibold text-md md:text-2xl py-2 md:py-0">
-          My Listings
-        </h1>
+        <h1 className="font-semibold text-md md:text-2xl py-2 md:py-0">My Listings</h1>
         <div className="col-span-2 flex justify-end gap-2">
           <span className="w-full md:w-[60%] flex items-center gap-2 bg-gray-100 rounded-sm px-2 md:px-4 py-2">
             <SearchIcon className="w-3 md:w-4 h-3 md:h-4 text-black" />
@@ -84,6 +87,8 @@ const MyListing = () => {
               type="text"
               placeholder="Search for Cars, Brands, Model..."
               className="w-full focus:outline-none text-[10px] md:text-xs text-black placeholder:text-black"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </span>
           <button className="whitespace-nowrap bg-black text-white px-3 py-2 rounded-xs md:rounded-sm flex items-center gap-2 text-[10px] md:text-xs">
@@ -97,10 +102,10 @@ const MyListing = () => {
       {error && <p className="text-red-500 px-4 md:px-0">{error}</p>}
 
       <div className="space-y-2 md:space-y-4 px-2 md:px-0 py-4 md:py-0 sm:mb-10 lg:mb-0">
-        {listings.map((car) => (
+        {filteredListings.map((car) => (
           <div
             key={car.id}
-            className={`flex flex-row rounded-sm md:rounded-md border border-gray-100 p-1 md:p-2  ${
+            className={`flex flex-row rounded-sm md:rounded-md border border-gray-100 p-1 md:p-2 ${
               car.isSold ? "opacity-40" : ""
             }`}
           >
@@ -127,8 +132,8 @@ const MyListing = () => {
             </div>
 
             <div className="w-full flex flex-col justify-between">
+              {/* Middle Content */}
               <div className="flex md:h-full md:justify-between">
-                {/* Middle Content */}
                 <div className="flex-1 px-2 md:px-4 flex flex-col justify-between">
                   {/* Title + Details */}
                   <div className="space-y-1 md:space-y-2">
@@ -153,7 +158,7 @@ const MyListing = () => {
                       }`}
                     >
                       <MapPinIcon
-                        className={`w-3 md:w-4 h-3 md:h-4 mr-1  ${
+                        className={`w-3 md:w-4 h-3 md:h-4 mr-1 ${
                           car.isSold ? "text-gray-400" : "text-gray-900"
                         }`}
                       />
@@ -177,7 +182,7 @@ const MyListing = () => {
                 </div>
 
                 {/* Right Sidebar */}
-                <div className=" flex flex-col items-end justify-between">
+                <div className="flex flex-col items-end justify-between">
                   <div className="flex ">
                     <div className="hidden w-fit md:flex flex-row lg:flex-col justify-center text-sm text-gray-600 gap-3 pr-1">
                       <span className="flex items-start justify-end gap-3">
@@ -212,25 +217,25 @@ const MyListing = () => {
                               setOpenMenuId(null);
                               navigate("/sell", { state: { editCar: car } });
                             }}
-                            className="text-xs md:text-md px-4 py-1 md:py-2 hover:bg-gray-200 cursor-pointer"
+                            className="text-[10px] md:text-md px-4 py-1 md:py-2 hover:bg-gray-200 cursor-pointer"
                           >
                             Edit
                           </div>
                           <div
                             onClick={() => handleAction("Mark as Sold", car.id)}
-                            className="text-xs md:text-md px-4 py-1 md:py-2 hover:bg-gray-200 cursor-pointer"
+                            className="text-[10px] md:text-md px-4 py-1 md:py-2 hover:bg-gray-200 cursor-pointer"
                           >
                             Mark as Sold
                           </div>
                           <div
                             onClick={() => handleAction("Download Lead", car.id)}
-                            className="text-xs md:text-md px-4 py-1 md:py-2 hover:bg-gray-200 cursor-pointer"
+                            className="text-[10px] md:text-md px-4 py-1 md:py-2 hover:bg-gray-200 cursor-pointer"
                           >
                             Download Lead
                           </div>
                           <div
                             onClick={() => handleAction("Delete", car.id)}
-                            className="text-xs md:text-md px-4 py-1 md:py-2 hover:bg-gray-200 cursor-pointer"
+                            className="text-[10px] md:text-md px-4 py-1 md:py-2 hover:bg-gray-200 cursor-pointer"
                           >
                             Delete
                           </div>
@@ -287,16 +292,15 @@ const MyListing = () => {
         ))}
 
         {!loading && listings.length === 0 && (
-          <p className="text-gray-500 text-sm text-center py-4">
-            No cars found.
-          </p>
+          <p className="text-gray-500 text-sm text-center py-4">No cars found.</p>
         )}
       </div>
     </>
   );
-};
+}
 
-export default MyListing;
+
+
 
 // import {
 //   EllipsisVerticalIcon,
@@ -307,66 +311,44 @@ export default MyListing;
 // } from "lucide-react";
 // import { useState, useRef, useEffect } from "react";
 // import { AiFillHeart } from "react-icons/ai";
-// import axios from "axios";
 // import { useNavigate } from "react-router-dom";
+// import {
+//   deleteCar,
+//   fetchUserCars,
+//   markCarAsSold,
+// } from "../../store/slices/listingsSlice";
+// import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 
 // const MyListing = () => {
 //   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
 //   const menuRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
-//   const [listings, setListings] = useState<any[]>([]);
 //   const navigate = useNavigate();
 
-//   // Fetch cars dynamically
+//   const dispatch = useAppDispatch();
+//   const {
+//     cars: listings,
+//     loading,
+//     error,
+//   } = useAppSelector((state) => state.listings);
+
 //   useEffect(() => {
-//     const fetchListings = async () => {
-//       try {
-//         const user = JSON.parse(localStorage.getItem("user") || "{}");
-//         const userId = user?.id;
-
-//         if (!userId) return;
-
-//         const res = await axios.post(
-//           `${import.meta.env.VITE_BACKEND_URL}/api/v1/car/get-user-cars`,
-//           { userId }
-//         );
-//         console.log("🚀 Listings fetched:", res.data.cars);
-//         setListings(res.data.cars || []);
-//       } catch (error) {
-//         console.error("Error fetching listings:", error);
-//       }
-//     };
-
-//     fetchListings();
-//   }, []);
+//     dispatch(fetchUserCars());
+//   }, [dispatch]);
 
 //   const handleMenuToggle = (id: number) => {
 //     setOpenMenuId(openMenuId === id ? null : id);
 //   };
 
-//   const handleAction = async (action: string, id: number) => {
-//     try {
-//       if (action === "Mark as Sold") {
-//         await axios.post(
-//           `${import.meta.env.VITE_BACKEND_URL}/api/v1/car/mark-sold`,
-//           { carId: id }
-//         );
-//         setListings((prev) =>
-//           prev.map((car) => (car.id === id ? { ...car, isSold: true } : car))
-//         );
-//       } else if (action === "Delete") {
-//         await axios.post(
-//           `${import.meta.env.VITE_BACKEND_URL}/api/v1/car/delete`,
-//           { carId: id }
-//         );
-//         setListings((prev) => prev.filter((car) => car.id !== id));
-//       }
-//       setOpenMenuId(null);
-//     } catch (error) {
-//       console.error(`${action} failed:`, error);
+//   const handleAction = (action: string, id: number) => {
+//     if (action === "Mark as Sold") {
+//       dispatch(markCarAsSold(id));
+//     } else if (action === "Delete") {
+//       dispatch(deleteCar(id));
 //     }
+//     setOpenMenuId(null);
 //   };
 
-//   // Outside click detect
+//   // outside click detect
 //   useEffect(() => {
 //     const handleClickOutside = (event: MouseEvent) => {
 //       if (
@@ -377,80 +359,65 @@ export default MyListing;
 //         setOpenMenuId(null);
 //       }
 //     };
-
 //     document.addEventListener("mousedown", handleClickOutside);
 //     return () => {
 //       document.removeEventListener("mousedown", handleClickOutside);
 //     };
 //   }, [openMenuId]);
 
-//   // Helper function for formatting
 //   const formatShortNumber = (num: number, isKm = false) => {
 //     if (!num) return isKm ? "0 km" : "0";
 //     if (num >= 10000000)
-//       return (
-//         (num / 10000000).toFixed(1).replace(/\.0$/, "") +
-//         "Cr" +
-//         (isKm ? " km" : "")
-//       );
+//       return (num / 10000000).toFixed(1) + " Cr" + (isKm ? " km" : "");
 //     if (num >= 100000)
-//       return (
-//         (num / 100000).toFixed(1).replace(/\.0$/, "") +
-//         " Lakh" +
-//         (isKm ? " km" : "")
-//       );
-//     if (num >= 1000)
-//       return (
-//         (num / 1000).toFixed(1).replace(/\.0$/, "") + " K" + (isKm ? " km" : "")
-//       );
+//       return (num / 100000).toFixed(1) + " L" + (isKm ? " km" : "");
+//     if (num >= 1000) return (num / 1000).toFixed(1) + "k" + (isKm ? " km" : "");
 //     return num + (isKm ? " km" : "");
 //   };
 
 //   return (
-//     <div>
-//       {/* Top bar */}
-//       <div className="grid grid-cols-3 justify-between items-center mb-6">
-//         <div className="w-fit whitespace-nowrap">
-//           <h1 className="font-semibold text-2xl">My Listings</h1>
-//         </div>
-//         <div className="w-full flex justify-end gap-2 col-span-2 ">
-//           <span className="w-[60%] flex items-center gap-2 bg-gray-100 rounded-sm px-4 py-2">
-//             <SearchIcon className="w-4 h-4 text-black" />
+//     <>
+//       <div className="grid md:grid-cols-3 justify-between items-center md:mb-6 gap-1 md:gap-0 px-4 md:px-0 shadow-sm md:shadow-none pb-3 md:pb-0 mt-2">
+//         <h1 className="font-semibold text-md md:text-2xl py-2 md:py-0">
+//           My Listings
+//         </h1>
+//         <div className="col-span-2 flex justify-end gap-2">
+//           <span className="w-full md:w-[60%] flex items-center gap-2 bg-gray-100 rounded-sm px-2 md:px-4 py-2">
+//             <SearchIcon className="w-3 md:w-4 h-3 md:h-4 text-black" />
 //             <input
 //               type="text"
 //               placeholder="Search for Cars, Brands, Model..."
-//               className="w-full focus:outline-none text-xs text-black placeholder:text-black"
+//               className="w-full focus:outline-none text-[10px] md:text-xs text-black placeholder:text-black"
 //             />
 //           </span>
-
-//           <div className="gap-2 flex items-center col-span-2 whitespace-nowrap">
-//             <button className="bg-black text-white px-4 py-2 rounded-sm flex items-center gap-2 text-xs">
-//               Download Leads
-//               <Download size={14} />
-//             </button>
-//           </div>
+//           <button className="whitespace-nowrap bg-black text-white px-3 py-2 rounded-xs md:rounded-sm flex items-center gap-2 text-[10px] md:text-xs">
+//             <span className="hidden md:block">Download</span> All Leads{" "}
+//             <Download className="w-3 h-3 md:w-4 md:h-4" />
+//           </button>
 //         </div>
 //       </div>
 
-//       {/* Listings */}
-//       <div className="space-y-4">
+//       {loading && <p className="text-gray-500 px-4 md:px-0">Loading...</p>}
+//       {error && <p className="text-red-500 px-4 md:px-0">{error}</p>}
+
+//       <div className="space-y-2 md:space-y-4 px-2 md:px-0 py-4 md:py-0 sm:mb-10 lg:mb-0">
 //         {listings.map((car) => (
 //           <div
 //             key={car.id}
-//             className={`flex flex-col lg:flex-row rounded-md border border-gray-100 p-2 overflow-hidden bg-white ${
+//             className={`flex flex-row rounded-sm md:rounded-md border border-gray-100 p-1 md:p-2  ${
 //               car.isSold ? "opacity-40" : ""
 //             }`}
 //           >
 //             {/* Left Image */}
-//             <div className="w-full lg:w-48 flex-shrink-0 relative">
+//             <div className="h-fit w-28 md:w-48 flex-shrink-0 relative">
 //               <img
 //                 src={
 //                   car.carImages && car.carImages.length > 0
 //                     ? car.carImages[0]
-//                     : "/car-1.jpg"
+//                     : "/fallback-car-img.png"
 //                 }
-//                 alt={car.carName}
-//                 className="w-full h-40 lg:h-35 object-cover rounded"
+//                 alt="car image"
+//                 className="w-full h-22 md:h-35 object-cover rounded-xs md:rounded"
 //               />
 //               {car.isSold && (
 //                 <span className="absolute inset-0 flex items-center justify-center bg-black/40">
@@ -463,142 +430,173 @@ export default MyListing;
 //               )}
 //             </div>
 
-//             {/* Middle Content */}
-//             <div className="flex-1 px-4 flex flex-col justify-between">
-//               {/* Title + Details */}
-//               <div className="space-y-2">
-//                 <h3
-//                   className={`font-semibold text-md ${
-//                     car.isSold ? "text-gray-500" : "text-gray-900"
-//                   }`}
-//                 >
-//                   {car.title}
-//                 </h3>
-//                 <p
-//                   className={`text-xs mt-1 ${
-//                     car.isSold ? "text-gray-400" : "text-gray-900"
-//                   }`}
-//                 >
-//                   {formatShortNumber(car.kmDriven, true)} | {car.bodyType} |{" "}
-//                   {car.seats} seater | {car.fuelType} | {car.transmission}
-//                 </p>
+//             <div className="w-full flex flex-col justify-between">
+//               <div className="flex md:h-full md:justify-between">
+//                 {/* Middle Content */}
+//                 <div className="flex-1 px-2 md:px-4 flex flex-col justify-between">
+//                   {/* Title + Details */}
+//                   <div className="space-y-1 md:space-y-2">
+//                     <h3
+//                       className={`font-semibold text-xs md:text-sm ${
+//                         car.isSold ? "text-gray-500" : "text-gray-900"
+//                       }`}
+//                     >
+//                       {car.title}
+//                     </h3>
+//                     <p
+//                       className={`text-[9px] md:text-[10px] font-medium mt-1 leading-tight ${
+//                         car.isSold ? "text-gray-400" : "text-gray-900"
+//                       }`}
+//                     >
+//                       {formatShortNumber(car.kmDriven, true)} | {car.bodyType}{" "}
+//                       {car.seats} seater | {car.fuel} | {car.transmission}
+//                     </p>
+//                     <div
+//                       className={`hidden text-[9px] md:text-[10px] md:flex items-center mt-2 font-medium ${
+//                         car.isSold ? "text-gray-400" : "text-gray-900"
+//                       }`}
+//                     >
+//                       <MapPinIcon
+//                         className={`w-3 md:w-4 h-3 md:h-4 mr-1  ${
+//                           car.isSold ? "text-gray-400" : "text-gray-900"
+//                         }`}
+//                       />
+//                       {car.address.city}, {car.address.state}
+//                     </div>
+//                   </div>
+
+//                   {/* Price */}
+//                   <div className="hidden md:block ">
+//                     <p
+//                       className={`font-bold text-sm md:text-lg flex items-center gap-2 mb-2 ${
+//                         car.isSold ? "text-gray-500" : "text-gray-900"
+//                       }`}
+//                     >
+//                       Rs. {formatShortNumber(car.price)}
+//                     </p>
+//                     <div className="text-left w-fit">
+//                       <p className="text-[9px] font-medium text-end">Added on {car.time}</p>
+//                     </div>
+//                   </div>
+//                 </div>
+
+//                 {/* Right Sidebar */}
+//                 <div className=" flex flex-col items-end justify-between">
+//                   <div className="flex ">
+//                     <div className="hidden w-fit md:flex flex-row lg:flex-col justify-center text-sm text-gray-600 gap-3 pr-1">
+//                       <span className="flex items-start justify-end gap-3">
+//                         <button
+//                           className="p-1 rounded-sm text-lg flex flex-col items-center gap-1 cursor-pointer"
+//                           aria-label="like"
+//                         >
+//                           <span className="rounded-sm p-1 bg-gray-100 shadow-md border border-gray-50">
+//                             <AiFillHeart className="w-4 h-4 text-green-600" />
+//                           </span>
+//                           <span className="text-[8px] w-[50px]">
+//                             {car.liked || 0} Peoples Liked
+//                           </span>
+//                         </button>
+//                       </span>
+//                     </div>
+
+//                     <div
+//                       className="relative mt-1 md:mt-[6px]"
+//                       ref={(el) => {
+//                         menuRefs.current[car.id] = el;
+//                       }}
+//                     >
+//                       <EllipsisVerticalIcon
+//                         className="w-3 md:w-5 h-3 md:h-5 cursor-pointer"
+//                         onClick={() => handleMenuToggle(car.id)}
+//                       />
+//                       {openMenuId === car.id && (
+//                         <div className="absolute right-0 mt-2 w-30 md:w-40 bg-white border border-gray-100 rounded-xs md:rounded shadow-md z-50">
+//                           <div
+//                             onClick={() => {
+//                               setOpenMenuId(null);
+//                               navigate("/sell", { state: { editCar: car } });
+//                             }}
+//                             className="text-xs md:text-md px-4 py-1 md:py-2 hover:bg-gray-200 cursor-pointer"
+//                           >
+//                             Edit
+//                           </div>
+//                           <div
+//                             onClick={() => handleAction("Mark as Sold", car.id)}
+//                             className="text-xs md:text-md px-4 py-1 md:py-2 hover:bg-gray-200 cursor-pointer"
+//                           >
+//                             Mark as Sold
+//                           </div>
+//                           <div
+//                             onClick={() => handleAction("Download Lead", car.id)}
+//                             className="text-xs md:text-md px-4 py-1 md:py-2 hover:bg-gray-200 cursor-pointer"
+//                           >
+//                             Download Lead
+//                           </div>
+//                           <div
+//                             onClick={() => handleAction("Delete", car.id)}
+//                             className="text-xs md:text-md px-4 py-1 md:py-2 hover:bg-gray-200 cursor-pointer"
+//                           >
+//                             Delete
+//                           </div>
+//                         </div>
+//                       )}
+//                     </div>
+//                   </div>
+
+//                   <div className="space-y-1 hidden md:block">
+//                     <div className="flex items-center justify-end">
+//                       <div
+//                         className={`flex items-center justify-center gap-1 ${
+//                           car.isSold ? "text-gray-400" : ""
+//                         }`}
+//                       >
+//                         <FlameIcon className="w-4 h-4 text-red-600" />
+//                         <span className="text-[9px]">
+//                           Trending Viewed by {car.trending || 0} users
+//                         </span>
+//                       </div>
+//                     </div>
+//                   </div>
+//                 </div>
+//               </div>
+
+//               {/* mobile right bottom */}
+//               <div className="flex md:hidden items-center justify-between px-2">
 //                 <div
-//                   className={`text-xs flex items-center mt-2 ${
+//                   className={`md:hidden text-[8px] md:text-xs flex items-center ${
 //                     car.isSold ? "text-gray-400" : "text-gray-900"
 //                   }`}
 //                 >
 //                   <MapPinIcon
-//                     className={`w-4 h-4 mr-1 ${
+//                     className={`w-[10px] md:w-4 h-[10px] md:h-4 mr-1 ${
 //                       car.isSold ? "text-gray-400" : "text-gray-900"
 //                     }`}
 //                   />
 //                   {car.address.city}, {car.address.state}
 //                 </div>
-//               </div>
 
-//               {/* Price */}
-//               <div className="mt-3">
-//                 <p
-//                   className={`font-bold text-lg flex items-center gap-2 ${
-//                     car.isSold ? "text-gray-500" : "text-gray-900"
-//                   }`}
-//                 >
-//                   Rs. {formatShortNumber(car.price)}
-//                 </p>
-//               </div>
-//             </div>
-
-//             {/* Right Sidebar */}
-//             <div className="w-full lg:w-44 flex flex-row lg:flex-col justify-between text-sm text-gray-600 gap-3 pr-1">
-//               <div className="flex items-center justify-between">
-//                 <span></span>
-
-//                 <span className="flex items-start gap-3">
-//                   {/* Likes */}
-//                   <button
-//                     className="bg-white p-1 rounded-sm text-lg flex flex-col items-center gap-1"
-//                     aria-label="like"
-//                   >
-//                     <span className="rounded-sm p-1 bg-gray-100 shadow-md border border-gray-50">
-//                       <AiFillHeart className="w-4 h-4 text-green-600" />
-//                     </span>
-//                     <span className="text-[8px] w-[50px]">
-//                       {car.liked || 0} Peoples Liked
-//                     </span>
-//                   </button>
-//                   {/* 3 dots menu */}
-//                   <div className="relative mt-[6px]" ref={(el) => { menuRefs.current[car.id] = el; }}>
-//                     <EllipsisVerticalIcon
-//                       className="w-5 h-5 cursor-pointer"
-//                       onClick={() => handleMenuToggle(car.id)}
-//                     />
-//                     {openMenuId === car.id && (
-//                       <div className="absolute right-0 mt-2 w-40 bg-white border rounded shadow-md z-50">
-//                         <div
-//                           onClick={(e) => {
-//                             e.stopPropagation();
-//                             setOpenMenuId(null);
-//                             navigate("/sell", { state: { editCar: car } });
-//                           }}
-//                           className="block w-full text-left px-4 py-2 hover:bg-gray-200 rounded cursor-pointer"
-//                         >
-//                           Edit
-//                         </div>
-//                         <div
-//                           onClick={(e) => {
-//                             e.stopPropagation();
-//                             setOpenMenuId(null);
-//                             handleAction("Mark as Sold", car.id);
-//                           }}
-//                           className="block w-full text-left px-4 py-2 hover:bg-gray-200 rounded cursor-pointer"
-//                         >
-//                           Mark as Sold
-//                         </div>
-//                         <div
-//                           onClick={(e) => {
-//                             e.stopPropagation();
-//                             setOpenMenuId(null);
-//                             handleAction("Delete", car.id);
-//                           }}
-//                           className="block w-full text-left px-4 py-2 hover:bg-gray-200 rounded cursor-pointer text-green-500"
-//                         >
-//                           Delete
-//                         </div>
-//                       </div>
-//                     )}
-//                   </div>
-//                 </span>
-//               </div>
-
-//               <div className="space-y-1">
-//                 <div>
-//                   <p className="text-[9px] text-end">
-//                     Added on{" "}
-//                     {car.time}
-//                   </p>
-//                 </div>
-//                 <div className="flex items-center justify-end">
-//                   <div
-//                     className={`flex items-center justify-center gap-1 ${
-//                       car.isSold ? "text-gray-400" : ""
+//                 {/* Price */}
+//                 <div className="">
+//                   <p
+//                     className={`font-bold text-xs flex items-center gap-2 ${
+//                       car.isSold ? "text-gray-500" : "text-gray-900"
 //                     }`}
 //                   >
-//                     <FlameIcon className="w-4 h-4 text-red-600" />
-//                     <span className="text-[9px]">
-//                       Trending Viewed by {car.trending || 0} users
-//                     </span>
-//                   </div>
+//                     Rs. {formatShortNumber(car.price)}
+//                   </p>
 //                 </div>
 //               </div>
 //             </div>
 //           </div>
 //         ))}
 
-//         {listings.length === 0 && (
-//           <p className="text-gray-500 text-sm">No cars found.</p>
+//         {!loading && listings.length === 0 && (
+//           <p className="text-gray-500 text-sm text-center py-4">
+//             No cars found.
+//           </p>
 //         )}
 //       </div>
-//     </div>
+//     </>
 //   );
 // };
 
