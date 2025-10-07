@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { FaHeart, FaShareAlt, FaWhatsapp } from "react-icons/fa";
 import {
@@ -18,10 +18,12 @@ import {
 import { formatPriceToLakh } from "../utils/formatPrice";
 import CarsDetailsSlider from "./CarsDetailsSlider";
 import FindDealers from "./FindDealers";
-import { useSelector } from "react-redux";
-import type { RootState } from "../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "../store/store";
+import { fetchSelectedCarById } from "../store/slices/carSlice";
 
 const CarDetails = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { id } = useParams();
   const carsState = useSelector(
@@ -29,12 +31,15 @@ const CarDetails = () => {
   );
   const selectedCar = carsState?.selectedCar ?? null;
   const cars = Array.isArray(carsState?.cars) ? carsState!.cars : [];
-  
 
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchSelectedCarById(id));
+    }
+  }, [id, dispatch]);
 
   const [showSellerPopup, setShowSellerPopup] = useState(false);
   const [mainImageIndex, setMainImageIndex] = useState(0);
-
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
 
   // safe: use selectedCar first, else try find in cars array; never call .find on non-array
@@ -73,10 +78,13 @@ const CarDetails = () => {
 
   // map fields (handle different naming)
   const title =
-    car.carName ?? car.title ?? `${car.brand ?? ""} ${car.model ?? ""}`.trim();
+    car.title ??
+    `${car.brand ?? ""} ${car.model ?? ""} ${car.varient ?? ""}`.trim();
+  // car.carName ?? car.title ?? `${car.brand ?? ""} ${car.model ?? ""}`.trim();
   const price = car.carPrice ?? car.price ?? 0;
-  const manufactureYear =
-    car.manufacturingYear ?? car.year ?? car.registrationYear ?? "N/A";
+  const manufactureYear = car.manufacturingYear ?? car.year ?? "N/A";
+  const registrationYear = car.registrationYear ?? "N/A";
+  const ownership = car.ownership ?? "N/A";
   const kms = car.kmDriven ?? car.kms ?? car.kmsDriven ?? 0;
   const seats = car.seats ?? car.noOfSeats ?? null;
   const bodyType = car.bodyType ?? car.body ?? "";
@@ -85,6 +93,14 @@ const CarDetails = () => {
   const address = car.address ?? {};
   const user = car.user ?? {};
   const userId = user.id ?? "";
+
+  // OWNER DETAILS
+const owner = car.owner ?? {};
+const ownerId = owner.id ?? "";
+const ownerName = owner.fullName ?? "N/A";
+const ownerMobile = owner.mobileNumber ?? "N/A";
+const ownerEmail = owner.email ?? "N/A";
+const ownerType = owner.userType ?? "N/A";
 
   return (
     <div className="max-w-7xl mx-auto mt-12 lg:mt-20 z-0 lg:pt-2">
@@ -108,7 +124,7 @@ const CarDetails = () => {
         {/* LEFT SIDE */}
         <div className="lg:col-span-9 space-y-6">
           {/* Main Image */}
-          <div className="relative -z-1">
+          <div className="relative z-0">
             <img
               src={visibleImages[mainImageIndex]}
               alt={title}
@@ -116,14 +132,18 @@ const CarDetails = () => {
             />
             {/* Arrows */}
             <button
-              onClick={handlePrevImage}
-              className="absolute top-1/2 left-2 -translate-y-1/2 bg-white p-1 lg:p-2 rounded-full shadow hover:bg-gray-200 hover:scale-[1.02] cursor-pointer active:bg-gray-300 active:scale-95"
+              onClick={() => {
+                handlePrevImage();
+              }}
+              className="z-50 absolute top-1/2 left-2 -translate-y-1/2 bg-white p-1 lg:p-2 rounded-full shadow hover:bg-gray-200 hover:scale-[1.02] cursor-pointer active:bg-gray-300 active:scale-95"
             >
               <ChevronLeft className="text-black w-4 lg:h-6 h-4 lg:w-6" />
             </button>
             <button
-              onClick={handleNextImage}
-              className="absolute top-1/2 right-2 -translate-y-1/2 bg-white p-1 lg:p-2 rounded-full shadow hover:bg-gray-200 hover:scale-[1.02] cursor-pointer active:bg-gray-300 active:scale-95"
+              onClick={() => {
+                handleNextImage();
+              }}
+              className="z-50 absolute top-1/2 right-2 -translate-y-1/2 bg-white p-1 lg:p-2 rounded-full shadow hover:bg-gray-200 hover:scale-[1.02] cursor-pointer active:bg-gray-300 active:scale-95"
             >
               <ChevronRight className="text-black w-4 lg:h-6 h-4 lg:w-6" />
             </button>
@@ -343,7 +363,7 @@ const CarDetails = () => {
 
             <p className="text-[10px] text-gray-500 flex items-center justify-center gap-1">
               <Flame className="text-[#cb202d] h-[14px] w-[14px]" />
-              Trending Viewed By {car.views | 0} user's
+              Trending Viewed By {car.views ?? 0} user's
             </p>
           </div>
 
@@ -455,9 +475,9 @@ const CarDetails = () => {
               <div className="flex items-center gap-2">
                 <User className="text-gray-500 h-[14px] w-[14px]" />
                 <span className="text-black text-[10px] leading-tight font-semibold capitalize">
-                  {user?.fullName ?? "Unknown"}{" "}
+                  {ownerName ?? "Unknown"}{" "}
                   <span className="text-[8px] text-gray-700">
-                    ({user?.userType ?? "Unknown"})
+                    ({ownerType ?? "Unknown"})
                   </span>
                 </span>
               </div>
@@ -519,14 +539,14 @@ const CarDetails = () => {
                       <div className="flex flex-col gap-2 w-full pb-3 pl-3">
                         <div className="flex items-center justify-between">
                           <h1 className="font-bold text-2xl capitalize w-[220px] truncate">
-                            {user?.fullName || "Unknown"}
+                            {ownerName || "Unknown"}
                           </h1>
                           <span className="flex items-center gap-4 px-2">
                             <p className="text-[#9e9e9e] bg-[#f4f4f4] p-1 px-2 rounded-sm">
-                              {user?.userType || "N/A"}
+                              {ownerType || "N/A"}
                             </p>
                             <Link
-                              to={`/seller-details/${userId}`}
+                              to={`/seller-details/${ownerId}`}
                               className="text-sky-500 font-normal text-xs underline"
                             >
                               View
@@ -536,7 +556,7 @@ const CarDetails = () => {
 
                         <span className="flex items-center gap-2 text-gray-500 text-lg">
                           <span>+91</span>
-                          {user?.mobileNumber || "Not Provided"}
+                          {ownerMobile || "Not Provided"}
                           <button className="px-2 cursor-pointer hover:scale-[1.1]">
                             <CopyIcon className="h-5 w-5 text-black" />
                           </button>
@@ -559,7 +579,7 @@ const CarDetails = () => {
 
             <p className="text-[10px] text-gray-500 flex items-center justify-center gap-1 pt-1">
               <Flame className="text-[#cb202d] h-[14px] w-[14px]" />
-              Trending Viewed By {car.views | 0} user's
+              Trending Viewed By {car.views ?? 0} user's
             </p>
           </div>
 
@@ -608,21 +628,15 @@ const CarDetails = () => {
                       value: seats ? `${seats} Seats` : "N/A",
                     },
                     { label: "Transmission", value: transmission || "N/A" },
+
                     {
-                      label: "Year of Manufacture",
-                      value: manufactureYear || "N/A",
+                      label: "Year of Registration",
+                      value: registrationYear || "N/A",
                     },
                     {
-                      label: "Kms Driven",
-                      value: kms
-                        ? `${Number(kms).toLocaleString()} Kms`
-                        : "N/A",
+                      label: "Ownership",
+                      value: ownership ? `${ownership} owner` : "N/A",
                     },
-                    {
-                      label: "Seats",
-                      value: seats ? `${seats} Seats` : "N/A",
-                    },
-                    { label: "Transmission", value: transmission || "N/A" },
                   ].map((item, i) => {
                     return (
                       <div
@@ -639,40 +653,6 @@ const CarDetails = () => {
                 </div>
               )}
             </div>
-
-            {/* <div className="border border-gray-200 rounded-lg shadow-sm p-4 w-full max-w-md">
-              <div
-                className="flex justify-between items-center cursor-pointer"
-                onClick={() => setOpenDropdown(openDropdown === 1 ? null : 1)}
-              >
-                <h2 className="font-semibold text-sm">Specification</h2>
-                {openDropdown === 1 ? (
-                  <ChevronUp size={20} />
-                ) : (
-                  <ChevronDown size={20} />
-                )}
-              </div>
-
-              {openDropdown === 1 && (
-                <div className="mt-2">
-                  {[
-                    
-                  ].map((item, i) => {
-                    return (
-                      <div
-                        key={i}
-                        className={`p-2 flex justify-between items-center text-xs`}
-                      >
-                        <p className="text-gray-700">{item.label}</p>
-                        <p className="text-gray-900 font-semibold">
-                          {item.value}
-                        </p>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div> */}
           </div>
         </div>
       </div>

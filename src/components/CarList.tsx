@@ -6,7 +6,7 @@ import type { RootState } from "../store/store";
 
 export default function CarList() {
   const { cars, filters } = useSelector((state: RootState) => state.cars);
-
+  
   return (
     <div className="min-h-screen w-full overflow-hidden lg:pl-1 pb-2">
       <div className="w-full lg:max-w-7xl mx-auto">

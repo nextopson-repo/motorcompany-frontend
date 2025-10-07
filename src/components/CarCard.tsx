@@ -2,18 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { AiFillHeart } from "react-icons/ai";
 import { MapPin, ChevronRight } from "lucide-react";
-import { useDispatch } from "react-redux";
-import type { AppDispatch } from "../store/store";
 import type { CarRecord } from "../types/car";
-import { setSelectedCar } from "../store/slices/carSlice";
-import { formatPriceToLakh } from "../utils/formatPrice";
+import { formatPriceToLakh, formatTimeAgo } from "../utils/formatPrice";
 
 interface CarCardProps {
   car: CarRecord;
 }
 
 const CarCard: React.FC<CarCardProps> = ({ car }) => {
-  const dispatch = useDispatch<AppDispatch>();
   const image = car.carImages?.[0]?.presignedUrl || "/fallback-car-img.png";
 
   return (
@@ -34,7 +30,7 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
           <h3 className="text-sm font-semibold leading-tight text-gray-800 truncate">
             {car.brand} {car.model}
           </h3>
-          <span className="text-[8px]">{"just now"}</span>
+          <span className="text-[8px]">{formatTimeAgo(car.updatedAt)}</span>
         </div>
         <p className="text-[9px] text-black whitespace-nowrap overflow-hidden text-ellipsis mb-1">
           {car.bodyType} {car.seats ? ` ${car.seats} Seater` : ""} |{" "}
@@ -56,7 +52,6 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
         </div>
         <Link
           to={`/buy-car/${car.id}`}
-          onClick={() => dispatch(setSelectedCar(car))}
         >
           <button className="flex items-center justify-center w-full mx-auto border border-gray-500 gap-2 text-[11px] font-semibold text-gray-900 py-1 rounded transition hover:text-gray-700">
             View More{" "}

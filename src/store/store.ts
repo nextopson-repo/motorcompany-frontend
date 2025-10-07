@@ -15,7 +15,7 @@ import enquiriesReducer from "./slices/enqueriesSlice";
 import boughtPackagesReducer from "./slices/boughtPackagesSlice";
 import sellerDetailsReducer from "./slices/sellerDetailsSlice";
 import carUploadReducer from "./slices/carUploadSlice";
-
+import carImageReducer from "./slices/carImageSlice";
 
 export const store = configureStore({
   reducer: {
@@ -35,7 +35,15 @@ export const store = configureStore({
     enquiries: enquiriesReducer,
     boughtPackages: boughtPackagesReducer,
     SellerDetails: sellerDetailsReducer,
+    carImage: carImageReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ["carImage/setCarImages"], 
+        ignoredPaths: ["carImage.files"], 
+      },
+    }),
 });
 
 // Type exports for TS

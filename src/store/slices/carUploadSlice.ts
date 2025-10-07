@@ -86,20 +86,10 @@ export const uploadCar = createAsyncThunk<UploadCarResponse, any>(
       const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
       const token = localStorage.getItem("token");
 
-      // const formData = new FormData();
-      // Object.entries(formData).forEach(([key, value]) => {
-      //   if (Array.isArray(value)) {
-      //     value.forEach((file: File) => formData.append(key, file));
-      //   } else {
-      //     formData.append(key, value as string | Blob);
-      //   }
-      // });
-
       const res = await fetch(`${BACKEND_URL}/api/v1/car/create-update`, {
         method: "POST",
         headers: {
           Authorization: token ? `Bearer ${token}` : "",
-          // DON'T set Content-Type; browser handles multipart boundary automatically
         },
         body: formData,
       });
@@ -109,6 +99,7 @@ export const uploadCar = createAsyncThunk<UploadCarResponse, any>(
       return data;
     } catch (error: any) {
       return rejectWithValue(error.message);
+      
     }
   }
 );
