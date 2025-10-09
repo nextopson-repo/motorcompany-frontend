@@ -1,18 +1,32 @@
-import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  type PayloadAction,
+} from "@reduxjs/toolkit";
 import type { RootState } from "../../store";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-// ---------- Thunks for APIs ----------
-
+// ---------- Selector ----------
 export const selectAuth = (state: RootState) => state.auth;
+
+// ---------- Thunks for APIs ----------
 
 // 1) Signup
 export const signup = createAsyncThunk(
   "auth/signup",
   async (
-    { fullName, email, mobileNumber, userType }: 
-    { fullName: string; email: string; mobileNumber: string; userType: string },
+    {
+      fullName,
+      email,
+      mobileNumber,
+      userType,
+    }: {
+      fullName: string;
+      email: string;
+      mobileNumber: string;
+      userType: string;
+    },
     thunkAPI
   ) => {
     try {
@@ -48,15 +62,12 @@ export const sendOtp = createAsyncThunk(
 // 3) Verify OTP
 export const verifyOtp = createAsyncThunk(
   "auth/verifyOtp",
-  async (
-    { userId, otp }: { userId: string; otp: string },
-    thunkAPI
-  ) => {
+  async ({ userId, mobileNumber, otp }: { userId: string; mobileNumber:string; otp: string }, thunkAPI) => {
     try {
       const res = await fetch(`${BACKEND_URL}/api/v1/auth/verify-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, otpType: "mobile", otp }),
+        body: JSON.stringify({ userId, mobileNumber, otpType: "mobile", otp }),
       });
       return await res.json();
     } catch (err: any) {
@@ -66,14 +77,18 @@ export const verifyOtp = createAsyncThunk(
 );
 
 // 4) Login
-export const login = createAsyncThunk(
+export const loginUser = createAsyncThunk(
   "auth/login",
-  async ({ email, password }: { email: string; password: string }, thunkAPI) => {
+  async ({ mobileNumber, checkbox }: { mobileNumber: string, checkbox:boolean }, thunkAPI) => {
     try {
+      const formattedNumber = mobileNumber.trim();
+      if (!/^\d{10}$/.test(formattedNumber)) {
+        throw new Error("Invalid mobile number format");
+      }
       const res = await fetch(`${BACKEND_URL}/api/v1/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ mobileNumber:formattedNumber, checkBox: checkbox }),
       });
       return await res.json();
     } catch (err: any) {
@@ -119,14 +134,28 @@ export const resendMobileOtp = createAsyncThunk(
 // 7) Update User Type
 export const updateUserType = createAsyncThunk(
   "auth/updateUserType",
-  async ({ userId, userType }: { userId: string; userType: string }, thunkAPI) => {
+  async (
+    { userId, userType }: { userId: string; userType: string },
+    thunkAPI
+  ) => {
     try {
       const res = await fetch(`${BACKEND_URL}/api/v1/auth/update-user-type`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, userType }),
       });
-      return await res.json();
+
+      const data = await res.json();
+
+      // ✅ ensure response is valid before returning
+      if (data?.responseObject?.userType) {
+        return {
+          userType: data.responseObject.userType,
+          user: data.responseObject.user,
+        };
+      }
+
+      return data;
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.message);
     }
@@ -161,7 +190,7 @@ const authSlice = createSlice({
     setAuth: (state, action: PayloadAction<{ user: any; token: string }>) => {
       state.user = action.payload.user;
       state.token = action.payload.token;
-      localStorage.setItem("token", state.token || '');
+      localStorage.setItem("token", state.token || "");
       localStorage.setItem("user", JSON.stringify(state.user));
     },
     updateUser: (state, action: PayloadAction<Partial<any>>) => {
@@ -172,7 +201,6 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // ✅ common handling for all thunks
     const pending = (state: AuthState) => {
       state.loading = true;
       state.error = null;
@@ -184,7 +212,7 @@ const authSlice = createSlice({
 
     builder
       .addCase(signup.pending, pending)
-      .addCase(signup.fulfilled, (state, action) => {
+      .addCase(signup.fulfilled, (state) => {
         state.loading = false;
       })
       .addCase(signup.rejected, rejected)
@@ -207,8 +235,8 @@ const authSlice = createSlice({
       })
       .addCase(verifyOtp.rejected, rejected)
 
-      .addCase(login.pending, pending)
-      .addCase(login.fulfilled, (state, action) => {
+      .addCase(loginUser.pending, pending)
+      .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         if (action.payload?.token) {
           state.token = action.payload.token;
@@ -217,7 +245,7 @@ const authSlice = createSlice({
           localStorage.setItem("user", JSON.stringify(state.user));
         }
       })
-      .addCase(login.rejected, rejected)
+      .addCase(loginUser.rejected, rejected)
 
       .addCase(resendEmailOtp.pending, pending)
       .addCase(resendEmailOtp.fulfilled, (state) => {
@@ -231,13 +259,15 @@ const authSlice = createSlice({
       })
       .addCase(resendMobileOtp.rejected, rejected)
 
+      // ✅ Update userType everywhere (store + localStorage)
       .addCase(updateUserType.pending, pending)
       .addCase(updateUserType.fulfilled, (state, action) => {
         state.loading = false;
-        if (state.user) {
-          state.user.userType = action.payload.userType;
-          localStorage.setItem("user", JSON.stringify(state.user));
-        }
+        state.user = action.payload;
+        // if (state.user && action.payload?.userType) {
+        //   state.user.userType = action.payload.userType;
+        //   localStorage.setItem("user", JSON.stringify(state.user));
+        // }
       })
       .addCase(updateUserType.rejected, rejected);
   },

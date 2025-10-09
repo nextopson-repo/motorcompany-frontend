@@ -5,9 +5,17 @@ type AuthPanelProps = {
   step: "mobile" | "otp";
   onStepChange: (step: "mobile" | "otp") => void;
   onSendOtp: (mobileNumber: string) => Promise<boolean>;
-  onVerifyOtp: (otp: string) => Promise<void>;
+  onVerifyOtp: (otp: string) => Promise<{
+    success: boolean;
+    isFullyVerified: boolean;
+    user?: any;
+    token?: string;
+  }>;
   mobileNumber: string;
+  setCheckbox: React.Dispatch<React.SetStateAction<boolean>>;
+  checkbox: boolean;
   setMobileNumber: React.Dispatch<React.SetStateAction<string>>;
+  openSignupModal: () => void;
 };
 
 const AuthPanel: React.FC<AuthPanelProps> = ({
@@ -18,8 +26,10 @@ const AuthPanel: React.FC<AuthPanelProps> = ({
   onVerifyOtp,
   mobileNumber,
   setMobileNumber,
+  checkbox,
+  setCheckbox,
+  openSignupModal,
 }) => {
-  
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -39,16 +49,14 @@ const AuthPanel: React.FC<AuthPanelProps> = ({
 
   // Auto-focus OTP input
   useEffect(() => {
-    if (step === "otp" && otpInputRef.current) {
-      otpInputRef.current.focus();
-    }
+    if (step === "otp" && otpInputRef.current) otpInputRef.current.focus();
   }, [step]);
 
-  // Send OTP handler
+  // Send OTP
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
-    setMessage(null);
     setError(null);
+    setMessage(null);
 
     if (!mobileNumber || mobileNumber.length !== 10) {
       setError("Please enter a valid 10-digit mobile number");
@@ -70,11 +78,11 @@ const AuthPanel: React.FC<AuthPanelProps> = ({
     }
   };
 
-  // Verify OTP handler
+  // Verify OTP
   const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
-    setMessage(null);
     setError(null);
+    setMessage(null);
 
     if (!otp || otp.length !== 4) {
       setError("Please enter a valid 4-digit OTP");
@@ -83,8 +91,18 @@ const AuthPanel: React.FC<AuthPanelProps> = ({
 
     setLoading(true);
     try {
-      await onVerifyOtp(otp);
-      // setMessage("OTP verified successfully!");
+      const data = await onVerifyOtp(otp);
+
+      if (data.success) {
+        // Fully verified → login user immediately
+        if (data.isFullyVerified && data.user?.fullname && data.user?.email) {
+          setMessage("Login successful!");
+        } else {
+          openSignupModal();
+        }
+      } else {
+        setError("OTP verification failed");
+      }
     } catch (err: any) {
       setError(err.message || "OTP verification failed");
     } finally {
@@ -115,7 +133,7 @@ const AuthPanel: React.FC<AuthPanelProps> = ({
 
   return (
     <div className="space-y-4 overflow-hidden">
-      {/* Mobile input form */}
+      {/* Mobile input */}
       {step === "mobile" && (
         <form onSubmit={handleSendOtp} className="space-y-4">
           <div className="flex items-center rounded-lg overflow-hidden bg-gray-100 mb-6">
@@ -124,10 +142,24 @@ const AuthPanel: React.FC<AuthPanelProps> = ({
             <input
               type="tel"
               value={mobileNumber}
-              onChange={(e) => setMobileNumber(e.target.value)}
+              onChange={(e) =>
+                setMobileNumber(e.target.value.replace(/\D/, ""))
+              }
               placeholder="9876543210"
               className="flex-1 px-3 py-2 bg-gray-100 focus:outline-none text-black font-semibold placeholder:text-gray-400 placeholder:font-normal"
             />
+          </div>
+          <div className="flex items-center gap-2 mb-4">
+            <input
+              type="checkbox"
+              id="checkbox"
+              checked={checkbox} // state value
+              onChange={(e) => setCheckbox(e.target.checked)} // update state
+              className="w-4 h-4 accent-red-500"
+            />
+            <label htmlFor="checkbox" className="text-sm text-gray-700">
+              Please select this
+            </label>
           </div>
           <button
             type="submit"
@@ -136,13 +168,10 @@ const AuthPanel: React.FC<AuthPanelProps> = ({
           >
             {loading ? "Sending..." : "Verify Number"}
           </button>
-          <div>
-            <p className="text-[9px] leading-3.5">By proceeding, I confirm that I have received, read, and agree to our <a href="#" className="font-semibold underline">Privacy Policy</a> and <a href="#" className="font-semibold underline">Terms & Conditions</a></p>
-          </div>
         </form>
       )}
 
-      {/* OTP form */}
+      {/* OTP input */}
       {step === "otp" && userId && (
         <form onSubmit={handleVerifyOtp} className="space-y-4">
           <input
@@ -173,10 +202,195 @@ const AuthPanel: React.FC<AuthPanelProps> = ({
         </form>
       )}
 
-      {message && <p className="text-green-600 text-sm text-center lg:text-left">{message}</p>}
-      {error && <p className="text-red-600 text-sm text-center lg:text-left">{error}</p>}
+      {message && (
+        <p className="text-green-600 text-sm text-center">{message}</p>
+      )}
+      {error && <p className="text-red-600 text-sm text-center">{error}</p>}
     </div>
   );
 };
 
 export default AuthPanel;
+
+// import { useState, useEffect, useRef } from "react";
+
+// type AuthPanelProps = {
+//   userId?: string;
+//   step: "mobile" | "otp";
+//   onStepChange: (step: "mobile" | "otp") => void;
+//   onSendOtp: (mobileNumber: string) => Promise<boolean>;
+//   onVerifyOtp: (otp: string) => Promise<void>;
+//   mobileNumber: string;
+//   setMobileNumber: React.Dispatch<React.SetStateAction<string>>;
+// };
+
+// const AuthPanel: React.FC<AuthPanelProps> = ({
+//   userId,
+//   step,
+//   onStepChange,
+//   onSendOtp,
+//   onVerifyOtp,
+//   mobileNumber,
+//   setMobileNumber,
+// }) => {
+
+//   const [otp, setOtp] = useState("");
+//   const [loading, setLoading] = useState(false);
+//   const [message, setMessage] = useState<string | null>(null);
+//   const [error, setError] = useState<string | null>(null);
+//   const [resendCooldown, setResendCooldown] = useState(30);
+
+//   const otpInputRef = useRef<HTMLInputElement>(null);
+
+//   // Countdown timer for resend OTP
+//   useEffect(() => {
+//     let timer: NodeJS.Timeout;
+//     if (step === "otp" && resendCooldown > 0) {
+//       timer = setTimeout(() => setResendCooldown(resendCooldown - 1), 1000);
+//     }
+//     return () => clearTimeout(timer);
+//   }, [step, resendCooldown]);
+
+//   // Auto-focus OTP input
+//   useEffect(() => {
+//     if (step === "otp" && otpInputRef.current) {
+//       otpInputRef.current.focus();
+//     }
+//   }, [step]);
+
+//   // Send OTP handler
+//   const handleSendOtp = async (e: React.FormEvent) => {
+//     e.preventDefault();
+//     setMessage(null);
+//     setError(null);
+
+//     if (!mobileNumber || mobileNumber.length !== 10) {
+//       setError("Please enter a valid 10-digit mobile number");
+//       return;
+//     }
+
+//     setLoading(true);
+//     try {
+//       const success = await onSendOtp(mobileNumber);
+//       if (success) {
+//         onStepChange("otp");
+//         setResendCooldown(30);
+//         setMessage("OTP sent successfully!");
+//       }
+//     } catch (err: any) {
+//       setError(err.message || "Failed to send OTP");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   // Verify OTP handler
+//   const handleVerifyOtp = async (e: React.FormEvent) => {
+//     e.preventDefault();
+//     setMessage(null);
+//     setError(null);
+
+//     if (!otp || otp.length !== 4) {
+//       setError("Please enter a valid 4-digit OTP");
+//       return;
+//     }
+
+//     setLoading(true);
+//     try {
+//       await onVerifyOtp(otp);
+//       // setMessage("OTP verified successfully!");
+//     } catch (err: any) {
+//       setError(err.message || "OTP verification failed");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   // Resend OTP
+//   const handleResendOtp = async () => {
+//     if (resendCooldown > 0) return;
+
+//     setLoading(true);
+//     setMessage(null);
+//     setError(null);
+
+//     try {
+//       const success = await onSendOtp(mobileNumber);
+//       if (success) {
+//         setResendCooldown(30);
+//         setMessage("OTP resent successfully!");
+//       }
+//     } catch (err: any) {
+//       setError(err.message || "Failed to resend OTP");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <div className="space-y-4 overflow-hidden">
+//       {/* Mobile input form */}
+//       {step === "mobile" && (
+//         <form onSubmit={handleSendOtp} className="space-y-4">
+//           <div className="flex items-center rounded-lg overflow-hidden bg-gray-100 mb-6">
+//             <span className="px-3 text-gray-500 select-none">+91</span>
+//             <span className="text-gray-400">|</span>
+//             <input
+//               type="tel"
+//               value={mobileNumber}
+//               onChange={(e) => setMobileNumber(e.target.value)}
+//               placeholder="9876543210"
+//               className="flex-1 px-3 py-2 bg-gray-100 focus:outline-none text-black font-semibold placeholder:text-gray-400 placeholder:font-normal"
+//             />
+//           </div>
+//           <button
+//             type="submit"
+//             disabled={loading}
+//             className="w-full text-white font-semibold text-sm bg-red-500 hover:bg-red-600 py-2 rounded transition cursor-pointer disabled:opacity-50 active:scale-95 active:bg-red-600"
+//           >
+//             {loading ? "Sending..." : "Verify Number"}
+//           </button>
+//           <div>
+//             <p className="text-[9px] leading-3.5">By proceeding, I confirm that I have received, read, and agree to our <a href="#" className="font-semibold underline">Privacy Policy</a> and <a href="#" className="font-semibold underline">Terms & Conditions</a></p>
+//           </div>
+//         </form>
+//       )}
+
+//       {/* OTP form */}
+//       {step === "otp" && userId && (
+//         <form onSubmit={handleVerifyOtp} className="space-y-4">
+//           <input
+//             ref={otpInputRef}
+//             type="text"
+//             value={otp}
+//             onChange={(e) => setOtp(e.target.value)}
+//             placeholder="Enter OTP"
+//             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none"
+//           />
+//           <button
+//             type="submit"
+//             disabled={loading}
+//             className="w-full text-white bg-red-500 hover:bg-red-600 py-2 rounded transition cursor-pointer disabled:opacity-50"
+//           >
+//             {loading ? "Verifying..." : "Verify OTP"}
+//           </button>
+//           <button
+//             type="button"
+//             onClick={handleResendOtp}
+//             disabled={resendCooldown > 0 || loading}
+//             className="w-full text-gray-700 hover:text-red-500 py-1 text-sm transition disabled:opacity-50"
+//           >
+//             {resendCooldown > 0
+//               ? `Resend OTP in ${resendCooldown}s`
+//               : "Resend OTP"}
+//           </button>
+//         </form>
+//       )}
+
+//       {message && <p className="text-green-600 text-sm text-center lg:text-left">{message}</p>}
+//       {error && <p className="text-red-600 text-sm text-center lg:text-left">{error}</p>}
+//     </div>
+//   );
+// };
+
+// export default AuthPanel;

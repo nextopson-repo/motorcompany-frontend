@@ -1,8 +1,10 @@
+// SignupModal.tsx
 import { useState } from "react";
 import { ChevronRight } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "../../store/store";
 import { signup } from "../../store/slices/authSlices/authSlice";
+import { useAuth } from "../../context/useAuth";
 
 interface SignupModalProps {
   isOpen: boolean;
@@ -10,6 +12,7 @@ interface SignupModalProps {
   onRegistered: () => void;
   mobileNumber: string;
   setMobileNumber: React.Dispatch<React.SetStateAction<string>>;
+  otpToken: string; // 🔹 added
 }
 
 export default function SignupModal({
@@ -18,8 +21,10 @@ export default function SignupModal({
   onRegistered,
   mobileNumber,
   setMobileNumber,
+  otpToken,
 }: SignupModalProps) {
   const dispatch = useDispatch<AppDispatch>();
+  const { login } = useAuth(); // 🔹 to login after signup
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -45,23 +50,21 @@ export default function SignupModal({
       setError("Please enter a valid email address");
       return;
     }
-    if (
-      !mobileNumber ||
-      mobileNumber.length !== 10 ||
-      isNaN(Number(mobileNumber))
-    ) {
+    if (!mobileNumber || mobileNumber.length !== 10 || isNaN(Number(mobileNumber))) {
       setError("Please enter a valid 10-digit mobile number");
       return;
     }
 
     try {
+      // 🔹 Pass otpToken in headers
       const action = await dispatch(
         signup({ fullName, email, mobileNumber, userType: "EndUser" })
       );
       const data: any = action.payload;
 
       if (data?.statusCode === 200 || action.meta.requestStatus === "fulfilled") {
-        localStorage.setItem("userId", data?.user?.id);
+        // 🔹 login immediately
+        login(data.user, otpToken);
         onRegistered();
         onClose();
       } else {
@@ -76,12 +79,10 @@ export default function SignupModal({
   return (
     <div className="fixed inset-0 bg-black/50 sm:flex items-center justify-center z-50">
       <div className="bg-white sm:rounded-2xl shadow-lg w-full h-full sm:h-auto max-w-2xl sm:grid sm:grid-cols-2 relative sm:gap-8">
-        {/* Left side image */}
         <div>
           <img src="/loginImg.png" alt="Signup" className="hidden sm:block w-full" />
         </div>
 
-        {/* Right side form */}
         <div className="p-4 lg:p-6 flex flex-col justify-center">
           <button
             onClick={onClose}
@@ -115,6 +116,7 @@ export default function SignupModal({
               value={mobileNumber}
               onChange={(e) => setMobileNumber(e.target.value)}
               className="w-full text-xs lg:text-sm bg-gray-100 rounded-xs lg:rounded px-3 py-2 placeholder:text-xs mt-1"
+              disabled // 🔹 disable to prevent changes
             />
 
             <button
@@ -129,7 +131,6 @@ export default function SignupModal({
           </form>
         </div>
 
-        {/* left side for mobile */}
         <div className="block sm:hidden h-fit p-2">
           <img src="/loginImg.png" alt="Login Image" className="w-full h-full object-bottom" />
         </div>
@@ -143,6 +144,9 @@ export default function SignupModal({
 
 // import { useState } from "react";
 // import { ChevronRight } from "lucide-react";
+// import { useDispatch, useSelector } from "react-redux";
+// import type { RootState, AppDispatch } from "../../store/store";
+// import { signup } from "../../store/slices/authSlices/authSlice";
 
 // interface SignupModalProps {
 //   isOpen: boolean;
@@ -159,10 +163,13 @@ export default function SignupModal({
 //   mobileNumber,
 //   setMobileNumber,
 // }: SignupModalProps) {
+//   const dispatch = useDispatch<AppDispatch>();
+
 //   const [fullName, setFullName] = useState("");
 //   const [email, setEmail] = useState("");
 //   const [error, setError] = useState<string | null>(null);
-//   const [loading, setLoading] = useState(false);
+
+//   const { loading } = useSelector((state: RootState) => state.auth);
 
 //   if (!isOpen) return null;
 
@@ -191,32 +198,22 @@ export default function SignupModal({
 //       return;
 //     }
 
-//     setLoading(true);
-
 //     try {
-//       const res = await fetch(
-//         `${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/signup`,
-//         {
-//           method: "POST",
-//           headers: { "Content-Type": "application/json" },
-//           body: JSON.stringify({ fullName, email, mobileNumber, userType: "EndUser" }),
-//         }
+//       const action = await dispatch(
+//         signup({ fullName, email, mobileNumber, userType: "EndUser" })
 //       );
-//       const data = await res.json();
+//       const data: any = action.payload;
 
-//       if (res.ok) {
-//         // ✅ Backend response success
-//         localStorage.setItem("userId", data.user?.id);
+//       if (data?.statusCode === 200 || action.meta.requestStatus === "fulfilled") {
+//         localStorage.setItem("userId", data?.user?.id);
 //         onRegistered();
 //         onClose();
 //       } else {
-//         setError(data.message || "Signup failed");
+//         setError(data?.message || "Signup failed");
 //       }
 //     } catch (err) {
 //       setError("Signup error, please try again");
 //       console.error(err);
-//     } finally {
-//       setLoading(false);
 //     }
 //   };
 
@@ -276,8 +273,10 @@ export default function SignupModal({
 //           </form>
 //         </div>
 
-//         {/* left side */}
-//             <div className="block sm:hidden h-fit p-2"><img src="/loginImg.png" alt="Login Image" className="w-full h-full object-bottom"/></div>
+//         {/* left side for mobile */}
+//         <div className="block sm:hidden h-fit p-2">
+//           <img src="/loginImg.png" alt="Login Image" className="w-full h-full object-bottom" />
+//         </div>
 //       </div>
 //     </div>
 //   );

@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import { resetUploadState, uploadCar } from "../../store/slices/carUploadSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAuth } from "../../store/slices/authSlices/authSlice";
+import { selectAuth, updateUserType } from "../../store/slices/authSlices/authSlice";
 import { openLogin } from "../../store/slices/authSlices/loginModelSlice";
 
 interface DropdownProps {
@@ -90,7 +90,7 @@ export default function SellHero() {
   const uploadedImages = useAppSelector((state) => state.carImage.files);
 
   const [showForm, setShowForm] = useState(false);
-  const [userType, setUserType] = useState<"owner" | "dealer">("owner");
+  const [userRole, setUserRole] = useState<"owner" | "dealer">("owner");
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
   const [locality, setLocality] = useState("");
@@ -191,6 +191,7 @@ export default function SellHero() {
       navigate("/");
     }
   }, [success, dispatch, navigate]);
+
 
   return (
     <section className="relative w-full max-w-8xl mx-auto h-[326px] sm:h-[28rem] lg:h-[88vh] bg-black mb-[230px] sm:mb-5 lg:mb-0 mt-12 lg:mt-10">
@@ -294,26 +295,28 @@ export default function SellHero() {
               </h2>
 
               {/* User Type */}
-              {user.userType === "EndUser" && (
-                <div>
+              {/* User Type (only show if user is EndUser) */}
+              {user?.userType === "EndUser" && (
+                <div className="mb-3">
                   <label htmlFor="userType" className="text-[10px] md:text-xs">
                     User Type
                   </label>
                   <div className="grid grid-cols-3 gap-3 md:gap-5 mb-2 md:mb-4 text-[10px] md:text-xs mt-1">
                     <button
-                      onClick={() => setUserType("owner")}
+                      onClick={() => dispatch(updateUserType({ userId: user.id, userType: "Owner" }))}
                       className={`flex-1 py-[6px] rounded ${
-                        userType === "owner"
+                        userRole === "owner"
                           ? "bg-green-50 text-green-700 font-medium"
                           : "bg-white border border-gray-300 text-gray-600"
                       }`}
                     >
                       Owner
                     </button>
+
                     <button
-                      onClick={() => setUserType("dealer")}
+                      onClick={() => dispatch(updateUserType({ userId: user.id, userType: "Dealer" }))}
                       className={`flex-1 py-[6px] rounded ${
-                        userType === "dealer"
+                        userRole === "dealer"
                           ? "bg-green-50 text-green-700 font-medium"
                           : "bg-white border border-gray-300 text-gray-600"
                       }`}

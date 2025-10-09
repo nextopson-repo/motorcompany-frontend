@@ -4,12 +4,14 @@ import {
   createAsyncThunk,
 } from "@reduxjs/toolkit";
 import axios from "axios";
+import type { RootState } from "../store";
 
 export interface UserProfile {
   fullName: string;
   userType: string;
   mobileNumber: string;
   email: string;
+  emailVerified: boolean;
   address: string;
   landmark: string;
   city: string;
@@ -51,6 +53,7 @@ export const fetchUserProfile = createAsyncThunk<
 
     const user = JSON.parse(userStr) as { id?: string };
     if (!user?.id) return rejectWithValue("User ID not found");
+    console.log(user)
 
     const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
     const res = await axios.post(
@@ -70,6 +73,47 @@ export const fetchUserProfile = createAsyncThunk<
   } catch (err: any) {
     return rejectWithValue(
       err.response?.data?.message || "Failed to fetch profile"
+    );
+  }
+});
+
+// 🧩 Update User Profile
+export const updateUserProfile = createAsyncThunk<
+  UserProfile,
+  Partial<UserProfile>,
+  { rejectValue: string }
+>("profile/updateUserProfile", async (updatedData, { rejectWithValue }) => {
+  try {
+    const token = localStorage.getItem("token");
+    const userStr = localStorage.getItem("user");
+
+    if (!userStr) return rejectWithValue("User not found in localStorage");
+    if (!token) return rejectWithValue("Token not found in localStorage");
+
+    const user = JSON.parse(userStr) as { id?: string };
+    if (!user?.id) return rejectWithValue("User ID not found");
+
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+    const res = await axios.post(
+      `${BACKEND_URL}/api/v1/profile/profile-edit`,
+      {
+        userId: user.id,
+        ...updatedData,
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
+      }
+    );
+
+    if (!res.data?.data)
+      return rejectWithValue("Invalid response from update API");
+
+    return res.data.data as UserProfile;
+  } catch (err: any) {
+    return rejectWithValue(
+      err.response?.data?.message || "Failed to update profile"
     );
   }
 });
@@ -150,6 +194,11 @@ const profileSlice = createSlice({
       state.otpSent = false;
       state.otpVerified = false;
     },
+     clearProfile: (state) => {
+      state.user = null;
+      state.error = null;
+      state.loading = false;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -164,6 +213,18 @@ const profileSlice = createSlice({
       .addCase(fetchUserProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Failed to fetch profile";
+      })
+      .addCase(updateUserProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateUserProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+      })
+      .addCase(updateUserProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to update profile";
       })
       .addCase(sendOtp.pending, (state) => {
         state.loading = true;
@@ -199,8 +260,17 @@ export const {
   setError,
   setLoading,
   resetOtpState,
+  clearProfile 
 } = profileSlice.actions;
+
+export const selectUserProfile = (state: RootState) => state.profile.user;
+export const selectProfileLoading = (state: RootState) => state.profile.loading;
+export const selectProfileError = (state: RootState) => state.profile.error;
+
 export default profileSlice.reducer;
+
+
+
 
 // import { createSlice, type PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 // import axios from "axios";

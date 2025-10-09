@@ -14,6 +14,7 @@ import {
   markCarAsSold,
 } from "../../store/slices/listingsSlice";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
+import { formatTimeAgo } from "../../utils/formatPrice";
 
 export const MyListing = () => {
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
@@ -62,9 +63,9 @@ export const MyListing = () => {
     };
   }, [openMenuId]);
 
-  const filteredListings = listings.filter((car) =>
-    car.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredListings = listings.filter((car) => 
+    car.title.toLowerCase().includes(searchTerm.toLowerCase()));
+  console.log(filteredListings)
 
   const formatShortNumber = (num: number, isKm = false) => {
     if (!num) return isKm ? "0 km" : "0";
@@ -79,7 +80,9 @@ export const MyListing = () => {
   return (
     <>
       <div className="grid md:grid-cols-3 justify-between items-center md:mb-6 gap-1 md:gap-0 px-4 md:px-0 shadow-sm md:shadow-none pb-3 md:pb-0 mt-2">
-        <h1 className="font-semibold text-md md:text-2xl py-2 md:py-0">My Listings</h1>
+        <h1 className="font-semibold text-md md:text-2xl py-2 md:py-0">
+          My Listings
+        </h1>
         <div className="col-span-2 flex justify-end gap-2">
           <span className="w-full md:w-[60%] flex items-center gap-2 bg-gray-100 rounded-sm px-2 md:px-4 py-2">
             <SearchIcon className="w-3 md:w-4 h-3 md:h-4 text-black" />
@@ -113,8 +116,8 @@ export const MyListing = () => {
             <div className="h-fit w-28 md:w-48 flex-shrink-0 relative">
               <img
                 src={
-                  car.carImages && car.carImages.length > 0
-                    ? car.carImages[0]
+                  (car.images && car.images.length > 0 && car.images[0])
+                    ? car.images[0]
                     : "/fallback-car-img.png"
                 }
                 alt="car image"
@@ -176,7 +179,9 @@ export const MyListing = () => {
                       Rs. {formatShortNumber(car.price)}
                     </p>
                     <div className="text-left w-fit">
-                      <p className="text-[9px] font-medium text-end">Added on {car.time}</p>
+                      <p className="text-[9px] font-medium text-end">
+                        Added on {formatTimeAgo(car.updatedAt)}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -228,7 +233,9 @@ export const MyListing = () => {
                             Mark as Sold
                           </div>
                           <div
-                            onClick={() => handleAction("Download Lead", car.id)}
+                            onClick={() =>
+                              handleAction("Download Lead", car.id)
+                            }
                             className="text-[10px] md:text-md px-4 py-1 md:py-2 hover:bg-gray-200 cursor-pointer"
                           >
                             Download Lead
@@ -292,15 +299,14 @@ export const MyListing = () => {
         ))}
 
         {!loading && listings.length === 0 && (
-          <p className="text-gray-500 text-sm text-center py-4">No cars found.</p>
+          <p className="text-gray-500 text-sm text-center py-4">
+            No cars found.
+          </p>
         )}
       </div>
     </>
   );
-}
-
-
-
+};
 
 // import {
 //   EllipsisVerticalIcon,
