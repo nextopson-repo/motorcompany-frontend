@@ -1,20 +1,28 @@
 import { ChevronRight, Copyright } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import type { AppDispatch } from "../store/store";
+import { updateSelectedFilter } from "../store/slices/carSlice";
+import { setLocation } from "../store/slices/locationSlice";
 
 const Footer = () => {
+  const Navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+
   const carForSaleCities = [
-    { title: "Delhi", link: "#" },
-    { title: "Chandigarh", link: "#" },
-    { title: "Ahemdabad", link: "#" },
-    { title: "Pune", link: "#" },
-    { title: "Jaipur", link: "#" },
+    { title: "Delhi" },
+    { title: "Chandigarh" },
+    { title: "Ahemdabad" },
+    { title: "Pune" },
+    { title: "Jaipur" },
   ];
 
   const carForSaleCities2 = [
-    { title: "Lucknow", link: "#" },
-    { title: "Bhopal", link: "#" },
-    { title: "Indore", link: "#" },
-    { title: "hyderabad", link: "#" },
-    { title: "Kanpur", link: "#" },
+    { title: "Lucknow" },
+    { title: "Bhopal" },
+    { title: "Indore" },
+    { title: "hyderabad" },
+    { title: "Kanpur" },
   ];
 
   const linksData = [
@@ -24,6 +32,12 @@ const Footer = () => {
     { page: "Privacy Policy", link: "/privacy-policy" },
     { page: "Contact Us", link: "/contact-us" },
   ];
+
+  const handleCityClick = (cityName: string) => {
+    dispatch(setLocation(cityName));
+    dispatch(updateSelectedFilter({ key: 'location', value: [cityName] }));
+    Navigate('/buy-car');
+  };
 
   return (
     <footer className="w-full max-w-7xl mx-auto md:border-t bg-[#F7F7F7] border-gray-300 md:px-4 lg:px-8">
@@ -131,9 +145,9 @@ const Footer = () => {
           <ul className="space-y-[6px] text-[10px] md:text-[10px] font-semibold text-gray-700 xl:text-xs">
             {carForSaleCities.map((cities, index) => (
               <li key={index}>
-                <a href={cities.link} className="hover:underline">
+                <p className="hover:underline" onClick={() => handleCityClick(cities.title)}>
                   Car for sale in {cities.title}
-                </a>
+                </p>
               </li>
             ))}
           </ul>
@@ -144,9 +158,9 @@ const Footer = () => {
           <ul className="space-y-[6px] text-[10px] md:text-[10px] font-semibold text-gray-700 xl:text-xs">
             {carForSaleCities2.map((cities, index) => (
               <li key={index}>
-                <a href={cities.link} className="hover:underline">
+                <p className="hover:underline" onClick={() => handleCityClick(cities.title)}>
                   Car for sale in {cities.title}
-                </a>
+                </p>
               </li>
             ))}
           </ul>

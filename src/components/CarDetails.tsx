@@ -21,6 +21,8 @@ import FindDealers from "./FindDealers";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../store/store";
 import { fetchSelectedCarById } from "../store/slices/carSlice";
+import { selectAuth } from "../store/slices/authSlices/authSlice";
+import { openLogin } from "../store/slices/authSlices/loginModelSlice";
 
 const CarDetails = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -37,6 +39,16 @@ const CarDetails = () => {
       dispatch(fetchSelectedCarById(id));
     }
   }, [id, dispatch]);
+
+  const { user, token } = useSelector(selectAuth);
+
+  const handleAccess = () => {
+    if (!user || !token) {
+      dispatch(openLogin());
+      return;
+    }
+    console.log("User logged in, allow to view seller details");
+  };
 
   const [showSellerPopup, setShowSellerPopup] = useState(false);
   const [mainImageIndex, setMainImageIndex] = useState(0);
@@ -91,16 +103,15 @@ const CarDetails = () => {
   const fuelType = car.fuelType ?? car.fuel ?? "";
   const transmission = car.transmission ?? "";
   const address = car.address ?? {};
-  const user = car.user ?? {};
-  const userId = user.id ?? "";
+  const carUser = car.user ?? {};
+  const userId = carUser.id ?? "";
 
   // OWNER DETAILS
-const owner = car.owner ?? {};
-const ownerId = owner.id ?? "";
-const ownerName = owner.fullName ?? "N/A";
-const ownerMobile = owner.mobileNumber ?? "N/A";
-const ownerEmail = owner.email ?? "N/A";
-const ownerType = owner.userType ?? "N/A";
+  const owner = car.owner ?? {};
+  const ownerId = owner.id ?? "";
+  const ownerName = owner.fullName ?? "N/A";
+  const ownerMobile = owner.mobileNumber ?? "N/A";
+  const ownerType = owner.userType ?? "N/A";
 
   return (
     <div className="max-w-7xl mx-auto mt-12 lg:mt-20 z-0 lg:pt-2">
@@ -259,9 +270,9 @@ const ownerType = owner.userType ?? "N/A";
               <div className="flex items-center gap-2">
                 <User className="text-gray-500 h-[14px] w-[14px]" />
                 <span className="text-black text-[10px] leading-tight font-semibold capitalize">
-                  {user?.fullName ?? "Unknown"}{" "}
+                  {carUser?.fullName ?? "Unknown"}{" "}
                   <span className="text-[8px] text-gray-700">
-                    ({user?.userType ?? "Unknown"})
+                    ({carUser?.userType ?? "Unknown"})
                   </span>
                 </span>
               </div>
@@ -275,7 +286,13 @@ const ownerType = owner.userType ?? "N/A";
             </div>
 
             <button
-              onClick={() => setShowSellerPopup(true)}
+              onClick={() => {
+                if (user) {
+                  setShowSellerPopup(true);
+                } else {
+                  handleAccess();
+                }
+              }}
               className="text-xs lg:text-base w-full bg-black text-white px-6 py-2 rounded-sm hover:bg-black/90 cursor-pointer active:bg-black/90 active:scale-95"
             >
               Contact Seller
@@ -323,11 +340,11 @@ const ownerType = owner.userType ?? "N/A";
                       <div className="flex flex-col gap-2 w-full pb-1 pl-1">
                         <div className="flex items-center justify-between">
                           <h1 className="font-bold text-lg capitalize truncate">
-                            {user?.fullName || "Unknown"}
+                            {carUser?.fullName || "Unknown"}
                           </h1>
                           <span className="flex items-center gap-2 px-2">
                             <p className="text-[#9e9e9e] bg-[#f4f4f4] p-[2px] px-1 rounded-sm text-[10px]">
-                              {user?.userType || "N/A"}
+                              {carUser?.userType || "N/A"}
                             </p>
                             <Link
                               to={`/seller-details/${userId}`}
@@ -340,7 +357,7 @@ const ownerType = owner.userType ?? "N/A";
 
                         <span className="flex items-center gap-2 text-gray-500 text-sm">
                           <span>+91</span>
-                          {user?.mobileNumber || "Not Provided"}
+                          {carUser?.mobileNumber || "Not Provided"}
                           <button className="px-2 cursor-pointer hover:scale-[1.1]">
                             <CopyIcon className="h-4 w-4 text-black" />
                           </button>
@@ -491,7 +508,13 @@ const ownerType = owner.userType ?? "N/A";
             </div>
 
             <button
-              onClick={() => setShowSellerPopup(true)}
+              onClick={() => {
+                if (user) {
+                  setShowSellerPopup(true);
+                } else {
+                  handleAccess();
+                }
+              }}
               className="w-full text-sm bg-black text-white px-6 py-[6px] rounded-sm hover:bg-black/90 cursor-pointer"
             >
               Contact Seller

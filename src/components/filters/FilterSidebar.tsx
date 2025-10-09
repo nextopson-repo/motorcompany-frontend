@@ -3,7 +3,12 @@ import { useState } from "react";
 import { ChevronUp, ChevronDown, ListFilter, Search } from "lucide-react";
 import { Disclosure } from "@headlessui/react";
 import { getTrackBackground, Range } from "react-range";
-import type { SelectedFilters } from "../../store/slices/carSlice";
+import {
+  updateSelectedFilter,
+  type SelectedFilters,
+} from "../../store/slices/carSlice";
+import { useDispatch } from "react-redux";
+import { setLocation } from "../../store/slices/locationSlice";
 
 interface FilterSidebarProps {
   filters: {
@@ -15,7 +20,7 @@ interface FilterSidebarProps {
     location: string[];
     priceRange: [number, number];
     yearRange: [number, number];
-    ownerType: "all" | "dealer" | "owner";
+    userType: "EndUser" | "Dealer" | "Owner";
   };
   selectedFilters: SelectedFilters;
   onSelectedFiltersChange: (filters: SelectedFilters) => void;
@@ -26,7 +31,6 @@ interface FilterSidebarProps {
   bodyTypeOptions: string[];
   ownershipOptions: string[];
   stateOptions: string[];
-  cityOptions?: string[];
   citiesByState?: Record<string, string[]>;
 }
 
@@ -41,9 +45,10 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
   bodyTypeOptions,
   ownershipOptions,
   stateOptions,
-  cityOptions = [],
   citiesByState = {},
 }) => {
+  const dispatch = useDispatch();
+
   const [brandSearch, setBrandSearch] = useState("");
   const [sectionStates, setSectionStates] = useState({
     priceRange: true,
@@ -166,7 +171,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
     hatchback: "/CarCategories/hatchback.png",
     sedan: "/CarCategories/sedan.png",
     coupe: "/CarCategories/coupe1.png",
-    convertable: "/CarCategories/convertable.png",
+    convertible: "/CarCategories/convertable.png",
     muv: "/CarCategories/muv.png",
   };
 
@@ -188,19 +193,19 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
       </button>
 
       <div className="text-sm text-center grid grid-cols-3 items-center rounded-sm border border-gray-200 mt-4 overflow-hidden">
-        {["all", "dealer", "owner"].map((type) => {
+        {["EndUser", "Dealer", "Owner"].map((type) => {
           const label =
-            type === "all"
+            type === "EndUser"
               ? "All Cars"
               : type.charAt(0).toUpperCase() + type.slice(1);
-          const isActive = selectedFilters.ownerType === type;
+          const isActive = selectedFilters.userType === type;
           return (
             <button
               key={type}
               onClick={() =>
                 onSelectedFiltersChange({
                   ...selectedFilters,
-                  ownerType: type as "all" | "dealer" | "owner",
+                  userType: type as "EndUser" | "Dealer" | "Owner",
                 })
               }
               className={`py-2 transition-all duration-200 ${
@@ -417,10 +422,9 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                               checked={selectedFilters.location.includes(
                                 `${state}-${city}`
                               )}
-                              onChange={() =>
-                                onSelectedFiltersChange({
-                                  ...selectedFilters,
-                                  location: selectedFilters.location.includes(
+                              onChange={() => {
+                                const updatedLocations =
+                                  selectedFilters.location.includes(
                                     `${state}-${city}`
                                   )
                                     ? selectedFilters.location.filter(
@@ -429,9 +433,28 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                                     : [
                                         ...selectedFilters.location,
                                         `${state}-${city}`,
-                                      ],
-                                })
-                              }
+                                      ];
+
+                                onSelectedFiltersChange({
+                                  ...selectedFilters,
+                                  location: updatedLocations,
+                                });
+
+                                dispatch(
+                                  updateSelectedFilter({
+                                    key: "location",
+                                    value: updatedLocations,
+                                  })
+                                );
+
+                                if (
+                                  !selectedFilters.location.includes(
+                                    `${state}-${city}`
+                                  )
+                                ) {
+                                  dispatch(setLocation(city));
+                                }
+                              }}
                             />
                             <span className="font-semibold">{city}</span>
                           </label>
@@ -634,8 +657,6 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
     </aside>
   );
 };
-
-
 
 // import type React from "react";
 // import { useState } from "react";

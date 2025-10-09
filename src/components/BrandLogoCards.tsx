@@ -84,7 +84,7 @@ const BrandLogoCards: React.FC = () => {
 
    // in city card click handler
   const handleBrandClick = (brandName: string) => {
-    dispatch(updateSelectedFilter({ key: 'Brand', value: [brandName] }));
+    dispatch(updateSelectedFilter({ key: 'brand', value: [brandName] }));
     Navigate('/buy-car');
   };
 

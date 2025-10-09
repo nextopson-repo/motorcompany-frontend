@@ -3,6 +3,8 @@ import React, { useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "../store/store";
 import { setLocation } from "../store/slices/locationSlice";
+import { updateSelectedFilter } from "../store/slices/carSlice";
+import { useNavigate } from "react-router-dom";
 
 interface LocationModalProps {
   isOpen: boolean;
@@ -20,6 +22,7 @@ const LocationModal: React.FC<LocationModalProps> = ({
   setCitySearch,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
+  const Navigate = useNavigate();
 
   const locationOptions = useSelector(
     (state: RootState) => state.location.locations
@@ -54,6 +57,8 @@ const LocationModal: React.FC<LocationModalProps> = ({
 
   const handleSelectCity = (city: string) => {
     dispatch(setLocation(city));
+    dispatch(updateSelectedFilter({ key: 'location', value: [city] }));
+    Navigate('/buy-car');
     if (onLocationChange) {
       onLocationChange(city);
     }

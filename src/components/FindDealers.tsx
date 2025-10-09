@@ -1,6 +1,8 @@
 import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function FindDealers() {
+  const navigate = useNavigate();
   return (
     <section className=" w-full lg:max-w-7xl h-[170px] sm:h-[200px] lg:h-[310px] flex items-center relative overflow-hidden">
       {/* Left Text Section */}
@@ -15,6 +17,7 @@ export default function FindDealers() {
           {/* <h2 className="text-[0.70rem] md:text-[1.6rem] font-bold text-gray-800 relative">
             Can't find your Desired Car! Don't Worry <span className="absolute -top-[35%] md:-top-2 lg:-top-4 left-[66%] md:left-[77%] lg:left-[70%] -translateX-1/2"><img src="/find-dealer-heading-top.png" alt="design" className="h-3 md:h-6 w-4 md:w-8"/></span>
           </h2> */}
+
           <h2 className="text-[0.70rem] sm:text-[1.1rem] lg:text-[1.6rem] font-bold text-gray-800">
             Can't find your Desired Car! Don't{" "}
             <span className="relative inline-block">
@@ -37,15 +40,16 @@ export default function FindDealers() {
             </span>
           </p>
         </div>
-
         <div className="mb-4 lg:mb-0">
-          <a
-            href="/top-dealer"
+          <div
+            onClick={() => {
+              navigate("/top-dealer");
+            }}
             className="inline-flex items-center text-black text-[0.65rem] lg:text-xl font-semibold tracking-wide underline underline-offset-2 group hover-scale-[1.05]"
           >
             Talk to the Dealers Now{" "}
             <ArrowRight className="ml-2 h-3 w-3 lg:h-7 lg:w-9 group-hover:ml-6 transition-all duration-300 ease-in-out" />
-          </a>
+          </div>
         </div>
       </div>
 

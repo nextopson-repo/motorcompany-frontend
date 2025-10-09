@@ -20,3 +20,5 @@ export const ownershipOptions = ["1st Owner", "2nd Owner", "3rd Owner", "4th Own
 export const stateOptions = ["Madhya Pradesh", "Maharashtra", "Delhi", "Karnataka", "Gujarat"];
 
 export const cityOptions = ["Mumbai", "Pune", "Delhi", "Bangalore", "Ahmedabad", "Indore", "Bhopal"];
+
+export const userTypeOptions = ["EndUser", "Owner", "Dealer"];

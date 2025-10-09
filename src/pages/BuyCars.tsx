@@ -30,8 +30,8 @@ export default function BuyCars() {
   const transmissionOptions = filters.transmission;
   const bodyTypeOptions = filters.bodyType;
   const ownershipOptions = filters.ownership;
-  const stateOptions = filters.stateOptions || [];
-  const cityOptions = filters.cityOptions || [];
+  const stateOptions = useMemo(() => filters.stateOptions || [], [filters.stateOptions]);
+  const cityOptions = useMemo(() => filters.cityOptions || [], [filters.cityOptions]);
 
   // Build citiesByState map (for sidebar city drilldowns)
   const citiesByState = useMemo(() => {

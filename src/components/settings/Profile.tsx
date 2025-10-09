@@ -14,27 +14,21 @@ import { useEffect, useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import {
-  updateField,
   type UserProfile,
   setUser,
-  fetchUserProfile,
   resetOtpState,
   updateUserProfile,
-  // sendEmailVerification, // ✅ new redux action
 } from "../../store/slices/profileSlice";
 
-export default function Profile() {
+export default function Profile({ user, selectedFile }: { user: UserProfile, selectedFile: File }) {
   const dispatch = useAppDispatch();
-  // const { user, loading, error, emailVerificationLoading } = //todo email link verification
-  const { user, loading, error } = useAppSelector((state) => state.profile);
+  const { loading, error } = useAppSelector((state) => state.profile);
+  useEffect(() => {
+    setLocalUser(user);
+  }, [user]);
+  const [localUser, setLocalUser] = useState(user);
 
   const [editMode, setEditMode] = useState(false);
-
-  useEffect(() => {
-    if (!user) {
-      dispatch(fetchUserProfile());
-    }
-  }, [dispatch, user]);
 
   if (!user) {
     return (
@@ -45,12 +39,10 @@ export default function Profile() {
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(
-      updateField({
-        field: e.target.name as keyof UserProfile,
-        value: e.target.value,
-      })
-    );
+    setLocalUser({
+      ...localUser,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleCancel = () => {
@@ -65,15 +57,19 @@ export default function Profile() {
       alert("Please enter a valid email before verifying.");
       return;
     }
-    // dispatch(sendEmailVerification(user.email))
-    //   .unwrap()
-    //   .then(() => {
-    //     alert("Verification link sent! Please check your email.");
-    //   })
-    //   .catch((err) => {
-    //     console.error("Email verification failed:", err);
-    //     alert("Failed to send verification email.");
-    //   });
+  };
+
+  const handleSave = async () => {
+    try {
+      const payload = {
+      ...localUser,
+      userProfile: selectedFile,
+    };
+    await dispatch(updateUserProfile(payload)).unwrap();
+    alert("Profile updated successfully!");
+    } catch (err) {
+      alert(`Failed to update profile : ${err}`);
+    }
   };
 
   return (
@@ -95,7 +91,7 @@ export default function Profile() {
 
         <div className="relative pt-6">
           <img
-            src={user.avatar || "/user-img.png"}
+            src={user.userProfile || "/user-img.png"}
             alt="profile"
             className="w-24 h-24 rounded-full object-cover border-2 border-gray-300"
           />
@@ -111,7 +107,7 @@ export default function Profile() {
           icon={<User size={12} />}
           label="Full Name"
           name="fullName"
-          value={user.fullName}
+          value={localUser.fullName}
           editable={editMode}
           onChange={handleChange}
         />
@@ -119,7 +115,7 @@ export default function Profile() {
           icon={<CgProfile size={12} />}
           label="User Type"
           name="userType"
-          value={user.userType}
+          value={localUser.userType}
           editable={false}
           onChange={handleChange}
         />
@@ -127,7 +123,7 @@ export default function Profile() {
           icon={<Phone size={12} />}
           label="Phone Number"
           name="mobileNumber"
-          value={user.mobileNumber}
+          value={localUser.mobileNumber}
           editable={false}
           onChange={handleChange}
         />
@@ -139,7 +135,7 @@ export default function Profile() {
             Email
           </span>
           <div className="flex items-center gap-2 my-2">
-            {user.emailVerified ? (
+            {localUser.emailVerified ? (
               <span className="flex items-center text-green-600 text-[11px] font-semibold">
                 <CheckCircle2 size={14} className="mr-1" />
                 Verified
@@ -147,7 +143,10 @@ export default function Profile() {
             ) : (
               <div className="relative flex items-center">
                 {/* Alert Icon with hover trigger */}
-                <div className="group relative flex items-center" onClick={handleEmailVerification}>
+                <div
+                  className="group relative flex items-center"
+                  onClick={handleEmailVerification}
+                >
                   <CircleAlert
                     size={16}
                     className="text-red-600 cursor-pointer transition-transform duration-200 group-hover:scale-110"
@@ -183,13 +182,13 @@ export default function Profile() {
               <input
                 type="text"
                 name="email"
-                value={user.email}
+                value={localUser.email}
                 onChange={handleChange}
                 className="flex-1 border rounded-xs md:rounded px-3 py-2 text-xs md:text-sm bg-gray-100"
               />
             ) : (
               <span className="flex-1 text-gray-700 text-xs md:text-sm bg-gray-100 rounded px-3 py-2 capitalize">
-                {user.email}
+                {localUser.email}
               </span>
             )}
           </div>
@@ -199,7 +198,7 @@ export default function Profile() {
           icon={<MapPinHouse size={12} />}
           label="Address"
           name="address"
-          value={user.address}
+          value={localUser.address}
           editable={editMode}
           onChange={handleChange}
           full
@@ -208,7 +207,7 @@ export default function Profile() {
           icon={<MapPin size={12} />}
           label="Landmark"
           name="landmark"
-          value={user.landmark}
+          value={localUser.landmark}
           editable={editMode}
           onChange={handleChange}
           full
@@ -217,7 +216,7 @@ export default function Profile() {
           icon={<Building size={12} />}
           label="City"
           name="city"
-          value={user.city}
+          value={localUser.city}
           editable={editMode}
           onChange={handleChange}
         />
@@ -225,7 +224,7 @@ export default function Profile() {
           icon={<PinIcon size={12} />}
           label="Pin Code"
           name="pin"
-          value={user.pin}
+          value={localUser.pin}
           editable={editMode}
           onChange={handleChange}
         />
@@ -241,20 +240,21 @@ export default function Profile() {
         {editMode ? (
           <div className="flex gap-3">
             <button
-              onClick={() => {
-                if (user) {
-                  dispatch(updateUserProfile(user))
-                    .unwrap()
-                    .then(() => {
-                      alert("Profile updated successfully!");
-                      setEditMode(false);
-                    })
-                    .catch((err) => {
-                      console.error("Update failed:", err);
-                      alert("Failed to update profile");
-                    });
-                }
-              }}
+              // onClick={() => {
+              //   if (user) {
+              //     dispatch(updateUserProfile(user))
+              //       .unwrap()
+              //       .then(() => {
+              //         alert("Profile updated successfully!");
+              //         setEditMode(false);
+              //       })
+              //       .catch((err) => {
+              //         console.error("Update failed:", err);
+              //         alert("Failed to update profile");
+              //       });
+              //   }
+              // }}
+              onClick={handleSave}
               disabled={loading}
               className="flex-1 py-2 md:py-3 bg-red-500 text-white text-xs md:text-md rounded-xs md:rounded-sm font-semibold"
             >

@@ -42,11 +42,11 @@ const fourCards = [
 ];
 
 const PopularCities: React.FC = () => {
+  const Navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const [currentSlide, setCurrentSlide] = useState(0);
   const citiesPerSlide = 6; // 2 rows × 3 columns
   const totalSlides = Math.ceil(cities.length / citiesPerSlide);
-  const Navigate = useNavigate();
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % totalSlides);

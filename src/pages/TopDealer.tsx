@@ -1,16 +1,28 @@
 import { MapPin, Phone, SearchIcon } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../store/redux/hooks";
+import { useAppSelector } from "../store/redux/hooks";
 import { setSelectedCity } from "../store/slices/dealerSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectAuth } from "../store/slices/authSlices/authSlice";
+import { openLogin } from "../store/slices/authSlices/loginModelSlice";
 
 const TopDealer: React.FC = () => {
   const { dealers, cities, selectedCity } = useAppSelector(
     (state) => state.dealers
   );
-  const dispatch = useAppDispatch();
 
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const dispatch = useDispatch();
+  const { user, token } = useSelector(selectAuth);
+  const handleAccess = () => {
+    if (!user || !token) {
+      dispatch(openLogin());
+      return;
+    }
+    console.log("User logged in, allow to view seller");
+  };
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -107,7 +119,9 @@ const TopDealer: React.FC = () => {
 
       {/* Dealers List */}
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-gray-400 text-[10px] lg:text-base font-medium lg:ml-6 py-2">Recommended</h2>
+        <h2 className="text-gray-400 text-[10px] lg:text-base font-medium lg:ml-6 py-2">
+          Recommended
+        </h2>
         {dealers.map((dealer) => (
           <div
             key={dealer.id}
@@ -121,18 +135,30 @@ const TopDealer: React.FC = () => {
               />
               <div className="space-y-1 lg:space-y-2">
                 <div className="flex items-center gap-2 lg:gap-4">
-                  <h2 className="text-xs lg:text-xl font-semibold truncate whitespace-nowrap">{dealer.name}</h2>
+                  <h2 className="text-xs lg:text-xl font-semibold truncate whitespace-nowrap">
+                    {dealer.name}
+                  </h2>
                   <span className="text-[8px] lg:text-sm  text-gray-400 bg-gray-100 px-2 lg:px-4 py-[2px] lg:py-1 rounded">
                     {dealer.role}
                   </span>
                 </div>
                 <p className="text-[10px] lg:text-sm text-[#24272C] lg:mt-1 flex items-center gap-1 lg:gap-2">
-                  <MapPin className="h-[10px] lg:h-[14px] w-[10px] lg:w-[14px] text-[#24272C]" /> {dealer.location}
+                  <MapPin className="h-[10px] lg:h-[14px] w-[10px] lg:w-[14px] text-[#24272C]" />{" "}
+                  {dealer.location}
                 </p>
               </div>
             </div>
 
-            <button className="bg-gray-800 text-white px-2 lg:px-4 py-[6px] text-xs lg:text-base rounded-xs lg:rounded hover:bg-black/80 flex items-center gap-1 lg:gap-3">
+            <button
+              className="bg-gray-800 text-white px-2 lg:px-4 py-[6px] text-xs lg:text-base rounded-xs lg:rounded hover:bg-black/80 flex items-center gap-1 lg:gap-3"
+              onClick={() => {
+                if (user) {
+                  console.log(user, "you are loggedIn"); //todo: baad me isme call button ko working karna hai direct call ke liye.
+                } else {
+                  handleAccess();
+                }
+              }}
+            >
               <Phone className="h-3 lg:h-4 w-3 lg:w-4" />
               Phone
             </button>

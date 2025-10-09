@@ -6,8 +6,10 @@ import "swiper/css/navigation";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import CarCard from "./CarCard";
-import { useSelector } from "react-redux";
-import type { RootState } from "../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "../store/store";
+import { useNavigate } from "react-router-dom";
+import { updateSelectedFilter } from "../store/slices/carSlice";
 
 const bodyTypes = [
   { name: "Hatchback", vehicles: 26, img: "/CarCategories/hatchback.png" },
@@ -19,7 +21,15 @@ const bodyTypes = [
 ];
 
 const HeroCategories: React.FC = () => {
+  const Navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const cars = useSelector((state: RootState) => state.cars.cars);
+
+  const handleCityClick = (type: string) => {
+    dispatch(updateSelectedFilter({ key: 'bodyType', value: [type] }));
+    Navigate('/buy-car');
+  };
+
   return (
     <section className="w-full mt-2 md:mt-6">
       {/* Categories */}
@@ -40,6 +50,7 @@ const HeroCategories: React.FC = () => {
           <div
             key={type.name}
             className="flex flex-col items-center text-center justify-between hover:border-[#EE1422] hover:shadow-lg transition-all p-2 rounded-lg bg-white cursor-pointer"
+            onClick={() => handleCityClick(type.name)}
           >
             <img
               src={type.img}
@@ -110,7 +121,9 @@ const HeroCategories: React.FC = () => {
 
         {/* Bottom Button */}
         <div className="flex justify-center">
-          <button className="w-[150px] md:w-[16.5rem] text-xs md:text-sm bg-[#EE1422] text-white font-[500] py-[6px] md:py-2 rounded-sm hover:bg-[#EE1422]/80 transition cursor-pointer">
+          <button className="w-[150px] md:w-[16.5rem] text-xs md:text-sm bg-[#EE1422] text-white font-[500] py-[6px] md:py-2 rounded-sm hover:bg-[#EE1422]/80 transition cursor-pointer"
+          onClick={()=>{Navigate('/buy-car');}}
+          >
             View All
           </button>
         </div>

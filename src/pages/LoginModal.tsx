@@ -20,7 +20,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const { login } = useAuth();
 
   const [userId, setUserId] = useState("");
-  const [otpToken, setOtpToken] = useState(""); // 🔹 store OTP token for signup
+  const [otpToken, setOtpToken] = useState("");
   const [step, setStep] = useState<"mobile" | "otp">("mobile");
   const [mobileNumber, setMobileNumber] = useState("");
   const [checkbox, setCheckbox] = useState(false)
@@ -48,7 +48,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
       if (data?.statusCode === 200 && data?.responseObject?.user?.id) {
         setUserId(data.responseObject.user.id);
-        setOtpToken(data.responseObject.token || ""); // save OTP token
+        setOtpToken(data.responseObject.token || "");
         return true;
       } else {
         throw new Error(data?.message || "Failed to send OTP");

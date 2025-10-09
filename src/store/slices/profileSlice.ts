@@ -16,7 +16,8 @@ export interface UserProfile {
   landmark: string;
   city: string;
   pin: string;
-  avatar: string;
+  userProfile: File;
+  userProfileUrl: string;
 }
 
 interface ProfileState {
@@ -53,7 +54,7 @@ export const fetchUserProfile = createAsyncThunk<
 
     const user = JSON.parse(userStr) as { id?: string };
     if (!user?.id) return rejectWithValue("User ID not found");
-    console.log(user)
+    console.log(user);
 
     const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
     const res = await axios.post(
@@ -69,6 +70,8 @@ export const fetchUserProfile = createAsyncThunk<
 
     if (!res.data?.data) return rejectWithValue("Invalid response from server");
 
+    console.log("getProfile", res.data.data);
+
     return res.data.data as UserProfile;
   } catch (err: any) {
     return rejectWithValue(
@@ -80,9 +83,9 @@ export const fetchUserProfile = createAsyncThunk<
 // 🧩 Update User Profile
 export const updateUserProfile = createAsyncThunk<
   UserProfile,
-  Partial<UserProfile>,
+  Partial<UserProfile> & { userProfile?: File },
   { rejectValue: string }
->("profile/updateUserProfile", async (updatedData, { rejectWithValue }) => {
+>("profile/updateUserProfile", async (userData, { rejectWithValue }) => {
   try {
     const token = localStorage.getItem("token");
     const userStr = localStorage.getItem("user");
@@ -93,22 +96,34 @@ export const updateUserProfile = createAsyncThunk<
     const user = JSON.parse(userStr) as { id?: string };
     if (!user?.id) return rejectWithValue("User ID not found");
 
+    // ✅ Convert all data into FormData
+    const formData = new FormData();
+    formData.append("userId", user.id);
+
+    Object.entries(userData).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        formData.append(key, value);
+      }
+    });
+
     const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
     const res = await axios.post(
       `${BACKEND_URL}/api/v1/profile/profile-edit`,
+      formData,
       {
-        userId: user.id,
-        ...updatedData,
-      },
-      {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
         withCredentials: true,
       }
     );
 
     if (!res.data?.data)
       return rejectWithValue("Invalid response from update API");
+
+    localStorage.setItem("token", res.data.token);
 
     return res.data.data as UserProfile;
   } catch (err: any) {
@@ -194,7 +209,7 @@ const profileSlice = createSlice({
       state.otpSent = false;
       state.otpVerified = false;
     },
-     clearProfile: (state) => {
+    clearProfile: (state) => {
       state.user = null;
       state.error = null;
       state.loading = false;
@@ -260,7 +275,7 @@ export const {
   setError,
   setLoading,
   resetOtpState,
-  clearProfile 
+  clearProfile,
 } = profileSlice.actions;
 
 export const selectUserProfile = (state: RootState) => state.profile.user;
@@ -268,9 +283,6 @@ export const selectProfileLoading = (state: RootState) => state.profile.loading;
 export const selectProfileError = (state: RootState) => state.profile.error;
 
 export default profileSlice.reducer;
-
-
-
 
 // import { createSlice, type PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 // import axios from "axios";

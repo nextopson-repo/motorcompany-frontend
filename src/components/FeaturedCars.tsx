@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
@@ -6,17 +6,14 @@ import "swiper/css/navigation";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import CarCard from "./CarCard";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
-// import { fetchCars } from "../store/slices/carSlice";
+import { useNavigate } from "react-router-dom";
 
 const FeaturedCars: React.FC = () => {
-  const featuredCars = useSelector((state: RootState) => state.cars.cars);
-  // const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   dispatch(fetchCars());
-  // }, [dispatch]);
+  const Navigate = useNavigate();
+  const featuredCars = useSelector((state: RootState) => state.cars.cars);
 
   return (
     <section className="max-w-7xl mx-auto px-2 lg:px-8 py-6 lg:py-14 relative">
@@ -71,7 +68,9 @@ const FeaturedCars: React.FC = () => {
 
       {/* Bottom Button */}
       <div className="flex justify-center">
-        <button className="w-[150px] md:w-[16.5rem] text-xs md:text-sm bg-[#EE1422] text-white font-[500] py-[6px] md:py-2 rounded-sm hover:bg-[#EE1422]/80 transition cursor-pointer">
+        <button className="w-[150px] md:w-[16.5rem] text-xs md:text-sm bg-[#EE1422] text-white font-[500] py-[6px] md:py-2 rounded-sm hover:bg-[#EE1422]/80 transition cursor-pointer"
+        onClick={()=>{Navigate('/buy-car');}}
+        >
           View All
         </button>
       </div>

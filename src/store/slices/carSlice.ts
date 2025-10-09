@@ -17,7 +17,7 @@ import {
 
 // ---------- Types ----------
 export type SelectedFilters = {
-  ownerType: "all" | "dealer" | "owner";
+  userType: "EndUser" | "Dealer" | "Owner";
   brand: string[];
   bodyType: string[];
   fuel: string[];
@@ -48,6 +48,7 @@ export type CarsState = {
     fuel: string[];
     transmission: string[];
     ownership: string[];
+    userType: string;
     priceRange: [number, number] | null;
     yearRange: [number, number] | null;
     cityOptions?: string[];
@@ -72,6 +73,7 @@ const initialState: CarsState = {
     transmission: transmissionOptions,
     bodyType: bodyTypeOptions,
     ownership: ownershipOptions,
+    userType: "EndUser",
     stateOptions,
     cityOptions,
   },
@@ -84,7 +86,7 @@ const initialState: CarsState = {
     location: [],
     priceRange: [0, 10000000],
     yearRange: [2000, new Date().getFullYear()],
-    ownerType: "all",
+    userType: "EndUser",
   },
   searchTerm: "",
   sortOption: "popularity",
@@ -112,7 +114,7 @@ const buildBody = (payload?: {
       body.price = { min: sf.priceRange[0], max: sf.priceRange[1] };
     if (sf.yearRange)
       body.modelYear = { min: sf.yearRange[0], max: sf.yearRange[1] };
-    if (sf.ownerType && sf.ownerType !== "all") body.ownerType = sf.ownerType;
+    if (sf.userType && sf.userType !== "EndUser") body.userType = sf.userType;
   }
 
   if (payload.searchTerm) body.search = payload.searchTerm;

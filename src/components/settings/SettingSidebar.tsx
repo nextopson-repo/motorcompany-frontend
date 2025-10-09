@@ -7,7 +7,7 @@ interface SettingSidebarProps {
   name: string;
   role: string;
   imageUrl: string;
-  onUploadImage: () => void;
+  onUploadImage: (file: File) => void;
 }
 
 export default function SettingSidebar({
@@ -15,11 +15,22 @@ export default function SettingSidebar({
   role,
   imageUrl,
   onUploadImage,
+  selectedFile,
+  setSelectedFile,
 }: SettingSidebarProps) {
   const location = useLocation();
   const { logout } = useAuth();
   const navigate = useNavigate();
   const [showDialog, setShowDialog] = useState(false);
+  const [previewImage, setPreviewImage] = useState(null);
+
+  const handleImageChange = (e: any) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      setPreviewImage(URL.createObjectURL(file)); // temporary preview
+    }
+  };
 
   const handleConfirmLogout = () => {
     logout();
@@ -43,17 +54,50 @@ export default function SettingSidebar({
       <aside className="hidden w-60 h-fit bg-white rounded-sm shadow py-4 mb-4 lg:flex flex-col items-center z-5">
         <div className="pb-4 px-4 w-full flex flex-col items-center relative">
           <div className="relative">
-            <img
+            <div className="flex flex-col items-center gap-2">
+              <label htmlFor="profileImage" className="cursor-pointer">
+                {previewImage ? (
+                  <img
+                    src={previewImage}
+                    alt="Preview"
+                    className="w-24 h-24 rounded-full object-cover border"
+                  />
+                ) : (
+                  <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
+                    <span>Select Image</span>
+                  </div>
+                )}
+              </label>
+              <input
+                type="file"
+                id="profileImage"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageChange}
+              />
+            </div>
+
+            {/* <img
               src={imageUrl}
               alt={name}
               className="w-24 h-24 rounded-full object-cover border-2 border-gray-300"
             />
             <button
-              onClick={onUploadImage}
+              onClick={() => document.getElementById("avatarUpload")?.click()}
               className="absolute bottom-0 right-0 bg-[#cb202d] p-1 rounded-full"
             >
               <CameraIcon className="w-4 h-4 text-white" />
             </button>
+            <input
+              id="avatarUpload"
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) onUploadImage(file);
+              }}
+              className="hidden"
+            /> */}
           </div>
 
           <h2 className="mt-3 font-semibold capitalize">{name}</h2>
