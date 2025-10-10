@@ -17,7 +17,6 @@ interface FilterSidebarProps {
     fuel: string[];
     transmission: string[];
     ownership: string[];
-    location: string[];
     priceRange: [number, number];
     yearRange: [number, number];
     userType: "EndUser" | "Dealer" | "Owner";

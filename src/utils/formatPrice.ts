@@ -26,7 +26,7 @@ export const formatShortNumber = (num: any, isKm = false) => {
 
 // utils/formatTimeAgo.ts
 
-export const formatTimeAgo = (dateString: string): string => {
+export const formatTimeAgo = (dateString: string) => {
   const now = new Date();
   const past = new Date(dateString);
   const diffInSeconds = Math.floor((now.getTime() - past.getTime()) / 1000);

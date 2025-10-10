@@ -10,15 +10,6 @@ import FilterBar from "./filters/FilterBar";
 
 interface CarListHeaderProps {
   carCount?: number;
-  filters: {
-    brand: string[];
-    bodyType: string[];
-    fuel: string[];
-    transmission: string[];
-    ownership: string[];
-    priceRange: [number, number];
-    yearRange: [number, number];
-  };
 }
 
 const cities = [
@@ -36,7 +27,6 @@ const cities = [
 
 const CarListHeader: React.FC<CarListHeaderProps> = ({
   carCount = 0,
-  filters,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const selectedFilters = useSelector(

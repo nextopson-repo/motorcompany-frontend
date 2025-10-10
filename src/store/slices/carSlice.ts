@@ -39,6 +39,7 @@ export type CarWithOwner = CarRecord & {
 };
 
 export type CarsState = {
+  allCars: CarWithOwner[];
   cars: CarWithOwner[];
   loading: boolean;
   error: string | null;
@@ -62,6 +63,7 @@ export type CarsState = {
 
 // ---------- Initial State ----------
 const initialState: CarsState = {
+  allCars: [],
   cars: [],
   loading: false,
   error: null,
@@ -126,7 +128,12 @@ const buildBody = (payload?: {
 // ---------- Fetch all cars ----------
 export const fetchCars = createAsyncThunk<
   CarWithOwner[],
-  { selectedFilters?: SelectedFilters; searchTerm?: string; sortOption?: string } | undefined,
+  | {
+      selectedFilters?: SelectedFilters;
+      searchTerm?: string;
+      sortOption?: string;
+    }
+  | undefined,
   { state: RootState }
 >("cars/fetchCars", async (arg, { rejectWithValue }) => {
   try {
@@ -142,6 +149,7 @@ export const fetchCars = createAsyncThunk<
         Authorization: token ? `Bearer ${token}` : "",
       },
       body: JSON.stringify(body),
+      mode: "cors",
     });
 
     if (!res.ok) throw new Error(await res.text());
@@ -175,6 +183,7 @@ export const fetchSelectedCarById = createAsyncThunk<
         Authorization: token ? `Bearer ${token}` : "",
       },
       body: JSON.stringify({ carId }),
+      mode: "cors",
     });
 
     if (!res.ok) throw new Error(await res.text());
@@ -234,7 +243,15 @@ const carSlice = createSlice({
       })
       .addCase(fetchCars.fulfilled, (state, action) => {
         state.loading = false;
-        state.cars = action.payload;
+        const isFiltered =
+          Object.keys(buildBody({ selectedFilters: state.selectedFilters }))
+            .length > 0;
+
+        if (isFiltered) {
+          state.cars = action.payload; // filtered result
+        } else {
+          state.allCars = action.payload; // unfiltered result
+        }
       })
       .addCase(fetchCars.rejected, (state, action) => {
         state.loading = false;
@@ -268,7 +285,6 @@ export const {
 } = carSlice.actions;
 
 export default carSlice.reducer;
-
 
 // import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
 // import type { RootState } from "../store";

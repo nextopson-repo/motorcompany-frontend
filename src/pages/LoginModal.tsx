@@ -11,7 +11,7 @@ import { verifyOtp, loginUser } from "../store/slices/authSlices/authSlice";
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
-  mobileNumber: number;
+  mobileNumber: string;
   checkbox: boolean;
 }
 
@@ -39,7 +39,6 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
   if (!isOpen) return null;
 
-  // 🔹 Send OTP
   const handleSendOtp = async () => {
     try {
       const action = await dispatch(loginUser({mobileNumber, checkbox}));
@@ -48,7 +47,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
       if (data?.statusCode === 200 && data?.responseObject?.user?.id) {
         setUserId(data.responseObject.user.id);
-        setOtpToken(data.responseObject.token || "");
+        setOtpToken(data.responseObject.token);
         return true;
       } else {
         throw new Error(data?.message || "Failed to send OTP");
@@ -60,8 +59,13 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   };
 
   // 🔹 Verify OTP
-  const handleVerifyOtp = async (otp: string) => {
-    if (!userId) throw new Error("User ID not found. Please resend OTP");
+  const handleVerifyOtp = async (otp: string): Promise<{ success: boolean; isFullyVerified: boolean; user?: any; token?: string }> => {
+    if (!userId) {
+      return {
+        success: false,
+        isFullyVerified: false,
+      };
+    }
 
     try {
       const action = await dispatch(verifyOtp({ userId, mobileNumber, otp }));
@@ -70,22 +74,46 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       const user = data?.responseObject?.user;
       const token = data?.responseObject?.token;
 
-      if (!user || !token) throw new Error("OTP verification failed");
+      if (!user || !token) {
+        return {
+          success: false,
+          isFullyVerified: false,
+        };
+      }
 
       if (!user.fullName || !user.email) {
         setShowSignup(true);
         setOtpToken(token); 
+        return {
+          success: true,
+          isFullyVerified: false,
+          user,
+          token,
+        };
       } else {
-
         login(user, token);
         onClose();
+        alert("Login Success");
+        return {
+          success: true,
+          isFullyVerified: true,
+          user,
+          token,
+        };
       }
     } catch (err: any) {
       console.error(err);
+      return {
+        success: false,
+        isFullyVerified: false,
+      };
     }
   };
 
-  const handleSignupRegistered = () => setShowSignup(false);
+  // const handleSignupRegistered = () => setShowSignup(false);
+  const handleSignupRegistered = () => {
+  setShowSignup(false);
+};
 
   return (
     <>
@@ -93,6 +121,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
         <SignupModal
           isOpen={showSignup}
           onClose={() => setShowSignup(false)}
+          onLoginClose={onClose}
           onRegistered={handleSignupRegistered}
           mobileNumber={mobileNumber}
           setMobileNumber={setMobileNumber}
@@ -128,6 +157,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 setCheckbox={setCheckbox}
                 checkbox = {checkbox}
                 setMobileNumber={setMobileNumber}
+                openSignupModal={() => setShowSignup(true)}
               />
 
               {loading && <p className="text-sm text-gray-500 mt-2">Processing...</p>}

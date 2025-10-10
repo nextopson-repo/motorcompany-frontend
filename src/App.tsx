@@ -22,16 +22,14 @@ import { closeLogin } from "./store/slices/authSlices/loginModelSlice";
 
 const App = () => {
   const location = useLocation();
-  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
-  const [citySearch, setCitySearch] = useState("");
-
-  const { isOpen } = useSelector((state: RootState) => state.loginModel);
-
-  const hideNavFooter = ["/register", "/forgot-password"];
-
   const dispatch = useDispatch<AppDispatch>();
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-  // Fetch cars on mount
+
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+  const [citySearch, setCitySearch] = useState("");
+  const { isOpen } = useSelector((state: RootState) => state.loginModel);
+  const hideNavFooter = ["/register", "/forgot-password"];
+
   useEffect(() => {
     dispatch(fetchCars(BACKEND_URL));
   }, [BACKEND_URL, dispatch]);
@@ -73,7 +71,12 @@ const App = () => {
         </Routes>
       </main>
 
-      <LoginModal isOpen={isOpen} onClose={() => dispatch(closeLogin())} />
+      <LoginModal
+        isOpen={isOpen}
+        onClose={() => dispatch(closeLogin())}
+        mobileNumber=""
+        checkbox={false}
+      />
 
       <LocationModal
         isOpen={isLocationModalOpen}

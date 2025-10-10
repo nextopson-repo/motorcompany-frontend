@@ -47,7 +47,6 @@ export default function BuyCars() {
     return map;
   }, [cars]);
 
-  // update frontend static meta once (optional)
   useEffect(() => {
     dispatch(
       setCityAndStateOptions({
@@ -57,7 +56,6 @@ export default function BuyCars() {
     );
   }, [cityOptions, stateOptions, dispatch]);
 
-  // whenever filters/search/sort/location change -> call API (server-side)
   useEffect(() => {
     const arg = {
       selectedFilters,
@@ -99,9 +97,14 @@ export default function BuyCars() {
           <div className="sticky top-20">
             <FilterSidebar
               filters={{
-                ...filters,
+                brand: filters.brand,
+                bodyType: filters.bodyType,
+                fuel: filters.fuel,
+                transmission: filters.transmission,
+                ownership: filters.ownership,
                 priceRange: filters.priceRange || [0, 10000000],
                 yearRange: filters.yearRange || [2000, 2025],
+                userType: (filters as any).userType as "EndUser" | "Dealer" | "Owner",
               }}
               selectedFilters={{
                 ...selectedFilters,
@@ -116,7 +119,6 @@ export default function BuyCars() {
               bodyTypeOptions={bodyTypeOptions}
               ownershipOptions={ownershipOptions}
               stateOptions={stateOptions}
-              cityOptions={cityOptions}
               citiesByState={citiesByState}
             />
           </div>

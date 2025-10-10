@@ -5,20 +5,13 @@ import CarListHeader from "./CarListHeader";
 import type { RootState } from "../store/store";
 
 export default function CarList() {
-  const { cars, filters } = useSelector((state: RootState) => state.cars);
+  const { cars } = useSelector((state: RootState) => state.cars);
   
   return (
     <div className="min-h-screen w-full overflow-hidden lg:pl-1 pb-2">
       <div className="w-full lg:max-w-7xl mx-auto">
         {/* Header */}
-        <CarListHeader
-          carCount={cars.length}
-          filters={{
-            ...filters,
-            priceRange: filters.priceRange ?? [0, 10000000],
-            yearRange: filters.yearRange ?? [2000, 2025],
-          }}
-        />
+        <CarListHeader carCount={cars.length} />
 
         {/* Car Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-2 md:gap-8 mx-4 sm:mx-0">

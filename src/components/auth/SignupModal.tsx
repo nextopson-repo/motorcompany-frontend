@@ -1,10 +1,8 @@
-// SignupModal.tsx
 import { useState } from "react";
 import { ChevronRight } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "../../store/store";
 import { signup } from "../../store/slices/authSlices/authSlice";
-import { useAuth } from "../../context/useAuth";
 
 interface SignupModalProps {
   isOpen: boolean;
@@ -12,7 +10,8 @@ interface SignupModalProps {
   onRegistered: () => void;
   mobileNumber: string;
   setMobileNumber: React.Dispatch<React.SetStateAction<string>>;
-  otpToken: string; // 🔹 added
+  otpToken: string;
+  onLoginClose: () => void;
 }
 
 export default function SignupModal({
@@ -21,10 +20,10 @@ export default function SignupModal({
   onRegistered,
   mobileNumber,
   setMobileNumber,
-  otpToken,
+  onLoginClose,
+  otpToken
 }: SignupModalProps) {
   const dispatch = useDispatch<AppDispatch>();
-  const { login } = useAuth(); // 🔹 to login after signup
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -41,7 +40,6 @@ export default function SignupModal({
     e.preventDefault();
     setError(null);
 
-    // 🔹 Validation
     if (fullName.trim().length < 2) {
       setError("Please enter a valid full name");
       return;
@@ -56,17 +54,16 @@ export default function SignupModal({
     }
 
     try {
-      // 🔹 Pass otpToken in headers
       const action = await dispatch(
-        signup({ fullName, email, mobileNumber, userType: "EndUser" })
+        signup({ fullName, email, mobileNumber, otpToken, })
       );
       const data: any = action.payload;
 
       if (data?.statusCode === 200 || action.meta.requestStatus === "fulfilled") {
-        // 🔹 login immediately
-        login(data.user, otpToken);
         onRegistered();
         onClose();
+        onLoginClose();
+        alert("You are signed up Successfully");
       } else {
         setError(data?.message || "Signup failed");
       }
@@ -74,7 +71,7 @@ export default function SignupModal({
       setError("Signup error, please try again");
       console.error(err);
     }
-  };
+  }; 
 
   return (
     <div className="fixed inset-0 bg-black/50 sm:flex items-center justify-center z-50">

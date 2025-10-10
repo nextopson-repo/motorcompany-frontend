@@ -63,9 +63,8 @@ export const MyListing = () => {
     };
   }, [openMenuId]);
 
-  const filteredListings = listings.filter((car) => 
+  const filteredListings = listings.filter((car: any) => 
     car.title.toLowerCase().includes(searchTerm.toLowerCase()));
-  console.log(filteredListings)
 
   const formatShortNumber = (num: number, isKm = false) => {
     if (!num) return isKm ? "0 km" : "0";
@@ -105,7 +104,7 @@ export const MyListing = () => {
       {error && <p className="text-red-500 px-4 md:px-0">{error}</p>}
 
       <div className="space-y-2 md:space-y-4 px-2 md:px-0 py-4 md:py-0 sm:mb-10 lg:mb-0">
-        {filteredListings.map((car) => (
+        {filteredListings.map((car: any) => (
           <div
             key={car.id}
             className={`flex flex-row rounded-sm md:rounded-md border border-gray-100 p-1 md:p-2 ${
@@ -115,11 +114,7 @@ export const MyListing = () => {
             {/* Left Image */}
             <div className="h-fit w-28 md:w-48 flex-shrink-0 relative">
               <img
-                src={
-                  (car.images && car.images.length > 0 && car.images[0])
-                    ? car.images[0]
-                    : "/fallback-car-img.png"
-                }
+                src={(car.images && car.images.length > 0 && car.images[0]) ? car.images[0] : (car.carImages && car.carImages.length > 0 ? car.carImages[0] : "/fallback-car-img.png")}
                 alt="car image"
                 className="w-full h-22 md:h-35 object-cover rounded-xs md:rounded"
               />
@@ -179,9 +174,7 @@ export const MyListing = () => {
                       Rs. {formatShortNumber(car.price)}
                     </p>
                     <div className="text-left w-fit">
-                      <p className="text-[9px] font-medium text-end">
-                        Added on {formatTimeAgo(car.updatedAt)}
-                      </p>
+                      <p className="text-[9px] font-medium text-end">Added on {formatTimeAgo((car.updatedAt || new Date().toISOString()))}</p>
                     </div>
                   </div>
                 </div>

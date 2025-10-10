@@ -20,7 +20,7 @@ import {
   updateUserProfile,
 } from "../../store/slices/profileSlice";
 
-export default function Profile({ user, selectedFile }: { user: UserProfile, selectedFile: File }) {
+export default function Profile({ user }: { user: UserProfile }) {
   const dispatch = useAppDispatch();
   const { loading, error } = useAppSelector((state) => state.profile);
   useEffect(() => {
@@ -63,7 +63,6 @@ export default function Profile({ user, selectedFile }: { user: UserProfile, sel
     try {
       const payload = {
       ...localUser,
-      userProfile: selectedFile,
     };
     await dispatch(updateUserProfile(payload)).unwrap();
     alert("Profile updated successfully!");
@@ -91,7 +90,7 @@ export default function Profile({ user, selectedFile }: { user: UserProfile, sel
 
         <div className="relative pt-6">
           <img
-            src={user.userProfile || "/user-img.png"}
+            src={user.userProfileUrl || "/user-img.png"}
             alt="profile"
             className="w-24 h-24 rounded-full object-cover border-2 border-gray-300"
           />

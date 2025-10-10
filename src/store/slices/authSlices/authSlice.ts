@@ -19,22 +19,27 @@ export const signup = createAsyncThunk(
     {
       fullName,
       email,
-      mobileNumber,
-      userType,
+      otpToken,
     }: {
       fullName: string;
       email: string;
       mobileNumber: string;
-      userType: string;
+      otpToken: string;
     },
     thunkAPI
   ) => {
     try {
+      console.log("received token", otpToken);
       const res = await fetch(`${BACKEND_URL}/api/v1/auth/signup`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ fullName, email, mobileNumber, userType }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${otpToken}`,
+        },
+        body: JSON.stringify({ fullName, email }),
+        mode: "cors",
       });
+
       return await res.json();
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.message);
@@ -51,6 +56,7 @@ export const sendOtp = createAsyncThunk(
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ mobileNumber }),
+        mode: "cors",
       });
       return await res.json();
     } catch (err: any) {
@@ -62,12 +68,20 @@ export const sendOtp = createAsyncThunk(
 // 3) Verify OTP
 export const verifyOtp = createAsyncThunk(
   "auth/verifyOtp",
-  async ({ userId, mobileNumber, otp }: { userId: string; mobileNumber:string; otp: string }, thunkAPI) => {
+  async (
+    {
+      userId,
+      mobileNumber,
+      otp,
+    }: { userId: string; mobileNumber: string; otp: string },
+    thunkAPI
+  ) => {
     try {
       const res = await fetch(`${BACKEND_URL}/api/v1/auth/verify-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, mobileNumber, otpType: "mobile", otp }),
+        mode: "cors",
       });
       return await res.json();
     } catch (err: any) {
@@ -79,7 +93,10 @@ export const verifyOtp = createAsyncThunk(
 // 4) Login
 export const loginUser = createAsyncThunk(
   "auth/login",
-  async ({ mobileNumber, checkbox }: { mobileNumber: string, checkbox:boolean }, thunkAPI) => {
+  async (
+    { mobileNumber, checkbox }: { mobileNumber: string; checkbox: boolean },
+    thunkAPI
+  ) => {
     try {
       const formattedNumber = mobileNumber.trim();
       if (!/^\d{10}$/.test(formattedNumber)) {
@@ -88,7 +105,11 @@ export const loginUser = createAsyncThunk(
       const res = await fetch(`${BACKEND_URL}/api/v1/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mobileNumber:formattedNumber, checkBox: checkbox }),
+        body: JSON.stringify({
+          mobileNumber: formattedNumber,
+          checkBox: checkbox,
+        }),
+        mode: "cors",
       });
       return await res.json();
     } catch (err: any) {
@@ -106,6 +127,7 @@ export const resendEmailOtp = createAsyncThunk(
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
+        mode: "cors",
       });
       return await res.json();
     } catch (err: any) {
@@ -123,6 +145,7 @@ export const resendMobileOtp = createAsyncThunk(
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ mobileNumber }),
+        mode: "cors",
       });
       return await res.json();
     } catch (err: any) {
@@ -143,6 +166,7 @@ export const updateUserType = createAsyncThunk(
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, userType }),
+        mode: "cors",
       });
 
       const data = await res.json();
@@ -241,7 +265,9 @@ const authSlice = createSlice({
         if (action.payload?.token) {
           state.token = action.payload.token;
           state.user = action.payload.user;
-          localStorage.setItem("token", state.token);
+          if (state.token) {
+            localStorage.setItem("token", state.token);
+          }
           localStorage.setItem("user", JSON.stringify(state.user));
         }
       })
@@ -259,15 +285,10 @@ const authSlice = createSlice({
       })
       .addCase(resendMobileOtp.rejected, rejected)
 
-      // ✅ Update userType everywhere (store + localStorage)
       .addCase(updateUserType.pending, pending)
       .addCase(updateUserType.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
-        // if (state.user && action.payload?.userType) {
-        //   state.user.userType = action.payload.userType;
-        //   localStorage.setItem("user", JSON.stringify(state.user));
-        // }
       })
       .addCase(updateUserType.rejected, rejected);
   },

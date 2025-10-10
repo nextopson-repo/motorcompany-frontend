@@ -90,7 +90,7 @@ export default function SellHero() {
   const uploadedImages = useAppSelector((state) => state.carImage.files);
 
   const [showForm, setShowForm] = useState(false);
-  const [userRole, setUserRole] = useState<"owner" | "dealer">("owner");
+  const [userRole] = useState<"owner" | "dealer">("owner");
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
   const [locality, setLocality] = useState("");

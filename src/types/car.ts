@@ -12,7 +12,7 @@ export interface CarRecord {
   kmDriven?: number;
   mileage?: number;
   address?: { state?: string; city?: string };
-  carImages?: { imageUrl?: string }[];
+  carImages?: { presignedUrl?: string; imageUrl?: string }[];
   user?: { fullName?: string; userType?: string; mobileNumber?: number };
   updatedAt?: string;
   createdAt?: string;

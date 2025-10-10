@@ -3,7 +3,7 @@ import {
   createAsyncThunk,
   type PayloadAction,
 } from "@reduxjs/toolkit";
-import axios from "axios";
+// Using fetch for endpoints where we need explicit CORS control
 
 interface Car {
   id: string;
@@ -43,13 +43,25 @@ export const fetchUserCars = createAsyncThunk(
       const userId = user?.id;
       if (!userId) return [];
 
-      const res = await axios.post(
+      const res = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/api/v1/car/get-user-cars`,
-        { userId }
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId }),
+          mode: "cors",
+          credentials: "include",
+        }
       );
-      return res.data.cars || [];
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data || "Failed to fetch cars");
+      type GetUserCarsResponse = { cars?: Car[] };
+      const data: GetUserCarsResponse = await res.json();
+      return data.cars || [];
+    } catch (error) {
+      const message =
+        typeof error === "object" && error && "message" in error
+          ? String((error as { message?: unknown }).message || "Failed to fetch cars")
+          : "Failed to fetch cars";
+      return rejectWithValue(message);
     }
   }
 );
@@ -64,13 +76,23 @@ export const markCarAsSold = createAsyncThunk(
 
       if (!userId) throw new Error("User ID not found in localStorage");
 
-      await axios.post(
+      await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/api/v1/car/update-is-sold`,
-        { carId, isSold: true, userId }
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ carId, isSold: true, userId }),
+          mode: "cors",
+          credentials: "include",
+        }
       );
       return carId;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data || "Failed to mark sold");
+    } catch (error) {
+      const message =
+        typeof error === "object" && error && "message" in error
+          ? String((error as { message?: unknown }).message || "Failed to mark sold")
+          : "Failed to mark sold";
+      return rejectWithValue(message);
     }
   }
 );
@@ -86,18 +108,26 @@ export const deleteCar = createAsyncThunk(
 
       if (!userId) throw new Error("User ID not found in localStorage");
       if (!token) throw new Error("Token not found in localStorage");
-      await axios.post(
+      await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/api/v1/car/delete-car`,
-        { carId, userId },
         {
+          method: "POST",
           headers: {
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
+          body: JSON.stringify({ carId, userId }),
+          mode: "cors",
+          credentials: "include",
         }
       );
       return carId;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data || "Failed to delete car");
+    } catch (error) {
+      const message =
+        typeof error === "object" && error && "message" in error
+          ? String((error as { message?: unknown }).message || "Failed to delete car")
+          : "Failed to delete car";
+      return rejectWithValue(message);
     }
   }
 );

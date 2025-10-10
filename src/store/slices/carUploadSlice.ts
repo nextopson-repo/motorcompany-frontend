@@ -92,6 +92,7 @@ export const uploadCar = createAsyncThunk<UploadCarResponse, any>(
           Authorization: token ? `Bearer ${token}` : "",
         },
         body: formData,
+        mode: "cors",
       });
 
       const data = await res.json();

@@ -15,20 +15,16 @@ export default function SettingSidebar({
   role,
   imageUrl,
   onUploadImage,
-  selectedFile,
-  setSelectedFile,
 }: SettingSidebarProps) {
   const location = useLocation();
   const { logout } = useAuth();
   const navigate = useNavigate();
   const [showDialog, setShowDialog] = useState(false);
-  const [previewImage, setPreviewImage] = useState(null);
 
   const handleImageChange = (e: any) => {
     const file = e.target.files[0];
     if (file) {
-      setSelectedFile(file);
-      setPreviewImage(URL.createObjectURL(file)); // temporary preview
+      onUploadImage(file);
     }
   };
 
@@ -55,19 +51,25 @@ export default function SettingSidebar({
         <div className="pb-4 px-4 w-full flex flex-col items-center relative">
           <div className="relative">
             <div className="flex flex-col items-center gap-2">
-              <label htmlFor="profileImage" className="cursor-pointer">
-                {previewImage ? (
-                  <img
-                    src={previewImage}
-                    alt="Preview"
-                    className="w-24 h-24 rounded-full object-cover border"
-                  />
-                ) : (
-                  <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
-                    <span>Select Image</span>
-                  </div>
-                )}
-              </label>
+              {/* Just show the image — no label needed */}
+              <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
+                <img
+                  src={imageUrl || "/user-img.png"}
+                  alt={name}
+                  className="w-24 h-24 rounded-full object-cover border-2 border-gray-300"
+                />
+              </div>
+
+              {/* Camera icon button triggers hidden input */}
+              <button
+                type="button"
+                onClick={() => document.getElementById("profileImage")?.click()}
+                className="absolute bottom-0 right-0 bg-[#cb202d] p-1 rounded-full hover:bg-[#cb202e] cursor-pointer"
+              >
+                <CameraIcon className="w-4 h-4 text-white" />
+              </button>
+
+              {/* Hidden file input */}
               <input
                 type="file"
                 id="profileImage"
@@ -76,28 +78,6 @@ export default function SettingSidebar({
                 onChange={handleImageChange}
               />
             </div>
-
-            {/* <img
-              src={imageUrl}
-              alt={name}
-              className="w-24 h-24 rounded-full object-cover border-2 border-gray-300"
-            />
-            <button
-              onClick={() => document.getElementById("avatarUpload")?.click()}
-              className="absolute bottom-0 right-0 bg-[#cb202d] p-1 rounded-full"
-            >
-              <CameraIcon className="w-4 h-4 text-white" />
-            </button>
-            <input
-              id="avatarUpload"
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) onUploadImage(file);
-              }}
-              className="hidden"
-            /> */}
           </div>
 
           <h2 className="mt-3 font-semibold capitalize">{name}</h2>

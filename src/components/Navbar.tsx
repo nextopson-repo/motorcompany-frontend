@@ -190,7 +190,7 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
               if (user) {
                 navigate("/settings/saved");
               } else {
-                handleAccess(); 
+                handleAccess();
               }
             }}
           >
@@ -475,7 +475,12 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
       )}
 
       {/* Login Modal */}
-      <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+      <LoginModal
+        isOpen={isLoginOpen}
+        onClose={() => setIsLoginOpen(false)}
+        mobileNumber=""
+        checkbox={false}
+      />
     </nav>
   );
 };

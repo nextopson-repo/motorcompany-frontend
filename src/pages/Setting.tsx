@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import AccountSidebar from "../components/settings/SettingSidebar";
 import Profile from "../components/settings/Profile";
@@ -9,11 +9,13 @@ import Saved from "../components/settings/Saved";
 import InterestedBuyers from "../components/settings/IntrustedBuyers";
 import Enquiries from "../components/settings/Enquiries";
 import { useAppDispatch, useAppSelector } from "../store/redux/hooks";
-import { fetchUserProfile, updateUserProfile } from "../store/slices/profileSlice";
+import {
+  fetchUserProfile,
+  updateUserProfile,
+} from "../store/slices/profileSlice";
 
 const Setting = () => {
   const dispatch = useAppDispatch();
-  const [selectedFile, setSelectedFile] = useState(null);
   const { user: profile, loading } = useAppSelector((state) => state.profile);
 
   useEffect(() => {
@@ -22,24 +24,10 @@ const Setting = () => {
     }
   }, [dispatch, profile]);
 
-  const handleImageUpload = async (file: File) => {
-    try {
-      // Ideally you'd upload image to backend here
-      const formData = new FormData();
-      formData.append("userProfileUrl", file);
-
-      const updatedData = {
-        ...profile,
-        userProfileUrl: URL.createObjectURL(file), // preview; backend would return real URL
-      };
-
-      await dispatch(updateUserProfile(updatedData)).unwrap();
-      alert("Profile image updated successfully!");
-    } catch (err) {
-      console.error("Failed to update image:", err);
-      alert("Failed to update image");
-    }
-  };
+ const handleImageUpload = async (file: File) => {
+  await dispatch(updateUserProfile({ userProfileFile: file }));
+  await dispatch(fetchUserProfile());
+};
 
   if (loading || !profile) {
     return <p className="text-center mt-10">Loading profile...</p>;
@@ -67,15 +55,16 @@ const Setting = () => {
             role={profile.userType || ""}
             imageUrl={profile.userProfileUrl || "/user-img.png"}
             onUploadImage={handleImageUpload}
-            selectedFile={selectedFile}
-            setSelectedFile={setSelectedFile}
           />
 
           {/* Main Content */}
           <div className="w-full lg:w-fit flex-1 bg-white lg:shadow rounded-sm lg:p-8">
             <Routes>
               <Route index element={<Navigate to="profile" replace />} />
-              <Route path="profile" element={<Profile user={profile} selectedFile={selectedFile} />} />
+              <Route
+                path="profile"
+                element={<Profile user={profile} />}
+              />
               <Route path="listings" element={<MyListing />} />
               <Route path="interested-buyers" element={<InterestedBuyers />} />
               <Route path="enquiries" element={<Enquiries />} />
@@ -91,9 +80,6 @@ const Setting = () => {
 };
 
 export default Setting;
-
-
-
 
 // import { Routes, Route, Navigate } from "react-router-dom";
 // import AccountSidebar from "../components/settings/SettingSidebar";

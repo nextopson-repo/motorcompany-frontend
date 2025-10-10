@@ -9,7 +9,7 @@ type AuthPanelProps = {
     success: boolean;
     isFullyVerified: boolean;
     user?: any;
-    token?: string;
+    token?: string | undefined;
   }>;
   mobileNumber: string;
   setCheckbox: React.Dispatch<React.SetStateAction<boolean>>;
@@ -40,7 +40,8 @@ const AuthPanel: React.FC<AuthPanelProps> = ({
 
   // Countdown timer for resend OTP
   useEffect(() => {
-    let timer: NodeJS.Timeout;
+    // let timer: NodeJS.Timeout;
+    let timer: ReturnType<typeof setTimeout>;
     if (step === "otp" && resendCooldown > 0) {
       timer = setTimeout(() => setResendCooldown(resendCooldown - 1), 1000);
     }
@@ -153,12 +154,12 @@ const AuthPanel: React.FC<AuthPanelProps> = ({
             <input
               type="checkbox"
               id="checkbox"
-              checked={checkbox} // state value
-              onChange={(e) => setCheckbox(e.target.checked)} // update state
+              checked={checkbox}
+              onChange={(e) => setCheckbox(e.target.checked)} 
               className="w-4 h-4 accent-red-500"
             />
-            <label htmlFor="checkbox" className="text-sm text-gray-700">
-              Please select this
+            <label htmlFor="checkbox" className="text-[10px] text-gray-700">
+              Accept our <a href="" className="text-blue-600 underline">terms</a> and <a href="" className="text-blue-600 underline">conditions</a>
             </label>
           </div>
           <button
@@ -174,6 +175,13 @@ const AuthPanel: React.FC<AuthPanelProps> = ({
       {/* OTP input */}
       {step === "otp" && userId && (
         <form onSubmit={handleVerifyOtp} className="space-y-4">
+           <div className="flex items-center rounded-lg overflow-hidden bg-gray-100 mb-6">
+            <span className="px-3 text-gray-500 select-none">+91</span>
+            <span className="text-gray-400">|</span>
+            <span className="flex-1 px-3 py-2 bg-gray-100 focus:outline-none text-black font-semibold placeholder:text-gray-400 placeholder:font-normal">
+              {mobileNumber}
+            </span>
+          </div>
           <input
             ref={otpInputRef}
             type="text"

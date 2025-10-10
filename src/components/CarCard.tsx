@@ -9,8 +9,10 @@ interface CarCardProps {
   car: CarRecord;
 }
 
+
 const CarCard: React.FC<CarCardProps> = ({ car }) => {
   const image = car.carImages?.[0]?.presignedUrl || "/fallback-car-img.png";
+  const updateTime = car.updatedAt;
 
   return (
     <div className="bg-white rounded-md overflow-hidden flex flex-col card-shadow-custom mb-3">
@@ -30,7 +32,7 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
           <h3 className="text-sm font-semibold leading-tight text-gray-800 truncate">
             {car.brand} {car.model}
           </h3>
-          <span className="text-[8px]">{formatTimeAgo(car.updatedAt)}</span>
+          <span className="text-[8px]">{formatTimeAgo(updateTime || new Date().toISOString())}</span>
         </div>
         <p className="text-[9px] text-black whitespace-nowrap overflow-hidden text-ellipsis mb-1">
           {car.bodyType} {car.seats ? ` ${car.seats} Seater` : ""} |{" "}
