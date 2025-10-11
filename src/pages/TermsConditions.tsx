@@ -10,7 +10,7 @@ const TermsConditions: React.FC = () => {
 
       <div className="space-y-3 leading-relaxed">
         <p className="text-sm">
-          Welcome to <strong>Dhikcar.com</strong>, a digital car marketplace
+          Welcome to <strong><a href="https://www.Dhikcar.com">Dhikcar.com</a></strong>, a digital car marketplace
           operated and managed by <strong>Exson Proptech Pvt. Ltd.</strong>{" "}
           (“Dhikcar” “we”, “our”, or “us”). By accessing or using our website,
           mobile application, or related services (collectively referred to as
@@ -65,7 +65,7 @@ const TermsConditions: React.FC = () => {
 
         <h2 className="text-lg font-semibold mt-10">3. Acceptance of Terms </h2>
         <p className="text-sm">
-          By accessing, browsing, or registering on Dhikcar.com, you agree that:
+          By accessing, browsing, or registering on <a href="https://www.Dhikcar.com">Dhikcar.com</a>, you agree that:
           <ul>
             <li className="list-disc list-inside pl-4">
               {" "}
@@ -486,14 +486,13 @@ const TermsConditions: React.FC = () => {
 
         <h2 className="text-lg font-semibold mt-10">19. Contact Information</h2>
         <p className="text-sm">
-          If you have questions, feedback, or legal concerns, please contact us:
+          If you have questions, feedback, or legal concerns, please contact us: <br />
           <a
             href="mailto:thedhikcar@gmail.com"
             className="text-blue-600 underline"
           >
             thedhikcar@gmail.com
-          </a>{" "}
-          or visit{" "}
+          </a>{" "} <br />
           <a href="https://www.dhikcar.com" className="text-blue-600 underline">
             www.dhikcar.com
           </a>
