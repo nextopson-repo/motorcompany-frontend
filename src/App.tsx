@@ -19,6 +19,9 @@ import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "./store/store";
 import { fetchCars } from "./store/slices/carSlice";
 import { closeLogin } from "./store/slices/authSlices/loginModelSlice";
+import TermsConditions from "./pages/TermsConditions";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import RefundPolicy from "./pages/RefundPolicy";
 
 const App = () => {
   const location = useLocation();
@@ -68,6 +71,9 @@ const App = () => {
           <Route path="/top-dealer" element={<TopDealer />} />
           <Route path="/seller-details/:userId" element={<SellerDetails />} />
           <Route path="/contact-us" element={<ContactUs />} />
+          <Route path="/terms" element={<TermsConditions />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/refund" element={<RefundPolicy />} />
         </Routes>
       </main>
 

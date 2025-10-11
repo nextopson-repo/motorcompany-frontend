@@ -158,6 +158,7 @@ export default function SellHero() {
 
     Object.entries({
       carId: editCar?.id || "",
+      carName: carData.brand && carData.model ? `${carData.brand} ${carData.model}` : editCar?.carName || "",
       brand: carData.brand || editCar?.brand || "",
       model: carData.model || editCar?.model || "",
       variant: carData.variant || editCar?.variant || "",

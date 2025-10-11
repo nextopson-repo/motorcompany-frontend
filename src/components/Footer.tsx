@@ -28,8 +28,9 @@ const Footer = () => {
   const linksData = [
     { page: "About Us", link: "/about" },
     { page: "Careers", link: "/career" },
-    { page: "Terms & Conditions", link: "/terms-and-conditions" },
-    { page: "Privacy Policy", link: "/privacy-policy" },
+    { page: "Terms & Conditions", link: "/terms" },
+    { page: "Privacy Policy", link: "/privacy" },
+    { page: "Refund Policy", link: "/refund" },
     { page: "Contact Us", link: "/contact-us" },
   ];
 
