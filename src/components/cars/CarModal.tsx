@@ -214,73 +214,6 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
     setPreviewUrls((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // const handleSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault();
-
-  //   const userData = localStorage.getItem("user");
-  //   let userId: string = ""; // default empty string
-
-  //   if (userData) {
-  //     try {
-  //       const user = JSON.parse(userData);
-  //       // Ensure it’s always string
-  //       userId = String(user.id);
-  //       console.log(userId)
-  //     } catch (err) {
-  //       console.error("Failed to parse user data from localStorage", err);
-  //     }
-  //   }
-
-  //   const formDataToSend = new FormData();
-
-  //   // append userId as string
-  //   formDataToSend.append("userId", userId);
-
-  //   // Basic details
-  //   formDataToSend.append("brand", formData.brand || "");
-  //   formDataToSend.append("model", formData.model || "");
-  //   formDataToSend.append("variant", formData.variant || "");
-  //   formDataToSend.append("fuelType", formData.fuelType || "");
-  //   formDataToSend.append("transmission", formData.transmission || "");
-  //   formDataToSend.append("bodyType", formData.bodyType || "");
-  //   formDataToSend.append("ownership", formData.ownership || "");
-
-  //   // Numeric values as strings
-  //   if (formData.manufacturingYear)
-  //     formDataToSend.append(
-  //       "manufacturingYear",
-  //       String(formData.manufacturingYear)
-  //     );
-  //   if (formData.registrationYear)
-  //     formDataToSend.append(
-  //       "registrationYear",
-  //       String(formData.registrationYear)
-  //     );
-  //   if (formData.kmDriven)
-  //     formDataToSend.append("kmDriven", String(formData.kmDriven));
-  //   if (formData.seats) formDataToSend.append("seats", String(formData.seats));
-  //   if (formData.carPrice)
-  //     formDataToSend.append("carPrice", String(formData.carPrice));
-
-  //   // Boolean
-  //   formDataToSend.append(
-  //     "isSale",
-  //     formData.isSale === "Sell" ? "true" : "false"
-  //   );
-
-  //   // Address
-  //   formDataToSend.append("addressState", formData.addressState || "");
-  //   formDataToSend.append("addressCity", formData.addressCity || "");
-  //   formDataToSend.append("addressLocality", formData.addressLocality || "");
-
-  //   // Images
-  //   images.forEach((file: File) => {
-  //     formDataToSend.append("carImages", file);
-  //   });
-
-  //   onSave(formDataToSend); // pass to parent
-  // };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -304,13 +237,10 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
       return;
     }
 
-    // 2️⃣ Create FormData
     const formDataToSend = new FormData();
 
-    // append userId first
     formDataToSend.append("userId", parsedUser.id);
 
-    // append all other fields (make sure they are strings)
     formDataToSend.append(
       "title",
       `${formData.brand} ${formData.model}`.trim()
@@ -342,7 +272,6 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
       formData.isSale === "Sell" ? "Sell" : "Buy"
     );
     formDataToSend.append("carPrice", formData.carPrice?.toString() || "");
-    // Required fields for backend
     formDataToSend.append("addressState", formData.addressState || "Unknown");
     formDataToSend.append("addressCity", formData.addressCity || "Unknown");
     formDataToSend.append(
@@ -350,16 +279,12 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
       formData.addressLocality || "Unknown"
     );
 
-    // append images
-    images.forEach((file: File) => {
-      formDataToSend.append("carImages", file);
+    images.forEach((file) => {
+      formDataToSend.append("images", file);
     });
 
-    // 3️⃣ Debug: log all keys to make sure userId exists
-    console.log("in carModel FormData keys:");
     formDataToSend.forEach((value, key) => console.log(key, value));
 
-    // 4️⃣ Send to parent handler
     onSave(formDataToSend);
   };
 

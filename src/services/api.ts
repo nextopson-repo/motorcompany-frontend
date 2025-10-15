@@ -241,92 +241,35 @@ export class VehicleApiService {
   }
 
   // Upload car to temp system
-  // static async uploadCar(carData: {
-  //   userId: string;
-  //   title: string;
-  //   description?: string;
-  //   category: string;
-  //   subCategory: string;
-  //   carPrice: number;
-  //   addressState: string;
-  //   addressCity: string;
-  //   addressLocality: string;
-  //   carName: string;
-  //   isSale: boolean;
-  //   unit?: string;
-  //   imageKeys?: string[];
-  // }, images?: File[]): Promise<ApiResponse<{ car: unknown }>> {
-  //   const formData = new FormData();
-    
-  //   // Append car data
-  //   Object.entries(carData).forEach(([key, value]) => {
-  //     if (value !== undefined && value !== null) {
-  //       if (Array.isArray(value)) {
-  //         formData.append(key, JSON.stringify(value));
-  //       } else {
-  //         formData.append(key, String(value));
-  //       }
-  //     }
-  //   });
-
-  //   // Append images if provided
-  //   if (images && images.length > 0) {
-  //     images.forEach((image) => {
-  //       formData.append('images', image);
-  //     });
-  //   }
-
-  //       try {
-  //         const sessionToken = localStorage.getItem('sessionToken');
-  //         const response = await fetch(`${API_CONFIG.BASE_URL}${API_ENDPOINTS.UPLOAD_CAR}`, {
-  //           method: 'POST',
-  //           headers: {
-  //             Authorization: `Bearer ${sessionToken}`,
-  //           },
-  //           body: formData,
-  //         });
-
-  //     const data = await response.json();
-
-  //     if (!response.ok) {
-  //       throw new Error(data.message || 'Car upload failed');
-  //     }
-
-  //     return {
-  //       success: true,
-  //       data: { car: data },
-  //       message: data.message,
-  //     };
-  //   } catch (error) {
-  //     return {
-  //       success: false,
-  //       error: error instanceof Error ? error.message : 'Car upload failed',
-  //     };
-  //   }
-  // }
-
   static async uploadCar(formData: FormData): Promise<ApiResponse<{ car: unknown }>> {
-  try {
-    const sessionToken = localStorage.getItem('sessionToken');
-    const response = await fetch("http://localhost:5000/api/v1/temp/cars", {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${sessionToken || ""}`,
-      },
-      body: formData,
-    });
+        try {
+          const sessionToken = localStorage.getItem('sessionToken');
+          const response = await fetch(`${API_CONFIG.BASE_URL}${API_ENDPOINTS.UPLOAD_CAR}`, {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${sessionToken}`,
+            },
+            body: formData,
+          });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (!response.ok) {
-      throw new Error(data.message || 'Car upload failed');
+      if (!response.ok) {
+        throw new Error(data.message || 'Car upload failed');
+      }
+
+      return {
+        success: true,
+        data: { car: data },
+        message: data.message,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Car upload failed',
+      };
     }
-
-    return { success: true, data: { car: data }, message: data.message };
-  } catch (error) {
-    return { success: false, error: error instanceof Error ? error.message : 'Car upload failed' };
   }
-}
 
 }
 
