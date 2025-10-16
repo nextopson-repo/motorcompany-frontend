@@ -50,14 +50,14 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
 
   const [brandSearch, setBrandSearch] = useState("");
   const [sectionStates, setSectionStates] = useState({
-    priceRange: true,
-    yearRange: true,
-    brands: true,
-    location: true,
-    bodyType: true,
-    fuel: true,
-    transmission: true,
-    ownership: true,
+    priceRange: false,
+    yearRange: false,
+    brands: false,
+    location: false,
+    bodyType: false,
+    fuel: false,
+    transmission: false,
+    ownership: false,
   });
 
   const toggleSection = (section: keyof typeof sectionStates) => {

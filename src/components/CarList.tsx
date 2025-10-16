@@ -4,9 +4,34 @@ import CarCard from "./CarCard";
 import CarListHeader from "./CarListHeader";
 import type { RootState } from "../store/store";
 
-export default function CarList() {
+interface CarListProps {
+  loading: boolean;
+  error: string | null;
+}
+
+export default function CarList({ loading, error }: CarListProps) {
   const { cars } = useSelector((state: RootState) => state.cars);
-  
+
+  // 🌀 Loading spinner
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center h-[60vh]">
+        <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        <p className="mt-3 text-gray-500 text-sm">Loading cars...</p>
+      </div>
+    );
+  }
+
+  // ❌ Error message
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-[60vh]">
+        <p className="text-red-500 text-lg font-medium">{error}</p>
+      </div>
+    );
+  }
+
+  // 🚗 Car list
   return (
     <div className="min-h-screen w-full overflow-hidden lg:pl-1 pb-2">
       <div className="w-full lg:max-w-7xl mx-auto">
@@ -18,7 +43,9 @@ export default function CarList() {
           {cars.length ? (
             cars.map((car) => <CarCard key={car.id} car={car} />)
           ) : (
-            <p className="col-span-full text-center">No cars found</p>
+            <p className="col-span-full text-center text-gray-500">
+              No cars found
+            </p>
           )}
         </div>
       </div>
@@ -27,77 +54,25 @@ export default function CarList() {
 }
 
 
-
-
+// // components/CarList.tsx
 // import { useSelector } from "react-redux";
 // import CarCard from "./CarCard";
 // import CarListHeader from "./CarListHeader";
 // import type { RootState } from "../store/store";
-// import { useMemo } from "react";
 
 // export default function CarList() {
-//   const { cars, filters, selectedFilters, searchTerm, sortOption } = useSelector(
-//     (state: RootState) => state.cars
-//   );
-
-//   const filteredAndSortedCars = useMemo(() => {
-//     const filtered = cars.filter((car) => {
-//       const { brand, fuel, transmission, bodyType, ownership, location, priceRange, yearRange } =
-//         selectedFilters;
-
-//       if (brand.length && !brand.includes(car.brand || "")) return false;
-//       if (fuel.length && !fuel.includes(car.fuelType || "")) return false;
-//       if (transmission.length && !transmission.includes(car.transmission || "")) return false;
-//       if (bodyType.length && !bodyType.includes(car.bodyType || "")) return false;
-//       if (ownership.length && !ownership.includes(car.ownership || "")) return false;
-//       if (location.length && !(location.includes(car.address?.state || "") || location.includes(car.address?.city || "")))
-//         return false;
-
-//       if (priceRange && (car.carPrice! < priceRange[0] || car.carPrice! > priceRange[1])) return false;
-//       if (yearRange && (car.manufacturingYear! < yearRange[0] || car.manufacturingYear! > yearRange[1]))
-//         return false;
-
-//       if (searchTerm && !`${car.brand} ${car.model}`.toLowerCase().includes(searchTerm.toLowerCase()))
-//         return false;
-
-//       return true;
-//     });
-
-//     filtered.sort((a, b) => {
-//       switch (sortOption) {
-//         case "yearNewToOld":
-//           return (b.manufacturingYear || 0) - (a.manufacturingYear || 0);
-//         case "yearOldToNew":
-//           return (a.manufacturingYear || 0) - (b.manufacturingYear || 0);
-//         case "priceLowToHigh":
-//           return (a.carPrice || 0) - (b.carPrice || 0);
-//         case "priceHighToLow":
-//           return (b.carPrice || 0) - (a.carPrice || 0);
-//         default:
-//           return 0;
-//       }
-//     });
-
-//     return filtered;
-//   }, [cars, selectedFilters, searchTerm, sortOption]);
-
+//   const { cars } = useSelector((state: RootState) => state.cars);
+  
 //   return (
 //     <div className="min-h-screen w-full overflow-hidden lg:pl-1 pb-2">
-//       <div className="w-full lg:max-w-7xl mx-auto ">
+//       <div className="w-full lg:max-w-7xl mx-auto">
 //         {/* Header */}
-//         <CarListHeader
-//           carCount={filteredAndSortedCars.length}
-//           filters={{
-//             ...filters,
-//             priceRange: filters.priceRange ?? [0, 10000000],
-//             yearRange: filters.yearRange ?? [2000, 2025],
-//           }}
-//         />
+//         <CarListHeader carCount={cars.length} />
 
 //         {/* Car Cards Grid */}
 //         <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-2 md:gap-8 mx-4 sm:mx-0">
-//           {filteredAndSortedCars.length ? (
-//             filteredAndSortedCars.map((car) => <CarCard key={car.id} car={car} />)
+//           {cars.length ? (
+//             cars.map((car) => <CarCard key={car.id} car={car} />)
 //           ) : (
 //             <p className="col-span-full text-center">No cars found</p>
 //           )}

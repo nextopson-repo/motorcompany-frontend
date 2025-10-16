@@ -11,7 +11,7 @@ interface CarCardProps {
 
 
 const CarCard: React.FC<CarCardProps> = ({ car }) => {
-  const image = car.carImages?.[0]?.presignedUrl || "/fallback-car-img.png";
+  const image = car.carImages?.[0]?.imageKey || "/fallback-car-img.png";
   const updateTime = car.updatedAt;
 
   return (
