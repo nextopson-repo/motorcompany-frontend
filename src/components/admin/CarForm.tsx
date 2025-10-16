@@ -21,18 +21,29 @@ export default function CarForm() {
     if (!title || !brand || !model || !year || !price || !kmDriven) return alert('Fill all fields');
     const newVehicle = {
       id: Date.now().toString(),
-      title,
+      title: title,
+      carName: title,
       brand,
       model,
-      year: Number(year),
-      price: Number(price),
-      kmDriven: Number(kmDriven),
-      fuelType,
-      transmission,
-      location,
-      owner,
-      condition,
-      image: image || 'https://via.placeholder.com/400'
+      variant: '',
+      bodyType: '',
+      fuelType: fuelType as 'Petrol' | 'Diesel' | 'CNG' | 'Electric',
+      transmission: transmission as 'Manual' | 'Automatic',
+      ownership: '1st' as '1st' | '2nd' | '3rd' | '3+',
+      manufacturingYear: Number(year),
+      registrationYear: Number(year),
+      kmDriven: kmDriven.toString(),
+      seats: '5' as '2' | '4' | '5' | '6' | '7' | '8',
+      isSale: 'Sell' as 'Sell' | 'Rent',
+      carPrice: price.toString(),
+      image: image || 'https://via.placeholder.com/400',
+      address: {
+        state: '',
+        city: location,
+        locality: ''
+      },
+      owner: owner,
+      isActive: true
     };
     dispatch(addVehicle(newVehicle));
     alert('Vehicle added successfully!');

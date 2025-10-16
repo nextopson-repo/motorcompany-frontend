@@ -9,6 +9,7 @@ import {
   Upload,
   X,
 } from "lucide-react";
+import toast from "react-hot-toast";
 import type { Vehicle } from "../../types";
 
 // Props type definition
@@ -26,6 +27,7 @@ interface DropdownProps {
   options: string[];
   value: string;
   onChange: (v: string) => void;
+  disabled?: boolean;
 }
 
 function Dropdown({
@@ -34,6 +36,7 @@ function Dropdown({
   options,
   value,
   onChange,
+  disabled = false,
 }: DropdownProps) {
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
@@ -41,6 +44,24 @@ function Dropdown({
   const filteredOptions = options.filter((opt) =>
     opt.toLowerCase().includes(search.toLowerCase())
   );
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+    if (e.target.value === "") {
+      onChange("");
+    }
+  };
+
+  const handleOptionSelect = (option: string) => {
+    onChange(option);
+    setSearch("");
+    setOpen(false);
+  };
+
+  const handleBlur = () => {
+    // Delay closing to allow option selection
+    setTimeout(() => setOpen(false), 150);
+  };
 
   return (
     <div className="mb-1 relative">
@@ -50,35 +71,35 @@ function Dropdown({
       <input
         type="text"
         value={search || value}
-        onFocus={() => setOpen(true)}
-        onChange={(e) => {
-          setSearch(e.target.value);
-          onChange("");
-        }}
-        placeholder={placeholder}
-        className="w-full rounded mt-1 px-4 py-[6px] md:py-2 text-[10px] md:text-xs border border-gray-200 placeholder:text-[10px] focus:ring-1 focus:ring-gray-800/50 outline-none"
+        onFocus={() => !disabled && setOpen(true)}
+        onBlur={handleBlur}
+        onChange={handleInputChange}
+        placeholder={disabled ? "Please select " + label.toLowerCase() + " first" : placeholder}
+        disabled={disabled}
+        className={`w-full rounded mt-1 px-4 py-[6px] md:py-2 text-[10px] md:text-xs border placeholder:text-[10px] outline-none transition-colors ${
+          disabled 
+            ? "border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed" 
+            : "border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        }`}
       />
 
       {open && (
-        <ul className="absolute w-full border border-gray-200 rounded mt-1 max-h-40 overflow-y-auto text-xs bg-white z-10">
+        <ul className="absolute w-full border border-gray-200 rounded mt-1 max-h-40 overflow-y-auto text-xs bg-white z-20 shadow-lg">
           {filteredOptions.length > 0 ? (
             filteredOptions.map((opt) => (
               <li
                 key={opt}
-                onClick={() => {
-                  onChange(opt);
-                  setSearch("");
-                  setOpen(false);
-                }}
-                className={`px-3 py-2 cursor-pointer hover:bg-gray-100 ${
-                  value === opt ? "bg-gray-200 font-medium" : ""
+                onMouseDown={(e) => e.preventDefault()} // Prevent input blur
+                onClick={() => handleOptionSelect(opt)}
+                className={`px-3 py-2 cursor-pointer hover:bg-blue-50 transition-colors ${
+                  value === opt ? "bg-blue-100 font-medium text-blue-800" : ""
                 }`}
               >
                 {opt}
               </li>
             ))
           ) : (
-            <li className="px-3 py-2 text-gray-400">No results</li>
+            <li className="px-3 py-2 text-gray-400 italic">No results found</li>
           )}
         </ul>
       )}
@@ -95,6 +116,7 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
 }) => {
   const [images, setImages] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
     addressState: "",
@@ -117,6 +139,10 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
   });
 
   const locationData: Record<string, Record<string, string[]>> = {
+    Karnataka: {
+      Bangalore: ["Whitefield", "Koramangala", "Indiranagar", "JP Nagar", "Electronic City"],
+      Mysore: ["Vijayanagar", "Kuvempunagar", "Saraswathipuram"],
+    },
     MadhyaPradesh: {
       Indore: ["Vijay Nagar", "Rajwada", "Palasia"],
       Bhopal: ["Arera Colony", "Kolar Road"],
@@ -129,6 +155,7 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
       Lucknow: ["Hazratganj", "Gomti Nagar"],
     },
     Maharashtra: {
+      Mumbai: ["Bandra", "Andheri", "Powai", "Thane"],
       Pune: ["Kothrud", "Hinjewadi"],
     },
     Gujarat: {
@@ -150,10 +177,12 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
       const defaultState = Object.keys(locationData)[0] || "";
       const state = vehicle.address?.state || defaultState;
 
-      const defaultCity = Object.keys(locationData[state] || {})[0] || "";
+      const stateData = locationData[state];
+      const defaultCity = stateData ? Object.keys(stateData)[0] || "" : "";
       const city = vehicle.address?.city || defaultCity;
 
-      const defaultLocality = (locationData[state]?.[city] || [])[0] || "";
+      const cityData = stateData?.[city];
+      const defaultLocality = cityData?.[0] || "";
       const locality = vehicle.address?.locality || defaultLocality;
 
       setFormData({
@@ -177,12 +206,23 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
         seats: vehicle.seats || "4",
       });
 
-      if (vehicle.carImages?.length > 0) {
-        const urls = vehicle.carImages.map((img) => img.presignedUrl);
+      if (vehicle.carImages && vehicle.carImages.length > 0) {
+        const urls = vehicle.carImages.map((img) => img.presignedUrl).filter((url): url is string => url !== undefined);
         setPreviewUrls(urls);
       }
     }
   }, [mode, vehicle]);
+
+  // Cleanup preview URLs to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      previewUrls.forEach(url => {
+        if (url.startsWith('blob:')) {
+          URL.revokeObjectURL(url);
+        }
+      });
+    };
+  }, [previewUrls]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
@@ -193,16 +233,26 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
       const updated = { ...prev, [name]: value };
 
       if (name === "addressState") {
-        const firstCity = Object.keys(locationData[value] || {})[0] || "";
-        const firstLocality = (locationData[value]?.[firstCity] || [])[0] || "";
-        updated.addressCity = firstCity;
-        updated.addressLocality = firstLocality;
+        const stateData = locationData[value];
+        if (stateData) {
+          const firstCity = Object.keys(stateData)[0] || "";
+          const firstLocality = stateData[firstCity]?.[0] || "";
+          updated.addressCity = firstCity;
+          updated.addressLocality = firstLocality;
+        } else {
+          updated.addressCity = "";
+          updated.addressLocality = "";
+        }
       }
 
       if (name === "addressCity") {
-        const firstLocality =
-          (locationData[prev.addressState]?.[value] || [])[0] || "";
-        updated.addressLocality = firstLocality;
+        const stateData = locationData[prev.addressState];
+        if (stateData && stateData[value]) {
+          const firstLocality = stateData[value][0] || "";
+          updated.addressLocality = firstLocality;
+        } else {
+          updated.addressLocality = "";
+        }
       }
 
       return updated;
@@ -214,12 +264,41 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
     setPreviewUrls((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (isSubmitting) return; // Prevent double submission
+
+    // Form validation
+    if (!formData.brand.trim()) {
+      toast.error("Please select a car brand");
+      return;
+    }
+
+    if (!formData.model.trim()) {
+      toast.error("Please enter the car model");
+      return;
+    }
+
+    if (!formData.carPrice || parseFloat(formData.carPrice) <= 0) {
+      toast.error("Please enter a valid car price");
+      return;
+    }
+
+    if (!formData.addressState || !formData.addressCity || !formData.addressLocality) {
+      toast.error("Please select complete address details (State, City, and Locality)");
+      return;
+    }
+
+    if (images.length === 0) {
+      toast.error("Please upload at least one car image");
+      return;
+    }
+
+    // Check user authentication
     const userData = localStorage.getItem("user");
     if (!userData) {
-      alert("User not logged in");
+      toast.error("Please log in to list your car");
       return;
     }
 
@@ -228,64 +307,67 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
       parsedUser = JSON.parse(userData);
     } catch (err) {
       console.error("Failed to parse user data from localStorage", err);
-      alert("Invalid user data");
+      toast.error("Invalid user data. Please log in again.");
       return;
     }
 
     if (!parsedUser?.id) {
-      alert("User ID missing");
+      toast.error("User ID missing. Please log in again.");
       return;
     }
 
+    // Create FormData for backend
     const formDataToSend = new FormData();
 
+    // Required fields according to backend interface
     formDataToSend.append("userId", parsedUser.id);
+    formDataToSend.append("addressState", formData.addressState);
+    formDataToSend.append("addressCity", formData.addressCity);
+    formDataToSend.append("addressLocality", formData.addressLocality);
 
-    formDataToSend.append(
-      "title",
-      `${formData.brand} ${formData.model}`.trim()
-    );
-    formDataToSend.append(
-      "carName",
-      formData.carName || `${formData.brand} ${formData.model}`.trim()
-    );
-
-    formDataToSend.append("brand", formData.brand || "");
-    formDataToSend.append("model", formData.model || "");
+    // Car details
+    const carTitle = `${formData.brand} ${formData.model}`.trim();
+    const carName = formData.carName.trim() || carTitle;
+    
+    formDataToSend.append("title", carTitle);
+    formDataToSend.append("carName", carName);
+    formDataToSend.append("brand", formData.brand);
+    formDataToSend.append("model", formData.model);
     formDataToSend.append("variant", formData.variant || "");
-    formDataToSend.append("fuelType", formData.fuelType || "");
-    formDataToSend.append("transmission", formData.transmission || "");
+    formDataToSend.append("fuelType", formData.fuelType);
+    formDataToSend.append("transmission", formData.transmission);
     formDataToSend.append("bodyType", formData.bodyType || "");
-    formDataToSend.append("ownership", formData.ownership || "");
-    formDataToSend.append(
-      "manufacturingYear",
-      formData.manufacturingYear?.toString() || ""
-    );
-    formDataToSend.append(
-      "registrationYear",
-      formData.registrationYear?.toString() || ""
-    );
-    formDataToSend.append("kmDriven", formData.kmDriven?.toString() || "");
-    formDataToSend.append("seats", formData.seats?.toString() || "");
-    formDataToSend.append(
-      "isSale",
-      formData.isSale === "Sell" ? "Sell" : "Buy"
-    );
-    formDataToSend.append("carPrice", formData.carPrice?.toString() || "");
-    formDataToSend.append("addressState", formData.addressState || "Unknown");
-    formDataToSend.append("addressCity", formData.addressCity || "Unknown");
-    formDataToSend.append(
-      "addressLocality",
-      formData.addressLocality || "Unknown"
-    );
+    formDataToSend.append("ownership", formData.ownership);
+    formDataToSend.append("manufacturingYear", formData.manufacturingYear.toString());
+    formDataToSend.append("registrationYear", formData.registrationYear.toString());
+    formDataToSend.append("kmDriven", formData.kmDriven || "0");
+    formDataToSend.append("seats", formData.seats);
+    formDataToSend.append("isSale", formData.isSale);
+    formDataToSend.append("carPrice", formData.carPrice);
 
+    // Add description
+    const description = `Discover this ${formData.model.toLowerCase()} ${formData.brand} located at ${formData.addressLocality}, ${formData.addressCity}. This ${formData.fuelType.toLowerCase()} ${formData.transmission.toLowerCase()} transmission vehicle has been driven ${formData.kmDriven || '0'} km and is available for ${formData.isSale.toLowerCase()}.`;
+    formDataToSend.append("description", description);
+
+    // Add images - backend expects 'images' field with array of files
     images.forEach((file) => {
       formDataToSend.append("images", file);
     });
 
-    formDataToSend.forEach((value, key) => console.log(key, value));
+    // Debug: Log FormData contents
+    console.log("FormData being sent to backend:");
+    formDataToSend.forEach((value, key) => {
+      console.log(`${key}:`, value);
+    });
 
-    onSave(formDataToSend);
+    setIsSubmitting(true);
+    try {
+      await onSave(formDataToSend);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleClose = () => {
@@ -357,11 +439,12 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
                   label="City"
                   placeholder="Select City"
                   options={
-                    formData.addressState
-                      ? Object.keys(locationData[formData.addressState] || {})
+                    formData.addressState && locationData[formData.addressState]
+                      ? Object.keys(locationData[formData.addressState])
                       : []
                   }
                   value={formData.addressCity}
+                  disabled={!formData.addressState}
                   onChange={(val) =>
                     setFormData((prev) => ({
                       ...prev,
@@ -373,15 +456,17 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
 
                 <Dropdown
                   label="Locality"
-                  placeholder="Select you neighbourhood"
+                  placeholder="Select your neighbourhood"
                   options={
-                    formData.addressState && formData.addressCity
-                      ? locationData[formData.addressState][
-                          formData.addressCity
-                        ] || []
+                    formData.addressState && 
+                    formData.addressCity && 
+                    locationData[formData.addressState] &&
+                    locationData[formData.addressState][formData.addressCity]
+                      ? locationData[formData.addressState][formData.addressCity]
                       : []
                   }
                   value={formData.addressLocality}
+                  disabled={!formData.addressState || !formData.addressCity}
                   onChange={(val) =>
                     setFormData((prev) => ({ ...prev, addressLocality: val }))
                   }
@@ -399,7 +484,22 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
               </div>
 
               <div className=" space-y-6">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Car Name <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="carName"
+                      required
+                      value={formData.carName}
+                      onChange={handleInputChange}
+                      className="w-full rounded mt-1 px-4 py-[6px] md:py-2 text-[10px] md:text-xs border border-gray-200 placeholder:text-[10px] focus:ring-1 focus:ring-gray-800/50 outline-none"
+                      placeholder="Enter car name (e.g., Honda City VX)"
+                    />
+                  </div>
+
                   <Dropdown
                     label="Brand"
                     placeholder="Select Brand"
@@ -426,7 +526,9 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
                       setFormData((prev) => ({ ...prev, brand: val }))
                     }
                   />
+                </div>
 
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Model <span className="text-red-500">*</span>
@@ -438,7 +540,7 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
                       value={formData.model}
                       onChange={handleInputChange}
                       className="w-full rounded mt-1 px-4 py-[6px] md:py-2 text-[10px] md:text-xs border border-gray-200 placeholder:text-[10px] focus:ring-1 focus:ring-gray-800/50 outline-none"
-                      placeholder="e.g., City"
+                      placeholder="Enter car model (e.g., City, Swift, i20)"
                     />
                   </div>
 
@@ -449,11 +551,10 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
                     <input
                       type="text"
                       name="variant"
-                      required
                       value={formData.variant}
                       onChange={handleInputChange}
                       className="w-full rounded mt-1 px-4 py-[6px] md:py-2 text-[10px] md:text-xs border border-gray-200 placeholder:text-[10px] focus:ring-1 focus:ring-gray-800/50 outline-none"
-                      placeholder="e.g., VX CVT"
+                      placeholder="Enter variant (e.g., VX CVT, ZX, LXI)"
                     />
                   </div>
                 </div>
@@ -602,7 +703,7 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
                     value={formData.carPrice}
                     onChange={handleInputChange}
                     className="w-full rounded mt-1 px-4 py-[6px] md:py-2 text-[10px] md:text-xs border border-gray-200 placeholder:text-[10px] focus:ring-1 focus:ring-gray-800/50 outline-none"
-                    placeholder="Enter price"
+                    placeholder="Enter price in ₹ (e.g., 500000)"
                   />
                 </div>
 
@@ -613,11 +714,10 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
                   <input
                     type="number"
                     name="kmDriven"
-                    required
                     value={formData.kmDriven}
                     onChange={handleInputChange}
                     className="w-full rounded mt-1 px-4 py-[6px] md:py-2 text-[10px] md:text-xs border border-gray-200 placeholder:text-[10px] focus:ring-1 focus:ring-gray-800/50 outline-none"
-                    placeholder="e.g., 25000"
+                    placeholder="Enter kilometers driven (e.g., 25000)"
                   />
                 </div>
               </div>
@@ -632,29 +732,53 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
                 </h2>
               </div>
 
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition">
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition-colors">
                 <input
                   type="file"
                   id="imageUpload"
                   multiple
-                  accept="image/*"
+                  accept="image/*,.webp"
                   onChange={(e) => {
                     if (!e.target.files) return;
                     const files = Array.from(e.target.files);
-                    setImages(files);
-                    const previews = files.map((file) =>
+                    
+                    // Validate file sizes (max 10MB per file)
+                    const validFiles = files.filter(file => {
+                      if (file.size > 10 * 1024 * 1024) {
+                        toast.error(`File ${file.name} is too large. Maximum size is 10MB.`);
+                        return false;
+                      }
+                      return true;
+                    });
+
+                    // Limit to 10 images total
+                    const totalImages = images.length + validFiles.length;
+                    if (totalImages > 10) {
+                      toast.error("Maximum 10 images allowed. Please select fewer images.");
+                      return;
+                    }
+
+                    setImages(prev => [...prev, ...validFiles]);
+                    const newPreviews = validFiles.map((file) =>
                       URL.createObjectURL(file)
                     );
-                    setPreviewUrls(previews);
+                    setPreviewUrls(prev => [...prev, ...newPreviews]);
                   }}
                   className="hidden"
                 />
-                <label htmlFor="imageUpload" className="cursor-pointer">
+                <label htmlFor="imageUpload" className="cursor-pointer block">
                   <Upload className="w-9 h-9 text-gray-400 mx-auto mb-2" />
                   <p className="text-gray-600 mb-1">
                     Click to upload car images
                   </p>
-                  <p className="text-xs text-gray-500">PNG, JPG Maximum 20MB</p>
+                  <p className="text-xs text-gray-500">
+                    PNG, JPG, WebP • Max 10MB each • Up to 10 images
+                  </p>
+                  {images.length > 0 && (
+                    <p className="text-xs text-blue-600 mt-1">
+                      {images.length} image{images.length !== 1 ? 's' : ''} selected
+                    </p>
+                  )}
                 </label>
               </div>
 
@@ -693,9 +817,21 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
             <button
               type="button"
               onClick={handleSubmit}
-              className="px-8 py-[6px] bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-md hover:from-blue-700 hover:to-blue-800 transition font-medium shadow-lg shadow-blue-500/30"
+              disabled={isSubmitting}
+              className={`px-8 py-[6px] rounded-md transition font-medium shadow-lg ${
+                isSubmitting
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-blue-500/30"
+              } text-white`}
             >
-              {mode === "edit" ? "Update Car" : "List Car"}
+              {isSubmitting ? (
+                <span className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  {mode === "edit" ? "Updating..." : "Listing..."}
+                </span>
+              ) : (
+                mode === "edit" ? "Update Car" : "List Car"
+              )}
             </button>
           </div>
         </div>

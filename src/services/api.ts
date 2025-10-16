@@ -168,14 +168,35 @@ export class VehicleApiService {
 
     // Map backend car to frontend Vehicle type minimally
     const mapped: Vehicle[] = cars.map((c) => ({
-      ...c, // spread all backend fields
       id: c.id,
       title: c.title || c.carName || '',
-      image:
-        c.carImages?.[0]?.imageKey ||
-        c.images?.[0] ||
-        '',
+      carName: c.carName || '',
+      brand: c.brand || '',
+      model: c.model || '',
+      variant: '', // TempCarRaw doesn't have variant
+      bodyType: '', // TempCarRaw doesn't have bodyType
+      fuelType: (c.fuelType as 'Petrol' | 'Diesel' | 'CNG' | 'Electric') || 'Petrol',
+      transmission: (c.transmission as 'Manual' | 'Automatic') || 'Manual',
+      ownership: '1st', // Default value since TempCarRaw doesn't have this
+      manufacturingYear: c.manufacturingYear || new Date().getFullYear(),
+      registrationYear: c.registrationYear || new Date().getFullYear(),
+      kmDriven: c.kmDriven?.toString() || '0',
+      seats: '4', // Default value since TempCarRaw doesn't have this
+      isSale: 'Sell', // Default value since TempCarRaw doesn't have this
+      carPrice: c.carPrice?.toString() || '0',
+      image: c.carImages?.[0]?.imageKey || c.images?.[0] || '',
+      carImages: c.carImages?.map(img => ({
+        id: img.id || '',
+        imageKey: new File([], img.imageKey || ''),
+        presignedUrl: img.imageKey
+      })) || [],
+      address: c.address ? {
+        state: c.address.state || '',
+        city: c.address.city || '',
+        locality: c.address.locality || ''
+      } : undefined,
       owner: c.user?.fullName || '',
+      isActive: true, // Default value since TempCarRaw doesn't have this
     }));
 
     return {
@@ -241,16 +262,24 @@ export class VehicleApiService {
   }
 
   // Upload car to temp system
-  static async uploadCar(formData: FormData): Promise<ApiResponse<{ car: unknown }>> {
-        try {
-          const sessionToken = localStorage.getItem('sessionToken');
-          const response = await fetch(`${API_CONFIG.BASE_URL}${API_ENDPOINTS.UPLOAD_CAR}`, {
-            method: 'POST',
-            headers: {
-              Authorization: `Bearer ${sessionToken}`,
-            },
-            body: formData,
-          });
+  static async uploadCar(formData: FormData): Promise<ApiResponse<{ car: TempCarRaw }>> {
+    try {
+      const sessionToken = localStorage.getItem('sessionToken');
+      
+      if (!sessionToken) {
+        return {
+          success: false,
+          error: 'No session token found. Please login again.',
+        };
+      }
+
+      const response = await fetch(`${API_CONFIG.BASE_URL}${API_ENDPOINTS.UPLOAD_CAR}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${sessionToken}`,
+        },
+        body: formData,
+      });
 
       const data = await response.json();
 
@@ -258,9 +287,10 @@ export class VehicleApiService {
         throw new Error(data.message || 'Car upload failed');
       }
 
+      // Backend returns: { message: string, car: CarResponse }
       return {
         success: true,
-        data: { car: data },
+        data: { car: data.car },
         message: data.message,
       };
     } catch (error) {

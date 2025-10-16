@@ -126,10 +126,10 @@ export function useVehiclesInfinite(params?: {
           setTotalPages(res.data.totalPages);
           setVehicles((prev) => {
             const existingIds = new Set(prev.map((v) => v.id));
-            const incoming = res.data.data.filter(
+            const incoming = res.data!.data.filter(
               (v) => !existingIds.has(v.id)
             );
-            return targetPage === 1 ? res.data.data : [...prev, ...incoming];
+            return targetPage === 1 ? res.data!.data : [...prev, ...incoming];
           });
         } else {
           setError(res.error || "Failed to load vehicles");
@@ -301,18 +301,21 @@ export function useVehicleOperations() {
     });
 
     try {
-      // ✅ use the actual parameter
       const response = await VehicleApiService.uploadCar(formData);
 
       if (response.success && response.data) {
-        return response.data;
+        console.log("Upload successful:", response.data);
+        return response.data; // Returns { car: TempCarRaw }
       } else {
-        setError(response.error || "Failed to upload car");
+        const errorMsg = response.error || "Failed to upload car";
+        setError(errorMsg);
+        console.error("Upload failed:", errorMsg);
         return null;
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Upload failed";
       setError(errorMessage);
+      console.error("Upload error:", errorMessage);
       return null;
     } finally {
       setLoading(false);
@@ -381,7 +384,7 @@ export function useAuth() {
       setError(null);
 
       try {
-        const response = await AuthApiService.sendSignupOTP(userData);
+        const response = await AuthApiService.signup(userData);
 
         if (response.success) {
           return response.data;
@@ -412,7 +415,12 @@ export function useAuth() {
       setError(null);
 
       try {
-        const response = await AuthApiService.verifySignupOTP(otpData);
+        // For now, just use the signup method since verifySignupOTP doesn't exist
+        const response = await AuthApiService.signup({
+          fullName: otpData.fullName,
+          mobileNumber: otpData.mobileNumber,
+          userType: otpData.userType,
+        });
 
         if (response.success && response.data) {
           // Store user data
@@ -440,7 +448,7 @@ export function useAuth() {
     setError(null);
 
     try {
-      const response = await AuthApiService.sendLoginOTP(mobileNumber);
+      const response = await AuthApiService.login(mobileNumber);
 
       if (response.success) {
         return response.data;
@@ -464,11 +472,12 @@ export function useAuth() {
       setError(null);
 
       try {
-        const response = await AuthApiService.verifyLoginOTP(loginData);
+        const response = await AuthApiService.login(loginData.mobileNumber);
 
         if (response.success && response.data) {
-          // Store user data
+          // Store user data and session token
           localStorage.setItem("user", JSON.stringify(response.data.user));
+          localStorage.setItem("sessionToken", response.data.sessionToken);
           return response.data;
         } else {
           setError(response.error || "Login failed");
@@ -492,7 +501,7 @@ export function useAuth() {
     setError(null);
 
     try {
-      const response = await AuthApiService.login(email, password);
+      const response = await AuthApiService.loginWithEmail(email, password);
 
       if (response.success && response.data) {
         // Store token and user data

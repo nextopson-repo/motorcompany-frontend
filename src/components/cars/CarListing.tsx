@@ -8,6 +8,7 @@ import {
   SortAsc,
   SortDesc,
 } from "lucide-react";
+import toast from "react-hot-toast";
 import type { Vehicle } from "../../types";
 import CarCard from "./CarCard";
 import CarModal from "./CarModal";
@@ -27,12 +28,13 @@ const CarListing: React.FC = () => {
     minYear: "",
     maxYear: "",
   });
-  const [sortBy, setSortBy] = useState<"price" | "year" | "kmDriven" | "title">(
-    "price"
+  const [sortBy, setSortBy] = useState<"carPrice" | "registrationYear" | "kmDriven" | "title">(
+    "carPrice"
   );
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [showFilters, setShowFilters] = useState(false);
+  const [deleteCarId, setDeleteCarId] = useState<string | null>(null);
   const [modalState, setModalState] = useState<{
     isOpen: boolean;
     mode: "create" | "edit" | "view";
@@ -94,8 +96,8 @@ const CarListing: React.FC = () => {
 
     // Sort vehicles
     filtered.sort((a, b) => {
-      let aValue: string | number = a[sortBy];
-      let bValue: string | number = b[sortBy];
+      let aValue: string | number = a[sortBy] || '';
+      let bValue: string | number = b[sortBy] || '';
 
       if (sortBy === "title") {
         aValue = (aValue as string).toLowerCase();
@@ -124,30 +126,34 @@ const CarListing: React.FC = () => {
   //   setModalState({ isOpen: true, mode: 'view', vehicle });
   // };
 
-  const handleDeleteVehicle = (id: string) => {
-    if (window.confirm("Are you sure you want to delete this vehicle?")) {
-      deleteVehicle(id);
-    }
-  };
+    const handleDeleteVehicle = (id: string) => {
+    
+        deleteVehicle(id);
+        toast.success("Vehicle deleted successfully!");
+      setDeleteCarId(id);
+    };
 
   const handleSaveVehicle = async (formDataToSend: FormData) => {
-
     formDataToSend.forEach((value, key) => {
       console.log("in carListing FormData:", key, value, typeof value);
     });
 
     try {
-      const uploadedVehicle = await uploadCar(formDataToSend);
+      const result = await uploadCar(formDataToSend);
 
-      if (uploadedVehicle) {
-        alert("Vehicle uploaded successfully!");
-        console.log("last Payload", uploadedVehicle);
+      if (result && result.car) {
+        toast.success("Vehicle uploaded successfully!");
+        console.log("Uploaded vehicle:", result.car);
+        // Refresh the vehicle list to show the new car
+        fetchMore(); // Use the proper refetch function from the hook
       } else {
-        alert("Failed to upload vehicle. in handleSaveVehicle");
+        const errorMessage = "Failed to upload vehicle. Please check the console for details.";
+        toast.error(errorMessage);
+        console.error("Upload failed:", result);
       }
     } catch (error) {
       console.error("Upload error:", error);
-      alert("Something went wrong while uploading.");
+      toast.error("Something went wrong while uploading. Please try again.");
     } finally {
       setModalState({ isOpen: false, mode: "create", vehicle: null });
     }
@@ -228,13 +234,13 @@ const CarListing: React.FC = () => {
               value={sortBy}
               onChange={(e) =>
                 setSortBy(
-                  e.target.value as "price" | "year" | "kmDriven" | "title"
+                  e.target.value as "carPrice" | "registrationYear" | "kmDriven" | "title"
                 )
               }
               className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
-              <option value="price">Price</option>
-              <option value="year">Year</option>
+              <option value="carPrice">Price</option>
+              <option value="registrationYear">Year</option>
               <option value="kmDriven">Kilometers</option>
               <option value="title">Name</option>
             </select>
@@ -470,7 +476,7 @@ const CarListing: React.FC = () => {
               : "space-y-4"
           }
         >
-          {filteredAndSortedVehicles.map((vehicle) => (
+          {filteredAndSortedVehicles.filter((vehicle) => vehicle.id !== deleteCarId).map((vehicle) => (
             <CarCard
               key={vehicle.id}
               vehicle={vehicle}

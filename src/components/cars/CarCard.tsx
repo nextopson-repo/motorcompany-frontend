@@ -100,7 +100,7 @@ const CarCard: React.FC<CarCardProps> = ({ vehicle, onDelete, onEdit }) => {
                   Edit
                 </button>
                 <button
-                  onClick={(e) => { e.stopPropagation(); setMenuOpen(false); onDelete(vehicle.id); }}
+                  onClick={(e) => { e.stopPropagation(); setMenuOpen(false); onDelete(vehicle.id || ''); }}
                   className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -139,7 +139,7 @@ const CarCard: React.FC<CarCardProps> = ({ vehicle, onDelete, onEdit }) => {
           </div>
           <div className="flex items-center text-sm text-gray-600">
             <Gauge className="w-4 h-4 mr-2 text-gray-400" />
-            <span>{vehicle.kmDriven.toLocaleString()} km</span>
+            <span>{parseFloat(vehicle.kmDriven || '0').toLocaleString()} km</span>
           </div>
           <div className="flex items-center text-sm text-gray-600">
             <Fuel className="w-4 h-4 mr-2 text-gray-400" />

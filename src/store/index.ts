@@ -9,12 +9,10 @@ function getPreloadedState() {
     if (rawUser && sessionToken) {
       const user = JSON.parse(rawUser);
       return {
-        app: {
-          users: [],
-          vehicles: [],
-          currentUser: user,
-          isAuthenticated: true,
-        },
+        users: [],
+        vehicles: [],
+        currentUser: user,
+        isAuthenticated: true,
       } as const;
     }
   } catch {
@@ -24,10 +22,8 @@ function getPreloadedState() {
 }
 
 export const store = configureStore({
-  reducer: {
-    app: appReducer,
-  },
-  preloadedState: getPreloadedState(),
+  reducer: appReducer,
+  preloadedState: getPreloadedState() as any,
 });
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -128,8 +128,8 @@ export default function UsersTab() {
                   </span>
                 </td>
                 <td className="px-4 py-4">
-                  {user.createdAt
-                    ? new Date(user.createdAt).toLocaleString("en-IN", {
+                  {user.created
+                    ? new Date(user.created).toLocaleString("en-IN", {
                         timeZone: "Asia/Kolkata",
                         year: "numeric",
                         month: "short",

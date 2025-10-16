@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import { useAppSelector } from './hooks/useAppDispatch';
 import Navbar from './components/layout/Navbar';
 import Login from './components/auth/Login';
@@ -7,13 +8,13 @@ import AdminPanel from './components/admin/AdminPanel';
 
 // Protected Route component
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const isAuthenticated = useAppSelector(s => s.app.isAuthenticated);
+  const isAuthenticated = useAppSelector(s => s.isAuthenticated);
   return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />;
 }
 
 // Public Route component (redirects authenticated users to dashboard)
 function PublicRoute({ children }: { children: React.ReactNode }) {
-  const isAuthenticated = useAppSelector(s => s.app.isAuthenticated);
+  const isAuthenticated = useAppSelector(s => s.isAuthenticated);
   return !isAuthenticated ? <>{children}</> : <Navigate to="/admin" replace />;
 }
 
@@ -59,6 +60,32 @@ function AppRoutes() {
 
 export default function App() {
   return (
-    <AppRoutes />
+    <>
+      <AppRoutes />
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: '#363636',
+            color: '#fff',
+          },
+          success: {
+            duration: 3000,
+            iconTheme: {
+              primary: '#10B981',
+              secondary: '#fff',
+            },
+          },
+          error: {
+            duration: 4000,
+            iconTheme: {
+              primary: '#EF4444',
+              secondary: '#fff',
+            },
+          },
+        }}
+      />
+    </>
   );
 }

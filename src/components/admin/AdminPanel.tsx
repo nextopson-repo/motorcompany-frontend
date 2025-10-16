@@ -21,9 +21,9 @@ const AdminPanel: React.FC = () => {
 
   const renderTabContent = () => {
 
-    const num = vehicles.reduce((sum, v) => sum + v.carPrice, 0);
+    const num = vehicles.reduce((sum, v) => sum + parseFloat(v.carPrice || '0'), 0);
     
-    function formatCompactINR(num) {
+    function formatCompactINR(num: number) {
       if (isNaN(num)) return "₹0";
       num = Math.floor(num);
 
@@ -102,7 +102,7 @@ const AdminPanel: React.FC = () => {
                       ₹
                       {vehicles.length > 0
                         ? Math.round(
-                            vehicles.reduce((sum, v) => sum + v.carPrice, 0) /
+                            vehicles.reduce((sum, v) => sum + parseFloat(v.carPrice || '0'), 0) /
                               vehicles.length
                           ).toLocaleString()
                         : 0}

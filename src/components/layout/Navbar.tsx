@@ -6,7 +6,7 @@ import { logout } from '../../store/slices/appSlice';
 
 const Navbar: React.FC = () => {
   const dispatch = useAppDispatch();
-  const state = useAppSelector(s => s.app);
+  const state = useAppSelector(s => s);
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
