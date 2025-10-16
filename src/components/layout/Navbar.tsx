@@ -23,7 +23,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="bg-white shadow-lg border-b border-gray-200 sticky top-0 z-50">
+    <nav className="bg-white shadow-lg border-b border-gray-200 sticky top-0 z-50 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -110,7 +110,7 @@ const Navbar: React.FC = () => {
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="p-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-100 transition-colors"
             >
-              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isMenuOpen ? <X className="w-6 h-6" /> : <User className="w-6 h-6" />} 
             </button>
           </div>
         </div>
@@ -173,7 +173,7 @@ const Navbar: React.FC = () => {
       {/* Backdrop for mobile menu */}
       {isMenuOpen && (
         <div
-          className="fixed inset-0 z-40 md:hidden"
+          className="sticky inset-0 z-40 md:hidden"
           onClick={() => setIsMenuOpen(false)}
         />
       )}

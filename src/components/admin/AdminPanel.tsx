@@ -120,7 +120,7 @@ const AdminPanel: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen w-full bg-gray-50">
       <Navbar />
 
       <div className="flex">
@@ -182,8 +182,8 @@ const AdminPanel: React.FC = () => {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 lg:ml-0">
-          <div className="p-6">{renderTabContent()}</div>
+        <div className="mx-auto lg:flex-1 lg:ml-0">
+          <div className="mt-4 lg:mt-0 lg:px-6 ">{renderTabContent()}</div>
         </div>
       </div>
 
