@@ -13,6 +13,8 @@ export default function UsersTab() {
   const { users, loading, error, refetch } = useUsers(params);
   const [refreshing, setRefreshing] = useState(false);
 
+  console.log(users)
+
   const highlightMatch = (text: string, query: string) => {
     if (!query) return text;
     const idx = text.toLowerCase().indexOf(query.toLowerCase());
@@ -153,8 +155,8 @@ export default function UsersTab() {
                   </span>
                 </td>
                 <td className="px-4 py-4 hidden lg:block">
-                  {user.created
-                    ? new Date(user.created).toLocaleString("en-IN", {
+                  {user.createdAt
+                    ? new Date(user.createdAt).toLocaleString("en-IN", {
                         timeZone: "Asia/Kolkata",
                         year: "numeric",
                         month: "short",

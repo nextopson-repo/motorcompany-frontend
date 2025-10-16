@@ -59,7 +59,7 @@ export default function Signup() {
           email: "",
           mobile: response.data.user.mobileNumber || "",
           type: response.data.user.userType || "Owner",
-          created: new Date().toLocaleDateString(),
+          createdAt: new Date().toLocaleDateString(),
         };
 
         // Save to localStorage

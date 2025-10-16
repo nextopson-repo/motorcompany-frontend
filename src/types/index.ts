@@ -7,7 +7,7 @@ export interface User {
   mobileNumber?: string;
   type: 'Owner' | 'Dealer' | 'EndUser';
   userType?: 'Owner' | 'Dealer' | 'EndUser';
-  created: string;
+  createdAt: string;
   accountType?: string;
   isMobileVerified?: boolean;
 }

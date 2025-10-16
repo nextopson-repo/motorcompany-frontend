@@ -33,7 +33,7 @@ export default function Login() {
           email: '',
           mobile: response.data.user.mobileNumber || '',
           type: response.data.user.userType || 'Owner',
-          created: new Date().toLocaleDateString()
+          createdAt: new Date().toLocaleDateString()
         };
 
         // Save session token and user data to localStorage

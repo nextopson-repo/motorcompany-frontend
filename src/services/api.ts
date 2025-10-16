@@ -355,7 +355,7 @@ export class UserApiService {
   }
 
   static async deleteUser(id: string): Promise<ApiResponse<void>> {
-    return apiClient.delete<void>(`temp/users/${id}`);
+    return apiClient.delete<void>(`/temp/users/${id}`);
   }
 }
 
