@@ -23,7 +23,9 @@ export default function UsersTab() {
     return (
       <>
         {before}
-        <mark className="bg-yellow-200 text-gray-900 rounded-sm px-0.5">{match}</mark>
+        <mark className="bg-yellow-200 text-gray-900 rounded-sm px-0.5">
+          {match}
+        </mark>
         {after}
       </>
     );
@@ -60,37 +62,58 @@ export default function UsersTab() {
   };
 
   return (
-    <div>
-      <div className="flex items-center justify-between">
-        <h3 className="text-xl font-bold mb-2">Temporary Users</h3>
-        <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2 mb-3">
+    <div className="w-screen lg:w-auto px-4 py-2 lg:py-0">
+      <div className="flex  flex-col lg:flex-row lg:justify-between ">
+        <div className="flex items-center justify-between">
+          <h3 className="text-xl font-bold mb-2 whitespace-nowrap">
+            Temporary Users
+          </h3>
           <button
             onClick={handleRefresh}
             disabled={loading || refreshing}
             aria-busy={loading || refreshing}
-            title={loading || refreshing ? 'Refreshing...' : 'Refresh'}
-            className="px-3 py-2 text-blue-600 hover:text-blue-700 disabled:opacity-50 disabled:cursor-not-allowed "
+            title={loading || refreshing ? "Refreshing..." : "Refresh"}
+            className="px-3 py-2 text-blue-600 hover:text-blue-700 disabled:opacity-50 disabled:cursor-not-allowed md:hidden"
           >
-            <LucideRefreshCcw className={(loading || refreshing) ? 'animate-spin' : ''} />
+            <LucideRefreshCcw
+              className={loading || refreshing ? "animate-spin" : ""}
+            />
           </button>
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search by name or mobile"
-            className="w-full sm:max-w-xs px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          />
-          <div className="mt-2 sm:mt-0 flex items-center gap-2">
-            <button
-              onClick={() => {
-                setQuery("");
-                setAppliedQuery("");
-                refetch();
-              }}
-              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
-            >
-              Clear
-            </button>
+        </div>
+        <div className="flex  sm:items-center sm:gap-2 mb-3">
+          <button
+            onClick={handleRefresh}
+            disabled={loading || refreshing}
+            aria-busy={loading || refreshing}
+            title={loading || refreshing ? "Refreshing..." : "Refresh"}
+            className="px-3 py-2 text-blue-600 hover:text-blue-700 disabled:opacity-50 disabled:cursor-not-allowed hidden md:block"
+          >
+            <LucideRefreshCcw
+              className={loading || refreshing ? "animate-spin" : ""}
+            />
+          </button>
+
+          <div className="flex w-full pt-4 lg:pt-0">
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search by name or mobile"
+              className="w-full sm:max-w-xs px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+
+            <div className="ml-4 sm:mt-0 flex items-center gap-2">
+              <button
+                onClick={() => {
+                  setQuery("");
+                  setAppliedQuery("");
+                  refetch();
+                }}
+                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+              >
+                Clear
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -104,14 +127,16 @@ export default function UsersTab() {
               {/* <th className="px-4 py-3">Email</th> */}
               <th className="px-4 py-3">Mobile</th>
               <th className="px-4 py-3">User Type</th>
-              <th className="px-4 py-3">Created</th>
+              <th className="px-4 py-3 hidden lg:block">Created</th>
               <th className="px-4 py-3">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
             {users.map((user) => (
               <tr key={user.id} className="hover:bg-gray-50">
-                <td className="px-4 py-4">{highlightMatch(user.fullName || '', query)}</td>
+                <td className="px-4 py-4">
+                  {highlightMatch(user.fullName || "", query)}
+                </td>
                 {/* <td className="px-4 py-4">{user.email || "-"}</td> */}
                 <td className="px-4 py-4">{user.mobileNumber}</td>
                 <td className="px-4 py-4">
@@ -127,7 +152,7 @@ export default function UsersTab() {
                     {user.userType}
                   </span>
                 </td>
-                <td className="px-4 py-4">
+                <td className="px-4 py-4 hidden lg:block">
                   {user.created
                     ? new Date(user.created).toLocaleString("en-IN", {
                         timeZone: "Asia/Kolkata",

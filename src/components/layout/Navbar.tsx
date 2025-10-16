@@ -23,7 +23,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="bg-white shadow-lg border-b border-gray-200 sticky top-0 z-50 overflow-hidden">
+    <nav className="bg-white shadow-lg border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -43,7 +43,7 @@ const Navbar: React.FC = () => {
                 {/* User Profile Dropdown */}
                 <div className="relative">
                   <button
-                    onClick={() => setIsProfileOpen(!isProfileOpen)}
+                    onClick={() => {setIsProfileOpen(!isProfileOpen);}}
                     className="flex items-center space-x-2 p-2 rounded-full hover:bg-gray-100 transition-colors"
                   >
                     <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
