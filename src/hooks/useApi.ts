@@ -379,6 +379,10 @@ export function useAuth() {
       fullName: string;
       mobileNumber: string;
       userType: "Owner" | "Dealer" | "EndUser";
+      addressState: string;
+      addressCity: string;
+      addressLocality: string;
+
     }) => {
       setLoading(true);
       setError(null);
@@ -410,6 +414,9 @@ export function useAuth() {
       mobileNumber: string;
       otp: string;
       userType: "Owner" | "Dealer" | "EndUser";
+      addressState: string;
+      addressCity: string;
+      addressLocality: string;
     }) => {
       setLoading(true);
       setError(null);
@@ -420,6 +427,10 @@ export function useAuth() {
           fullName: otpData.fullName,
           mobileNumber: otpData.mobileNumber,
           userType: otpData.userType,
+          addressCity: otpData.addressCity,
+          addressState: otpData.addressState,
+          addressLocality: otpData.addressLocality,
+
         });
 
         if (response.success && response.data) {

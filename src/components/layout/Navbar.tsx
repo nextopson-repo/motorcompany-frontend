@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Car, Menu, X, User, LogOut, Settings } from 'lucide-react';
+import { Car, X, User, LogOut, Settings } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
 import { logout } from '../../store/slices/appSlice';
 
