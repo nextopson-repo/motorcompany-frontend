@@ -28,9 +28,9 @@ const CarListing: React.FC = () => {
     minYear: "",
     maxYear: "",
   });
-  const [sortBy, setSortBy] = useState<"carPrice" | "registrationYear" | "kmDriven" | "title">(
-    "carPrice"
-  );
+  const [sortBy, setSortBy] = useState<
+    "carPrice" | "registrationYear" | "kmDriven" | "title"
+  >("carPrice");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [showFilters, setShowFilters] = useState(false);
@@ -96,8 +96,8 @@ const CarListing: React.FC = () => {
 
     // Sort vehicles
     filtered.sort((a, b) => {
-      let aValue: string | number = a[sortBy] || '';
-      let bValue: string | number = b[sortBy] || '';
+      let aValue: string | number = a[sortBy] || "";
+      let bValue: string | number = b[sortBy] || "";
 
       if (sortBy === "title") {
         aValue = (aValue as string).toLowerCase();
@@ -122,16 +122,11 @@ const CarListing: React.FC = () => {
     setModalState({ isOpen: true, mode: "edit", vehicle });
   };
 
-  // const handleViewVehicle = (vehicle: Vehicle) => {
-  //   setModalState({ isOpen: true, mode: 'view', vehicle });
-  // };
-
-    const handleDeleteVehicle = (id: string) => {
-    
-        deleteVehicle(id);
-        toast.success("Vehicle deleted successfully!");
-      setDeleteCarId(id);
-    };
+  const handleDeleteVehicle = (id: string) => {
+    deleteVehicle(id);
+    toast.success("Vehicle deleted successfully!");
+    setDeleteCarId(id);
+  };
 
   const handleSaveVehicle = async (formDataToSend: FormData) => {
     formDataToSend.forEach((value, key) => {
@@ -144,10 +139,10 @@ const CarListing: React.FC = () => {
       if (result && result.car) {
         toast.success("Vehicle uploaded successfully!");
         console.log("Uploaded vehicle:", result.car);
-        // Refresh the vehicle list to show the new car
-        fetchMore(); // Use the proper refetch function from the hook
+        fetchMore();
       } else {
-        const errorMessage = "Failed to upload vehicle. Please check the console for details.";
+        const errorMessage =
+          "Failed to upload vehicle. Please check the console for details.";
         toast.error(errorMessage);
         console.error("Upload failed:", result);
       }
@@ -234,7 +229,11 @@ const CarListing: React.FC = () => {
               value={sortBy}
               onChange={(e) =>
                 setSortBy(
-                  e.target.value as "carPrice" | "registrationYear" | "kmDriven" | "title"
+                  e.target.value as
+                    | "carPrice"
+                    | "registrationYear"
+                    | "kmDriven"
+                    | "title"
                 )
               }
               className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -476,15 +475,17 @@ const CarListing: React.FC = () => {
               : "space-y-4"
           }
         >
-          {filteredAndSortedVehicles.filter((vehicle) => vehicle.id !== deleteCarId).map((vehicle) => (
-            <CarCard
-              key={vehicle.id}
-              vehicle={vehicle}
-              onEdit={handleEditVehicle}
-              onDelete={handleDeleteVehicle}
-              // onView={handleViewVehicle}
-            />
-          ))}
+          {filteredAndSortedVehicles
+            .filter((vehicle) => vehicle.id !== deleteCarId)
+            .map((vehicle) => (
+              <CarCard
+                key={vehicle.id}
+                vehicle={vehicle}
+                onEdit={handleEditVehicle}
+                onDelete={handleDeleteVehicle}
+                // onView={handleViewVehicle}
+              />
+            ))}
           {!loading && hasMore && (
             <div className="col-span-full flex justify-center mt-2">
               <button

@@ -13,8 +13,6 @@ export default function UsersTab() {
   const { users, loading, error, refetch } = useUsers(params);
   const [refreshing, setRefreshing] = useState(false);
 
-  console.log(users)
-
   const highlightMatch = (text: string, query: string) => {
     if (!query) return text;
     const idx = text.toLowerCase().indexOf(query.toLowerCase());

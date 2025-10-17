@@ -11,6 +11,13 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 import type { Vehicle } from "../../types";
+import useGCitySheetData from "../../hooks/useGCitySheetData";
+
+interface LocationData {
+  [state: string]: {
+    [city: string]: Set<string>;
+  };
+}
 
 // Props type definition
 interface CarDetailsFormProps {
@@ -59,7 +66,6 @@ function Dropdown({
   };
 
   const handleBlur = () => {
-    // Delay closing to allow option selection
     setTimeout(() => setOpen(false), 150);
   };
 
@@ -74,11 +80,15 @@ function Dropdown({
         onFocus={() => !disabled && setOpen(true)}
         onBlur={handleBlur}
         onChange={handleInputChange}
-        placeholder={disabled ? "Please select " + label.toLowerCase() + " first" : placeholder}
+        placeholder={
+          disabled
+            ? "Please select " + label.toLowerCase() + " first"
+            : placeholder
+        }
         disabled={disabled}
         className={`w-full rounded mt-1 px-4 py-[6px] md:py-2 text-[10px] md:text-xs border placeholder:text-[10px] outline-none transition-colors ${
-          disabled 
-            ? "border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed" 
+          disabled
+            ? "border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed"
             : "border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         }`}
       />
@@ -122,7 +132,7 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
     addressState: "",
     addressCity: "",
     addressLocality: "",
-    carName: "",
+    // carName: "",
     brand: "",
     model: "",
     variant: "",
@@ -138,46 +148,46 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
     seats: "4",
   });
 
-  const locationData: Record<string, Record<string, string[]>> = {
-    Karnataka: {
-      Bangalore: ["Whitefield", "Koramangala", "Indiranagar", "JP Nagar", "Electronic City"],
-      Mysore: ["Vijayanagar", "Kuvempunagar", "Saraswathipuram"],
-    },
-    MadhyaPradesh: {
-      Indore: ["Vijay Nagar", "Rajwada", "Palasia"],
-      Bhopal: ["Arera Colony", "Kolar Road"],
-    },
-    Rajasthan: {
-      Jaipur: ["Malviya Nagar", "Vaishali Nagar"],
-    },
-    UttarPradesh: {
-      Kanpur: ["Swaroop Nagar", "Kakadeo"],
-      Lucknow: ["Hazratganj", "Gomti Nagar"],
-    },
-    Maharashtra: {
-      Mumbai: ["Bandra", "Andheri", "Powai", "Thane"],
-      Pune: ["Kothrud", "Hinjewadi"],
-    },
-    Gujarat: {
-      Ahmedabad: ["Navrangpura", "Maninagar"],
-    },
-    Punjab: {
-      Chandigarh: ["Sector 17", "Manimajra"],
-    },
-    Telangana: {
-      Hyderabad: ["Banjara Hills", "Hitech City"],
-    },
-    Delhi: {
-      NewDelhi: ["Connaught Place", "Saket"],
-    },
-  };
+  // google city
+  const sheetId = import.meta.env.VITE_GOOGLE_SHEETS_ID;
+  const range = "Sheet1!A:Z";
+  const apiKey = import.meta.env.VITE_GOOGLE_SHEETS_API_KEY;
+  const {
+    data: sheetData,
+    loading: sheetLoading,
+    // error: sheetError,
+  } = useGCitySheetData(sheetId, range, apiKey);
+
+  // Build nested locationData object from Google Sheet
+  const locationData: LocationData = sheetData.reduce((acc, item) => {
+    const state = item["Haryana"];
+    const city = item["Gurgaon"];
+    const locality = item["Aath Marla"];
+    if (!state || !city || !locality) return acc;
+    if (!acc[state]) acc[state] = {};
+    if (!acc[state][city]) acc[state][city] = new Set();
+    acc[state][city].add(locality);
+    return acc;
+  }, {} as LocationData);
+
+  const locationDataObj = Object.fromEntries(
+    Object.entries(locationData).map(([state, cities]) => [
+      state,
+      Object.fromEntries(
+        Object.entries(cities).map(([city, localitiesSet]) => [
+          city,
+          Array.from(localitiesSet).sort(),
+        ])
+      ),
+    ])
+  ) as { [state: string]: { [city: string]: string[] } };
 
   useEffect(() => {
     if (mode === "edit" && vehicle) {
-      const defaultState = Object.keys(locationData)[0] || "";
+      const defaultState = Object.keys(locationDataObj)[0] || "";
       const state = vehicle.address?.state || defaultState;
 
-      const stateData = locationData[state];
+      const stateData = locationDataObj[state];
       const defaultCity = stateData ? Object.keys(stateData)[0] || "" : "";
       const city = vehicle.address?.city || defaultCity;
 
@@ -189,7 +199,7 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
         addressState: state,
         addressCity: city,
         addressLocality: locality,
-        carName: vehicle.carName || "",
+        // carName: vehicle.carName || "",
         brand: vehicle.brand || "",
         model: vehicle.model || "",
         variant: vehicle.variant || "",
@@ -207,7 +217,9 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
       });
 
       if (vehicle.carImages && vehicle.carImages.length > 0) {
-        const urls = vehicle.carImages.map((img) => img.presignedUrl).filter((url): url is string => url !== undefined);
+        const urls = vehicle.carImages
+          .map((img) => img.presignedUrl)
+          .filter((url): url is string => url !== undefined);
         setPreviewUrls(urls);
       }
     }
@@ -216,8 +228,8 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
   // Cleanup preview URLs to prevent memory leaks
   useEffect(() => {
     return () => {
-      previewUrls.forEach(url => {
-        if (url.startsWith('blob:')) {
+      previewUrls.forEach((url) => {
+        if (url.startsWith("blob:")) {
           URL.revokeObjectURL(url);
         }
       });
@@ -236,7 +248,9 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
         const stateData = locationData[value];
         if (stateData) {
           const firstCity = Object.keys(stateData)[0] || "";
-          const firstLocality = stateData[firstCity]?.[0] || "";
+          const firstLocality = stateData[value]
+            ? Array.from(stateData[value])[0] || ""
+            : "";
           updated.addressCity = firstCity;
           updated.addressLocality = firstLocality;
         } else {
@@ -248,7 +262,9 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
       if (name === "addressCity") {
         const stateData = locationData[prev.addressState];
         if (stateData && stateData[value]) {
-          const firstLocality = stateData[value][0] || "";
+          const firstLocality = stateData[value]
+            ? Array.from(stateData[value])[0] || ""
+            : "";
           updated.addressLocality = firstLocality;
         } else {
           updated.addressLocality = "";
@@ -285,8 +301,14 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
       return;
     }
 
-    if (!formData.addressState || !formData.addressCity || !formData.addressLocality) {
-      toast.error("Please select complete address details (State, City, and Locality)");
+    if (
+      !formData.addressState ||
+      !formData.addressCity ||
+      !formData.addressLocality
+    ) {
+      toast.error(
+        "Please select complete address details (State, City, and Locality)"
+      );
       return;
     }
 
@@ -327,10 +349,10 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
 
     // Car details
     const carTitle = `${formData.brand} ${formData.model}`.trim();
-    const carName = formData.carName.trim() || carTitle;
-    
+    // const carName = formData.carName.trim() || carTitle;
+
     formDataToSend.append("title", carTitle);
-    formDataToSend.append("carName", carName);
+    // formDataToSend.append("carName", carName);
     formDataToSend.append("brand", formData.brand);
     formDataToSend.append("model", formData.model);
     formDataToSend.append("variant", formData.variant || "");
@@ -338,15 +360,27 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
     formDataToSend.append("transmission", formData.transmission);
     formDataToSend.append("bodyType", formData.bodyType || "");
     formDataToSend.append("ownership", formData.ownership);
-    formDataToSend.append("manufacturingYear", formData.manufacturingYear.toString());
-    formDataToSend.append("registrationYear", formData.registrationYear.toString());
+    formDataToSend.append(
+      "manufacturingYear",
+      formData.manufacturingYear.toString()
+    );
+    formDataToSend.append(
+      "registrationYear",
+      formData.registrationYear.toString()
+    );
     formDataToSend.append("kmDriven", formData.kmDriven || "0");
     formDataToSend.append("seats", formData.seats);
     formDataToSend.append("isSale", formData.isSale);
     formDataToSend.append("carPrice", formData.carPrice);
 
     // Add description
-    const description = `Discover this ${formData.model.toLowerCase()} ${formData.brand} located at ${formData.addressLocality}, ${formData.addressCity}. This ${formData.fuelType.toLowerCase()} ${formData.transmission.toLowerCase()} transmission vehicle has been driven ${formData.kmDriven || '0'} km and is available for ${formData.isSale.toLowerCase()}.`;
+    const description = `Discover this ${formData.model.toLowerCase()} ${
+      formData.brand
+    } located at ${formData.addressLocality}, ${
+      formData.addressCity
+    }. This ${formData.fuelType.toLowerCase()} ${formData.transmission.toLowerCase()} transmission vehicle has been driven ${
+      formData.kmDriven || "0"
+    } km and is available for ${formData.isSale.toLowerCase()}.`;
     formDataToSend.append("description", description);
 
     // Add images - backend expects 'images' field with array of files
@@ -414,7 +448,7 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
               <div className="flex items-center gap-2 mb-6">
                 <MapPin className="w-5 h-5 text-blue-600" />
                 <h2 className="text-xl font-semibold text-gray-800">
-                  Location Details
+                  Car Location Details
                 </h2>
               </div>
 
@@ -423,7 +457,7 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
                 <Dropdown
                   label="State"
                   placeholder="Select State"
-                  options={Object.keys(locationData)}
+                  options={Object.keys(locationDataObj)}
                   value={formData.addressState}
                   onChange={(val) =>
                     setFormData((prev) => ({
@@ -433,18 +467,20 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
                       addressLocality: "",
                     }))
                   }
+                  disabled={sheetLoading}
                 />
 
                 <Dropdown
                   label="City"
                   placeholder="Select City"
                   options={
-                    formData.addressState && locationData[formData.addressState]
-                      ? Object.keys(locationData[formData.addressState])
+                    formData.addressState &&
+                    locationDataObj[formData.addressState]
+                      ? Object.keys(locationDataObj[formData.addressState])
                       : []
                   }
                   value={formData.addressCity}
-                  disabled={!formData.addressState}
+                  disabled={!formData.addressState || sheetLoading}
                   onChange={(val) =>
                     setFormData((prev) => ({
                       ...prev,
@@ -458,15 +494,21 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
                   label="Locality"
                   placeholder="Select your neighbourhood"
                   options={
-                    formData.addressState && 
-                    formData.addressCity && 
-                    locationData[formData.addressState] &&
-                    locationData[formData.addressState][formData.addressCity]
-                      ? locationData[formData.addressState][formData.addressCity]
+                    formData.addressState &&
+                    formData.addressCity &&
+                    locationDataObj[formData.addressState] &&
+                    locationDataObj[formData.addressState][formData.addressCity]
+                      ? locationDataObj[formData.addressState][
+                          formData.addressCity
+                        ]
                       : []
                   }
                   value={formData.addressLocality}
-                  disabled={!formData.addressState || !formData.addressCity}
+                  disabled={
+                    !formData.addressState ||
+                    !formData.addressCity ||
+                    sheetLoading
+                  }
                   onChange={(val) =>
                     setFormData((prev) => ({ ...prev, addressLocality: val }))
                   }
@@ -484,22 +526,7 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
               </div>
 
               <div className=" space-y-6">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Car Name <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="carName"
-                      required
-                      value={formData.carName}
-                      onChange={handleInputChange}
-                      className="w-full rounded mt-1 px-4 py-[6px] md:py-2 text-[10px] md:text-xs border border-gray-200 placeholder:text-[10px] focus:ring-1 focus:ring-gray-800/50 outline-none"
-                      placeholder="Enter car name (e.g., Honda City VX)"
-                    />
-                  </div>
-
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                   <Dropdown
                     label="Brand"
                     placeholder="Select Brand"
@@ -526,9 +553,6 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
                       setFormData((prev) => ({ ...prev, brand: val }))
                     }
                   />
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Model <span className="text-red-500">*</span>
@@ -741,11 +765,13 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
                   onChange={(e) => {
                     if (!e.target.files) return;
                     const files = Array.from(e.target.files);
-                    
+
                     // Validate file sizes (max 10MB per file)
-                    const validFiles = files.filter(file => {
+                    const validFiles = files.filter((file) => {
                       if (file.size > 10 * 1024 * 1024) {
-                        toast.error(`File ${file.name} is too large. Maximum size is 10MB.`);
+                        toast.error(
+                          `File ${file.name} is too large. Maximum size is 10MB.`
+                        );
                         return false;
                       }
                       return true;
@@ -754,15 +780,17 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
                     // Limit to 10 images total
                     const totalImages = images.length + validFiles.length;
                     if (totalImages > 10) {
-                      toast.error("Maximum 10 images allowed. Please select fewer images.");
+                      toast.error(
+                        "Maximum 10 images allowed. Please select fewer images."
+                      );
                       return;
                     }
 
-                    setImages(prev => [...prev, ...validFiles]);
+                    setImages((prev) => [...prev, ...validFiles]);
                     const newPreviews = validFiles.map((file) =>
                       URL.createObjectURL(file)
                     );
-                    setPreviewUrls(prev => [...prev, ...newPreviews]);
+                    setPreviewUrls((prev) => [...prev, ...newPreviews]);
                   }}
                   className="hidden"
                 />
@@ -776,7 +804,8 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
                   </p>
                   {images.length > 0 && (
                     <p className="text-xs text-blue-600 mt-1">
-                      {images.length} image{images.length !== 1 ? 's' : ''} selected
+                      {images.length} image{images.length !== 1 ? "s" : ""}{" "}
+                      selected
                     </p>
                   )}
                 </label>
@@ -829,8 +858,10 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                   {mode === "edit" ? "Updating..." : "Listing..."}
                 </span>
+              ) : mode === "edit" ? (
+                "Update Car"
               ) : (
-                mode === "edit" ? "Update Car" : "List Car"
+                "List Car"
               )}
             </button>
           </div>
