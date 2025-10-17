@@ -4,7 +4,7 @@ interface SheetDataItem {
   [key: string]: string;
 }
 
-function useGCitySheetData(
+function useGCarSheetData(
   sheetId: string,
   range: string,
   apiKey: string,
@@ -23,42 +23,30 @@ function useGCitySheetData(
       try {
         const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
         const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error(
-            `Error fetching data: ${response.status} ${response.statusText}`
-          );
-        }
+        if (!response.ok) throw new Error(`Error fetching data: ${response.statusText}`);
+
         const json = await response.json();
-        if (json.values && json.values.length > 0) {
-          const headers: string[] = json.values[0];
-          const rows: string[][] = json.values.slice(1);
-          const formattedData: SheetDataItem[] = rows.map((row: string[]) => {
-            const obj: SheetDataItem = {};
-            headers.forEach((header: string, index: number) => {
-              obj[header] = row[index] || "";
-            });
-            return obj;
-          });
+        if (json.values?.length > 0) {
+          const headers = json.values[0];
+          const rows = json.values.slice(1);
+          const formattedData = rows.map((row: string[]) =>
+            headers.reduce((acc: SheetDataItem, header: string, i: number) => {
+              acc[header] = row[i] || "";
+              return acc;
+            }, {})
+          );
           if (isMounted) setData(formattedData);
         } else {
           if (isMounted) setData([]);
         }
-      } catch (err: unknown) {
-        if (isMounted) {
-          if (err instanceof Error) {
-            setError(err.message);
-          } else {
-            setError(String(err));
-          }
-        }
+      } catch (err: any) {
+        if (isMounted) setError(err.message || String(err));
       } finally {
         if (isMounted) setLoading(false);
       }
     };
 
     fetchSheetData();
-
-    // Poll for updates every refreshInterval milliseconds (default 60s)
     const intervalId = setInterval(fetchSheetData, refreshInterval);
 
     return () => {
@@ -70,4 +58,4 @@ function useGCitySheetData(
   return { data, loading, error };
 }
 
-export default useGCitySheetData;
+export default useGCarSheetData;

@@ -13,6 +13,7 @@ import {
 import toast from "react-hot-toast";
 import type { Vehicle } from "../../types";
 import useGCitySheetData from "../../hooks/useGCitySheetData";
+import useGCarSheetData from "../../hooks/useDCarSheetData";
 
 interface LocationData {
   [state: string]: {
@@ -152,13 +153,19 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
 
   // google city
   const sheetId = import.meta.env.VITE_GOOGLE_SHEETS_ID;
-  const range = "Sheet1!A:Z";
+  const range = "locationData!A:Z";
+  const carRange = "carDetails!A:Z";
   const apiKey = import.meta.env.VITE_GOOGLE_SHEETS_API_KEY;
   const {
     data: sheetData,
     loading: sheetLoading,
     // error: sheetError,
   } = useGCitySheetData(sheetId, range, apiKey);
+  const {
+    data: carSheetData,
+    loading: carSheetLoading,
+    // error: carSheetError,
+  } = useGCarSheetData(sheetId, carRange, apiKey);
 
   // Build nested locationData object from Google Sheet
   const locationData: LocationData = sheetData.reduce((acc, item) => {
@@ -183,6 +190,30 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
       ),
     ])
   ) as { [state: string]: { [city: string]: string[] } };
+
+  // Build nested locationData object from Google Sheet
+  const carDataObj = carSheetData.reduce((acc, item) => {
+    const brand = item["Brand"];
+    const model = item["Model"];
+    const variant = item["Variant"];
+    if (!brand || !model) return acc;
+    if (!acc[brand]) acc[brand] = {};
+    if (!acc[brand][model]) acc[brand][model] = new Set();
+    if (variant) acc[brand][model].add(variant);
+    return acc;
+  }, {} as { [brand: string]: { [model: string]: Set<string> } });
+
+  const carDataNested = Object.fromEntries(
+    Object.entries(carDataObj).map(([brand, models]) => [
+      brand,
+      Object.fromEntries(
+        Object.entries(models).map(([model, variants]) => [
+          model,
+          Array.from(variants),
+        ])
+      ),
+    ])
+  );
 
   useEffect(() => {
     if (mode === "edit" && vehicle) {
@@ -287,7 +318,7 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (isSubmitting) return; // Prevent double submission
+    if (isSubmitting) return;
 
     // Form validation
     if (!formData.brand.trim()) {
@@ -353,8 +384,6 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
 
     // Car details
     const carTitle = `${formData.brand} ${formData.model}`.trim();
-    // const carName = formData.carName.trim() || carTitle;
-
     formDataToSend.append("title", carTitle);
     // formDataToSend.append("carName", carName);
     formDataToSend.append("brand", formData.brand);
@@ -376,16 +405,6 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
     formDataToSend.append("seats", formData.seats);
     formDataToSend.append("isSale", formData.isSale);
     formDataToSend.append("carPrice", formData.carPrice);
-
-    // Add description
-    // const description = `Discover this ${formData.model.toLowerCase()} ${
-    //   formData.brand
-    // } located at ${formData.addressLocality}, ${
-    //   formData.addressCity
-    // }. This ${formData.fuelType.toLowerCase()} ${formData.transmission.toLowerCase()} transmission vehicle has been driven ${
-    //   formData.kmDriven || "0"
-    // } km and is available for ${formData.isSale.toLowerCase()}.`;
-
     formDataToSend.append("description", formData.description);
 
     // Add images - backend expects 'images' field with array of files
@@ -393,7 +412,6 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
       formDataToSend.append("images", file);
     });
 
-    // Debug: Log FormData contents
     console.log("FormData being sent to backend:");
     formDataToSend.forEach((value, key) => {
       console.log(`${key}:`, value);
@@ -535,57 +553,53 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
                   <Dropdown
                     label="Brand"
                     placeholder="Select Brand"
-                    options={[
-                      "Maruti Suzuki",
-                      "Hyundai",
-                      "Tata",
-                      "Honda",
-                      "Mahindra",
-                      "Toyota",
-                      "Kia",
-                      "Volkswagen",
-                      "Skoda",
-                      "Renault",
-                      "Ford",
-                      "Nissan",
-                      "MG",
-                      "BMW",
-                      "Mercedes",
-                      "Audi",
-                    ]}
+                    options={Object.keys(carDataNested)}
                     value={formData.brand}
                     onChange={(val) =>
-                      setFormData((prev) => ({ ...prev, brand: val }))
+                      setFormData((prev) => ({
+                        ...prev,
+                        brand: val,
+                        model: "",
+                        variant: "",
+                      }))
                     }
                   />
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Model <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="model"
-                      required
-                      value={formData.model}
-                      onChange={handleInputChange}
-                      className="w-full rounded mt-1 px-4 py-[6px] md:py-2 text-[10px] md:text-xs border border-gray-200 placeholder:text-[10px] focus:ring-1 focus:ring-gray-800/50 outline-none"
-                      placeholder="Enter car model (e.g., City, Swift, i20)"
-                    />
-                  </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Variant
-                    </label>
-                    <input
-                      type="text"
-                      name="variant"
-                      value={formData.variant}
-                      onChange={handleInputChange}
-                      className="w-full rounded mt-1 px-4 py-[6px] md:py-2 text-[10px] md:text-xs border border-gray-200 placeholder:text-[10px] focus:ring-1 focus:ring-gray-800/50 outline-none"
-                      placeholder="Enter variant (e.g., VX CVT, ZX, LXI)"
-                    />
-                  </div>
+                  <Dropdown
+                    label="Model"
+                    placeholder="Select Model"
+                    options={
+                      formData.brand && carDataNested[formData.brand]
+                        ? Object.keys(carDataNested[formData.brand])
+                        : []
+                    }
+                    value={formData.model}
+                    disabled={!formData.brand || carSheetLoading}
+                    onChange={(val) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        model: val,
+                        variant: "",
+                      }))
+                    }
+                  />
+
+                  <Dropdown
+                    label="Variant"
+                    placeholder="Select Variant"
+                    options={
+                      formData.brand &&
+                      formData.model &&
+                      carDataNested[formData.brand]?.[formData.model]
+                        ? carDataNested[formData.brand][formData.model]
+                        : []
+                    }
+                    value={formData.variant}
+                    disabled={!formData.model || carSheetLoading}
+                    onChange={(val) =>
+                      setFormData((prev) => ({ ...prev, variant: val }))
+                    }
+                  />
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -610,7 +624,7 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
                   <Dropdown
                     label="Seats"
                     placeholder="Select Seats"
-                    options={["2", "4", "5", "6", "7", "8"]}
+                    options={["2", "4", "5", "6", "7", "8", "8 Plus"]}
                     value={formData.seats}
                     onChange={(val) =>
                       setFormData((prev) => ({ ...prev, seats: val }))
