@@ -8,6 +8,7 @@ import {
   DollarSign,
   Upload,
   X,
+  NotebookText,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import type { Vehicle } from "../../types";
@@ -133,6 +134,7 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
     addressCity: "",
     addressLocality: "",
     // carName: "",
+    description: "",
     brand: "",
     model: "",
     variant: "",
@@ -199,7 +201,6 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
         addressState: state,
         addressCity: city,
         addressLocality: locality,
-        // carName: vehicle.carName || "",
         brand: vehicle.brand || "",
         model: vehicle.model || "",
         variant: vehicle.variant || "",
@@ -214,6 +215,7 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
         carPrice: vehicle.carPrice || "",
         kmDriven: vehicle.kmDriven || "",
         seats: vehicle.seats || "4",
+        description: vehicle.description || "",
       });
 
       if (vehicle.carImages && vehicle.carImages.length > 0) {
@@ -237,7 +239,9 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
   }, [previewUrls]);
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
   ) => {
     const { name, value } = e.target;
 
@@ -374,14 +378,15 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
     formDataToSend.append("carPrice", formData.carPrice);
 
     // Add description
-    const description = `Discover this ${formData.model.toLowerCase()} ${
-      formData.brand
-    } located at ${formData.addressLocality}, ${
-      formData.addressCity
-    }. This ${formData.fuelType.toLowerCase()} ${formData.transmission.toLowerCase()} transmission vehicle has been driven ${
-      formData.kmDriven || "0"
-    } km and is available for ${formData.isSale.toLowerCase()}.`;
-    formDataToSend.append("description", description);
+    // const description = `Discover this ${formData.model.toLowerCase()} ${
+    //   formData.brand
+    // } located at ${formData.addressLocality}, ${
+    //   formData.addressCity
+    // }. This ${formData.fuelType.toLowerCase()} ${formData.transmission.toLowerCase()} transmission vehicle has been driven ${
+    //   formData.kmDriven || "0"
+    // } km and is available for ${formData.isSale.toLowerCase()}.`;
+
+    formDataToSend.append("description", formData.description);
 
     // Add images - backend expects 'images' field with array of files
     images.forEach((file) => {
@@ -744,6 +749,30 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
                     placeholder="Enter kilometers driven (e.g., 25000)"
                   />
                 </div>
+              </div>
+            </div>
+
+            {/* Description */}
+            <div className="mb-10">
+              <div className="flex items-center gap-2 mb-6">
+                <NotebookText className="w-5 h-5 text-blue-600" />
+                <h2 className="text-xl font-semibold text-gray-800">
+                  Description
+                </h2>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Other Details About Car
+                </label>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  className="w-full rounded mt-1 px-4 py-[6px] md:py-2 text-[10px] md:text-xs border border-gray-200 placeholder:text-[10px] focus:ring-1 focus:ring-gray-800/50 outline-none resize-none"
+                  placeholder="Enter a detailed description about the car (condition, features, modifications, etc.)"
+                  rows={4}
+                />
               </div>
             </div>
 

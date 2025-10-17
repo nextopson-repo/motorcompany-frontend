@@ -13,8 +13,9 @@ export interface User {
 }
 
 export interface Vehicle {
-  id?: string; // optional because new vehicles won't have an id yet
-  title?: string; // optional, can generate from carName or model
+  id?: string; 
+  title?: string; 
+  description?: string; 
   carName: string;
   brand: string;
   model: string;
