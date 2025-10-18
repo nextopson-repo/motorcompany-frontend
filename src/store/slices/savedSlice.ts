@@ -1,90 +1,155 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  type PayloadAction,
+} from "@reduxjs/toolkit";
 import type { CarRecord } from "../../types/car";
+import axios from "axios";
 
 interface SavedState {
   cars: CarRecord[];
+  savedCarIds: string[];
   searchTerm: string;
   sortOption: string;
+  loading: boolean;
+  error: string | null;
 }
 
 const initialState: SavedState = {
-  cars: [
-    {
-      id: 1,
-      brand: "Hyundai",
-      model: "Exterior",
-      carPrice: 880000,
-      manufacturingYear: 2020,
-      fuelType: "Petrol",
-      kms: 20000,
-      transmission: "Automatic",
-      bodyType: "Hatchback",
-      ownership: "2nd",
-      mileage: 19.4,
-      seats: 5,
-      // carImages?: { imageUrl:  }[],
-      address: { city: "Indore", state: "Madhya Pradesh" },
-      user: { fullName: "Dhiraj", userType: "owner" },
-      updatedAt: "2 days ago",
-      createdAt: "2 days ago",
-    },
-    {
-      id: 2,
-      brand: "Hyundai",
-      model: "Verna",
-      carPrice: 880000,
-      manufacturingYear: 2020,
-      fuelType: "Petrol",
-      kms: 20000,
-      transmission: "Automatic",
-      bodyType: "Hatchback",
-      ownership: "2nd",
-      mileage: 19.4,
-      seats: 5,
-      // carImages?: { imageUrl:  }[],
-      address: { city: "Indore", state: "Madhya Pradesh" },
-      user: { fullName: "Dhiraj", userType: "owner" },
-      updatedAt: "2 days ago",
-      createdAt: "2 days ago",
-    },
-    {
-      id: 3,
-      brand: "Hyundai",
-      model: "Creta",
-      carPrice: 880000,
-      manufacturingYear: 2020,
-      fuelType: "Petrol",
-      kms: 20000,
-      transmission: "Automatic",
-      bodyType: "Hatchback",
-      ownership: "2nd",
-      mileage: 19.4,
-      seats: 5,
-      // carImages?: { imageUrl:  }[],
-      address: { city: "Indore", state: "Madhya Pradesh" },
-      user: { fullName: "Dhiraj", userType: "owner" },
-      updatedAt: "2 days ago",
-      createdAt: "2 days ago",
-    },
-  ],
+  cars: [],
+  savedCarIds: [],
   searchTerm: "",
   sortOption: "popularity",
+  loading: false,
+  error: null,
 };
+
+// ✅ Fetch saved cars API call
+export const fetchSavedCars = createAsyncThunk(
+  "saved/fetchSavedCars",
+  async (_, { rejectWithValue }) => {
+    try {
+      const userData = localStorage.getItem("user");
+      const user = userData ? JSON.parse(userData) : null;
+      const token = localStorage.getItem("token");
+      if (!user || !token) throw new Error("User not logged in");
+
+      const response = await axios.post(
+        "http://localhost:5000/api/v1/dashboard/get-saved-cars",
+        { userId: user.id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("response :", response)
+      
+
+      const savedCars: CarRecord[] = response.data.result.savedCars.map(
+        (item: any) => {
+          const car = item.property;
+          return {
+            id: car.id,
+            brand: car.brand,
+            model: car.model,
+            fuelType: car.fuelType,
+            transmission: car.transmission,
+            bodyType: car.bodyType,
+            ownership: car.ownership,
+            seats: car.seats,
+            carPrice: car.carPrice,
+            manufacturingYear: car.manufacturingYear,
+            kmDriven: car.kmDriven,
+            address: { state: car.state, city: car.city || car.address?.city },
+            carImages: car.carImages?.map((img: any) => ({
+              imageKey: img,
+              imageUrl: img,
+            })),
+            // ✅ Owner info
+            user: {
+              fullName: item.savedCar?.ownerFullName || "Unknown",
+              userType: item.savedCar?.ownerType || "Owner",
+            },
+            updatedAt: car.updatedAt,
+            createdAt: car.createdAt,
+            savedCarId: item.savedCar.id,
+          };
+        }
+      );
+
+      const savedCarIds = response.data.result.savedCars.map(
+        (item: any) => item.savedCar.id
+      );
+      return { savedCars, savedCarIds };
+    } catch (err: any) {
+      return rejectWithValue(err.response?.data?.message || err.message);
+    }
+  }
+);
+
+// ✅ Save car API
+export const createSaveCar = createAsyncThunk(
+  "saved/createSaveCar",
+  async (carId: string, { rejectWithValue }) => {
+    try {
+      const userData = localStorage.getItem("user");
+      const user = userData ? JSON.parse(userData) : null;
+      const token = localStorage.getItem("token");
+      if (!user || !token) throw new Error("User not logged in");
+
+      await axios.post(
+        "http://localhost:5000/api/v1/dashboard/create-saved-car",
+        { userId: user.id, carId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      return carId;
+    } catch (err: any) {
+      return rejectWithValue(err.response?.data?.message || err.message);
+    }
+  }
+);
+
+// ✅ Unsave car API
+export const removeSaveCar = createAsyncThunk(
+  "saved/removeSaveCar",
+  async (carId: string, { rejectWithValue }) => {
+    try {
+      const userData = localStorage.getItem("user");
+      const user = userData ? JSON.parse(userData) : null;
+      const token = localStorage.getItem("token");
+      if (!user || !token) throw new Error("User not logged in");
+
+      await axios.post(
+        "http://localhost:5000/api/v1/dashboard/remove-saved-car",
+        { userId: user.id, savedCarId: carId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      return carId;
+    } catch (err: any) {
+      return rejectWithValue(err.response?.data?.message || err.message);
+    }
+  }
+);
 
 const savedSlice = createSlice({
   name: "saved",
   initialState,
   reducers: {
-    setSavedCars: (state, action: PayloadAction<CarRecord[]>) => {
-      state.cars = action.payload;
-    },
-    addSavedCar: (state, action: PayloadAction<CarRecord>) => {
-      if (!state.cars.find((c) => c.id === action.payload.id))
-        state.cars.push(action.payload);
-    },
-    removeSavedCar: (state, action: PayloadAction<number>) => {
-      state.cars = state.cars.filter((c) => c.id !== action.payload);
-    },
     setSearchTerm: (state, action: PayloadAction<string>) => {
       state.searchTerm = action.payload;
     },
@@ -92,137 +157,47 @@ const savedSlice = createSlice({
       state.sortOption = action.payload;
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchSavedCars.fulfilled, (state, action) => {
+        state.cars = action.payload.savedCars;
+        state.savedCarIds = action.payload.savedCarIds;
+      })
+      .addCase(createSaveCar.fulfilled, (state, action) => {
+        if (!state.savedCarIds.includes(action.payload))
+          state.savedCarIds.push(action.payload);
+      })
+      .addCase(removeSaveCar.fulfilled, (state, action) => {
+        state.savedCarIds = state.savedCarIds.filter(
+          (id) => id !== action.payload
+        );
+      })
+      .addCase(createSaveCar.pending, (state, action) => {
+        // 🟢 Heart turant green show karne ke liye
+        if (!state.savedCarIds.includes(action.meta.arg)) {
+          state.savedCarIds.push(action.meta.arg);
+        }
+      })
+      .addCase(createSaveCar.rejected, (state, action) => {
+        // ❌ Agar API fail ho gaya to rollback
+        state.savedCarIds = state.savedCarIds.filter(
+          (id) => id !== action.meta.arg
+        );
+      })
+      .addCase(removeSaveCar.pending, (state, action) => {
+        // 🟢 Heart turant gray show karne ke liye
+        state.savedCarIds = state.savedCarIds.filter(
+          (id) => id !== action.meta.arg
+        );
+      })
+      .addCase(removeSaveCar.rejected, (state, action) => {
+        // ❌ Agar API fail to rollback
+        if (!state.savedCarIds.includes(action.meta.arg)) {
+          state.savedCarIds.push(action.meta.arg);
+        }
+      });
+  },
 });
 
-export const {
-  setSavedCars,
-  addSavedCar,
-  removeSavedCar,
-  setSearchTerm,
-  setSortOption,
-} = savedSlice.actions;
+export const { setSearchTerm, setSortOption } = savedSlice.actions;
 export default savedSlice.reducer;
-
-// import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-// import type { CarRecord } from "../../types/car";
-
-// // interface Car {
-// //     id: number;
-// //     brand: string;
-// //     model: string;
-// //     carPrice: number;
-// //     manufacturingYear: number;
-// //     fuelType: string;
-// //     kms: number;
-// //     transmission: string;
-// //     bodyType: string;
-// //     ownership: string;
-// //     mileage?: number;
-// //     seats?: number;
-// //     // carImages?: { imageUrl: string }[];
-// //     address?: { city?: string; state?: string };
-// //     user?: { fullName?: string; userType?: string };
-// //     updatedAt: string;
-// //     createdAt: string;
-// // }
-
-// interface SavedState {
-//     // cars: Car[];
-//     cars: CarRecord[];
-//     searchTerm: string;
-//     sortOption: string;
-// }
-
-// const initialState: SavedState = {
-//     cars: [
-//         {
-//             id: 1,
-//             brand: "Hyundai",
-//             model: "Exterior",
-//             carPrice: 880000,
-//             manufacturingYear: 2020,
-//             fuelType: "Petrol",
-//             kms: 20000,
-//             transmission: "Automatic",
-//             bodyType: "Hatchback",
-//             ownership: "2nd",
-//             mileage: 19.4,
-//             seats: 5,
-//              // carImages?: { imageUrl:  }[],
-//             address: { city: "Indore", state: "Madhya Pradesh" },
-//             user: { fullName: "Dhiraj", userType: "owner" },
-//             updatedAt: "2 days ago",
-//             createdAt: "2 days ago",
-//         },
-//         {
-//             id: 2,
-//             brand: "Mahindra",
-//             model: "Bolero",
-//             carPrice: 1050000,
-//             manufacturingYear: 2020,
-//             fuelType: "Diesel",
-//             kms: 20000,
-//             transmission: "Manual",
-//             bodyType: "SUV",
-//             ownership: "2nd",
-//             mileage: 15.6,
-//             seats: 7,
-//             // carImages?: { imageUrl:  }[],
-//             address: { city: "Indore", state: "Madhya Pradesh" },
-//             user: { fullName: "Dhiraj", userType: "owner" },
-//             updatedAt: "1 hr ago",
-//             createdAt: "1 hr ago",
-//         },
-//         {
-//             id: 3,
-//             brand: "Mahindra",
-//             model: "Bolero",
-//             carPrice: 1050000,
-//             manufacturingYear: 2020,
-//             fuelType: "Petrol",
-//             kms: 20000,
-//             transmission: "Manual",
-//             bodyType: "SUV",
-//             ownership: "2nd",
-//             mileage: 15.6,
-//             seats: 7,
-//             // carImages?: { imageUrl:  }[],
-//             address: { city: "Indore", state: "Madhya Pradesh" },
-//             user: { fullName: "Dhiraj", userType: "dealer" },
-//             updatedAt: "3 min ago",
-//             createdAt: "3 min ago",
-//         }
-
-//     ],
-//     searchTerm: "",
-//     sortOption: "popularity",
-// };
-
-// const savedSlice = createSlice({
-//     name: "saved",
-//     initialState,
-//     reducers: {
-//         setSavedCars: (state, action: PayloadAction<CarRecord[]>) => {
-//             state.cars = action.payload;
-//         },
-//         addSavedCar: (state, action: PayloadAction<CarRecord>) => {
-//             if (!state.cars.find((c) => c.id === action.payload.id)) {
-//                 state.cars.push(action.payload);
-//             }
-//         },
-//         removeSavedCar: (state, action: PayloadAction<number>) => {
-//             state.cars = state.cars.filter((c) => c.id !== action.payload);
-//         },
-//         setSearchTerm: (state, action: PayloadAction<string>) => {
-//             state.searchTerm = action.payload;
-//         },
-//         setSortOption: (state, action: PayloadAction<string>) => {
-//             state.sortOption = action.payload;
-//         },
-//     },
-// });
-
-// export const { setSavedCars, addSavedCar, removeSavedCar, setSearchTerm, setSortOption } =
-//     savedSlice.actions;
-
-// export default savedSlice.reducer;

@@ -1,21 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CarCard from "../CarCard";
 import { Calendar, ChevronDown, MapPinIcon, SearchIcon } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import type { AppDispatch, RootState } from "../../store/store";
-import { setSearchTerm, setSortOption } from "../../store/slices/savedSlice";
+import {
+  fetchSavedCars,
+  setSearchTerm,
+  setSortOption,
+} from "../../store/slices/savedSlice";
 import { AiFillHeart } from "react-icons/ai";
 import { formatShortNumber } from "../../utils/formatPrice";
 
 const Saved: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { cars, searchTerm, sortOption } = useSelector(
+  const { cars = [], searchTerm, sortOption, loading, error } = useSelector(
     (state: RootState) => state.saved
   );
 
+  const [isSortOpen, setIsSortOpen] = useState(false);
 
+  // 🔥 Fetch user's saved cars on mount
+  useEffect(() => {
+    dispatch(fetchSavedCars());
+  }, [dispatch]);
+
+  // 🔎 Filter + Sort
   const filteredCars = cars
-    .filter((c) => c.brand.toLowerCase().includes(searchTerm.toLowerCase()))
+    .filter((c) => c?.brand?.toLowerCase().includes(searchTerm.toLowerCase()))
     .sort((a, b) => {
       switch (sortOption) {
         case "priceLowToHigh":
@@ -31,8 +42,6 @@ const Saved: React.FC = () => {
       }
     });
 
-  const [isSortOpen, setIsSortOpen] = useState(false);
-
   const sortOptions = [
     { value: "popularity", label: "Popularity" },
     { value: "yearNewToOld", label: "Newest" },
@@ -40,20 +49,23 @@ const Saved: React.FC = () => {
     { value: "priceLowToHigh", label: "Price - Low to High" },
     { value: "priceHighToLow", label: "Price - High to Low" },
   ];
+
   const currentSortLabel =
     sortOptions.find((o) => o.value === sortOption)?.label ||
     sortOptions[0].label;
 
   return (
     <div className="mx-auto">
-      {/* Top bar */}
+      {/* 🔝 Top bar */}
       <div className="grid grid-cols-3 justify-between items-center mb-4 md:mb-6 px-4 md:px-0">
         <div className="w-fit whitespace-nowrap col-span-3 lg:col-span-1">
           <h1 className="font-semibold text-md md:text-2xl py-2 lg:py-0">
             Saved Cars
           </h1>
         </div>
+
         <div className="w-full flex items-center lg:justify-end gap-2 col-span-3 lg:col-span-2">
+          {/* Search box */}
           <span className="w-full lg:w-[50%] flex items-center gap-2 bg-gray-100 rounded-sm px-4 py-[5px] md:py-2">
             <SearchIcon className="w-3 md:w-4 h-3 md:h-4 text-black" />
             <input
@@ -100,84 +112,97 @@ const Saved: React.FC = () => {
             )}
           </div>
 
-          {/* Mobile sort button */}
+          {/* Mobile sort placeholder */}
           <div className="block lg:hidden h-full">
-            <button className="flex items-center gap-1 text-[10px] font-semibold rounded-xs bg-black text-white py-1 px-2 ">
+            <button className="flex items-center gap-1 text-[10px] font-semibold rounded-xs bg-black text-white py-1 px-2">
               <Calendar className="h-3 w-3" /> Today
             </button>
           </div>
         </div>
       </div>
 
-      {/*Desktop Cars Grid */}
-      <div className="hidden lg:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {filteredCars.map((car) => (
-          <CarCard key={car.id} car={car} />
-        ))}
-      </div>
+      {/* 🌀 Loading & Error */}
+      {loading && (
+        <p className="text-center text-gray-500 py-6 text-sm">Loading cars...</p>
+      )}
+      {error && (
+        <p className="text-center text-red-500 py-6 text-sm">{error}</p>
+      )}
 
-      {/* mobile Cars Grid */}
-      <div className="block lg:hidden space-y-2 sm:space-y-4 px-4 sm:mb-10 lg:mb-0">
-        {filteredCars.map((car) => (
-          <div
-            key={car.id}
-            className="flex flex-row rounded-sm border border-gray-100 p-1"
-          >
-            {/* Left Image */}
-            <div className="h-fit w-28 sm:w-36 flex-shrink-0 relative">
-              <img
-                src={"/fallback-car-img.png"}
-                alt="car image"
-                className="w-full h-22 sm:h-26 object-cover rounded-xs"
-              />
-            </div>
+      {/* 🖥 Desktop Cars Grid */}
+      {!loading && !error && (
+        <div className="hidden lg:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {filteredCars.length > 0 ? (
+            filteredCars.map((car) => <CarCard key={car.id} car={car} />)
+          ) : (
+            <p className="text-gray-500 text-sm text-center col-span-3 py-4">
+              No saved cars found.
+            </p>
+          )}
+        </div>
+      )}
 
-            <div className="w-full flex flex-col justify-between">
-              <div className="flex">
-                {/* Middle Content */}
-                <div className="flex-1 px-2 flex flex-col justify-between">
-                  <div className="space-y-1">
-                    <h3 className="font-semibold text-xs text-gray-900">
-                      {car.brand} {car.model} {car.transmission}{" "}
-                      {car.manufacturingYear}
-                    </h3>
-                    <p className="text-[9px] mt-1 leading-tight text-gray-900">
-                      {formatShortNumber(car.kms)} kms | {car.bodyType}{" "}
-                      {car.seats} seater | {car.fuelType} | {car.transmission}
+      {/* 📱 Mobile Cars Grid */}
+      {!loading && !error && (
+        <div className="block lg:hidden space-y-2 sm:space-y-4 px-4 sm:mb-10 lg:mb-0">
+          {filteredCars.length > 0 ? (
+            filteredCars.map((car) => (
+              <div
+                key={car.id}
+                className="flex flex-row rounded-sm border border-gray-100 p-1"
+              >
+                {/* Left Image */}
+                <div className="h-fit w-28 sm:w-36 flex-shrink-0 relative">
+                  <img
+                    src={car.carImages?.[0]?.imageUrl || car.carImages?.[0]?.imageKey || "/fallback-car-img.png"}
+                    alt="car image"
+                    className="w-full h-22 sm:h-26 object-cover rounded-xs"
+                  />
+                </div>
+
+                {/* Details */}
+                <div className="w-full flex flex-col justify-between">
+                  <div className="flex">
+                    <div className="flex-1 px-2 flex flex-col justify-between">
+                      <div className="space-y-1">
+                        <h3 className="font-semibold text-xs text-gray-900">
+                          {car.brand} {car.model} {car.transmission}{" "}
+                          {car.manufacturingYear}
+                        </h3>
+                        <p className="text-[9px] mt-1 leading-tight text-gray-900">
+                          {formatShortNumber(car.kms || car.kmDriven)} kms |{" "}
+                          {car.bodyType} {car.seats} seater | {car.fuelType} |{" "}
+                          {car.transmission}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col items-end justify-between p-1">
+                      <span className="p-[3px] bg-gray-100 rounded-xs active:scale-95 active:bg-white transition-all duration-300">
+                        <AiFillHeart className="w-3 h-3 text-green-600" />
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between pl-2 pr-1">
+                    <div className="text-[8px] flex items-center text-gray-900">
+                      <MapPinIcon className="w-[10px] h-[10px] mr-1 text-gray-900" />
+                      {car.address?.city || "Unknown City"}
+                    </div>
+                    <p className="font-bold text-xs flex items-center gap-2 text-gray-900">
+                      Rs. {formatShortNumber(car.carPrice)}
                     </p>
                   </div>
                 </div>
-
-                {/* Right Sidebar */}
-                <div className="flex flex-col items-end justify-between p-1">
-                  <span className="p-[3px] bg-gray-100 rounded-xs active:scale-95 active:bg-white transition-all duration-300">
-                    <AiFillHeart className="w-3 h-3 text-green-600" />
-                  </span>
-                </div>
               </div>
-
-              {/* Mobile bottom */}
-              <div className="flex items-center justify-between pl-2 pr-1">
-                <div className="text-[8px] flex items-center text-gray-900">
-                  <MapPinIcon className="w-[10px] h-[10px] mr-1 text-gray-900" />
-                  {car.address?.city}
-                </div>
-                <div>
-                  <p className="font-bold text-xs flex items-center gap-2 text-gray-900">
-                    Rs. {formatShortNumber(car.carPrice)}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-
-        {filteredCars.length === 0 && (
-          <p className="text-gray-500 text-sm text-center py-4">
-            No saved cars found.
-          </p>
-        )}
-      </div>
+            ))
+          ) : (
+            <p className="text-gray-500 text-sm text-center py-4">
+              No saved cars found.
+            </p>
+          )}
+        </div>
+      )}
     </div>
   );
 };
