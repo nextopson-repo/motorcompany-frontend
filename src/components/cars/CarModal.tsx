@@ -134,7 +134,6 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
     addressState: "",
     addressCity: "",
     addressLocality: "",
-    // carName: "",
     description: "",
     brand: "",
     model: "",
@@ -193,9 +192,15 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
 
   // Build nested locationData object from Google Sheet
   const carDataObj = carSheetData.reduce((acc, item) => {
-    const brand = item["Brand"];
-    const model = item["Model"];
-    const variant = item["Variant"];
+    // Clean up all keys: remove spaces + lowercase
+    const normalizedItem = Object.fromEntries(
+      Object.entries(item).map(([k, v]) => [k.trim().toLowerCase(), v])
+    );
+
+    const brand = normalizedItem["brand"];
+    const model = normalizedItem["model"];
+    const variant = normalizedItem["variant"];
+
     if (!brand || !model) return acc;
     if (!acc[brand]) acc[brand] = {};
     if (!acc[brand][model]) acc[brand][model] = new Set();

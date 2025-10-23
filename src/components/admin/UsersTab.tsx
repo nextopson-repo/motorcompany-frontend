@@ -3,7 +3,7 @@ import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { deleteUser as deleteUserLocal } from "../../store/slices/appSlice";
 import { useUsers } from "../../hooks/useApi";
 import { UserApiService } from "../../services/api";
-import { LucideRefreshCcw } from "lucide-react";
+import { LucideRefreshCw } from "lucide-react";
 
 export default function UsersTab() {
   const dispatch = useAppDispatch();
@@ -75,7 +75,7 @@ export default function UsersTab() {
             title={loading || refreshing ? "Refreshing..." : "Refresh"}
             className="px-3 py-2 text-blue-600 hover:text-blue-700 disabled:opacity-50 disabled:cursor-not-allowed md:hidden"
           >
-            <LucideRefreshCcw
+            <LucideRefreshCw
               className={loading || refreshing ? "animate-spin" : ""}
             />
           </button>
@@ -88,7 +88,7 @@ export default function UsersTab() {
             title={loading || refreshing ? "Refreshing..." : "Refresh"}
             className="px-3 py-2 text-blue-600 hover:text-blue-700 disabled:opacity-50 disabled:cursor-not-allowed hidden md:block"
           >
-            <LucideRefreshCcw
+            <LucideRefreshCw
               className={loading || refreshing ? "animate-spin" : ""}
             />
           </button>

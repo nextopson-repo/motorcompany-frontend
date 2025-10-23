@@ -182,8 +182,8 @@ const AdminPanel: React.FC = () => {
         </div>
 
         {/* Main Content */}
-        <div className="mx-auto lg:flex-1 lg:ml-0">
-          <div className="lg:mt-0 lg:p-6 ">{renderTabContent()}</div>
+        <div className="mx-auto lg:flex-1 lg:ml-0 ">
+          <div className="lg:mt-0 lg:p-6">{renderTabContent()}</div>
         </div>
       </div>
 

@@ -173,7 +173,7 @@ const CarListing: React.FC = () => {
   return (
     <div className="space-y-6 mt-4 lg:mt-0">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-4 lg:px-0">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">
             Vehicle Management
@@ -192,10 +192,10 @@ const CarListing: React.FC = () => {
       </div>
 
       {/* Search and Controls */}
-      <div className="bg-white rounded-md shadow-sm border border-gray-200 p-2">
+      <div className="bg-white rounded-md shadow-sm lg:border lg:border-gray-200 lg:p-2 ">
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Search */}
-          <div className="flex-1 relative">
+          <div className="lg:flex-1 relative w-auto mx-4 lg:mx-0">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <input
               type="text"
@@ -207,7 +207,7 @@ const CarListing: React.FC = () => {
           </div>
 
           {/* Controls */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 px-4 lg:px-0">
             {/* Filter Toggle */}
             <button
               onClick={() => setShowFilters(!showFilters)}
@@ -471,7 +471,7 @@ const CarListing: React.FC = () => {
         <div
           className={
             viewMode === "grid"
-              ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+              ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 px-4 lg:px-0"
               : "space-y-4"
           }
         >
@@ -498,7 +498,7 @@ const CarListing: React.FC = () => {
           )}
         </div>
       ) : (
-        <div className="text-center py-12">
+        <div className="text-center py-12 px-4 lg:px-0">
           <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Search className="w-8 h-8 text-gray-400" />
           </div>
