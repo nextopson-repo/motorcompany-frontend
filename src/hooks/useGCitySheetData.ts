@@ -8,7 +8,7 @@ function useGCitySheetData(
   sheetId: string,
   range: string,
   apiKey: string,
-  refreshInterval: number = 60000
+  refreshInterval: number = 300000  //5min = 300000ms
 ) {
   const [data, setData] = useState<SheetDataItem[]>([]);
   const [loading, setLoading] = useState(true);
