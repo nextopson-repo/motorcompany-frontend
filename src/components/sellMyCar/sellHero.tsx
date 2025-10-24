@@ -94,7 +94,6 @@ export default function SellHero() {
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
   const [locality, setLocality] = useState("");
-  const [currentUser, setCurrentUser] = useState<any>();
   const [editCar, setEditCar] = useState<any>(null);
 
   const locationData: Record<string, Record<string, string[]>> = {
@@ -126,22 +125,16 @@ export default function SellHero() {
     },
   };
 
-  useEffect(() => {
-    const savedToken = localStorage.getItem("token");
-    const savedUser = localStorage.getItem("user");
-    if (savedToken && savedUser) {
-      setCurrentUser(JSON.parse(savedUser));
-    }
-
-    if (location.state?.editCar) {
-      const car = location.state.editCar;
-      setEditCar(car);
-      setState(car?.address?.state || "");
-      setCity(car?.address?.city || "");
-      setLocality(car?.address?.locality || "");
-      setShowForm(true);
-    }
-  }, [location]);
+ useEffect(() => {
+  if (location.state?.editCar) {
+    const car = location.state.editCar;
+    setEditCar(car);
+    setState(car?.address?.state || "");
+    setCity(car?.address?.city || "");
+    setLocality(car?.address?.locality || "");
+    setShowForm(true);
+  }
+}, [location]);
 
   // This function receives carData with images array directly from SellHeroForm and dispatches upload
   const handleFinalSubmit = async (carData: any) => {
@@ -152,7 +145,7 @@ export default function SellHero() {
 
     const formData = new FormData();
 
-    formData.append("userId", currentUser?.id);
+    formData.append("userId", user?.id || "");
     formData.append("isSale", "Sell");
     formData.append("isSold", "false");
 

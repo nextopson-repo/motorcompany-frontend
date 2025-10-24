@@ -16,6 +16,7 @@ export interface CarRecord {
   user?: { fullName?: string; userType?: string; mobileNumber?: number };
   updatedAt?: string;
   createdAt?: string;
+  savedCarId?: string;
   [key: string]: unknown;
 }
 
