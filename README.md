@@ -6,7 +6,7 @@ A modern, responsive admin panel for managing car dealership operations built wi
 
 ### 🚗 Vehicle Management
 - **Comprehensive CRUD Operations**: Create, read, update, and delete vehicles
-- **Advanced Filtering**: Filter by brand, fuel type, transmission, condition, price range, and year
+- **Advanced Filtering**: Filter by brand, fuel type, transmission, condi   tion, price range, and year
 - **Search Functionality**: Search across vehicle titles, brands, models, locations, and owners
 - **Sorting Options**: Sort by price, year, kilometers driven, or name
 - **Responsive Grid/List Views**: Switch between grid and list layouts
