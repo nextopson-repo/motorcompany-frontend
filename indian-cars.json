@@ -1,0 +1,1522 @@
+[
+  {
+    "car_brand": "Maruti Suzuki",
+    "car_model": "Swift",
+    "car_variants": [
+      "LXi",
+      "VXi",
+      "ZXi",
+      "ZXi+"
+    ]
+  },
+  {
+    "car_brand": "Maruti Suzuki",
+    "car_model": "Baleno",
+    "car_variants": [
+      "Sigma",
+      "Delta",
+      "Zeta",
+      "Alpha"
+    ]
+  },
+  {
+    "car_brand": "Maruti Suzuki",
+    "car_model": "WagonR",
+    "car_variants": [
+      "LXi",
+      "VXi",
+      "ZXi",
+      "ZXi+"
+    ]
+  },
+  {
+    "car_brand": "Maruti Suzuki",
+    "car_model": "Alto K10",
+    "car_variants": [
+      "Std",
+      "LXi",
+      "VXi"
+    ]
+  },
+  {
+    "car_brand": "Maruti Suzuki",
+    "car_model": "Dzire",
+    "car_variants": [
+      "LXi",
+      "VXi",
+      "ZXi",
+      "ZXi+"
+    ]
+  },
+  {
+    "car_brand": "Maruti Suzuki",
+    "car_model": "Ertiga",
+    "car_variants": [
+      "LXi",
+      "VXi",
+      "ZXi",
+      "ZXi+"
+    ]
+  },
+  {
+    "car_brand": "Maruti Suzuki",
+    "car_model": "Vitara Brezza",
+    "car_variants": [
+      "LDi",
+      "VDi",
+      "ZDi",
+      "ZDi+"
+    ]
+  },
+  {
+    "car_brand": "Maruti Suzuki",
+    "car_model": "Celerio",
+    "car_variants": [
+      "LXi",
+      "VXi",
+      "ZXi"
+    ]
+  },
+  {
+    "car_brand": "Maruti Suzuki",
+    "car_model": "S-Presso",
+    "car_variants": [
+      "Std",
+      "LXi",
+      "VXi"
+    ]
+  },
+  {
+    "car_brand": "Maruti Suzuki",
+    "car_model": "Ignis",
+    "car_variants": [
+      "Sigma",
+      "Delta",
+      "Zeta",
+      "Alpha"
+    ]
+  },
+  {
+    "car_brand": "Maruti Suzuki",
+    "car_model": "XL6",
+    "car_variants": [
+      "Zeta",
+      "Alpha"
+    ]
+  },
+  {
+    "car_brand": "Maruti Suzuki",
+    "car_model": "Grand Vitara",
+    "car_variants": [
+      "Sigma",
+      "Delta",
+      "Zeta",
+      "Alpha"
+    ]
+  },
+  {
+    "car_brand": "Maruti Suzuki",
+    "car_model": "Fronx",
+    "car_variants": [
+      "Sigma",
+      "Delta",
+      "Zeta",
+      "Alpha"
+    ]
+  },
+  {
+    "car_brand": "Maruti Suzuki",
+    "car_model": "Jimny",
+    "car_variants": [
+      "Zeta",
+      "Alpha"
+    ]
+  },
+  {
+    "car_brand": "Maruti Suzuki",
+    "car_model": "Invicto",
+    "car_variants": [
+      "Zeta",
+      "Alpha"
+    ]
+  },
+  {
+    "car_brand": "Tata Motors",
+    "car_model": "Nexon",
+    "car_variants": [
+      "XE",
+      "XM",
+      "XZ",
+      "XZ+",
+      "XZ+(O)"
+    ]
+  },
+  {
+    "car_brand": "Tata Motors",
+    "car_model": "Punch",
+    "car_variants": [
+      "Pure",
+      "Adventure",
+      "Accomplished",
+      "Creative"
+    ]
+  },
+  {
+    "car_brand": "Tata Motors",
+    "car_model": "Harrier",
+    "car_variants": [
+      "XE",
+      "XM",
+      "XT",
+      "XZ",
+      "XZ+"
+    ]
+  },
+  {
+    "car_brand": "Tata Motors",
+    "car_model": "Safari",
+    "car_variants": [
+      "XE",
+      "XM",
+      "XT",
+      "XZ",
+      "XZ+"
+    ]
+  },
+  {
+    "car_brand": "Tata Motors",
+    "car_model": "Tiago",
+    "car_variants": [
+      "XE",
+      "XM",
+      "XZ",
+      "XZ+"
+    ]
+  },
+  {
+    "car_brand": "Tata Motors",
+    "car_model": "Tigor",
+    "car_variants": [
+      "XE",
+      "XM",
+      "XZ",
+      "XZ+"
+    ]
+  },
+  {
+    "car_brand": "Tata Motors",
+    "car_model": "Altroz",
+    "car_variants": [
+      "XE",
+      "XM",
+      "XZ",
+      "XZ+"
+    ]
+  },
+  {
+    "car_brand": "Tata Motors",
+    "car_model": "Tigor EV",
+    "car_variants": [
+      "XM",
+      "XZ+"
+    ]
+  },
+  {
+    "car_brand": "Tata Motors",
+    "car_model": "Nexon EV",
+    "car_variants": [
+      "XM",
+      "XZ+",
+      "XZ+ Lux"
+    ]
+  },
+  {
+    "car_brand": "Tata Motors",
+    "car_model": "Tiago EV",
+    "car_variants": [
+      "XM",
+      "XZ+"
+    ]
+  },
+  {
+    "car_brand": "Tata Motors",
+    "car_model": "Punch EV",
+    "car_variants": [
+      "Adventure",
+      "Accomplished",
+      "Creative"
+    ]
+  },
+  {
+    "car_brand": "Mahindra",
+    "car_model": "Thar",
+    "car_variants": [
+      "AX",
+      "AX(O)",
+      "LX"
+    ]
+  },
+  {
+    "car_brand": "Mahindra",
+    "car_model": "XUV700",
+    "car_variants": [
+      "MX",
+      "AX3",
+      "AX5",
+      "AX7"
+    ]
+  },
+  {
+    "car_brand": "Mahindra",
+    "car_model": "Scorpio N",
+    "car_variants": [
+      "Z2",
+      "Z4",
+      "Z6",
+      "Z8",
+      "Z8L"
+    ]
+  },
+  {
+    "car_brand": "Mahindra",
+    "car_model": "Bolero Neo",
+    "car_variants": [
+      "N4",
+      "N8",
+      "N10"
+    ]
+  },
+  {
+    "car_brand": "Mahindra",
+    "car_model": "XUV300",
+    "car_variants": [
+      "W4",
+      "W6",
+      "W8",
+      "W8(O)"
+    ]
+  },
+  {
+    "car_brand": "Mahindra",
+    "car_model": "Marazzo",
+    "car_variants": [
+      "M2",
+      "M4",
+      "M6",
+      "M8"
+    ]
+  },
+  {
+    "car_brand": "Mahindra",
+    "car_model": "Bolero",
+    "car_variants": [
+      "B4",
+      "B6",
+      "B6(O)"
+    ]
+  },
+  {
+    "car_brand": "Mahindra",
+    "car_model": "XUV400 EV",
+    "car_variants": [
+      "EC",
+      "EL"
+    ]
+  },
+  {
+    "car_brand": "Hyundai",
+    "car_model": "Creta",
+    "car_variants": [
+      "E",
+      "EX",
+      "S",
+      "SX",
+      "SX(O)"
+    ]
+  },
+  {
+    "car_brand": "Hyundai",
+    "car_model": "Venue",
+    "car_variants": [
+      "E",
+      "S",
+      "SX",
+      "SX(O)"
+    ]
+  },
+  {
+    "car_brand": "Hyundai",
+    "car_model": "i20",
+    "car_variants": [
+      "Magna",
+      "Sportz",
+      "Asta",
+      "Asta(O)"
+    ]
+  },
+  {
+    "car_brand": "Hyundai",
+    "car_model": "Grand i10 Nios",
+    "car_variants": [
+      "Magna",
+      "Sportz",
+      "Asta"
+    ]
+  },
+  {
+    "car_brand": "Hyundai",
+    "car_model": "Aura",
+    "car_variants": [
+      "E",
+      "S",
+      "SX",
+      "SX(O)"
+    ]
+  },
+  {
+    "car_brand": "Hyundai",
+    "car_model": "Verna",
+    "car_variants": [
+      "E",
+      "S",
+      "SX",
+      "SX(O)"
+    ]
+  },
+  {
+    "car_brand": "Hyundai",
+    "car_model": "Elantra",
+    "car_variants": [
+      "S",
+      "SX",
+      "SX(O)"
+    ]
+  },
+  {
+    "car_brand": "Hyundai",
+    "car_model": "Tucson",
+    "car_variants": [
+      "GLS",
+      "GLS(O)"
+    ]
+  },
+  {
+    "car_brand": "Hyundai",
+    "car_model": "Kona Electric",
+    "car_variants": [
+      "Premium"
+    ]
+  },
+  {
+    "car_brand": "Hyundai",
+    "car_model": "Ioniq 5",
+    "car_variants": [
+      "Premium"
+    ]
+  },
+  {
+    "car_brand": "Kia",
+    "car_model": "Seltos",
+    "car_variants": [
+      "HTE",
+      "HTK",
+      "HTK+",
+      "HTX",
+      "HTX+",
+      "GTX+"
+    ]
+  },
+  {
+    "car_brand": "Kia",
+    "car_model": "Sonet",
+    "car_variants": [
+      "HTE",
+      "HTK",
+      "HTK+",
+      "HTX",
+      "HTX+",
+      "GTX+"
+    ]
+  },
+  {
+    "car_brand": "Kia",
+    "car_model": "Carnival",
+    "car_variants": [
+      "Premium",
+      "Prestige"
+    ]
+  },
+  {
+    "car_brand": "Kia",
+    "car_model": "EV6",
+    "car_variants": [
+      "GT Line"
+    ]
+  },
+  {
+    "car_brand": "Kia",
+    "car_model": "Carens",
+    "car_variants": [
+      "Premium",
+      "Prestige",
+      "Luxury"
+    ]
+  },
+  {
+    "car_brand": "Toyota",
+    "car_model": "Innova Crysta",
+    "car_variants": [
+      "G",
+      "GX",
+      "VX",
+      "ZX"
+    ]
+  },
+  {
+    "car_brand": "Toyota",
+    "car_model": "Fortuner",
+    "car_variants": [
+      "4x2 MT",
+      "4x2 AT",
+      "4x4 MT",
+      "4x4 AT"
+    ]
+  },
+  {
+    "car_brand": "Toyota",
+    "car_model": "Urban Cruiser Hyryder",
+    "car_variants": [
+      "S",
+      "G",
+      "V"
+    ]
+  },
+  {
+    "car_brand": "Toyota",
+    "car_model": "Glanza",
+    "car_variants": [
+      "G",
+      "V",
+      "V CVT"
+    ]
+  },
+  {
+    "car_brand": "Toyota",
+    "car_model": "Camry",
+    "car_variants": [
+      "Hybrid"
+    ]
+  },
+  {
+    "car_brand": "Toyota",
+    "car_model": "Vellfire",
+    "car_variants": [
+      "Z"
+    ]
+  },
+  {
+    "car_brand": "Toyota",
+    "car_model": "Hilux",
+    "car_variants": [
+      "4x4 MT"
+    ]
+  },
+  {
+    "car_brand": "Honda",
+    "car_model": "City",
+    "car_variants": [
+      "V",
+      "VX",
+      "ZX"
+    ]
+  },
+  {
+    "car_brand": "Honda",
+    "car_model": "Amaze",
+    "car_variants": [
+      "E",
+      "S",
+      "V",
+      "VX"
+    ]
+  },
+  {
+    "car_brand": "Honda",
+    "car_model": "WR-V",
+    "car_variants": [
+      "S",
+      "V",
+      "VX"
+    ]
+  },
+  {
+    "car_brand": "Honda",
+    "car_model": "Jazz",
+    "car_variants": [
+      "V",
+      "VX"
+    ]
+  },
+  {
+    "car_brand": "Honda",
+    "car_model": "Civic",
+    "car_variants": [
+      "V",
+      "VX"
+    ]
+  },
+  {
+    "car_brand": "Honda",
+    "car_model": "CR-V",
+    "car_variants": [
+      "V"
+    ]
+  },
+  {
+    "car_brand": "Honda",
+    "car_model": "Elevate",
+    "car_variants": [
+      "SV",
+      "V",
+      "VX",
+      "ZX"
+    ]
+  },
+  {
+    "car_brand": "Nissan",
+    "car_model": "Magnite",
+    "car_variants": [
+      "XE",
+      "XL",
+      "XV",
+      "XV Premium"
+    ]
+  },
+  {
+    "car_brand": "Nissan",
+    "car_model": "Kicks",
+    "car_variants": [
+      "XL",
+      "XV",
+      "XV Premium"
+    ]
+  },
+  {
+    "car_brand": "Nissan",
+    "car_model": "GT-R",
+    "car_variants": [
+      "Premium"
+    ]
+  },
+  {
+    "car_brand": "Renault",
+    "car_model": "Kwid",
+    "car_variants": [
+      "Std",
+      "RXL",
+      "RXT",
+      "RXZ"
+    ]
+  },
+  {
+    "car_brand": "Renault",
+    "car_model": "Triber",
+    "car_variants": [
+      "RXE",
+      "RXL",
+      "RXT",
+      "RXZ"
+    ]
+  },
+  {
+    "car_brand": "Renault",
+    "car_model": "Duster",
+    "car_variants": [
+      "RXE",
+      "RXL",
+      "RXT",
+      "RXZ"
+    ]
+  },
+  {
+    "car_brand": "Renault",
+    "car_model": "Kiger",
+    "car_variants": [
+      "RXE",
+      "RXL",
+      "RXT",
+      "RXZ"
+    ]
+  },
+  {
+    "car_brand": "Volkswagen",
+    "car_model": "Polo",
+    "car_variants": [
+      "Trendline",
+      "Comfortline",
+      "Highline"
+    ]
+  },
+  {
+    "car_brand": "Volkswagen",
+    "car_model": "Vento",
+    "car_variants": [
+      "Trendline",
+      "Comfortline",
+      "Highline"
+    ]
+  },
+  {
+    "car_brand": "Volkswagen",
+    "car_model": "Taigun",
+    "car_variants": [
+      "Trendline",
+      "Comfortline",
+      "Highline",
+      "GT Line"
+    ]
+  },
+  {
+    "car_brand": "Volkswagen",
+    "car_model": "Virtus",
+    "car_variants": [
+      "Trendline",
+      "Comfortline",
+      "Highline",
+      "GT Line"
+    ]
+  },
+  {
+    "car_brand": "Skoda",
+    "car_model": "Rapid",
+    "car_variants": [
+      "Rider",
+      "Ambition",
+      "Style"
+    ]
+  },
+  {
+    "car_brand": "Skoda",
+    "car_model": "Kushaq",
+    "car_variants": [
+      "Active",
+      "Ambition",
+      "Style",
+      "Monte Carlo"
+    ]
+  },
+  {
+    "car_brand": "Skoda",
+    "car_model": "Slavia",
+    "car_variants": [
+      "Active",
+      "Ambition",
+      "Style",
+      "Monte Carlo"
+    ]
+  },
+  {
+    "car_brand": "Skoda",
+    "car_model": "Octavia",
+    "car_variants": [
+      "Style",
+      "Laurin & Klement"
+    ]
+  },
+  {
+    "car_brand": "Skoda",
+    "car_model": "Superb",
+    "car_variants": [
+      "Style",
+      "Laurin & Klement"
+    ]
+  },
+  {
+    "car_brand": "Skoda",
+    "car_model": "Kodiaq",
+    "car_variants": [
+      "Style",
+      "Laurin & Klement"
+    ]
+  },
+  {
+    "car_brand": "MG Motor",
+    "car_model": "Hector",
+    "car_variants": [
+      "Style",
+      "Super",
+      "Smart",
+      "Sharp"
+    ]
+  },
+  {
+    "car_brand": "MG Motor",
+    "car_model": "Gloster",
+    "car_variants": [
+      "Super",
+      "Smart",
+      "Sharp"
+    ]
+  },
+  {
+    "car_brand": "MG Motor",
+    "car_model": "Astor",
+    "car_variants": [
+      "Style",
+      "Super",
+      "Smart",
+      "Sharp"
+    ]
+  },
+  {
+    "car_brand": "MG Motor",
+    "car_model": "ZS EV",
+    "car_variants": [
+      "Excite",
+      "Exclusive"
+    ]
+  },
+  {
+    "car_brand": "MG Motor",
+    "car_model": "Comet EV",
+    "car_variants": [
+      "Pace",
+      "Play"
+    ]
+  },
+  {
+    "car_brand": "MG Motor",
+    "car_model": "Hector Plus",
+    "car_variants": [
+      "Style",
+      "Super",
+      "Smart",
+      "Sharp"
+    ]
+  },
+  {
+    "car_brand": "Jeep",
+    "car_model": "Compass",
+    "car_variants": [
+      "Sport",
+      "Longitude",
+      "Limited",
+      "Trailhawk"
+    ]
+  },
+  {
+    "car_brand": "Jeep",
+    "car_model": "Meridian",
+    "car_variants": [
+      "Limited",
+      "Limited(O)",
+      "Night Eagle"
+    ]
+  },
+  {
+    "car_brand": "Jeep",
+    "car_model": "Wrangler",
+    "car_variants": [
+      "Unlimited"
+    ]
+  },
+  {
+    "car_brand": "Jeep",
+    "car_model": "Grand Cherokee",
+    "car_variants": [
+      "Limited",
+      "Summit"
+    ]
+  },
+  {
+    "car_brand": "BMW",
+    "car_model": "3 Series",
+    "car_variants": [
+      "320d",
+      "330i"
+    ]
+  },
+  {
+    "car_brand": "BMW",
+    "car_model": "5 Series",
+    "car_variants": [
+      "520d",
+      "530d"
+    ]
+  },
+  {
+    "car_brand": "BMW",
+    "car_model": "X1",
+    "car_variants": [
+      "sDrive20i",
+      "xDrive20d"
+    ]
+  },
+  {
+    "car_brand": "BMW",
+    "car_model": "X3",
+    "car_variants": [
+      "xDrive20d",
+      "xDrive30d"
+    ]
+  },
+  {
+    "car_brand": "BMW",
+    "car_model": "X5",
+    "car_variants": [
+      "xDrive30d",
+      "xDrive40i"
+    ]
+  },
+  {
+    "car_brand": "BMW",
+    "car_model": "X7",
+    "car_variants": [
+      "xDrive30d",
+      "xDrive40i"
+    ]
+  },
+  {
+    "car_brand": "BMW",
+    "car_model": "iX",
+    "car_variants": [
+      "xDrive40",
+      "xDrive50"
+    ]
+  },
+  {
+    "car_brand": "BMW",
+    "car_model": "i4",
+    "car_variants": [
+      "eDrive40",
+      "M50"
+    ]
+  },
+  {
+    "car_brand": "Mercedes-Benz",
+    "car_model": "A-Class",
+    "car_variants": [
+      "A200",
+      "A200d"
+    ]
+  },
+  {
+    "car_brand": "Mercedes-Benz",
+    "car_model": "C-Class",
+    "car_variants": [
+      "C200",
+      "C220d"
+    ]
+  },
+  {
+    "car_brand": "Mercedes-Benz",
+    "car_model": "E-Class",
+    "car_variants": [
+      "E200",
+      "E220d"
+    ]
+  },
+  {
+    "car_brand": "Mercedes-Benz",
+    "car_model": "S-Class",
+    "car_variants": [
+      "S350d",
+      "S450"
+    ]
+  },
+  {
+    "car_brand": "Mercedes-Benz",
+    "car_model": "GLA",
+    "car_variants": [
+      "GLA200",
+      "GLA220d"
+    ]
+  },
+  {
+    "car_brand": "Mercedes-Benz",
+    "car_model": "GLC",
+    "car_variants": [
+      "GLC220d",
+      "GLC300"
+    ]
+  },
+  {
+    "car_brand": "Mercedes-Benz",
+    "car_model": "GLE",
+    "car_variants": [
+      "GLE300d",
+      "GLE450"
+    ]
+  },
+  {
+    "car_brand": "Mercedes-Benz",
+    "car_model": "GLS",
+    "car_variants": [
+      "GLS400d",
+      "GLS450"
+    ]
+  },
+  {
+    "car_brand": "Mercedes-Benz",
+    "car_model": "EQS",
+    "car_variants": [
+      "450+",
+      "580"
+    ]
+  },
+  {
+    "car_brand": "Audi",
+    "car_model": "A3",
+    "car_variants": [
+      "35 TFSI",
+      "35 TDI"
+    ]
+  },
+  {
+    "car_brand": "Audi",
+    "car_model": "A4",
+    "car_variants": [
+      "40 TFSI",
+      "35 TDI"
+    ]
+  },
+  {
+    "car_brand": "Audi",
+    "car_model": "A6",
+    "car_variants": [
+      "45 TFSI",
+      "40 TDI"
+    ]
+  },
+  {
+    "car_brand": "Audi",
+    "car_model": "A8",
+    "car_variants": [
+      "55 TFSI",
+      "50 TDI"
+    ]
+  },
+  {
+    "car_brand": "Audi",
+    "car_model": "Q2",
+    "car_variants": [
+      "35 TFSI",
+      "35 TDI"
+    ]
+  },
+  {
+    "car_brand": "Audi",
+    "car_model": "Q3",
+    "car_variants": [
+      "40 TFSI",
+      "35 TDI"
+    ]
+  },
+  {
+    "car_brand": "Audi",
+    "car_model": "Q5",
+    "car_variants": [
+      "45 TFSI",
+      "40 TDI"
+    ]
+  },
+  {
+    "car_brand": "Audi",
+    "car_model": "Q7",
+    "car_variants": [
+      "55 TFSI",
+      "45 TDI"
+    ]
+  },
+  {
+    "car_brand": "Audi",
+    "car_model": "Q8",
+    "car_variants": [
+      "55 TFSI",
+      "50 TDI"
+    ]
+  },
+  {
+    "car_brand": "Audi",
+    "car_model": "e-tron",
+    "car_variants": [
+      "50",
+      "55"
+    ]
+  },
+  {
+    "car_brand": "Jaguar",
+    "car_model": "XE",
+    "car_variants": [
+      "P250",
+      "P300"
+    ]
+  },
+  {
+    "car_brand": "Jaguar",
+    "car_model": "XF",
+    "car_variants": [
+      "P250",
+      "P300"
+    ]
+  },
+  {
+    "car_brand": "Jaguar",
+    "car_model": "XJ",
+    "car_variants": [
+      "P300"
+    ]
+  },
+  {
+    "car_brand": "Jaguar",
+    "car_model": "F-PACE",
+    "car_variants": [
+      "P250",
+      "P300"
+    ]
+  },
+  {
+    "car_brand": "Jaguar",
+    "car_model": "E-PACE",
+    "car_variants": [
+      "P250",
+      "P300"
+    ]
+  },
+  {
+    "car_brand": "Jaguar",
+    "car_model": "I-PACE",
+    "car_variants": [
+      "EV400"
+    ]
+  },
+  {
+    "car_brand": "Land Rover",
+    "car_model": "Range Rover Evoque",
+    "car_variants": [
+      "P200",
+      "P250"
+    ]
+  },
+  {
+    "car_brand": "Land Rover",
+    "car_model": "Range Rover Velar",
+    "car_variants": [
+      "P250",
+      "P300"
+    ]
+  },
+  {
+    "car_brand": "Land Rover",
+    "car_model": "Range Rover Sport",
+    "car_variants": [
+      "P360",
+      "P400"
+    ]
+  },
+  {
+    "car_brand": "Land Rover",
+    "car_model": "Range Rover",
+    "car_variants": [
+      "P400",
+      "P530"
+    ]
+  },
+  {
+    "car_brand": "Land Rover",
+    "car_model": "Discovery Sport",
+    "car_variants": [
+      "P200",
+      "P250"
+    ]
+  },
+  {
+    "car_brand": "Land Rover",
+    "car_model": "Discovery",
+    "car_variants": [
+      "P300",
+      "P360"
+    ]
+  },
+  {
+    "car_brand": "Land Rover",
+    "car_model": "Defender",
+    "car_variants": [
+      "P300",
+      "P400"
+    ]
+  },
+  {
+    "car_brand": "Volvo",
+    "car_model": "XC40",
+    "car_variants": [
+      "B4",
+      "B5"
+    ]
+  },
+  {
+    "car_brand": "Volvo",
+    "car_model": "XC60",
+    "car_variants": [
+      "B5",
+      "B6"
+    ]
+  },
+  {
+    "car_brand": "Volvo",
+    "car_model": "XC90",
+    "car_variants": [
+      "B5",
+      "B6"
+    ]
+  },
+  {
+    "car_brand": "Volvo",
+    "car_model": "S60",
+    "car_variants": [
+      "B4",
+      "B5"
+    ]
+  },
+  {
+    "car_brand": "Volvo",
+    "car_model": "S90",
+    "car_variants": [
+      "B5"
+    ]
+  },
+  {
+    "car_brand": "Volvo",
+    "car_model": "C40 Recharge",
+    "car_variants": [
+      "Recharge"
+    ]
+  },
+  {
+    "car_brand": "Porsche",
+    "car_model": "Macan",
+    "car_variants": [
+      "Macan",
+      "Macan S",
+      "Macan GTS"
+    ]
+  },
+  {
+    "car_brand": "Porsche",
+    "car_model": "Cayenne",
+    "car_variants": [
+      "Cayenne",
+      "Cayenne S",
+      "Cayenne Turbo"
+    ]
+  },
+  {
+    "car_brand": "Porsche",
+    "car_model": "Panamera",
+    "car_variants": [
+      "Panamera",
+      "Panamera 4",
+      "Panamera Turbo"
+    ]
+  },
+  {
+    "car_brand": "Porsche",
+    "car_model": "911",
+    "car_variants": [
+      "Carrera",
+      "Carrera S",
+      "Carrera 4S"
+    ]
+  },
+  {
+    "car_brand": "Porsche",
+    "car_model": "Taycan",
+    "car_variants": [
+      "Taycan",
+      "Taycan 4S",
+      "Taycan Turbo"
+    ]
+  },
+  {
+    "car_brand": "Ferrari",
+    "car_model": "Portofino",
+    "car_variants": [
+      "Portofino M"
+    ]
+  },
+  {
+    "car_brand": "Ferrari",
+    "car_model": "Roma",
+    "car_variants": [
+      "Roma"
+    ]
+  },
+  {
+    "car_brand": "Ferrari",
+    "car_model": "F8",
+    "car_variants": [
+      "F8 Tributo",
+      "F8 Spider"
+    ]
+  },
+  {
+    "car_brand": "Ferrari",
+    "car_model": "SF90",
+    "car_variants": [
+      "SF90 Stradale",
+      "SF90 Spider"
+    ]
+  },
+  {
+    "car_brand": "Ferrari",
+    "car_model": "296 GTB",
+    "car_variants": [
+      "296 GTB"
+    ]
+  },
+  {
+    "car_brand": "Lamborghini",
+    "car_model": "Huracán",
+    "car_variants": [
+      "Huracán EVO",
+      "Huracán EVO Spyder"
+    ]
+  },
+  {
+    "car_brand": "Lamborghini",
+    "car_model": "Aventador",
+    "car_variants": [
+      "Aventador S",
+      "Aventador SVJ"
+    ]
+  },
+  {
+    "car_brand": "Lamborghini",
+    "car_model": "Urus",
+    "car_variants": [
+      "Urus"
+    ]
+  },
+  {
+    "car_brand": "Bentley",
+    "car_model": "Continental GT",
+    "car_variants": [
+      "V8",
+      "W12"
+    ]
+  },
+  {
+    "car_brand": "Bentley",
+    "car_model": "Bentayga",
+    "car_variants": [
+      "V8",
+      "W12"
+    ]
+  },
+  {
+    "car_brand": "Bentley",
+    "car_model": "Flying Spur",
+    "car_variants": [
+      "V8",
+      "W12"
+    ]
+  },
+  {
+    "car_brand": "Rolls-Royce",
+    "car_model": "Ghost",
+    "car_variants": [
+      "Ghost"
+    ]
+  },
+  {
+    "car_brand": "Rolls-Royce",
+    "car_model": "Phantom",
+    "car_variants": [
+      "Phantom"
+    ]
+  },
+  {
+    "car_brand": "Rolls-Royce",
+    "car_model": "Cullinan",
+    "car_variants": [
+      "Cullinan"
+    ]
+  },
+  {
+    "car_brand": "Rolls-Royce",
+    "car_model": "Wraith",
+    "car_variants": [
+      "Wraith"
+    ]
+  },
+  {
+    "car_brand": "Rolls-Royce",
+    "car_model": "Dawn",
+    "car_variants": [
+      "Dawn"
+    ]
+  },
+  {
+    "car_brand": "Maserati",
+    "car_model": "Ghibli",
+    "car_variants": [
+      "Ghibli",
+      "Ghibli S"
+    ]
+  },
+  {
+    "car_brand": "Maserati",
+    "car_model": "Quattroporte",
+    "car_variants": [
+      "Quattroporte",
+      "Quattroporte S"
+    ]
+  },
+  {
+    "car_brand": "Maserati",
+    "car_model": "Levante",
+    "car_variants": [
+      "Levante",
+      "Levante S"
+    ]
+  },
+  {
+    "car_brand": "Maserati",
+    "car_model": "GranTurismo",
+    "car_variants": [
+      "GranTurismo"
+    ]
+  },
+  {
+    "car_brand": "Aston Martin",
+    "car_model": "DB11",
+    "car_variants": [
+      "DB11 V8",
+      "DB11 V12"
+    ]
+  },
+  {
+    "car_brand": "Aston Martin",
+    "car_model": "Vantage",
+    "car_variants": [
+      "Vantage"
+    ]
+  },
+  {
+    "car_brand": "Aston Martin",
+    "car_model": "DBS",
+    "car_variants": [
+      "DBS Superleggera"
+    ]
+  },
+  {
+    "car_brand": "McLaren",
+    "car_model": "720S",
+    "car_variants": [
+      "720S",
+      "720S Spider"
+    ]
+  },
+  {
+    "car_brand": "McLaren",
+    "car_model": "570S",
+    "car_variants": [
+      "570S",
+      "570S Spider"
+    ]
+  },
+  {
+    "car_brand": "McLaren",
+    "car_model": "600LT",
+    "car_variants": [
+      "600LT",
+      "600LT Spider"
+    ]
+  },
+  {
+    "car_brand": "McLaren",
+    "car_model": "GT",
+    "car_variants": [
+      "GT"
+    ]
+  },
+  {
+    "car_brand": "Lotus",
+    "car_model": "Evora",
+    "car_variants": [
+      "Evora GT410"
+    ]
+  },
+  {
+    "car_brand": "Lotus",
+    "car_model": "Exige",
+    "car_variants": [
+      "Exige Sport 410"
+    ]
+  },
+  {
+    "car_brand": "Lotus",
+    "car_model": "Elise",
+    "car_variants": [
+      "Elise Sport 220"
+    ]
+  },
+  {
+    "car_brand": "Force Motors",
+    "car_model": "Gurkha",
+    "car_variants": [
+      "3 Door",
+      "5 Door"
+    ]
+  },
+  {
+    "car_brand": "Force Motors",
+    "car_model": "Traveller",
+    "car_variants": [
+      "13 Seater",
+      "17 Seater"
+    ]
+  },
+  {
+    "car_brand": "Isuzu",
+    "car_model": "D-Max V-Cross",
+    "car_variants": [
+      "4x2",
+      "4x4"
+    ]
+  },
+  {
+    "car_brand": "Isuzu",
+    "car_model": "MU-X",
+    "car_variants": [
+      "4x2",
+      "4x4"
+    ]
+  },
+  {
+    "car_brand": "Citroen",
+    "car_model": "C3",
+    "car_variants": [
+      "Live",
+      "Feel",
+      "Shine"
+    ]
+  },
+  {
+    "car_brand": "Citroen",
+    "car_model": "C5 Aircross",
+    "car_variants": [
+      "Feel",
+      "Shine"
+    ]
+  },
+  {
+    "car_brand": "Citroen",
+    "car_model": "eC3",
+    "car_variants": [
+      "Live",
+      "Feel",
+      "Shine"
+    ]
+  }
+]
