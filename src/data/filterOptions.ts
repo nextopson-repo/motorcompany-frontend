@@ -21,4 +21,4 @@ export const stateOptions = ["Madhya Pradesh", "Maharashtra", "Delhi", "Karnatak
 
 export const cityOptions = ["Mumbai", "Pune", "Delhi", "Bangalore", "Ahmedabad", "Indore", "Bhopal"];
 
-export const userTypeOptions = ["EndUser", "Owner", "Dealer"];
+export const userTypeOptions = ["All", "Owner", "Dealer"];

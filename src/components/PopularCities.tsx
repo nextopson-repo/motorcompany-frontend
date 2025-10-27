@@ -11,10 +11,10 @@ const cities = [
   { name: "Pune", cars: 2023, img: "/Cities/pune.png" },
   { name: "Hyderabad", cars: 2023, img: "/Cities/hyderabad.png" },
   { name: "Kanpur", cars: 2023, img: "/Cities/Kanpur.png" },
-  { name: "Indore", cars: 2023, img: "/Cities/Indore.png" },
+  { name: "Surat", cars: 2023, img: "/Cities/Indor.png" }, //update image
   { name: "Lucknow", cars: 2023, img: "/Cities/Lucknow.png" },
   { name: "Delhi", cars: 2023, img: "/Cities/Delhi.png" },
-  { name: "Bhopal", cars: 2023, img: "/Cities/Bhopal.png" },
+  { name: "Mumbai", cars: 2023, img: "/Cities/Bhopa.png" }, //update image]
   { name: "Jaipur", cars: 2023, img: "/Cities/jaipur.png" },
 ];
 

@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../store/store";
 import { useNavigate } from "react-router-dom";
 import { updateSelectedFilter } from "../store/slices/carSlice";
+import CarCardSkeleton from "./CarCardSkeleton";
 
 const bodyTypes = [
   { name: "Hatchback", vehicles: 26, img: "/CarCategories/hatchback.png" },
@@ -23,11 +24,12 @@ const bodyTypes = [
 const HeroCategories: React.FC = () => {
   const Navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const cars = useSelector((state: RootState) => state.cars.cars);
+  // const cars = useSelector((state: RootState) => state.cars.cars);
+  const { cars, loading } = useSelector((state: RootState) => state.cars);
 
   const handleCityClick = (type: string) => {
-    dispatch(updateSelectedFilter({ key: 'bodyType', value: [type] }));
-    Navigate('/buy-car');
+    dispatch(updateSelectedFilter({ key: "bodyType", value: [type] }));
+    Navigate("/buy-car");
   };
 
   return (
@@ -86,9 +88,7 @@ const HeroCategories: React.FC = () => {
           spaceBetween={32}
           slidesPerView={1.5}
           breakpoints={{
-            0: { slidesPerView: 1.5,
-              spaceBetween:24,
-             },
+            0: { slidesPerView: 1.5, spaceBetween: 24 },
             640: { slidesPerView: 2.5 },
             1024: { slidesPerView: 3.3 },
             1100: { slidesPerView: 4 },
@@ -100,15 +100,24 @@ const HeroCategories: React.FC = () => {
             nextEl: ".custom-next2",
           }}
         >
-          {cars && cars.length > 0 ? (
-          cars.map((car) => (
-            <SwiperSlide key={car.id} className="pb-4 md:pb-5">
-              <CarCard car={car} />
-            </SwiperSlide>
-          ))
-        ) : (
-          <p>No featured cars found.</p>
-        )}
+          {loading ? (
+            // 👇 render 3-4 skeletons as placeholder
+            Array(4)
+              .fill(0)
+              .map((_, i) => (
+                <SwiperSlide key={i}>
+                  <CarCardSkeleton />
+                </SwiperSlide>
+              ))
+          ) : cars && cars.length > 0 ? (
+            cars.map((car) => (
+              <SwiperSlide key={car.id}>
+                <CarCard car={car} />
+              </SwiperSlide>
+            ))
+          ) : (
+            <p>No featured cars found.</p>
+          )}
         </Swiper>
 
         {/* Custom Navigation Buttons (now with class selectors) */}
@@ -121,8 +130,11 @@ const HeroCategories: React.FC = () => {
 
         {/* Bottom Button */}
         <div className="flex justify-center">
-          <button className="w-[150px] md:w-[16.5rem] text-xs md:text-sm bg-[#EE1422] text-white font-[500] py-[6px] md:py-2 rounded-sm hover:bg-[#EE1422]/80 transition cursor-pointer"
-          onClick={()=>{Navigate('/buy-car');}}
+          <button
+            className="w-[150px] md:w-[16.5rem] text-xs md:text-sm bg-[#EE1422] text-white font-[500] py-[6px] md:py-2 rounded-sm hover:bg-[#EE1422]/80 transition cursor-pointer"
+            onClick={() => {
+              Navigate("/buy-car");
+            }}
           >
             View All
           </button>

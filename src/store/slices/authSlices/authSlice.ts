@@ -66,6 +66,29 @@ export const sendOtp = createAsyncThunk(
 );
 
 // 3) Verify OTP
+// export const verifyOtp = createAsyncThunk(
+//   "auth/verifyOtp",
+//   async (
+//     {
+//       userId,
+//       mobileNumber,
+//       otp,
+//     }: { userId: string; mobileNumber: string; otp: string },
+//     thunkAPI
+//   ) => {
+//     try {
+//       const res = await fetch(`${BACKEND_URL}/api/v1/auth/verify-otp`, {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({ userId, mobileNumber, otpType: "mobile", otp }),
+//         mode: "cors",
+//       });
+//       return await res.json();
+//     } catch (err: any) {
+//       return thunkAPI.rejectWithValue(err.message);
+//     }
+//   }
+// );
 export const verifyOtp = createAsyncThunk(
   "auth/verifyOtp",
   async (
@@ -83,7 +106,16 @@ export const verifyOtp = createAsyncThunk(
         body: JSON.stringify({ userId, mobileNumber, otpType: "mobile", otp }),
         mode: "cors",
       });
-      return await res.json();
+
+      const data = await res.json();
+
+      // ✅ Return consistent structure even on error
+      return {
+        success: data?.success || false,
+        message: data?.message || "No message",
+        responseObject: data?.responseObject || null,
+        statusCode: data?.statusCode || 500,
+      };
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.message);
     }
@@ -250,9 +282,11 @@ const authSlice = createSlice({
       .addCase(verifyOtp.pending, pending)
       .addCase(verifyOtp.fulfilled, (state, action) => {
         state.loading = false;
-        if (action.payload?.responseObject?.user) {
-          state.user = action.payload.responseObject.user;
-          state.token = action.payload.responseObject.token;
+        if (action.payload?.responseObject?.user || action.payload?.user) {
+          state.user =
+            action.payload.responseObject?.user || action.payload.user;
+          state.token =
+            action.payload.responseObject?.token || action.payload.token;
           localStorage.setItem("token", state.token || "");
           localStorage.setItem("user", JSON.stringify(state.user));
         }

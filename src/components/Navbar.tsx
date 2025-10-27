@@ -24,7 +24,7 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
   const dispatch = useDispatch();
   const { user, token } = useSelector(selectAuth);
-  // const { user } = useAuth();
+  console.log(user);
   const navigate = useNavigate();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -101,19 +101,11 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
                 setIsMobileMenuOpen(false);
               }}
             >
-              {user.image ? (
-                <img
-                  src={user.image}
-                  alt="User Avatar"
-                  className="w-5 h-5 rounded-full object-cover"
-                />
-              ) : (
-                <img
-                  src="/default-men-logo.jpg"
-                  alt="User Avatar"
-                  className="w-5 h-5 rounded-full object-cover"
-                />
-              )}
+              <img
+                src={user.profileImg}
+                alt="User Avatar"
+                className="w-5 h-5 rounded-full object-cover"
+              />
             </div>
           ) : (
             <button
@@ -166,6 +158,17 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
           >
             <span>Sell my car</span>
           </NavLink>
+          <NavLink
+            to="/requirements"
+            className={({ isActive }) =>
+              (isActive
+                ? "text-[#EE1422] text-sm underline underline-offset-3 font-semibold"
+                : "text-black hover:text-[#EE1422] text-sm") +
+              " transition flex items-center gap-1"
+            }
+          >
+            <span>Requirements</span>
+          </NavLink>
         </div>
 
         {/* Desktop Buttons */}
@@ -202,19 +205,11 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
               className="flex flex-col items-center gap-2 cursor-pointer select-none"
               onClick={openSetting}
             >
-              {user.image ? (
                 <img
-                  src={user.image}
+                  src={user.userProfileUrl || "/default-men-logo.jpg"}
                   alt="User Avatar"
                   className="w-7 h-7 rounded-full border-1 object-cover"
                 />
-              ) : (
-                <img
-                  src="/default-men-logo.jpg"
-                  alt="User Avatar"
-                  className="w-8 h-8 rounded-full object-cover mx-4 cursor-pointer hover:scale-[1.1] transition-all duration-500"
-                />
-              )}
             </div>
           ) : (
             <button
@@ -307,7 +302,7 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
             }}
           >
             <img
-              src={user?.image || "/default-men-logo.jpg"}
+              src={user?.images || "/default-men-logo.jpg"}
               alt="User"
               className="w-10 h-10 rounded-full border"
             />
@@ -340,6 +335,15 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
             onClick={() => setIsRightSidebarOpen(false)}
           >
             My Listing
+          </NavLink>
+          <NavLink
+            to="/settings/my-leads"
+            className={({ isActive }) =>
+              isActive ? "text-[#EE1422] text-sm" : "text-black text-sm"
+            }
+            onClick={() => setIsRightSidebarOpen(false)}
+          >
+            My Leads
           </NavLink>
           <NavLink
             to="/sell"

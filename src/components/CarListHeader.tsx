@@ -13,7 +13,7 @@ interface CarListHeaderProps {
 }
 
 const cities = [
-  "Kolkata",
+  "Surat",
   "Mumbai",
   "Delhi",
   "Bangalore",

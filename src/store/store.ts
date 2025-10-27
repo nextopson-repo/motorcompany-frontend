@@ -16,6 +16,8 @@ import boughtPackagesReducer from "./slices/boughtPackagesSlice";
 import sellerDetailsReducer from "./slices/sellerDetailsSlice";
 import carUploadReducer from "./slices/carUploadSlice";
 import carImageReducer from "./slices/carImageSlice";
+import requirementsReducer from "./slices/requirementsSlice";
+import leadsReducer from "./slices/leadsSlice";
 
 export const store = configureStore({
   reducer: {
@@ -36,6 +38,8 @@ export const store = configureStore({
     boughtPackages: boughtPackagesReducer,
     SellerDetails: sellerDetailsReducer,
     carImage: carImageReducer,
+    requirements: requirementsReducer,
+    leads: leadsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

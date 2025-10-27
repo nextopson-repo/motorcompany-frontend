@@ -134,22 +134,8 @@ export default function BuyCars() {
         </div>
 
         {/* Car List */}
-        {/* <div className="w-full py-4 sm:px-6 lg:px-2">
-          {loading ? (
-            <p>Loading cars...</p>
-          ) : error ? (
-            <p className="text-red-500">{error}</p>
-          ) : Array.isArray(cars) && cars.length > 0 ? (
-            <CarList />
-          ) : (
-            <p className="h-[55vh] lg:h-full w-full flex items-center justify-center">
-              No cars available
-            </p>
-          )}
-        </div> */}
-        {/* Car List */}
         <div className="w-full py-4 sm:px-6 lg:px-2">
-          <CarList loading={loading} error={error} />
+          <CarList loading={loading}  error={error} />
         </div>
       </div>
 

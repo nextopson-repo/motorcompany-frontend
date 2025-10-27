@@ -22,6 +22,7 @@ import { closeLogin } from "./store/slices/authSlices/loginModelSlice";
 import TermsConditions from "./pages/TermsConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import RefundPolicy from "./pages/RefundPolicy";
+import Requirements from "./pages/Requirements";
 
 const App = () => {
   const location = useLocation();
@@ -67,6 +68,7 @@ const App = () => {
           <Route path="/buy-car/:id" element={<CarDetail />} />
           <Route path="/saved" element={<Saved />} />
           <Route path="sell" element={<Sell />} />
+          <Route path="/requirements" element={<Requirements />} />
           <Route path="/settings/*" element={<Setting />} />
           <Route path="/top-dealer" element={<TopDealer />} />
           <Route path="/seller-details/:userId" element={<SellerDetails />} />

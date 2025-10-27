@@ -41,14 +41,14 @@ const LocationModal: React.FC<LocationModalProps> = ({
     const map: Record<string, string> = {
       delhi: "/Cities/dehli-img.png",
       chandigarh: "/Cities/chandigarh-img.png",
-      indore: "/Cities/indore-img.png",
       kanpur: "/Cities/kanpur-img.png",
       pune: "/Cities/pune-img.png",
       ahmedabad: "/Cities/ahmedabad-img.png",
-      bhopal: "/Cities/bhopal-img.png",
       lucknow: "/Cities/lucknow-img.png",
       hyderabad: "/Cities/hyderabad-img.png",
       jaipur: "/Cities/jaipur-img.png",
+      surat: "/Cities/surat.jpg",
+      mumbai: "/Cities/mumbai.webp",
     };
     return map[cityName] || "/Cities/delhi-img.png";
   };
