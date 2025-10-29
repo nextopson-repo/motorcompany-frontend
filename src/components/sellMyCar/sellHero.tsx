@@ -71,32 +71,7 @@ function Dropdown({
   );
 }
 
-export default function SellHero() {
-  const dispatch = useAppDispatch();
-  const loginDispatch = useDispatch();
-  const { user, token } = useSelector(selectAuth);
-  const navigate = useNavigate();
-
-  const handleAccess = () => {
-    if (!user || !token) {
-      loginDispatch(openLogin());
-      return;
-    }
-    console.log("User logged in, allow car upload");
-  };
-
-  const location = useLocation();
-  const { success } = useAppSelector((state) => state.carUpload);
-  const uploadedImages = useAppSelector((state) => state.carImage.files);
-
-  const [showForm, setShowForm] = useState(false);
-  const [userRole] = useState<"owner" | "dealer">("owner");
-  const [state, setState] = useState("");
-  const [city, setCity] = useState("");
-  const [locality, setLocality] = useState("");
-  const [editCar, setEditCar] = useState<any>(null);
-
-  const locationData: Record<string, Record<string, string[]>> = {
+export const locationData: Record<string, Record<string, string[]>> = {
     MadhyaPradesh: {
       Indore: ["Vijay Nagar", "Rajwada", "Palasia"],
       Bhopal: ["Arera Colony", "Kolar Road"],
@@ -123,7 +98,32 @@ export default function SellHero() {
     Delhi: {
       NewDelhi: ["Connaught Place", "Saket"],
     },
+};
+
+export default function SellHero() {
+  const dispatch = useAppDispatch();
+  const loginDispatch = useDispatch();
+  const { user, token } = useSelector(selectAuth);
+  const navigate = useNavigate();
+
+  const handleAccess = () => {
+    if (!user || !token) {
+      loginDispatch(openLogin());
+      return;
+    }
+    console.log("User logged in, allow car upload");
   };
+
+  const location = useLocation();
+  const { success } = useAppSelector((state) => state.carUpload);
+  const uploadedImages = useAppSelector((state) => state.carImage.files);
+
+  const [showForm, setShowForm] = useState(false);
+  const [userRole] = useState<"owner" | "dealer">("owner");
+  const [state, setState] = useState("");
+  const [city, setCity] = useState("");
+  const [locality, setLocality] = useState("");
+  const [editCar, setEditCar] = useState<any>(null);
 
  useEffect(() => {
   if (location.state?.editCar) {
