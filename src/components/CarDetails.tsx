@@ -23,6 +23,7 @@ import type { AppDispatch, RootState } from "../store/store";
 import { fetchSelectedCarById } from "../store/slices/carSlice";
 import { selectAuth } from "../store/slices/authSlices/authSlice";
 import { openLogin } from "../store/slices/authSlices/loginModelSlice";
+import { createEnquiry } from "../store/slices/enqueriesSlice";
 
 const CarDetails = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -31,6 +32,7 @@ const CarDetails = () => {
   const carsState = useSelector(
     (state: RootState) => state.cars as any | undefined
   );
+  const currentUser = useSelector((state: RootState) => state.auth.user?.id);
   const selectedCar = carsState?.selectedCar ?? null;
   const cars = Array.isArray(carsState?.cars) ? carsState!.cars : [];
 
@@ -69,8 +71,6 @@ const CarDetails = () => {
     );
   }
 
-  console.log("carDetails:", car);
-
   // Normalize all car images to URLs
   const images: string[] =
     (Array.isArray(car.carImages) && car.carImages.length
@@ -106,7 +106,6 @@ const CarDetails = () => {
   const title =
     car.title ??
     `${car.brand ?? ""} ${car.model ?? ""} ${car.varient ?? ""}`.trim();
-  // car.carName ?? car.title ?? `${car.brand ?? ""} ${car.model ?? ""}`.trim();
   const price = car.carPrice ?? car.price ?? 0;
   const manufactureYear = car.manufacturingYear ?? car.year ?? "N/A";
   const registrationYear = car.registrationYear ?? "N/A";
@@ -124,8 +123,57 @@ const CarDetails = () => {
   const owner = car.owner ?? {};
   const ownerId = owner.id ?? "";
   const ownerName = owner.fullName ?? "N/A";
-  // const ownerMobile = owner.mobileNumber ?? "N/A";
   const ownerType = owner.userType ?? "N/A";
+
+  // share profile link
+  const handleShareCar = async () => {
+    const profileUrl = `${window.location.origin}/buy-car/${car.id}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "Check out this profile on Dhikcar",
+          text: `Check out ${car.title}'s Car`,
+          url: profileUrl,
+        });
+      } catch (error) {
+        console.log("Error sharing:", error);
+      }
+    } else {
+      // Fallback: Copy to clipboard
+      navigator.clipboard.writeText(profileUrl);
+      alert("Car link copied to clipboard!");
+    }
+  };
+
+  // check is mobile or desktop
+  function isMobile() {
+    return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  }
+
+  const handlePhoneClick = async () => {
+    console.log("button clicked");
+
+    const enquiryPayload = {
+      carId: car.id,
+      userId: currentUser,
+      Calling: "",
+    };
+
+    await dispatch(createEnquiry(enquiryPayload));
+
+    // 2. Mobile: Initiate call
+    if (isMobile()) {
+      window.location.href = `tel:${owner.mobileNumber}`;
+      return;
+    }
+    // 3. Desktop: WhatsApp Web
+    const whatsAppMsg = encodeURIComponent(
+      `Hello, I'm interested in your car listing: ${car.carTitle}.`
+    );
+    const phoneDigits = owner.mobileNumber.replace(/[^+\d]/g, "");
+    window.open(`https://wa.me/${phoneDigits}?text=${whatsAppMsg}`, "_blank");
+  };
 
   return (
     <div className="max-w-7xl mx-auto mt-12 lg:mt-20 z-0 lg:pt-2">
@@ -380,10 +428,16 @@ const CarDetails = () => {
                     </div>
 
                     <div className="flex items-center  gap-2 my-2">
-                      <button className="flex items-center justify-center gap-3 w-full hover:font-semibold text-sm p-2 border rounded-sm cursor-pointer active:text-white active:bg-[#24272c]">
+                      <button
+                        className="flex items-center justify-center gap-3 w-full hover:font-semibold text-sm p-2 border rounded-sm cursor-pointer active:text-white active:bg-[#24272c]"
+                        onClick={handlePhoneClick}
+                      >
                         <Phone className=" h-4 w-4" /> Phone
                       </button>
-                      <button className="flex items-center justify-center gap-3 w-full hover:font-semibold text-sm p-2 border rounded-sm cursor-pointer active:text-white active:bg-[#24272c]">
+                      <button
+                        className="flex items-center justify-center gap-3 w-full hover:font-semibold text-sm p-2 border rounded-sm cursor-pointer active:text-white active:bg-[#24272c]"
+                        // onClick={handleWhatsAppClick}
+                      >
                         <FaWhatsapp className=" h-5 w-5" /> What's app
                       </button>
                     </div>
@@ -579,7 +633,6 @@ const CarDetails = () => {
                             {ownerName || "Unknown"}
                           </h1>
                           <span className="flex items-center gap-4 px-2">
-                            
                             <Link
                               to={`/seller-details/${ownerId}`}
                               className="text-sky-500 font-normal text-xs underline"
@@ -596,14 +649,16 @@ const CarDetails = () => {
                             <CopyIcon className="h-5 w-5 text-black" />
                           </button> */}
                           <p className="text-[#9e9e9e] bg-[#f4f4f4] p-1 px-2 rounded-sm">
-                              {ownerType || "N/A"}
-                            </p>
+                            {ownerType || "N/A"}
+                          </p>
                         </span>
                       </div>
                     </div>
 
                     <div className="flex items-center  gap-4 my-2">
-                      <button className="flex items-center justify-center gap-3 w-full hover:font-semibold text-xl p-2 border rounded-sm cursor-pointer hover:text-white hover:bg-[#24272c]">
+                      <button className="flex items-center justify-center gap-3 w-full hover:font-semibold text-xl p-2 border rounded-sm cursor-pointer hover:text-white hover:bg-[#24272c]"
+                      onClick={handlePhoneClick}
+                      >
                         <Phone className=" h-6 w-6" /> Phone
                       </button>
                       <button className="flex items-center justify-center gap-3 w-full hover:font-semibold text-xl p-2 border rounded-sm cursor-pointer hover:text-white hover:bg-[#24272c]">
@@ -629,7 +684,10 @@ const CarDetails = () => {
             </span>
             <span className="flex text-[10px] items-center gap-2 hover:scale-[1.02] cursor-pointer transition-all duration-300">
               <Share2 className="h-[14px] w-[14px]" />
-              <span className="underline font-light">Share</span>
+              {/* <span className="underline font-light">Share</span> */}
+              <button onClick={handleShareCar} className="underline font-light">
+                Share
+              </button>
             </span>
           </div>
 

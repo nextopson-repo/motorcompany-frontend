@@ -136,7 +136,7 @@ export const fetchAllRequirements = createAsyncThunk<
     hasMore: boolean;
   },
   {
-    userId: string;
+    userId?: string;
     page?: number;
     limit?: number;
     sort?: string;
@@ -150,6 +150,7 @@ export const fetchAllRequirements = createAsyncThunk<
     const { userId, page = 1, limit = 10, sort, filter = {}, location = {}, connectionType } = payload;
     const token = localStorage.getItem("token");
     
+    // If userId is empty, backend will return error - we'll handle it gracefully
     const res = await fetch(
       `${BACKEND_URL}/api/v1/car-requirement/get-all?page=${page}&limit=${limit}`,
       {
@@ -158,17 +159,43 @@ export const fetchAllRequirements = createAsyncThunk<
           "Content-Type": "application/json",
           Authorization: token ? `Bearer ${token}` : "",
         },
-        body: JSON.stringify({ userId, sort, filter, location, connectionType }),
+        body: JSON.stringify({ userId: userId || "", sort, filter, location, connectionType }),
         mode: "cors",
       }
     );
 
     if (!res.ok) {
       const errorText = await res.text();
-      throw new Error(errorText || "Failed to fetch requirements");
+      let errorMessage = errorText || "Failed to fetch requirements";
+      try {
+        const errorJson = JSON.parse(errorText);
+        errorMessage = errorJson.message || errorJson.error || errorMessage;
+      } catch {
+        // If errorText is not JSON, use it as is
+      }
+      
+      // If userId is required but missing, return empty data instead of error
+      // This allows viewing requirements page without login
+      if (errorMessage.includes("User ID is required") || errorMessage.includes("userId")) {
+        return {
+          data: [],
+          totalCount: 0,
+          currentPage: page,
+          totalPages: 0,
+          hasMore: false,
+        };
+      }
+      
+      throw new Error(errorMessage);
     }
 
     const data = await res.json();
+    
+    // Debug logging
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Requirements API Response:', data);
+    }
+    
     // Normalize ID fields in requirements array
     const normalizedData = (data.data || []).map((req: any) => {
       if (!req.requirementId && req.id) {
@@ -176,6 +203,7 @@ export const fetchAllRequirements = createAsyncThunk<
       }
       return req;
     });
+    
     return {
       data: normalizedData,
       totalCount: data.totalCount || 0,

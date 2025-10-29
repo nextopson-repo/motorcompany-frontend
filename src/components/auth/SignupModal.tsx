@@ -27,6 +27,7 @@ export default function SignupModal({
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+  const [userType] = useState("Enduser");
   const [error, setError] = useState<string | null>(null);
 
   const { loading } = useSelector((state: RootState) => state.auth);
@@ -55,7 +56,7 @@ export default function SignupModal({
 
     try {
       const action = await dispatch(
-        signup({ fullName, email, mobileNumber, otpToken, })
+        signup({ fullName, email, mobileNumber, otpToken, userType})
       );
       const data: any = action.payload;
 

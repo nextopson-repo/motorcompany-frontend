@@ -20,20 +20,17 @@ const Requirements: React.FC = () => {
   const [deletingRequirementId, setDeletingRequirementId] = useState<string | null>(null);
 
   useEffect(() => {
-    const userId = user?.id
-    if (userId) {
-      dispatch(
-        fetchAllRequirements({
-          userId,
-          page: 1,
-          limit: 20,
-          sort: sortOption === "oldToNew" ? "oldToNew" : "newToOld",
-        })
-      );
-    } else if (!token) {
-      dispatch(openLogin());
-    }
-  }, [dispatch, sortOption, user?.id, token]);
+    // Always fetch requirements - show them without login
+    // Backend requires userId, but we handle missing userId gracefully
+    dispatch(
+      fetchAllRequirements({
+        userId: user?.id,
+        page: 1,
+        limit: 20,
+        sort: sortOption === "oldToNew" ? "oldToNew" : "newToOld",
+      })
+    );
+  }, [dispatch, sortOption, user?.id]);
 
   const handleContact = async (requirement: Requirement) => {
     if (!user || !token) {
@@ -161,7 +158,8 @@ const Requirements: React.FC = () => {
       {/* Responsive Grid */}
       {data.length === 0 ? (
         <div className="text-center py-12 text-gray-500">
-          No requirements found. Be the first to post one!
+          <p>No requirements found.</p>
+          <p className="text-sm mt-2">Be the first to post one!</p>
         </div>
       ) : (
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-start">

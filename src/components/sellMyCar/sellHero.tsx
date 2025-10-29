@@ -125,16 +125,16 @@ export default function SellHero() {
   const [locality, setLocality] = useState("");
   const [editCar, setEditCar] = useState<any>(null);
 
- useEffect(() => {
-  if (location.state?.editCar) {
-    const car = location.state.editCar;
-    setEditCar(car);
-    setState(car?.address?.state || "");
-    setCity(car?.address?.city || "");
-    setLocality(car?.address?.locality || "");
-    setShowForm(true);
-  }
-}, [location]);
+  useEffect(() => {
+    if (location.state?.editCar) {
+      const car = location.state.editCar;
+      setEditCar(car);
+      setState(car?.address?.state || "");
+      setCity(car?.address?.city || "");
+      setLocality(car?.address?.locality || "");
+      setShowForm(true);
+    }
+  }, [location]);
 
   // This function receives carData with images array directly from SellHeroForm and dispatches upload
   const handleFinalSubmit = async (carData: any) => {

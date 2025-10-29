@@ -20,11 +20,13 @@ export const signup = createAsyncThunk(
       fullName,
       email,
       otpToken,
+      userType,
     }: {
       fullName: string;
       email: string;
       mobileNumber: string;
       otpToken: string;
+      userType: string;
     },
     thunkAPI
   ) => {
@@ -36,7 +38,7 @@ export const signup = createAsyncThunk(
           "Content-Type": "application/json",
           Authorization: `Bearer ${otpToken}`,
         },
-        body: JSON.stringify({ fullName, email }),
+        body: JSON.stringify({ fullName, email, userType }),
         mode: "cors",
       });
 

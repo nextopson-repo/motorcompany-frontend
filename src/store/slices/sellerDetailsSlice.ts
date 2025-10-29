@@ -18,9 +18,9 @@ export interface Car {
   transmission: string;
   location: string;
   price: string;
-  emi: string;
   likes: number;
   views: number;
+  createdAt: string;
 }
 
 export interface SellerState {
@@ -89,6 +89,7 @@ export const fetchSellerCars = createAsyncThunk<
         emi: (car as Record<string, any>).emi ? `₹ ${(car as Record<string, any>).emi} /mo` : `₹ 7599 /mo`,
         likes: Number((car as Record<string, any>).likes || 1),
         views: Number(((car as Record<string, any>).enquiries as any)?.viewProperty || 1),
+        createdAt: String(car.createdAt),
       } as Car;
     });
 

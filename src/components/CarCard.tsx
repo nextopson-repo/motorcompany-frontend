@@ -12,7 +12,6 @@ interface CarCardProps {
 }
 
 const CarCard: React.FC<CarCardProps> = ({ car }) => {
-  console.log("car Data:",car)
   const image = car.carImages?.[0] || "/fallback-car-img.png";
   const updateTime = car.updatedAt;
 
