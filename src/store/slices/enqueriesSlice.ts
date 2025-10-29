@@ -1,5 +1,16 @@
-import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  type PayloadAction,
+} from "@reduxjs/toolkit";
 import axios from "axios";
+
+export interface CreateEnquiryPayload {
+  carId: any;
+  userId: any;
+  Calling: string;
+  // Add other fields required by your backend (like message, etc), if any
+}
 
 export interface Enquiry {
   id: string;
@@ -29,6 +40,7 @@ interface EnquiryState {
   error: string | null;
 }
 
+
 const initialState: EnquiryState = {
   enquiries: [],
   loading: false,
@@ -36,17 +48,36 @@ const initialState: EnquiryState = {
 };
 
 // 🧠 API base URL
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
-// 🔹 Async thunk for fetching all car enquiries
+//Create Enquiry api thunk
+export const createEnquiry = createAsyncThunk<
+  Enquiry, 
+  CreateEnquiryPayload, 
+  { rejectValue: string }
+>("enquiries/create", async (payload, thunkAPI) => {
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/api/v1/dashboard/create-car-enquiry`,
+      payload
+    );
+    return response.data?.responseObject; 
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(
+      error.response?.data?.message || "Failed to create enquiry"
+    );
+  }
+});
+
 export const fetchEnquiries = createAsyncThunk(
   "enquiries/fetchAll",
-  async ({ page = 1, limit = 10 }: { page?: number; limit?: number }, thunkAPI) => {
+  async ({ userId }: { userId: string }, thunkAPI) => {
     try {
-      const response = await axios.get(
-        `${BASE_URL}/api/v1/dashboard/get-all-car-enquiries?page=${page}&limit=${limit}`
+      const response = await axios.post(
+        `${BASE_URL}/api/v1/dashboard/get-all-car-enquiries`,
+        { userId } // send userId in request body
       );
-      return response.data?.responseObject?.enquiries || []; // depends on your API response structure
+      return response.data?.responseObject?.enquiries || [];
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || "Failed to fetch enquiries"
@@ -54,6 +85,8 @@ export const fetchEnquiries = createAsyncThunk(
     }
   }
 );
+
+
 
 const enquiriesSlice = createSlice({
   name: "enquiries",
@@ -76,14 +109,15 @@ const enquiriesSlice = createSlice({
       .addCase(fetchEnquiries.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      })
+      .addCase(createEnquiry.fulfilled, (state, action) => {
+        state.enquiries.push(action.payload);
       });
   },
 });
 
 export const { addEnquiry } = enquiriesSlice.actions;
 export default enquiriesSlice.reducer;
-
-
 
 // import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 

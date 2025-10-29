@@ -3,11 +3,24 @@ import { useSelector } from "react-redux";
 import type { RootState } from "../../store/store";
 import EnquiryCard from "../EnquiryCard";
 import { Search } from "lucide-react";
+// import { useEffect } from "react";
+// import { fetchEnquiries } from "../../store/slices/enqueriesSlice";
 
 export default function Enquiries() {
+  // const dispatch = useDispatch();
   const enquiries = useSelector(
     (state: RootState) => state.enquiries.enquiries
   );
+  // const userId = useSelector((state: RootState) => state.auth.user.id);
+  
+
+// useEffect(() => {
+//     if (userId) {
+//       dispatch(fetchEnquiries({ userId }));
+//     }
+//   }, [dispatch, userId]);
+
+  console.log("enquery:", enquiries)
 
   return (
     <div className="mx-auto -m-1 px-4 md:px-0 sm:mb-10 lg:mb-0">

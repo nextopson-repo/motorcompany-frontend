@@ -1,15 +1,17 @@
 export function formatPriceToLakh(price: any): string {
-  if (!Number.isFinite(price)) return "";
+   const numericPrice = Number(price);
+  if (!Number.isFinite(numericPrice)) return "";
 
-  const inLakh = price / 100000;
+  const inLakh = numericPrice / 100000;
   const formatted = inLakh % 1 === 0 ? inLakh : inLakh.toFixed(1);
   return `${formatted} Lakhs`;
 }
 
 export function formatPriceToL(price: any): string {
-  if (!Number.isFinite(price)) return "";
+  const numericPrice = Number(price);
+  if (!Number.isFinite(numericPrice)) return "";
 
-  const inLakh = price / 100000;
+  const inLakh = numericPrice / 100000;
   const formatted = inLakh % 1 === 0 ? inLakh : inLakh.toFixed(1);
   return `${formatted} L`;
 }
@@ -22,9 +24,7 @@ export const formatShortNumber = (num: any, isKm = false) => {
       return (num / 100000).toFixed(1) + " L" + (isKm ? " km" : "");
     if (num >= 1000) return (num / 1000).toFixed(1) + "k" + (isKm ? " km" : "");
     return num + (isKm ? " km" : "");
-  };
-
-// utils/formatTimeAgo.ts
+};
 
 export const formatTimeAgo = (dateString: string) => {
   const now = new Date();

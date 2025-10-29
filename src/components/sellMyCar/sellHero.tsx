@@ -75,6 +75,7 @@ export default function SellHero() {
   const dispatch = useAppDispatch();
   const loginDispatch = useDispatch();
   const { user, token } = useSelector(selectAuth);
+  console.log("user :", user);
   const navigate = useNavigate();
 
   const handleAccess = () => {

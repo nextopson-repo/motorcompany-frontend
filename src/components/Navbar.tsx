@@ -24,7 +24,6 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
   const dispatch = useDispatch();
   const { user, token } = useSelector(selectAuth);
-  console.log(user);
   const navigate = useNavigate();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

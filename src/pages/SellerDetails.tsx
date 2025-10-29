@@ -17,13 +17,14 @@ import {
 import { fetchSellerCars } from "../store/slices/sellerDetailsSlice";
 import { Link, useParams } from "react-router-dom";
 import { AiFillHeart } from "react-icons/ai";
-import { formatPriceToLakh, formatShortNumber } from "../utils/formatPrice";
+import { formatPriceToLakh, formatShortNumber, formatTimeAgo } from "../utils/formatPrice";
 // import { setSelectedCar } from "../store/slices/carSlice";
 
 export default function SellerDetails() {
   const { userId } = useParams<{ userId: string }>();
   const dispatch = useDispatch<AppDispatch>();
   const seller = useSelector((state: RootState) => state.SellerDetails);
+  console.log("seller data:",seller)
   const [viewMode, setViewMode] = useState<"list" | "card">("list");
   // const handleViewMore = () => dispatch(setSelectedCar(seller.cars.));
 
@@ -49,6 +50,27 @@ export default function SellerDetails() {
     );
   }
 
+  // share profile link
+  const handleShareProfile = async () => {
+  const profileUrl = `${window.location.origin}/profile/${userId}`; // or username
+  
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: 'Check out this profile on Dhikcar',
+        text: `Check out ${seller.name}'s profile`,
+        url: profileUrl,
+      });
+    } catch (error) {
+      console.log('Error sharing:', error);
+    }
+  } else {
+    // Fallback: Copy to clipboard
+    navigator.clipboard.writeText(profileUrl);
+    alert('Profile link copied to clipboard!');
+  }
+};
+
   return (
     <div className="grid lg:grid-cols-4 gap-8 mt-20 max-w-5xl mx-auto mb-4 overflow-hidden">
       {/* ---------- Left Seller Profile ---------- */}
@@ -65,7 +87,7 @@ export default function SellerDetails() {
                 {seller.name || "Unknown Seller"}
               </h2>
               <p className="text-gray-500 text-xs sm:text-sm lg:text-[10px] lg:text-xs font-semibold">
-                {seller.role || "Dealer"}
+                {seller.role || "EndUser"}
               </p>
             </span>
           </div>
@@ -118,7 +140,9 @@ export default function SellerDetails() {
         </div>
 
         <div className="mt-4 flex flex-col sm:flex-row gap-3 w-full">
-          <button className="w-full text-xs sm:text-[10px] bg-black text-white px-4 py-[6px] rounded-sm hover:bg-gray-900 flex items-center justify-center gap-2 whitespace-nowrap">
+          <button className="w-full text-xs sm:text-[10px] bg-black text-white px-4 py-[6px] rounded-sm hover:bg-gray-900 flex items-center justify-center gap-2 whitespace-nowrap"
+          onClick={handleShareProfile}
+          >
             <Share2 className="h-3 w-3" /> Share Profile
           </button>
           <button className="w-full text-xs sm:text-[10px] border px-4 py-[6px] rounded-sm text-gray-700 hover:bg-gray-100 flex items-center justify-center gap-2 whitespace-nowrap">
@@ -153,7 +177,7 @@ export default function SellerDetails() {
                 </h3>
 
                 <p className="text-[10px] mt-1 font-semibold">
-                  {car.kms} | {car.type} | {car.seats} Seater | {car.fuel} |{" "}
+                  {formatShortNumber(car.kms)} | {car.type} | {car.seats} Seater | {car.fuel} |{" "}
                   {car.transmission}
                 </p>
 
@@ -167,12 +191,12 @@ export default function SellerDetails() {
 
               <span className="space-y-1 mb-2">
                 <p className="font-bold text-md">
-                  Rs. {formatPriceToLakh(car.price)}
+                 ₹ {formatPriceToLakh(car.price || 0)}
                   <span className="text-[10px] text-orange-600 ml-2">
                     Make your Offer
                   </span>
                 </p>
-                <p className="text-[10px] font-medium">3 days ago</p>
+                <p className="text-[10px] font-medium">{formatTimeAgo(car.createdAt)}</p>
               </span>
             </div>
 
@@ -274,7 +298,7 @@ export default function SellerDetails() {
                   </div>
                   <div>
                     <p className="font-bold text-xs flex items-center gap-2 text-gray-900">
-                      Rs. {formatShortNumber(car.price)}
+                      ₹ {formatPriceToLakh(car.price ?? 0)}
                     </p>
                   </div>
                 </div>
