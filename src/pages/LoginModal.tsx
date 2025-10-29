@@ -71,6 +71,8 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       const action = await dispatch(verifyOtp({ userId, mobileNumber, otp }));
       const data: any = action.payload;
 
+      console.log("loginModel-74 :", data);
+
       const user = data?.responseObject?.user;
       const token = data?.responseObject?.token;
 

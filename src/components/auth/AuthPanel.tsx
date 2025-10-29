@@ -94,7 +94,7 @@ const AuthPanel: React.FC<AuthPanelProps> = ({
     try {
       const data = await onVerifyOtp(otp);
 
-      console.log("data", data);
+      console.log("data-97", data);
 
       if (data.success) {
         // Fully verified → login user immediately

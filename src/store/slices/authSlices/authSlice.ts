@@ -66,61 +66,46 @@ export const sendOtp = createAsyncThunk(
 );
 
 // 3) Verify OTP
-// export const verifyOtp = createAsyncThunk(
-//   "auth/verifyOtp",
-//   async (
-//     {
-//       userId,
-//       mobileNumber,
-//       otp,
-//     }: { userId: string; mobileNumber: string; otp: string },
-//     thunkAPI
-//   ) => {
-//     try {
-//       const res = await fetch(`${BACKEND_URL}/api/v1/auth/verify-otp`, {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ userId, mobileNumber, otpType: "mobile", otp }),
-//         mode: "cors",
-//       });
-//       return await res.json();
-//     } catch (err: any) {
-//       return thunkAPI.rejectWithValue(err.message);
-//     }
-//   }
-// );
-export const verifyOtp = createAsyncThunk(
-  "auth/verifyOtp",
-  async (
-    {
-      userId,
-      mobileNumber,
-      otp,
-    }: { userId: string; mobileNumber: string; otp: string },
-    thunkAPI
-  ) => {
-    try {
-      const res = await fetch(`${BACKEND_URL}/api/v1/auth/verify-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, mobileNumber, otpType: "mobile", otp }),
-        mode: "cors",
-      });
+// ✅ Add this interface above verifyOtp
+interface VerifyOtpResponse {
+  success: boolean;
+  message: string;
+  responseObject?: {
+    user?: any;
+    token?: string;
+  } | null;
+  user?: any; // optional fallback
+  token?: string; // optional fallback
+  statusCode?: number;
+}
 
-      const data = await res.json();
+export const verifyOtp = createAsyncThunk<
+  VerifyOtpResponse,
+  { userId: string; mobileNumber: string; otp: string }
+>("auth/verifyOtp", async ({ userId, mobileNumber, otp }, thunkAPI) => {
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/v1/auth/verify-otp`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId, mobileNumber, otpType: "mobile", otp }),
+      mode: "cors",
+    });
 
-      // ✅ Return consistent structure even on error
-      return {
-        success: data?.success || false,
-        message: data?.message || "No message",
-        responseObject: data?.responseObject || null,
-        statusCode: data?.statusCode || 500,
-      };
-    } catch (err: any) {
-      return thunkAPI.rejectWithValue(err.message);
-    }
+    const data = await res.json();
+    console.log("slice data:", data);
+
+    return {
+      success: data?.success || false,
+      message: data?.message || "No message",
+      responseObject: data?.responseObject || null,
+      statusCode: data?.statusCode || 500,
+      user: data?.user, // optional extra
+      token: data?.token, // optional extra
+    };
+  } catch (err: any) {
+    return thunkAPI.rejectWithValue(err.message);
   }
-);
+});
 
 // 4) Login
 export const loginUser = createAsyncThunk(
@@ -285,8 +270,14 @@ const authSlice = createSlice({
         if (action.payload?.responseObject?.user || action.payload?.user) {
           state.user =
             action.payload.responseObject?.user || action.payload.user;
+
+          // ✅ Always assign null if token is undefined
           state.token =
-            action.payload.responseObject?.token || action.payload.token;
+            action.payload.responseObject?.token ??
+            action.payload.token ??
+            null;
+
+          // ✅ LocalStorage expects a string, so fallback safely
           localStorage.setItem("token", state.token || "");
           localStorage.setItem("user", JSON.stringify(state.user));
         }

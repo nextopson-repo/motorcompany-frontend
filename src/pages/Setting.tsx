@@ -31,7 +31,7 @@ const Setting = () => {
 };
 
   if (loading || !profile) {
-    return <p className="text-center mt-10">Loading profile...</p>;
+    return <p className="text-center my-[10%] ">Loading profile...</p>;
   }
 
   return (
