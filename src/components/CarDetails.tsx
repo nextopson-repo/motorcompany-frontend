@@ -69,11 +69,25 @@ const CarDetails = () => {
     );
   }
 
+  console.log("carDetails:", car);
+
   // Normalize all car images to URLs
   const images: string[] =
-    car.carImages?.map((img: any) => img.presignedUrl).filter(Boolean) ||
-    car.carDetailsImages?.map((img: any) => img.presignedUrl).filter(Boolean) ||
-    car.images?.map((img: any) => img.presignedUrl).filter(Boolean) ||
+    (Array.isArray(car.carImages) && car.carImages.length
+      ? car.carImages.map((img: any) =>
+          typeof img === "string" ? img : img.presignedUrl
+        )
+      : []) ||
+    (Array.isArray(car.carDetailsImages) && car.carDetailsImages.length
+      ? car.carDetailsImages.map((img: any) =>
+          typeof img === "string" ? img : img.presignedUrl
+        )
+      : []) ||
+    (Array.isArray(car.images) && car.images.length
+      ? car.images.map((img: any) =>
+          typeof img === "string" ? img : img.presignedUrl
+        )
+      : []) ||
     (car.image ? [car.image] : []);
 
   const visibleImages = images.length > 0 ? images : ["/fallback-car-img.png"];
@@ -110,7 +124,7 @@ const CarDetails = () => {
   const owner = car.owner ?? {};
   const ownerId = owner.id ?? "";
   const ownerName = owner.fullName ?? "N/A";
-  const ownerMobile = owner.mobileNumber ?? "N/A";
+  // const ownerMobile = owner.mobileNumber ?? "N/A";
   const ownerType = owner.userType ?? "N/A";
 
   return (
@@ -565,9 +579,7 @@ const CarDetails = () => {
                             {ownerName || "Unknown"}
                           </h1>
                           <span className="flex items-center gap-4 px-2">
-                            <p className="text-[#9e9e9e] bg-[#f4f4f4] p-1 px-2 rounded-sm">
-                              {ownerType || "N/A"}
-                            </p>
+                            
                             <Link
                               to={`/seller-details/${ownerId}`}
                               className="text-sky-500 font-normal text-xs underline"
@@ -578,11 +590,14 @@ const CarDetails = () => {
                         </div>
 
                         <span className="flex items-center gap-2 text-gray-500 text-lg">
-                          <span>+91</span>
+                          {/* <span>+91</span>
                           {ownerMobile || "Not Provided"}
                           <button className="px-2 cursor-pointer hover:scale-[1.1]">
                             <CopyIcon className="h-5 w-5 text-black" />
-                          </button>
+                          </button> */}
+                          <p className="text-[#9e9e9e] bg-[#f4f4f4] p-1 px-2 rounded-sm">
+                              {ownerType || "N/A"}
+                            </p>
                         </span>
                       </div>
                     </div>

@@ -12,7 +12,8 @@ interface CarCardProps {
 }
 
 const CarCard: React.FC<CarCardProps> = ({ car }) => {
-  const image = car.carImages?.[0]?.imageKey || "/fallback-car-img.png";
+  console.log("car Data:",car)
+  const image = car.carImages?.[0] || "/fallback-car-img.png";
   const updateTime = car.updatedAt;
 
   const dispatch = useAppDispatch();
@@ -23,7 +24,7 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
     <div className="bg-white rounded-md overflow-hidden flex flex-col card-shadow-custom mb-3">
       <div className="relative">
         <img
-          src={image}
+          src={typeof image === 'string' ? image : (image?.presignedUrl || image?.imageUrl || '')}
           alt={`${car.brand} ${car.model}`}
           className="w-full h-40 lg:h-48 object-cover rounded-sm"
           loading="lazy"
@@ -42,7 +43,7 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
             className={`w-4 h-4 ${
               isSaved
                 ? "text-green-600"
-                : "text-gray-400 border border-gray-400 rounded"
+                : "text-gray-400"
             }`}
           />
         </span>

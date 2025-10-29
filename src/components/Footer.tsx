@@ -19,8 +19,8 @@ const Footer = () => {
 
   const carForSaleCities2 = [
     { title: "Lucknow" },
-    { title: "Bhopal" },
-    { title: "Indore" },
+    { title: "Mumbai" },
+    { title: "Surat" },
     { title: "hyderabad" },
     { title: "Kanpur" },
   ];

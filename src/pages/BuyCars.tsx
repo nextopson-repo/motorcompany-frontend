@@ -39,7 +39,7 @@ export default function BuyCars() {
     [filters.cityOptions]
   );
 
-  // Build citiesByState map (for sidebar city drilldowns)
+  // Build citiesByState map (for sidebar city drill-downs)
   const citiesByState = useMemo(() => {
     const map: Record<string, string[]> = {};
     (cars || []).forEach((c) => {
