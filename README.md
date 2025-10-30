@@ -11,7 +11,7 @@ A modern, responsive admin panel for managing car dealership operations built wi
 - **Sorting Options**: Sort by price, year, kilometers driven, or name
 - **Responsive Grid/List Views**: Switch between grid and list layouts
 - **Image Management**: Upload and manage vehicle images with fallback support
-- **Detailed Vehicle Information**: Track all essential vehicle details
+- **Detailed Vehicle Information**: Track all essential vehicle detailsbmgmghmg
 
 ### 👥 User Management
 - **User Registration & Authentication**: Secure login/signup system
