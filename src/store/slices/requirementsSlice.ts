@@ -359,7 +359,7 @@ export const deleteRequirement = createAsyncThunk<
 >("requirements/delete", async (payload, { rejectWithValue }) => {
   try {
     const token = localStorage.getItem("token");
-    const res = await fetch(`${BACKEND_URL}/api/v1/car/delete-user-requirements`, {
+    const res = await fetch(`${BACKEND_URL}/api/v1/car-requirement/delete`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
