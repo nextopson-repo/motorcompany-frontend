@@ -152,8 +152,8 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
 
   // google city
   const sheetId = import.meta.env.VITE_GOOGLE_SHEETS_ID;
-  const range = "locationData!A:Z";
-  const carRange = "carDetails!A:Z";
+  const range = "landmark!A:Z";
+  const carRange = "sheet2!A:Z";
   const apiKey = import.meta.env.VITE_GOOGLE_SHEETS_API_KEY;
   const {
     data: sheetData,
