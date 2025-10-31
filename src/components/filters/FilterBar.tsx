@@ -23,11 +23,11 @@ const FilterBar = () => {
       {/* Filters */}
       <div className="whitespace-nowrap">
         <button
-          className="px-3 py-[6px] border border-gray-200 rounded-sm text-[10px] flex items-center gap-2"
+          className="px-3 py-2 border border-gray-200 rounded-sm text-xs flex items-center gap-2"
           onClick={() => toggleFilter("allFilters")}
         >
-          <ListFilter className="h-3 w-3" /> Filters{" "}
-          <ChevronDown className="h-3 w-3" />
+          <ListFilter className="h-4 w-4" /> Filters{" "}
+          <ChevronDown className="h-4 w-4" />
         </button>
         {openFilter === "allFilters" && (
           <AllFilters onClose={() => setOpenFilter(null)} />
@@ -42,11 +42,11 @@ const FilterBar = () => {
       {/* City Selector */}
       <div className="whitespace-nowrap">
         <button
-          className="px-2 py-[6px] border border-blue-500 text-blue-500 rounded-sm text-[10px] flex items-center gap-1 active:bg-gray-300 transition-all duration-300"
+          className="px-3 py-[7.5px] border border-blue-500 text-blue-500 rounded-sm text-xs flex items-center gap-1 active:bg-gray-300 transition-all duration-300"
           onClick={() => toggleFilter("city")}
         >
           {city ? city : "City "}
-          <ChevronDown className="h-3 w-3 " />
+          <ChevronDown className="h-4 w-4 " />
         </button>
         {openFilter === "city" && (
           <LocationFilter onClose={() => setOpenFilter(null)} />
@@ -56,10 +56,10 @@ const FilterBar = () => {
       {/* Brand + Models */}
       <div className="whitespace-nowrap">
         <button
-          className="px-2 py-[6px] border border-gray-200 rounded-sm text-[10px] flex items-center gap-2"
+          className="px-2 py-2 border border-gray-200 rounded-sm text-xs flex items-center gap-2"
           onClick={() => toggleFilter("brand")}
         >
-          Brand + Models <ChevronDown className="h-3 w-3" />
+          Brand + Models <ChevronDown className="h-4 w-4" />
         </button>
         {openFilter === "brand" && (
           <BrandModelFilter onClose={() => setOpenFilter(null)} />
@@ -69,10 +69,10 @@ const FilterBar = () => {
       {/* Model Year */}
       <div className="whitespace-nowrap">
         <button
-          className="px-2 py-[6px] border border-gray-200 rounded-sm text-[10px] flex items-center gap-2"
+          className="px-2 py-2 border border-gray-200 rounded-sm text-xs flex items-center gap-2"
           onClick={() => toggleFilter("modelYear")}
         >
-          Models Year <ChevronDown className="h-3 w-3" />
+          Models Year <ChevronDown className="h-4 w-4" />
         </button>
         {openFilter === "modelYear" && (
           <ModelYearFilter onClose={() => setOpenFilter(null)} />
@@ -82,10 +82,10 @@ const FilterBar = () => {
       {/* body type */}
       <div className="whitespace-nowrap">
         <button
-          className="px-3 py-[6px] border border-gray-200 rounded-sm text-[10px] flex items-center gap-2"
+          className="px-3 py-2 border border-gray-200 rounded-sm text-xs flex items-center gap-2"
           onClick={() => toggleFilter("bodyType")}
         >
-          Body Type <ChevronDown className="h-3 w-3" />
+          Body Type <ChevronDown className="h-4 w-4" />
         </button>
         {openFilter === "bodyType" && (
           <BodyTypeFilter onClose={() => setOpenFilter(null)} />

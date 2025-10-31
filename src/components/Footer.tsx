@@ -45,32 +45,32 @@ const Footer = () => {
       {/* Main Grid */}
       <div className="max-w-7xl mx-auto grid grid-cols-6 lg:grid-cols-18 gap-4 lg:items-end border-b border-gray-300 pt-4 md:pb-4">
         {/* Logo + Description */}
-        <div className="col-span-6 lg:col-span-5 space-y-3 md:space-y-4 pr-8 text-gray-700 md:pb-4 px-4">
+        <div className="col-span-6 lg:col-span-5 space-y-4 md:space-y-4 pr-8 text-gray-700 md:pb-4 px-4">
           <img
             src="/Brand-logo.png"
             alt="Dhikcar"
-            className="h-5 md:h-10 w-auto"
+            className="h-7 md:h-10 w-auto"
           />
-          <p className="text-[8px] md:text-[10px] font-semibold leading-[0.65rem] md:leading-[0.75rem] tracking-tight">
+          <p className="text-xs md:text-[10px] font-semibold leading-[0.95rem] md:leading-[0.75rem] tracking-tight">
             Dhikcar is the most trusted way of buying and selling used
             cars. Choose from over 5000 fully inspected second-hand car models.
           </p>
-          <span className="flex items-center underline gap-2 text-[11px] font-semibold tracking-tighter group text-[#EE1422] hover:underline">
+          <span className="flex items-center underline gap-2 text-xs font-semibold tracking-tighter group text-[#EE1422] hover:underline">
             <p>Join our Network and Grow your Business!</p>
             <span>
               <ChevronRight className="h-4 w-4 text-[#EE1422] group-hover:ml-2 transition-all duration-500 cursor-pointer" />
             </span>
           </span>
 
-          <span className="flex md:hidden gap-3 text-gray-800 text-[9px] font-semibold">
+          <span className="flex md:hidden gap-3 text-gray-800 text-[11px] font-semibold">
             Contact With Us :
             <span className="flex gap-3 items-center ">
               {/* facebook */}
               <a href="">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="12"
+                  width="16"
+                  height="16"
                   viewBox="0 0 24 24"
                   fill="none"
                 >
@@ -84,8 +84,8 @@ const Footer = () => {
               <a href="">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="12"
+                  width="16"
+                  height="16"
                   viewBox="0 0 20 20"
                   fill="none"
                 >
@@ -106,8 +106,8 @@ const Footer = () => {
               <a href="">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="14"
-                  height="14"
+                  width="18"
+                  height="18"
                   viewBox="0 0 24 24"
                   fill="none"
                 >
@@ -123,8 +123,8 @@ const Footer = () => {
               <a href="">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="12"
+                  width="16"
+                  height="16"
                   viewBox="0 0 24 24"
                   fill="none"
                 >
@@ -140,10 +140,10 @@ const Footer = () => {
 
         {/* Car For Sell col 1 */}
         <div className="col-span-3 lg:col-span-3 md:px-3 pl-4">
-          <h4 className="text-sm md:text-md font-semibold text-gray-900 mb-2">
+          <h4 className="text-md md:text-md font-semibold text-gray-900 mb-2">
             Car for Sale
           </h4>
-          <ul className="space-y-[6px] text-[10px] md:text-[10px] font-semibold text-gray-700 xl:text-xs">
+          <ul className="space-y-[6px] text-xs md:text-[10px] font-semibold text-gray-700 xl:text-xs">
             {carForSaleCities.map((cities, index) => (
               <li key={index}>
                 <p className="hover:underline" onClick={() => handleCityClick(cities.title)}>
@@ -155,8 +155,8 @@ const Footer = () => {
         </div>
 
         {/* Car For Sell col 2 */}
-        <div className="col-span-3 mt-6 lg:pl-10 xl:pr-4">
-          <ul className="space-y-[6px] text-[10px] md:text-[10px] font-semibold text-gray-700 xl:text-xs">
+        <div className="col-span-3 mt-8 lg:pl-10 xl:pr-4">
+          <ul className="space-y-[6px] text-xs md:text-[10px] font-semibold text-gray-700 xl:text-xs">
             {carForSaleCities2.map((cities, index) => (
               <li key={index}>
                 <p className="hover:underline" onClick={() => handleCityClick(cities.title)}>
@@ -168,10 +168,10 @@ const Footer = () => {
         </div>
 
         <div className="col-span-6 md:col-span-3 lg:col-span-3 lg:mt-6 lg:pl-16 px-4">
-          <h4 className="block md:hidden text-sm md:text-md font-semibold text-gray-900 mb-2">
+          <h4 className="block md:hidden text-md md:text-md font-semibold text-gray-900 mb-2">
             Company
           </h4>
-          <ul className="hidden md:block space-y-[6px] text-[10px] md:text-[10px] font-semibold text-gray-700 xl:text-xs">
+          <ul className="hidden md:block space-y-[6px] text-xs md:text-[10px] font-semibold text-gray-700 xl:text-xs">
             {linksData.map((link, index) => (
               <li key={index}>
                 <a href={link.link} className="hover:underline">
@@ -181,9 +181,9 @@ const Footer = () => {
             ))}
           </ul>
 
-          <span className="grid grid-cols-2 md:hidden justify-between gap-4 mb-3">
+          <span className="grid grid-cols-2 md:hidden justify-between gap-4 mb-4">
             {/* Left side - 3 links */}
-            <ul className="space-y-[6px] text-[10px] md:text-[10px] font-semibold text-gray-700 xl:text-xs">
+            <ul className="space-y-[6px] text-xs md:text-[10px] font-semibold text-gray-700 xl:text-xs">
               {linksData.slice(0, 3).map((link, index) => (
                 <li key={index}>
                   <a href={link.link} className="hover:underline">
@@ -194,7 +194,7 @@ const Footer = () => {
             </ul>
 
             {/* Right side - 2 links */}
-            <ul className="space-y-[6px] text-[10px] md:text-[10px] font-semibold text-gray-700 xl:text-xs">
+            <ul className="space-y-[6px] text-xs md:text-[10px] font-semibold text-gray-700 xl:text-xs">
               {linksData.slice(3, 5).map((link, index) => (
                 <li key={index}>
                   <a href={link.link} className="hover:underline">
@@ -205,24 +205,24 @@ const Footer = () => {
             </ul>
           </span>
 
-          <p className="flex md:hidden items-center justify-center gap-2 text-gray-800 text-[9px]">
-            <Copyright className="h-3 w-3" /> Copyright{" "}
+          <p className="flex md:hidden items-center justify-center gap-2 text-gray-800 text-[10px]">
+            <Copyright className="h-[14px] w-[14px]" /> Copyright{" "}
             {new Date().getFullYear()} | All Rights Reserved
           </p>
         </div>
 
         {/* Newsletter */}
-        <div className="w-auto md:w-56 lg:w-auto col-span-6 md:col-span-3 lg:col-span-4 bg-[#CBCBCB] md:rounded-md p-3 space-y-1 lg:ml-12 px-4 md:px-2 pb-10 lg:pb-3">
-          <img src="/Brand-logo.png" alt="Dhikcar-logo" className="h-4 w-fit" />
-          <h4 className="text-[9px] font-semibold">Found Car in you City</h4>
-          <p className="text-[8px] tracking-tight leading-2.5">
+        <div className="w-auto md:w-56 lg:w-auto col-span-6 md:col-span-3 lg:col-span-4 bg-[#CBCBCB] md:rounded-md p-3 space-y-2 sm:space-y-1 lg:ml-12 px-4 md:px-2 pb-10 lg:pb-3">
+          <img src="/Brand-logo.png" alt="Dhikcar-logo" className="h-5 sm:h-4 w-fit" />
+          <h4 className="text-[11px] sm:text-[9px] font-semibold">Found Car in you City</h4>
+          <p className="text-[11px] sm:text-[8px] tracking-tight leading-3.5 sm:leading-2.5">
             Dhikcar is India's fastest growing technology enabled cars
             brokerage. Our mission is to make people happy what they want to
             ride and ride what they want.
           </p>
           <a
             href="/buy-car"
-            className="text-[9px] text-black flex items-center font-semibold gap-1 mt-2"
+            className="text-[11px] sm:text-[9px] text-black flex items-center font-semibold gap-1 mt-3 sm:mt-2"
           >
             Start Exploring{" "}
             <span>

@@ -89,22 +89,22 @@ const BrandLogoCards: React.FC = () => {
   };
 
   return (
-    <section className="max-w-7xl mx-auto relative bg-[#F8F8F8] py-4 md:py-8 md:pb-12  md:px-10 bg-car-handle">
+    <section className="max-w-7xl mx-auto relative bg-[#F8F8F8] px-4 lg:px-0 py-6 md:py-8 md:pb-12  md:px-10 bg-car-handle">
       {/* Top Heading */}
-      <div className="mb-3 md:mb-8 mx-auto px-4 md:px-0">
-        <h2 className=" text-sm md:text-2xl font-semibold">Popular Brands</h2>
+      <div className="mb-5 md:mb-8 mx-auto">
+        <h2 className=" text-[17px] md:text-2xl font-semibold">Popular Brands</h2>
       </div>
 
       {/* Slider */}
       <Swiper
-      spaceBetween={20}
-        slidesPerView={3.5}
+      spaceBetween={16}
+        slidesPerView={3}
         breakpoints={{
           1280: { slidesPerView: 10 },
           1024: { slidesPerView: 8 },
           640: { slidesPerView: 6 },
-          475: { slidesPerView: 4, spaceBetween: 20, },
-          0: { slidesPerView: 4, spaceBetween: 20 },
+          475: { slidesPerView: 3, spaceBetween: 16, },
+          0: { slidesPerView: 3, spaceBetween: 16 },
         }}
         modules={[Navigation]}
         navigation={{
@@ -121,12 +121,12 @@ const BrandLogoCards: React.FC = () => {
                 <img
                   src={car.logo}
                   alt={car.Brand}
-                  className="w-6 md:w-14 h-6 md:h-10 object-contain rounded-xs"
+                  className="w-10 md:w-14 h-9 md:h-10 object-contain rounded-xs"
                 />
-                <p className="text-[10px] md:text-sm font-semibold text-black whitespace-nowrap overflow-hidden text-ellipsis">
+                <p className="text-[13px] md:text-sm font-semibold text-black whitespace-nowrap overflow-hidden text-ellipsis">
                   {car.Brand}
                 </p>
-                <p className="text-[7px] md:text-[10px] text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis -mt-2">
+                <p className="text-[10px] md:text-[10px] text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis -mt-2">
                   {car.description}
                 </p>
               </div>
@@ -136,11 +136,11 @@ const BrandLogoCards: React.FC = () => {
       </Swiper>
 
       {/* Custom Navigation Buttons (now with class selectors) */}
-      <button className="custom-prev3 absolute left-[3%] md:left-4 top-[55%] sm:top-[60%] -translate-y-1/2 z-30 bg-gray-500 md:bg-gray-900 text-white shadow-lg p-1 md:p-2 rounded-full hover:bg-gray-700 cursor-pointer">
-        <ChevronLeft className="h-3 w-3 md:h-6 md:w-6" />
+      <button className="custom-prev3 absolute left-[3%] md:left-4 top-[60%] sm:top-[60%] -translate-y-1/2 z-30 bg-gray-500 md:bg-gray-900 text-white shadow-lg p-1 md:p-2 rounded-full hover:bg-gray-700 cursor-pointer">
+        <ChevronLeft className="h-4 w-4 md:h-6 md:w-6" />
       </button>
-      <button className="custom-next3 absolute right-[3%] md:right-2 top-[55%] sm:top-[60%] -translate-y-1/2 z-30 bg-gray-500 md:bg-gray-900 text-white shadow-lg p-1 md:p-2 rounded-full hover:bg-gray-700 cursor-pointer">
-        <ChevronRight className="h-3 w-3 md:h-6 md:w-6" />
+      <button className="custom-next3 absolute right-[3%] md:right-2 top-[60%] sm:top-[60%] -translate-y-1/2 z-30 bg-gray-500 md:bg-gray-900 text-white shadow-lg p-1 md:p-2 rounded-full hover:bg-gray-700 cursor-pointer">
+        <ChevronRight className="h-4 w-4 md:h-6 md:w-6" />
       </button>
     </section>
   );

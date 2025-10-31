@@ -73,15 +73,15 @@ const handleCityClick = (cityName: string) => {
 };
 
   return (
-    <section className="w-full max-w-7xl pt-6 lg:pt-12 custom-bg">
+    <section className="w-full max-w-7xl pt-8 lg:pt-12 custom-bg">
       {/* Heading */}
       <div className="text-center">
-        <p className="text-[#EE1422] font-semibold text-[9px] md:text-xs mb-2 md:mb-4 flex items-center justify-center gap-3 md:gap-5">
-          <span className="w-7 md:w-10 h-[1px] md:h-[1.5px] bg-[#EE1422]"></span>
+        <p className="text-[#EE1422] font-semibold text-[11px] md:text-xs mb-2 md:mb-4 flex items-center justify-center gap-3 md:gap-5">
+          <span className="w-8 md:w-10 h-[1px] md:h-[1.5px] bg-[#EE1422]"></span>
           Location based Cars
-          <span className="w-7 md:w-10 h-[1px] md:h-[1.5px] bg-[#EE1422]"></span>
+          <span className="w-8 md:w-10 h-[1px] md:h-[1.5px] bg-[#EE1422]"></span>
         </p>
-        <h2 className="text-sm md:text-2xl font-bold md:font-semibold">
+        <h2 className="text-md md:text-2xl font-bold md:font-semibold">
           Search by Popular Cities
         </h2>
       </div>
@@ -89,22 +89,22 @@ const handleCityClick = (cityName: string) => {
       {/* Mobile Slider */}
       <div className="sm:hidden relative pt-6 pb-8">
         {/* Cities Container - 2 rows × 3 columns */}
-        <div className="grid grid-cols-3 gap-4 gap-y-6 max-w-xs mx-auto">
+        <div className="grid grid-cols-3 gap-4 gap-y-6 md:max-w-xs mx-auto">
           {getCurrentCities().map((city) => (
             <div
               key={city.name}
               className="flex flex-col items-center text-center cursor-pointer hover:scale-105 transition-transform"
               onClick={() => handleCityClick(city.name)}
             >
-              <div className="w-12 h-9 mb-2">
+              <div className="w-16 h-12 mb-2">
                 <img 
                   src={city.img} 
                   alt={city.name} 
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-contain object-bottom"
                 />
               </div>
-              <p className="font-semibold text-[9px]">{city.name}</p>
-              <span className="text-gray-400 text-[7px] mt-1">
+              <p className="font-semibold text-[13px]">{city.name}</p>
+              <span className="text-gray-400 text-[10px] mt-1">
                 {city.cars} Cars Available
               </span>
             </div>
@@ -178,18 +178,18 @@ const handleCityClick = (cityName: string) => {
         {fourCards.map((card, idx) => (
           <div
             key={idx}
-            className="grid grid-cols-3 items-center justify-center rounded-sm p-2 px-4 md:p-4 py-4 md:py-7 md:gap-3 shadow-custom"
+            className="grid grid-cols-3 items-center justify-center rounded-sm p-2 px-2 md:p-4 py-4 md:py-7 md:gap-3 shadow-custom"
           >
             <img
               src={card.img}
               alt={card.title}
-              className="w-8 md:w-16 h-7 md:h-12 object-contain"
+              className="w-10 md:w-16 h-9 md:h-12 object-contain"
             />
             <div className="col-span-2 flex flex-col md:gap-3">
-              <p className="text-[10px] sm:text-xs lg:text-[1rem] font-semibold text-gray-800 whitespace-nowrap overflow-hidden text-ellipsis">
+              <p className="text-sm sm:text-xs lg:text-[1rem] font-semibold text-gray-800 whitespace-nowrap overflow-hidden text-ellipsis">
                 {card.title}
               </p>
-              <p className="text-[8px] sm: lg:text-xs font-semibold lg:font-normal text-gray-800 whitespace-nowrap overflow-hidden text-ellipsis md:-mt-2">
+              <p className="text-[10px] sm:xs lg:text-xs font-semibold lg:font-normal text-gray-800 whitespace-nowrap overflow-hidden text-ellipsis md:-mt-2">
                 {card.description}
               </p>
             </div>

@@ -102,7 +102,9 @@ const CarDetails = () => {
       prev === visibleImages.length - 1 ? 0 : prev + 1
     );
 
-  // map fields (handle different naming)
+console.log("carData :",car)
+
+  // Car map fields (handle different naming)
   const title =
     car.title ??
     `${car.brand ?? ""} ${car.model ?? ""} ${car.varient ?? ""}`.trim();
@@ -514,7 +516,7 @@ const CarDetails = () => {
           </div>
         </div>
 
-        {/* RIGHT SIDE */}
+        {/*desktop & laptop RIGHT SIDE */}
         <div className="hidden lg:block lg:col-span-4 space-y-6">
           {/* Car Details Card */}
           <div className="border border-gray-100 p-4 rounded-lg space-y-3 shadow">
@@ -588,7 +590,7 @@ const CarDetails = () => {
               Contact Seller
             </button>
 
-            {/* Seller Popup */}
+            {/*desktop Seller Popup */}
             {showSellerPopup && (
               <div className="fixed inset-0 bg-black/5 backdrop-blur-[1px] flex items-center justify-center z-50">
                 <div className="bg-white rounded-lg w-lg relative ">
@@ -691,7 +693,7 @@ const CarDetails = () => {
             </span>
           </div>
 
-          {/* car overview dropdown */}
+          {/*desktop car overview dropdown */}
           <div className="hidden md:block sticky z-40 space-y-2">
             <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 w-full max-w-md">
               <div

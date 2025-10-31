@@ -21,22 +21,18 @@ export default function CarList({ loading, error }: CarListProps) {
         {/* Car Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-2 md:gap-8 mx-4 sm:mx-0">
           {loading ? (
-            // 💀 Skeletons while loading
             Array(6)
               .fill(0)
               .map((_, i) => <CarCardSkeleton key={i} />)
           ) : error ? (
-            // ❌ Error message
             <p className="col-span-full text-center text-red-500 font-medium">
               {error}
             </p>
           ) : cars.length === 0 ? (
-            // 🚫 No cars found
             <p className="col-span-full text-center text-gray-500">
               No cars found
             </p>
           ) : (
-            // ✅ Render car cards
             cars.map((car) => <CarCard key={car.id} car={car} />)
           )}
         </div>

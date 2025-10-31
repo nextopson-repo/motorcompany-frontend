@@ -9,7 +9,6 @@ export interface CreateEnquiryPayload {
   carId: any;
   userId: any;
   Calling: string;
-  // Add other fields required by your backend (like message, etc), if any
 }
 
 export interface Enquiry {
@@ -75,9 +74,10 @@ export const fetchEnquiries = createAsyncThunk(
     try {
       const response = await axios.post(
         `${BASE_URL}/api/v1/dashboard/get-all-car-enquiries`,
-        { userId } // send userId in request body
+        { userId }
       );
-      return response.data?.responseObject?.enquiries || [];
+      // console.log(response)
+      return response.data?.carEnquiries || [];
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || "Failed to fetch enquiries"
@@ -197,7 +197,7 @@ export default enquiriesSlice.reducer;
 // const enquiriesSlice = createSlice({
 //   name: "enquiries",
 //   initialState,
-//   reducers: {
+//   reducers:{
 //     addEnquiry: (state, action: PayloadAction<Enquiry>) => {
 //       state.enquiries.push(action.payload);
 //     },

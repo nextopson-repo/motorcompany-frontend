@@ -74,12 +74,12 @@ const LocationModal: React.FC<LocationModalProps> = ({
       />
 
       {/* modal */}
-      <div className="relative overflow-hidden mx-auto h-[82%] sm:h-[50%] lg:h-[82%] mt-14 w-[95%] sm:w-[75%] lg:w-[50%] max-w-5xl bg-white rounded-md md:rounded-xl shadow-xl">
+      <div className="relative overflow-hidden mx-auto h-[82%] sm:h-[50%] lg:h-[82%] mt-14 w-[95%] sm:w-[75%] lg:w-[50%] max-w-5xl bg-white rounded-md md:rounded-xl shadow-xl z-0">
         {/* header */}
         <div className="flex items-center justify-between p-2 md:p-3 px-2 md:px-8 border-b border-gray-100">
-          <h3 className="text-xs sm:text-lg font-semibold">Select your City</h3>
+          <h3 className="text-sm sm:text-lg font-semibold">Select your City</h3>
           <button onClick={onClose} className="p-1 rounded hover:bg-black/5">
-            <X className="w-4 md:w-5 h-4 md:h-5" />
+            <X className="w-5 md:w-5 h-5 md:h-5" />
           </button>
         </div>
 
@@ -91,13 +91,13 @@ const LocationModal: React.FC<LocationModalProps> = ({
               value={citySearch}
               onChange={(e) => setCitySearch(e.target.value)}
               placeholder="Enter your City"
-              className="w-full py-2 text-[10px] md:text-sm outline-none placeholder:text-gray-500"
+              className="w-full py-2 text-xs md:text-sm outline-none placeholder:text-gray-500"
             />
           </div>
         </div>
 
         {/* cities grid */}
-        <div className="w-full overflow-y-auto p-2 md:p-4 md:px-5 grid grid-cols-4 md:grid-cols-4 lg:grid-cols-5 gap-2">
+        <div className="w-full overflow-y-auto p-2 md:p-4 md:px-5 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 z-[10]">
           {filteredLocations.map((loc) => (
             <button
               key={loc}
@@ -107,9 +107,9 @@ const LocationModal: React.FC<LocationModalProps> = ({
               <img
                 src={cityImage(loc)}
                 alt={loc}
-                className="w-full h-full object-contain rounded-xs md:rounded-lg mx-auto"
+                className="w-24 h-20 lg:w-22 lg:h-18 lg:object-cover object-cover rounded-sm md:rounded-lg mx-auto"
               />
-              <div className="mt-1 md:mt-2 text-[9px] md:text-[12px] font-semibold text-center">
+              <div className="mt-1 md:mt-2 text-[11px] md:text-xs font-semibold text-center">
                 {loc.split(",")[0]}
               </div>
             </button>
@@ -117,7 +117,7 @@ const LocationModal: React.FC<LocationModalProps> = ({
         </div>
 
         {/* footer background image */}
-        <div className="absolute inset-[65%] left-0 -translate-x-[0%] w-full h-1/2 opacity-20">
+        <div className="absolute inset-[65%] left-0 -translate-x-[0%] w-full h-1/2 opacity-20 z-[-1]">
           <img
             src="/Cities/cities-bg.png"
             alt="cities-bg"

@@ -1,26 +1,33 @@
-// src/components/Enquiries.tsx
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../store/store";
-import EnquiryCard from "../EnquiryCard";
+import { useEffect } from "react";
+import { fetchEnquiries } from "../../store/slices/enqueriesSlice";
 import { Search } from "lucide-react";
-// import { useEffect } from "react";
-// import { fetchEnquiries } from "../../store/slices/enqueriesSlice";
+import EnquiryCard from "../EnquiryCard";
 
 export default function Enquiries() {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const enquiries = useSelector(
     (state: RootState) => state.enquiries.enquiries
   );
-  // const userId = useSelector((state: RootState) => state.auth.user.id);
-  
+  const loading = useSelector((state: RootState) => state.enquiries.loading);
+  const userId = useSelector((state: RootState) => state.auth.user.id);
 
-// useEffect(() => {
-//     if (userId) {
-//       dispatch(fetchEnquiries({ userId }));
-//     }
-//   }, [dispatch, userId]);
+  // console.log("enqueries :", enquiries);
 
-  console.log("enquery:", enquiries)
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchEnquiries({ userId }));
+    }
+  }, [dispatch, userId]);
+
+  if (loading) {
+    return <div>Loading enquiries...</div>;
+  }
+
+  // if (!loading && enquiries.length === 0) {
+  //   return <div>No enquiries found.</div>;
+  // }
 
   return (
     <div className="mx-auto -m-1 px-4 md:px-0 sm:mb-10 lg:mb-0">
@@ -30,9 +37,7 @@ export default function Enquiries() {
         </h1>
         <div className="flex items-center gap-2">
           <span className="w-full md:w-68 flex items-center gap-2 bg-[#F2F3F7] text-xs px-2 rounded-xs ">
-            <span>
-              <Search className="text-black" size={14} />
-            </span>
+            <Search className="text-black" size={14} />
             <input
               type="text"
               placeholder="Search for Cars, Brands, Models..."
@@ -46,7 +51,7 @@ export default function Enquiries() {
         </div>
       </div>
 
-      {enquiries.map((enquiry) => (
+      {enquiries.map((enquiry: any) => (
         <EnquiryCard key={enquiry.id} enquiry={enquiry} />
       ))}
     </div>

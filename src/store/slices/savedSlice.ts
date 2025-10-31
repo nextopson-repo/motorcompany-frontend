@@ -24,6 +24,9 @@ const initialState: SavedState = {
   error: null,
 };
 
+// 🧠 API base URL
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 // ✅ Fetch saved cars API call
 export const fetchSavedCars = createAsyncThunk(
   "saved/fetchSavedCars",
@@ -35,7 +38,7 @@ export const fetchSavedCars = createAsyncThunk(
       if (!user || !token) throw new Error("User not logged in");
 
       const response = await axios.post(
-        "http://localhost:5000/api/v1/dashboard/get-saved-cars",
+        `${BACKEND_URL}/api/v1/dashboard/get-saved-cars`,
         { userId: user.id },
         {
           headers: {
@@ -45,7 +48,7 @@ export const fetchSavedCars = createAsyncThunk(
         }
       );
 
-      console.log("response :", response)
+      // console.log("response :", response)
       
 
       const savedCars: CarRecord[] = response.data.result.savedCars.map(
@@ -101,7 +104,7 @@ export const createSaveCar = createAsyncThunk(
       if (!user || !token) throw new Error("User not logged in");
 
       await axios.post(
-        "http://localhost:5000/api/v1/dashboard/create-saved-car",
+        `${BACKEND_URL}/api/v1/dashboard/create-saved-car`,
         { userId: user.id, carId },
         {
           headers: {
@@ -129,7 +132,7 @@ export const removeSaveCar = createAsyncThunk(
       if (!user || !token) throw new Error("User not logged in");
 
       await axios.post(
-        "http://localhost:5000/api/v1/dashboard/remove-saved-car",
+        `${BACKEND_URL}/api/v1/dashboard/remove-saved-car`,
         { userId: user.id, savedCarId: carId },
         {
           headers: {

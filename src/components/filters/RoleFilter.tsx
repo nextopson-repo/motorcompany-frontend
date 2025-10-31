@@ -45,10 +45,10 @@ const RoleFilter = ({ userType }: { userType: string }) => {
       {/* Trigger Button */}
       <button
         ref={buttonRef}
-        className="px-3 py-[6px] bg-black text-white border rounded-sm text-[10px] flex items-center gap-2"
+        className="px-3 py-2 bg-black text-white border rounded-sm text-xs flex items-center gap-2"
         onClick={() => setOpenFilter((prev) => !prev)}
       >
-        {userType} <ChevronDown className="h-3 w-3" />
+        {userType} <ChevronDown className="h-4 w-4" />
       </button>
 
       {/* Dropdown */}

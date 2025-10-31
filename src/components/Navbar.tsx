@@ -54,10 +54,10 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
     <nav className="w-full h-12 md:h-auto bg-white shadow-md fixed top-0 left-0 z-50">
       <div className="w-full max-w-7xl mx-auto px-4 py-2 flex items-center md:justify-between">
         {/* Mobile Menu Button */}
-        <div className="flex gap-3">
+        <div className="flex gap-1">
           <div className="lg:hidden flex items-center">
             <button onClick={() => setIsMobileMenuOpen(true)}>
-              <Menu className="w-5 h-5 text-black mt-1" />
+              <Menu className="w-5 h-5 text-black mt-[2px]" />
             </button>
           </div>
 
@@ -67,7 +67,7 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
               <img
                 src="/Brand-logo.png"
                 alt="Logo"
-                className="w-24 md:w-auto h-5 md:h-9"
+                className="w-31 md:w-auto h-[22px] md:h-9"
               />
             </NavLink>
           </div>
@@ -82,14 +82,14 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
             className=" py-2 rounded-md text-[10px] flex flex-col items-center justify-center group"
             onClick={() => navigate("/settings/saved")}
           >
-            <Heart className="w-4 h-4" />
+            <Heart className="w-5 h-5" />
           </button>
 
           <button
             onClick={onSelectCityClick}
             className="rounded-sm py-2 text-xs flex items-center"
           >
-            <MapPin className="w-4 h-4" />
+            <MapPin className="w-5 h-5" />
           </button>
 
           {user ? (
@@ -103,7 +103,7 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
               <img
                 src={user.profileImg}
                 alt="User Avatar"
-                className="w-5 h-5 rounded-full object-cover"
+                className="w-6 h-6 rounded-full object-cover"
               />
             </div>
           ) : (
@@ -116,7 +116,7 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
               // onClick={() => setIsLoginOpen(true)}
             >
               <UserRound
-                className="w-4 h-4 border-[1.5px] rounded-full"
+                className="w-6 h-6 border-[1.5px] rounded-full"
                 strokeWidth={2}
               />
             </button>
@@ -227,12 +227,12 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
 
       {/* Mobile left Sidebar Menu */}
       <div
-        className={`fixed top-0 left-0 h-full w-[70%] sm:w-[35%] bg-white shadow-lg transform transition-transform duration-300 z-50 ${
+        className={`fixed top-0 left-0 h-full w-[80%] sm:w-[35%] bg-white shadow-lg transform transition-transform duration-300 z-50 ${
           isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div className="flex items-center justify-between p-4">
-          <img src="/Brand-logo.png" alt="Logo" className="h-5" />
+          <img src="/Brand-logo.png" alt="Logo" className="h-6" />
           <button onClick={() => setIsMobileMenuOpen(false)}>
             <X className="w-5 h-5 text-black" />
           </button>
@@ -243,7 +243,7 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
             to="/"
             end
             className={({ isActive }) =>
-              isActive ? "text-[#EE1422] text-sm" : "text-black text-sm"
+              isActive ? "text-[#EE1422] text-md" : "text-black text-md"
             }
             onClick={() => setIsMobileMenuOpen(false)}
           >
@@ -254,33 +254,33 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
             onClick={() => setIsMobileMenuOpen(false)}
             className={({ isActive }) =>
               isActive
-                ? "text-[#EE1422] text-sm flex items-center justify-between"
-                : "text-black text-sm flex items-center justify-between"
+                ? "text-[#EE1422] text-md flex items-center justify-between"
+                : "text-black text-md flex items-center justify-between"
             }
           >
-            Browse Cars <ChevronRight className="h-4 w-4" />
+            Browse Cars <ChevronRight className="h-5 w-5" />
           </NavLink>
           <NavLink
             to="/sell"
             className={({ isActive }) =>
               isActive
-                ? "text-[#EE1422] text-sm flex items-center justify-between"
-                : "text-black text-sm flex items-center justify-between"
+                ? "text-[#EE1422] text-md flex items-center justify-between"
+                : "text-black text-md flex items-center justify-between"
             }
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            Sell my car <ChevronRight className="h-4 w-4" />
+            Sell my car <ChevronRight className="h-5 w-5" />
           </NavLink>
           <NavLink
             to="/settings/saved"
             className={({ isActive }) =>
               isActive
-                ? "text-[#EE1422] text-sm flex items-center justify-between"
-                : "text-black text-sm flex items-center justify-between"
+                ? "text-[#EE1422] text-md flex items-center justify-between"
+                : "text-black text-md flex items-center justify-between"
             }
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            Wishlist <ChevronRight className="h-4 w-4" />
+            Wishlist <ChevronRight className="h-5 w-5" />
           </NavLink>
         </div>
       </div>
@@ -301,12 +301,12 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
             }}
           >
             <img
-              src={user?.images || "/default-men-logo.jpg"}
+              src={user?.userProfileUrl || "/default-men-logo.jpg"}
               alt="User"
               className="w-10 h-10 rounded-full border"
             />
             <div className="flex flex-col">
-              <span className="text-xs font-semibold">
+              <span className="text-md font-semibold">
                 {user?.fullName || "Login / Signup"}
               </span>
             </div>
@@ -316,87 +316,87 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
           </button>
         </div>
 
-        <div className="flex flex-col p-4 gap-3">
+        <div className="flex flex-col p-4 gap-4">
           <NavLink
             to="/settings/profile"
             className={({ isActive }) =>
-              isActive ? "text-[#EE1422] text-sm" : "text-black text-sm"
+              isActive ? "text-[#EE1422] text-md" : "text-black text-md flex items-center gap-2"
             }
             onClick={() => setIsRightSidebarOpen(false)}
           >
-            Profile Settings
+            <span className="h-5 w-5"><img src="/public/mobile sidebar logo/solar_user-broken.png" alt="icon"/></span> Profile Settings
           </NavLink>
           <NavLink
             to="/settings/listings"
             className={({ isActive }) =>
-              isActive ? "text-[#EE1422] text-sm" : "text-black text-sm"
+              isActive ? "text-[#EE1422] text-md" : "text-black text-md flex items-center gap-2"
             }
             onClick={() => setIsRightSidebarOpen(false)}
           >
-            My Listing
+            <span className="h-5 w-5"><img src="/public/mobile sidebar logo/my_listings.png" alt="icon"/></span> My Listing
           </NavLink>
           <NavLink
             to="/settings/my-leads"
             className={({ isActive }) =>
-              isActive ? "text-[#EE1422] text-sm" : "text-black text-sm"
+              isActive ? "text-[#EE1422] text-md" : "text-black text-md flex items-center gap-2"
             }
             onClick={() => setIsRightSidebarOpen(false)}
           >
-            My Leads
+           <span className="h-5 w-5"><img src="/public/mobile sidebar logo/" alt="icon"/></span> My Leads
           </NavLink>
           <NavLink
             to="/sell"
             className={({ isActive }) =>
-              isActive ? "text-[#EE1422] text-sm" : "text-black text-sm"
+              isActive ? "text-[#EE1422] text-md" : "text-black text-md flex items-center gap-2"
             }
             onClick={() => setIsRightSidebarOpen(false)}
           >
-            Add Car
+           <span className="h-5 w-5"><img src="/public/mobile sidebar logo/add_car.png" alt="icon"/></span> Add Car
           </NavLink>
           <NavLink
             to="/settings/interested-buyers"
             className={({ isActive }) =>
-              isActive ? "text-[#EE1422] text-sm" : "text-black text-sm"
+              isActive ? "text-[#EE1422] text-md" : "text-black text-md flex items-center gap-2"
             }
             onClick={() => setIsRightSidebarOpen(false)}
           >
-            Interested Buyers
+           <span className="h-5 w-5"><img src="/public/mobile sidebar logo/" alt="icon"/></span> Interested Buyers
           </NavLink>
           <NavLink
             to="/settings/enquiries"
             className={({ isActive }) =>
-              isActive ? "text-[#EE1422] text-sm" : "text-black text-sm"
+              isActive ? "text-[#EE1422] text-md" : "text-black text-md flex items-center gap-2"
             }
             onClick={() => setIsRightSidebarOpen(false)}
           >
-            My Enquiries
+           <span className="h-5 w-5"><img src="/public/mobile sidebar logo/my_enquery.png" alt="icon"/></span> My Enquiries
           </NavLink>
           <NavLink
             to="/settings/saved"
             className={({ isActive }) =>
-              isActive ? "text-[#EE1422] text-sm" : "text-black text-sm"
+              isActive ? "text-[#EE1422] text-md" : "text-black text-md flex items-center gap-2"
             }
             onClick={() => setIsRightSidebarOpen(false)}
           >
-            Saved Cars
+           <span className="h-5 w-5"><img src="/public/mobile sidebar logo/saved_cars.png" alt="icon"/></span> Saved Cars
           </NavLink>
           <NavLink
             to="/settings/buy-packages"
             className={({ isActive }) =>
-              isActive ? "text-[#EE1422] text-sm" : "text-black text-sm"
+              isActive ? "text-[#EE1422] text-md" : "text-black text-md flex items-center gap-2"
             }
             onClick={() => setIsRightSidebarOpen(false)}
           >
-            Buy Packages
+           <span className="h-5 w-5"><img src="/public/mobile sidebar logo/buy_package.png" alt="icon"/></span> Buy Packages
           </NavLink>
           <NavLink
             to="/settings/bought-packages"
             className={({ isActive }) =>
-              isActive ? "text-[#EE1422] text-sm" : "text-black text-sm"
+              isActive ? "text-[#EE1422] text-md" : "text-black text-md flex items-center gap-2"
             }
             onClick={() => setIsRightSidebarOpen(false)}
           >
-            Bought Packages
+           <span className="h-5 w-5"><img src="/public/mobile sidebar logo/brought_packages.png" alt="icon"/></span> Bought Packages
           </NavLink>
 
           {user && (

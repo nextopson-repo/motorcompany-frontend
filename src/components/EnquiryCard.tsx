@@ -95,8 +95,8 @@ export default function EnquiryCard({ enquiry }: EnquiryCardProps){
                 <div className="w-full space-y-2">
                   <div className="w-full flex items-center gap-2">
                   <img
-                    src={enquiry.owner.avatar}
-                    alt={enquiry.owner.name}
+                    src={"/default-men-logo.jpg"}
+                    alt={"logo"}
                     className="w-10 h-10 rounded-full"
                   />
                   <div className="w-full flex flex-col gap-1">

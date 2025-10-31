@@ -48,7 +48,7 @@ const initialState: SellerState = {
   email: "",
   phone: "",
   verified: false,
-  avatar: "/default-avatar.png",
+  avatar: "",
   cars: [],
   loading: false,
   error: null,
@@ -105,7 +105,7 @@ export const fetchSellerCars = createAsyncThunk<
       location: fAddress ? `${String(fAddress.city || "")}, ${String(fAddress.state || "")}` : "city, state",
       email: String(owner.email || ""),
       phone: String(owner.mobileNumber || ""),
-      verified: Boolean(owner.verified ?? true),
+      verified: Boolean(owner.verified ?? true), //
       avatar: String(owner.avatar || "/default-men-logo.jpg"),
     } as Omit<SellerState, "cars" | "loading" | "error">;
 

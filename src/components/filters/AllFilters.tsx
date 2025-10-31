@@ -94,7 +94,7 @@ const AllFilters: React.FC<AllFiltersProps> = ({ onClose }) => {
   const handleFuelToggle = (f: string) => dispatch(toggleFuel(f));
 
   return (
-    <div className="lg:hidden h-screen fixed inset-0 z-50 bg-white overflow-hidden">
+    <div className="lg:hidden h-screen fixed inset-0 z-50 bg-white overflow-hidden mt-12">
       {/* header */}
       <div className="h-[7vh] items-center p-4 pb-2 border-b border-gray-300">
         <button onClick={onClose} className="flex items-center gap-1 text-sm">
