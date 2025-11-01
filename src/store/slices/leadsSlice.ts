@@ -50,7 +50,7 @@ export const fetchCarLeads = createAsyncThunk(
 
       console.log("📦 Car Leads Response:", res.data);
 
-      return res.data?.data || []; // assuming API returns { data: [...] }
+      return res.data?.leads || []; // assuming API returns { data: [...] }
     } catch (err: any) {
       console.error("❌ Error fetching car leads:", err);
       return rejectWithValue(err.response?.data?.message || "Failed to fetch leads");

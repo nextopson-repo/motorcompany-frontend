@@ -233,15 +233,15 @@ const Footer = () => {
       </div>
 
       {/* Bottom Strip */}
-      <div className="text-sm font-semibold text-center md:text-left hidden lg:flex flex-col lg:flex-row items-center justify-between py-4 max-w-7xl mx-auto gap-2">
+      <div className="text-sm font-semibold text-center md:text-left hidden lg:flex flex-col lg:flex-row items-center justify-center py-4 max-w-7xl mx-auto gap-2">
         <p className="flex items-center gap-2 text-gray-800 text-[13px]">
           <Copyright className="h-4 w-4" /> Copyright {new Date().getFullYear()}{" "}
           | All Rights Reserved
         </p>
-        <span className="flex gap-10 text-gray-800 text-[13px]">
+        {/* <span className="flex gap-10 text-gray-800 text-[13px]">
           Contact With Us :
           <span className="flex gap-7 items-center ">
-            {/* facebook */}
+
             <a href="">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -256,7 +256,7 @@ const Footer = () => {
                 />
               </svg>
             </a>
-            {/* linkedin */}
+
             <a href="">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -278,7 +278,7 @@ const Footer = () => {
                 </defs>
               </svg>
             </a>
-            {/* youtube */}
+
             <a href="">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -295,7 +295,7 @@ const Footer = () => {
                 />
               </svg>
             </a>
-            {/* instagram */}
+
             <a href="">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -311,7 +311,7 @@ const Footer = () => {
               </svg>
             </a>
           </span>
-        </span>
+        </span> */}
       </div>
     </footer>
   );

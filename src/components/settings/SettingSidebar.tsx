@@ -37,7 +37,6 @@ export default function SettingSidebar({
   const links = [
     { name: "Profile", path: "/settings/profile" },
     { name: "My Listing", path: "/settings/listings" },
-    { name: "My Leads", path: "/settings/my-leads" },
     { name: "Add Car", path: "/sell" },
     { name: "My Enqueries", path: "/settings/enquiries" },
     { name: "Interested Buyers List", path: "/settings/interested-buyers" },
@@ -89,7 +88,7 @@ export default function SettingSidebar({
           </div>
         </div>
 
-        <ul className="mt-6 flex flex-col items-center w-full space-y-[2px]">
+        <ul className="mt-6 flex flex-col items-center w-full space-y-0.5">
           {links.map((link) => {
             const isActive = location.pathname === link.path;
             return (

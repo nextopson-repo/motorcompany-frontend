@@ -10,73 +10,85 @@ const testimonials = [
     id: 1,
     date: "12 Mar, 2024",
     bgImg: "/Testimonals/card-1.png",
-    profileImg: "/Testimonals/profile-logo.png",
-    name: "Savannah Nguyen",
-    location: "Guwahati",
-    rating: 4.7,
-    text: "Kia Syros Long Term Introduction: Third Time's The Cha Citroen eC3 1000 km",
+    profileImg: "https://randomuser.me/api/portraits/men/58.jpg", // Example Indian male avatar
+    name: "Arjun Patel",
+    location: "Ahmedabad, Gujarat",
+    rating: 4.8,
+    text: "Smooth and trustworthy car buying ex",
     description:
-      "After fleeting experiences that left me with mixed feelings for Kia’s rather ingenious SUV, it is feelings for Kia’s rather is After fleeting experiences that left me with mixed feeling...",
+      "I found the perfect car within my budget with clear details and genuine sellers. The whole transaction felt safe and seamless from start to finish. Highly recommended!",
+    response:
+      "Thank you, Arjun! We are delighted to hear about your positive experience. We strive to keep our marketplace transparent and easy to use.",
   },
   {
     id: 2,
-    date: "12 Mar, 2024",
+    date: "10 Feb, 2024",
     bgImg: "/Testimonals/card-2.png",
-    profileImg: "/Testimonals/profile-logo.png",
-    name: "Dianne Russell",
-    location: "Guwahati",
-    rating: 4.7,
-    text: "Kia Syros Long Term Introduction: Third Time's The Cha Citroen eC3 1000 km",
+    profileImg: "https://randomuser.me/api/portraits/women/15.jpg", // Example Indian female avatar
+    name: "Neha Sharma",
+    location: "New Delhi, Delhi",
+    rating: 4.6,
+    text: "Great selection and prompt support",
     description:
-      "After fleeting experiences that left me with mixed feelings for Kia’s rather ingenious SUV, it is feelings for Kia’s rather is After fleeting experiences that left me with mixed feeling...",
+      "The variety of cars available was impressive and the support team was very responsive to my questions. It made buying a car online comfortable and easy.",
+    response:
+      "Thanks for your feedback, Neha! Our team is committed to supporting our users at every step and providing great vehicle options.",
   },
   {
     id: 3,
-    date: "12 Mar, 2024",
+    date: "05 Jan, 2024",
     bgImg: "/Testimonals/card-3.png",
-    profileImg: "/Testimonals/profile-logo.png",
-    name: "Bessie Cooper",
-    location: "Panaji",
-    rating: 3.1,
-    text: "Kia Syros Long Term Introduction: Third Time's The Cha Citroen eC3 1000 km",
+    profileImg: "https://randomuser.me/api/portraits/men/48.jpg",
+    name: "Rohit Singh",
+    location: "Lucknow, Uttar Pradesh",
+    rating: 4.3,
+    text: "Good overall, needs faster delivery",
     description:
-      "After fleeting experiences that left me with mixed feelings for Kia’s rather ingenious SUV, it is feelings for Kia’s rather is After fleeting experiences that left me with mixed feeling...",
+      "The listing information was detailed and accurate. I would have loved faster delivery service, but overall a reliable platform. i'm recommend anyone this website.",
+    response:
+      "Thank you, Rohit. We appreciate your honest feedback and are actively working on improving our delivery timelines.",
   },
   {
     id: 4,
-    date: "12 Mar, 2024",
+    date: "20 Apr, 2024",
     bgImg: "/Testimonals/card-1.png",
-    profileImg: "/Testimonals/profile-logo.png",
-    name: "Savannah Nguyen",
-    location: "Guwahati",
-    rating: 4.7,
-    text: "Kia Syros Long Term Introduction: Third Time's The Cha Citroen eC3 1000 km",
+    profileImg: "https://randomuser.me/api/portraits/women/54.jpg",
+    name: "Pooja Desai",
+    location: "Mumbai, Maharashtra",
+    rating: 5.0,
+    text: "Excellent service and smooth payment",
     description:
-      "After fleeting experiences that left me with mixed feelings for Kia’s rather ingenious SUV, it is feelings for Kia’s rather is After fleeting experiences that left me with mixed feeling...",
+      "From browsing to payment confirmation, everything was handled very professionally. The platform gave me confidence to make such a big purchase online.",
+    response:
+      "We really appreciate your encouraging words, Pooja! We aim to make car buying simple and safe for all our customers.",
   },
   {
     id: 5,
-    date: "12 Mar, 2024",
+    date: "15 Mar, 2024",
     bgImg: "/Testimonals/card-2.png",
-    profileImg: "/Testimonals/profile-logo.png",
-    name: "Dianne Russell",
-    location: "Guwahati",
+    profileImg: "https://randomuser.me/api/portraits/men/44.jpg",
+    name: "Amit Verma",
+    location: "Bangalore, Karnataka",
     rating: 4.7,
-    text: "Kia Syros Long Term Introduction: Third Time's The Cha Citroen eC3 1000 km",
+    text: "Reliable platform with genuine listings",
     description:
-      "After fleeting experiences that left me with mixed feelings for Kia’s rather ingenious SUV, it is feelings for Kia’s rather is After fleeting experiences that left me with mixed feeling...",
+      "I could browse many verified cars and had no worries about security. The transparency helped me trust the platform fully for my purchase.",
+    response:
+      "Thank you for trusting us, Amit! Transparency and reliability are our core values, and we are glad you experienced that firsthand.",
   },
   {
     id: 6,
-    date: "12 Mar, 2024",
+    date: "01 Feb, 2024",
     bgImg: "/Testimonals/card-3.png",
-    profileImg: "/Testimonals/profile-logo.png",
-    name: "Bessie Cooper",
-    location: "Panaji",
-    rating: 3.1,
-    text: "Kia Syros Long Term Introduction: Third Time's The Cha Citroen eC3 1000 km",
+    profileImg: "https://randomuser.me/api/portraits/women/40.jpg",
+    name: "Sneha Reddy",
+    location: "Hyderabad, Telangana",
+    rating: 4.5,
+    text: "Helpful support and smooth vehicle selection",
     description:
-      "After fleeting experiences that left me with mixed feelings for Kia's rather ingenious SUV, it is feelings for Kia’s rather is After fleeting experiences that left me with mixed feeling...",
+      "The customer support was very helpful in answering my queries promptly which made choosing a car easier. I highly recommend this platform to friends and family.",
+    response:
+      "Thanks for your recommendation, Sneha! We're glad our support could assist you. We look forward to helping more customers like you.",
   },
 ];
 
@@ -86,9 +98,9 @@ const Testimonials: React.FC = () => {
       {/* Heading */}
       <div className="text-xs text-center mb-2 md:mb-4 px-4">
         <p className="text-[#EE1422] text-[10px] md:text-xs font-semibold flex items-center justify-center gap-2 md:gap-4">
-          <span className="w-7 md:w-10  h-[1px] md:h-[1.4px] bg-[#EE1422]/80"></span>
+          <span className="w-7 md:w-10  h-px md:h-[1.4px] bg-[#EE1422]/80"></span>
           Testimonials
-          <span className="w-7 md:w-10  h-[1px] md:h-[1.4px] bg-[#EE1422]/80"></span>
+          <span className="w-7 md:w-10  h-px md:h-[1.4px] bg-[#EE1422]/80"></span>
         </p>
         <h2 className="text-sm lg:text-2xl font-bold mt-2 md:mt-4">
           Real Stories. Real Experiences. Real
@@ -118,7 +130,7 @@ const Testimonials: React.FC = () => {
         breakpoints={{
           1024: { slidesPerView: 3, spaceBetween: 32 },
           640: { slidesPerView: 2, spaceBetween: 5 },
-          0: { slidesPerView: 1, spaceBetween:5 },
+          0: { slidesPerView: 1, spaceBetween: 5 },
         }}
         navigation={{
           nextEl: ".swiper-button-next1",
@@ -128,10 +140,11 @@ const Testimonials: React.FC = () => {
       >
         {testimonials.map((t) => (
           <SwiperSlide key={t.id}>
-            <div className="bg-white rounded-md p-4 relative h-full flex flex-col my-2 m-4"
-            style={{
-            boxShadow: "0px 1px 10px 0px rgba(0, 0, 0, 0.15)",
-          }}
+            <div
+              className="bg-white rounded-md p-4 relative h-full flex flex-col my-2 m-4"
+              style={{
+                boxShadow: "0px 1px 10px 0px rgba(0, 0, 0, 0.15)",
+              }}
             >
               {/* Profile + Rating Row */}
               <div className="flex items-start justify-between mb-4">
@@ -142,17 +155,30 @@ const Testimonials: React.FC = () => {
                     className="w-11 h-11 rounded-full object-cover"
                   />
                   <div className="space-y-1">
-                    <p className="font-medium text-xs lg:text-sm whitespace-nowrap truncate text-ellipsis">{t.name}</p>
+                    <p className="font-medium text-xs lg:text-sm whitespace-nowrap truncate text-ellipsis">
+                      {t.name}
+                    </p>
                     <p className="text-gray-500 text-thin text-[8px] lg:text-[10px]">
                       {t.date} | {t.location}
                     </p>
                   </div>
                 </div>
-                <div className="text-right flex items-center gap-2 mt-[6px]">
+                <div className="text-right flex items-center gap-2 mt-1.5">
                   <div className="flex items-center gap-[2.5px] text-yellow-400 text-[10px]">
-                    {Array.from({ length: 5 }, (_, i) => (
-                      <IoStarSharp key={i} className="h-[10px] w-[10px]"/>
-                    ))}
+                    {/* {Array.from({ length: 5 }, (_, i) => (
+                      <IoStarSharp key={i} className="h-2.5 w-2.5"/>
+                    ))} */}
+                    {Array.from({ length: 5 }, (_, i) => {
+                      const isFilled = i < Math.floor(t.rating);
+                      return (
+                        <IoStarSharp
+                          key={i}
+                          className={`h-2.5 w-2.5 ${
+                            isFilled ? "text-yellow-400" : "text-gray-300"
+                          }`}
+                        />
+                      );
+                    })}
                   </div>
                   <p className="text-green-600 font-semibold text-[10px] mt-1 whitespace-nowrap">
                     {t.rating} +
@@ -189,11 +215,7 @@ const Testimonials: React.FC = () => {
             </div>
           </SwiperSlide>
         ))}
-
       </Swiper>
-
-      
-
     </section>
   );
 };

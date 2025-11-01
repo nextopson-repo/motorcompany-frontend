@@ -7,13 +7,13 @@ import {
   type ContactFormData,
 } from "../store/slices/contactSlice";
 import {
-  FacebookIcon,
-  InstagramIcon,
-  LinkedinIcon,
+  // FacebookIcon,
+  // InstagramIcon,
+  // LinkedinIcon,
   Mail,
   MapPin,
   Phone,
-  YoutubeIcon,
+  // YoutubeIcon,
 } from "lucide-react";
 
 export default function ContactUs() {
@@ -80,8 +80,8 @@ export default function ContactUs() {
           Get in touch with us for any car sale, purchase, or resell inquiries.
           Our dedicated team is here to assist you with quick support, reliable
           guidance, and the best deals to make your car journey smooth and
-          hassle-free. Reach out today and let us help you drive your dream
-          forward.
+          hassle-free. <span className="hidden lg:block">Reach out today and let us help you drive your dream
+          forward.</span>
         </p>
       </div>
 
@@ -106,9 +106,9 @@ export default function ContactUs() {
                     Address
                   </p>
                   <p className="text-black text-[10px]">
-                    8502 Preston Rd, Inglewood, Maine 98380
+                    C1 Indus Apartment, Bawadiya Kalan
                   </p>
-                  <p className="text-black text-[10px]">Maine 98380</p>
+                  <p className="text-black text-[10px]"> Bhopal (M.P.)</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -119,8 +119,7 @@ export default function ContactUs() {
                   <p className="text-sm text-gray-800 mb-1 font-semibold">
                     Email Us
                   </p>
-                  <p className="text-black text-[10px]">example@email.com</p>
-                  <p className="text-black text-[10px]">example@email.com</p>
+                  <a href="mailto:thedhikcar@gmail.com" className="text-black text-[10px]">thedhikcar@gmail.com</a>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -131,14 +130,14 @@ export default function ContactUs() {
                   <p className="text-sm text-gray-800 mb-1 font-semibold">
                     Call Us
                   </p>
-                  <p className="text-black text-[10px]">+1 555 0126</p>
-                  <p className="text-black text-[10px]">+1 555 0126</p>
+                  <a href="tel:8989227426" className="text-black text-[10px]">+91 - 8989227426</a>
+                  {/* <p className="text-black text-[10px]">+1 555 0126</p> */}
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="my-4 flex items-center gap-3">
+          {/* <div className="my-4 flex items-center gap-3">
             <span className="text-sm font-semibold mr-6">
               {" "}
               Contact With Us :
@@ -155,7 +154,7 @@ export default function ContactUs() {
             <a href="#" className="bg-red-500 text-white p-2 rounded-xs">
               <InstagramIcon className="h-4 w-4" />
             </a>
-          </div>
+          </div> */}
         </div>
 
         {/* Right form panel */}
@@ -175,7 +174,7 @@ export default function ContactUs() {
                   value={data.firstName}
                   onChange={handleChange}
                   placeholder="Jhon"
-                  className="bg-gray-100 text-xs rounded p-[6px] px-2 md:px-4 w-full placeholder:text-[10px]"
+                  className="bg-gray-100 text-xs rounded p-1.5 px-2 md:px-4 w-full placeholder:text-[10px]"
                   required
                 />
               </span>
@@ -189,7 +188,7 @@ export default function ContactUs() {
                   value={data.lastName}
                   onChange={handleChange}
                   placeholder="Doe"
-                  className="bg-gray-100 text-xs rounded p-[6px] px-2 md:px-4 w-full placeholder:text-[10px]"
+                  className="bg-gray-100 text-xs rounded p-1.5 px-2 md:px-4 w-full placeholder:text-[10px]"
                   required
                 />
               </span>
@@ -205,7 +204,7 @@ export default function ContactUs() {
                   value={data.phone}
                   onChange={handleChange}
                   placeholder="9876543210"
-                  className="bg-gray-100 text-xs rounded p-[6px] px-2 md:px-4 w-full placeholder:text-[10px]"
+                  className="bg-gray-100 text-xs rounded p-1.5 px-2 md:px-4 w-full placeholder:text-[10px]"
                   required
                 />
               </span>
@@ -219,7 +218,7 @@ export default function ContactUs() {
                   value={data.email}
                   onChange={handleChange}
                   placeholder="jhonfoe@xyz.com"
-                  className="bg-gray-100 text-xs rounded p-[6px] px-2 md:px-4 w-full placeholder:text-[10px]"
+                  className="bg-gray-100 text-xs rounded p-1.5 px-2 md:px-4 w-full placeholder:text-[10px]"
                   required
                 />
               </span>
@@ -234,7 +233,7 @@ export default function ContactUs() {
                 value={data.subject}
                 onChange={handleChange}
                 placeholder="Subject"
-                className="bg-gray-100 rounded p-[6px] px-2 md:px-4 w-full placeholder:text-[10px]"
+                className="bg-gray-100 rounded p-1.5 px-2 md:px-4 w-full placeholder:text-[10px]"
                 required
               />
             </span>
@@ -247,7 +246,7 @@ export default function ContactUs() {
                 value={data.message}
                 onChange={handleChange}
                 placeholder="Write your message here"
-                className="bg-gray-100 text-xs rounded p-[6px] px-2 md:px-4 w-full placeholder:text-[10px] h-14 md:h-24 resize-none"
+                className="bg-gray-100 text-xs rounded p-1.5 px-2 md:px-4 w-full placeholder:text-[10px] h-14 md:h-24 resize-none"
                 required
               />
             </span>
@@ -285,8 +284,9 @@ export default function ContactUs() {
           <div className="mt-2 border-b border-gray-400 ">
             <h2 className="text-xs text-center font-bold mb-4">Get in touch</h2>
             <p className="text-gray-600 mb-4 text-[9px]">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+             Have questions or need assistance with buying, selling, or
+              reselling your car? Our team is here to provide fast support and
+              reliable guidance.
             </p>
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div className="flex items-start gap-2 col-span-2">
@@ -297,10 +297,10 @@ export default function ContactUs() {
                   <p className="text-xs text-gray-800 mb-1 font-semibold">
                     Address
                   </p>
-                  <p className="text-black text-[10px]">
-                    8502 Preston Rd, Inglewood, Maine 98380
+                   <p className="text-black text-[10px]">
+                    C1 Indus Apartment, Bawadiya Kalan
                   </p>
-                  <p className="text-black text-[10px]">Maine 98380</p>
+                  <p className="text-black text-[10px]"> Bhopal (M.P.)</p>
                 </div>
               </div>
               <div className="flex items-start gap-2">
@@ -311,8 +311,7 @@ export default function ContactUs() {
                   <p className="text-xs text-gray-800 mb-1 font-semibold">
                     Email Us
                   </p>
-                  <p className="text-black text-[10px]">example@email.com</p>
-                  <p className="text-black text-[10px]">example@email.com</p>
+                  <a href="mailto:thedhikcar@gmail.com" className="text-black text-[10px]">thedhikcar@gmail.com</a>
                 </div>
               </div>
               <div className="flex items-start gap-2">
@@ -323,14 +322,13 @@ export default function ContactUs() {
                   <p className="text-xs text-gray-800 mb-1 font-semibold">
                     Call Us
                   </p>
-                  <p className="text-black text-[10px]">+1 555 0126</p>
-                  <p className="text-black text-[10px]">+1 555 0126</p>
+                  <a href="tel:8989227426" className="text-black text-[10px]">+91 - 8989227426</a>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="mt-4 flex items-center gap-3">
+          {/* <div className="mt-4 flex items-center gap-3">
             <span className="text-xs font-semibold">Contact With Us :</span>
             <a href="#" className="bg-red-500 text-white p-1 rounded-xs">
               <FacebookIcon className="h-3 w-3" />
@@ -344,27 +342,27 @@ export default function ContactUs() {
             <a href="#" className="bg-red-500 text-white p-1 rounded-xs">
               <InstagramIcon className="h-3 w-3" />
             </a>
-          </div>
+          </div> */}
         </div>
       </div>
 
       {/* 4 cards end */}
-      <div className="bg-white p-2 lg:p-6 py-8 sm:py-0 mb-2 sm:my-10 md:pt-4 rounded-sm grid grid-cols-2 sm:grid-cols-4 gap-3 lg:gap-8 px-4 lg:px-14">
+      <div className="bg-white p-2 py-4 mb-2 md:mb-0 lg:py-10 rounded-sm md:rounded-none grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-3 md:gap-8 mt-0 lg:mt-8  w-full lg:max-w-6xl mx-auto">
         {fourCards.map((card, idx) => (
           <div
             key={idx}
-            className="grid grid-cols-3 items-center justify-center rounded-sm p-2 md:p-4 py-4 md:py-7 md:gap-3 shadow-custom"
+            className="grid grid-cols-3 items-center justify-center rounded-sm p-2 px-2 md:p-4 py-4 md:py-7 md:gap-3 shadow-custom"
           >
             <img
               src={card.img}
               alt={card.title}
-              className="w-8 md:w-16 h-6 md:h-12 object-contain"
+              className="w-10 md:w-16 h-9 md:h-12 object-contain"
             />
             <div className="col-span-2 flex flex-col md:gap-3">
-              <p className="text-[10px] md:text-md font-semibold text-gray-800 whitespace-nowrap overflow-hidden text-ellipsis">
+              <p className="text-sm sm:text-xs lg:text-[1rem] font-semibold text-gray-800 whitespace-nowrap overflow-hidden text-ellipsis">
                 {card.title}
               </p>
-              <p className="text-[8px] md:text-xs font-semibold text-gray-800 whitespace-nowrap overflow-hidden text-ellipsis md:-mt-2">
+              <p className="text-[10px] sm:xs lg:text-xs font-semibold lg:font-normal text-gray-800 whitespace-nowrap overflow-hidden text-ellipsis md:-mt-2">
                 {card.description}
               </p>
             </div>

@@ -41,7 +41,7 @@ function Dropdown({
           onChange("");
         }}
         placeholder={placeholder}
-        className="w-full rounded mt-1 px-4 py-[6px] md:py-2 text-[10px] md:text-xs border border-gray-200 placeholder:text-[10px] focus:ring-1 focus:ring-gray-800/50 outline-none"
+        className="w-full rounded mt-1 px-4 py-1.5 md:py-2 text-[10px] md:text-xs border border-gray-200 placeholder:text-[10px] focus:ring-1 focus:ring-gray-800/50 outline-none"
       />
 
       {open && (
@@ -186,12 +186,12 @@ export default function SellHero() {
 
 
   return (
-    <section className="relative w-full max-w-8xl mx-auto h-[326px] sm:h-[28rem] lg:h-[88vh] bg-black mb-[230px] sm:mb-5 lg:mb-0 mt-12 lg:mt-10">
+    <section className="relative w-full max-w-8xl mx-auto h-[326px] sm:h-112 lg:h-[88vh] bg-black mb-[230px] sm:mb-5 lg:mb-0 mt-12 lg:mt-10">
       {/* Background Image */}
       <div
         className="h-auto sm:h-auto lg:h-auto absolute inset-0 bg-cover bg-no-repeat opacity-60 mb-1"
         style={{
-          backgroundImage: "url('/sell-my-car-hero-bg.jpg')",
+          backgroundImage: "url('/sell-my-car-hero-bg1.jpg')",
           backgroundPosition: "center calc(100% - 75%)",
         }}
       />

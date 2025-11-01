@@ -8,6 +8,7 @@ interface CarsDetailsSlider {
   }
 
   const CarsDetailsSlider: React.FC<CarsDetailsSlider> = ({ carsData }) => {
+
   return (
     <div className="w-full pb-2">
       <Swiper
@@ -20,24 +21,19 @@ interface CarsDetailsSlider {
           disableOnInteraction: false,
         }}
         breakpoints={{
-          1280: { slidesPerView: 4 },
-          1100: { slidesPerView: 4 },
-          1024: { slidesPerView: 3.3 },
-          640: { slidesPerView: 2.5 },
-          475: { slidesPerView: 1.5,
-            spaceBetween: 24,
-           },
-          0: { slidesPerView: 1.5,
-            spaceBetween: 24,
-           },
+          1280: { slidesPerView: 4, spaceBetween: 32 },
+          1140: { slidesPerView: 4, spaceBetween: 32 },
+          1024: { slidesPerView: 3.3, spaceBetween: 26 },
+          640: { slidesPerView: 2.5, spaceBetween: 20 },
+          475: { slidesPerView: 1.2, spaceBetween: 20 },
         }}
         loop={true}
       >
         {carsData.map((car, index) => (
-          <SwiperSlide key={index} className="py-2 mx-1">
-            <CarCard car={car} />
-          </SwiperSlide>
-        ))}
+              <SwiperSlide key={index} className="py-2 mx-0.5">
+                <CarCard car={car} />
+              </SwiperSlide>
+            ))}
       </Swiper>
     </div>
   );

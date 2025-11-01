@@ -62,8 +62,16 @@ const Setting = () => {
           <div className="w-full lg:w-fit flex-1 bg-white lg:shadow rounded-sm lg:p-8">
             <Routes>
               <Route index element={<Navigate to="profile" replace />} />
-              <Route path="profile" element={<Profile user={profile} imageUrl={profile.userProfileUrl || "/default-men-logo.jpg"}
-            onUploadImage={handleImageUpload} />} />
+              <Route
+                path="profile"
+                element={
+                  <Profile
+                    user={profile}
+                    imageUrl={profile.userProfileUrl || "/default-men-logo.jpg"}
+                    onUploadImage={handleImageUpload}
+                  />
+                }
+              />
               <Route path="listings" element={<MyListing />} />
               <Route path="my-leads" element={<MyLeads />} />
               <Route path="interested-buyers" element={<InterestedBuyers />} />

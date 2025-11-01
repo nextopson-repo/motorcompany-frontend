@@ -27,9 +27,9 @@ const FeaturedCars: React.FC = () => {
       {/* Heading */}
       <div className="text-xs text-center mb-5 mx-auto">
         <p className="text-[#EE1422] text-xs md:text-xs font-bold mb-3 flex items-center justify-center gap-2 md:gap-5">
-          <span className="w-8 md:w-10 h-[1px] bg-[#EE1422]" />
+          <span className="w-8 md:w-10 h-px bg-[#EE1422]" />
           Featured Cars
-          <span className="w-8 md:w-10 h-[1px] bg-[#EE1422]" />
+          <span className="w-8 md:w-10 h-px bg-[#EE1422]" />
         </p>
         <h2 className="text-[17px] md:text-2xl font-bold">The Most Searched And Liked Cars</h2>
       </div>
@@ -73,7 +73,7 @@ const FeaturedCars: React.FC = () => {
       {/* Bottom Button */}
       <div className="flex justify-center lg:mt-4">
         <button
-          className="w-[160px] md:w-[16.5rem] text-sm md:text-sm bg-[#EE1422] text-white font-medium py-[6px] md:py-2 rounded-sm hover:bg-[#EE1422]/80 transition"
+          className="w-40 md:w-66 text-sm md:text-sm bg-[#EE1422] text-white font-medium py-1.5 md:py-2 rounded-sm hover:bg-[#EE1422]/80 transition"
           onClick={() => navigate("/buy-car")}
         >
           View All
