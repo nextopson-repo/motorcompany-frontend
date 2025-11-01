@@ -24,6 +24,9 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import RefundPolicy from "./pages/RefundPolicy";
 import Requirements from "./pages/Requirements";
 import CreateRequirement from "./pages/CreateRequirement";
+import { Toaster } from "react-hot-toast";
+
+
 
 const App = () => {
   const location = useLocation();
@@ -63,6 +66,7 @@ const App = () => {
       )}
 
       <main className="flex-1 z-0 ">
+        <Toaster position="top-right" reverseOrder={false} />
         <Routes>
           <Route path="/" element={<HeroPage />} />
           <Route path="/buy-car" element={<BuyCars />} />

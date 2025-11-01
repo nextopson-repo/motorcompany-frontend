@@ -1,36 +1,56 @@
-import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "../../store/store";
 import { useEffect } from "react";
-import { fetchEnquiries } from "../../store/slices/enqueriesSlice";
 import { Search } from "lucide-react";
+import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
+import {
+  fetchCarDetailsById,
+  // fetchCarDetailsById,
+  fetchEnquiries,
+} from "../../store/slices/enqueriesSlice";
 import EnquiryCard from "../EnquiryCard";
+import EnquiriesSkeletonLoader from "../loader/EnquiriesSkeletonLoader";
+import toast from "react-hot-toast";
 
-export default function Enquiries() {
-  const dispatch = useDispatch();
-  const enquiries = useSelector(
-    (state: RootState) => state.enquiries.enquiries
+const Enquiries: React.FC = () => {
+  const dispatch = useAppDispatch();
+
+  // 🔹 Redux states
+  const { enquiries, loading, error } = useAppSelector(
+    (state) => state.enquiries
   );
-  const loading = useSelector((state: RootState) => state.enquiries.loading);
-  const userId = useSelector((state: RootState) => state.auth.user.id);
+  const { user } = useAppSelector((state) => state.auth);
+  const userId = user?._id || user?.id;
+  console.log(userId)
 
-  // console.log("enqueries :", enquiries);
-
+  // 🧭 Fetch all enquiries when userId available
   useEffect(() => {
     if (userId) {
-      dispatch(fetchEnquiries({ userId }));
+      dispatch(fetchEnquiries({ userId }))
+        .unwrap()
+        .catch((err) => toast.error(err));
     }
   }, [dispatch, userId]);
 
-  if (loading) {
-    return <div>Loading enquiries...</div>;
-  }
+  // 🚗 Fetch car details for each enquiry
+  useEffect(() => {
+    if (!loading && enquiries.length > 0) {
+      enquiries.forEach((enquiry) => {
+        if (!enquiry.carDetails && enquiry.carId) {
+          dispatch(fetchCarDetailsById(enquiry.carId));
+        }
+      });
+    }
+  }, [dispatch, enquiries, loading]);
 
-  // if (!loading && enquiries.length === 0) {
-  //   return <div>No enquiries found.</div>;
-  // }
+  // 💀 Handle errors
+  useEffect(() => {
+    if (error) toast.error(error);
+  }, [error]);
+
+  console.log("enquiry :",enquiries)
 
   return (
-    <div className="mx-auto -m-1 px-4 md:px-0 sm:mb-10 lg:mb-0">
+    <div className="mx-auto -m-1 px-4 md:px-0 sm:mb-10 lg:mb-0 min-h-screen bg-gray-50">
+      {/* 🔹 Header with search + sort */}
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 lg:mb-6 sm:mt-3 lg:mt-0">
         <h1 className="text-md md:text-2xl text-[#24272C] font-bold py-3 md:py-0 md:flex">
           <span className="hidden md:block mr-2">My</span> Enquiries
@@ -41,7 +61,7 @@ export default function Enquiries() {
             <input
               type="text"
               placeholder="Search for Cars, Brands, Models..."
-              className="w-full py-2 placeholder:text-xs placeholder:text-[#24272C] focus:outline-none"
+              className="w-full py-2 placeholder:text-xs placeholder:text-[#24272C] focus:outline-none bg-transparent"
             />
           </span>
           <select className="hidden md:block bg-[#24272C] text-white font-semibold text-xs rounded-xs px-3 py-2">
@@ -51,9 +71,38 @@ export default function Enquiries() {
         </div>
       </div>
 
-      {enquiries.map((enquiry: any) => (
-        <EnquiryCard key={enquiry.id} enquiry={enquiry} />
-      ))}
+      {/* 🌀 Loading skeletons */}
+      {loading && (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[...Array(3)].map((_, i) => (
+            <EnquiriesSkeletonLoader key={i} />
+          ))}
+        </div>
+      )}
+
+      {/* 🫥 No enquiries */}
+      {!loading && enquiries.length === 0 && (
+        <p className="text-gray-500 text-center py-12">No enquiries found 😔</p>
+      )}
+
+      {/* 🧾 Enquiry cards */}
+      {!loading && enquiries.length > 0 && (
+        <div >
+          {enquiries.map((enquiry) => (
+            <EnquiryCard
+              key={enquiry.id}
+              enquiry={enquiry}
+              car={enquiry.carDetails}
+              onCall={() =>
+                console.log("Calling dealer:", enquiry.mobileNumber)
+              }
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
-}
+};
+
+export default Enquiries;
+

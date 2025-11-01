@@ -72,10 +72,6 @@ function Dropdown({
 }
 
 export const locationData: Record<string, Record<string, string[]>> = {
-    MadhyaPradesh: {
-      Indore: ["Vijay Nagar", "Rajwada", "Palasia"],
-      Bhopal: ["Arera Colony", "Kolar Road"],
-    },
     Rajasthan: {
       Jaipur: ["Malviya Nagar", "Vaishali Nagar"],
     },
@@ -85,9 +81,11 @@ export const locationData: Record<string, Record<string, string[]>> = {
     },
     Maharashtra: {
       Pune: ["Kothrud", "Hinjewadi"],
+      Mumbai: ["Kothrud", "Hinjewadi"],
     },
     Gujarat: {
       Ahmedabad: ["Navrangpura", "Maninagar"],
+      Surat: ["Navrangpura", "Maninagar"],
     },
     Punjab: {
       Chandigarh: ["Sector 17", "Manimajra"],

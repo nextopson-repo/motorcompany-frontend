@@ -1,5 +1,9 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
+// --------------------
+// Types
+// --------------------
 export interface Dealer {
   id: number;
   name: string;
@@ -12,29 +16,61 @@ interface DealerState {
   dealers: Dealer[];
   cities: string[];
   selectedCity: string;
+  loading: boolean;
+  error: string | null;
 }
 
+// --------------------
+// Initial State
+// --------------------
 const initialState: DealerState = {
-  dealers: [
-    {
-      id: 1,
-      name: "Sourav Chakraborty",
-      role: "Owner",
-      location: "Kurla, Mumbai - 700008",
-      imageUrl: "/default-men-logo.jpg",
-    },
-    {
-      id: 2,
-      name: "Sourav Chakraborty",
-      role: "Owner",
-      location: "Kurla, Mumbai - 700008",
-      imageUrl: "/default-men-logo.jpg",
-    },
-  ],
-  cities: ["Kolkata", "Mumbai", "Delhi"],
-  selectedCity: "Kolkata",
+  dealers: [] as any[],
+  cities: ["Chandigarh", "Mumbai", "Delhi", "Ahemdabad", "Jaipur", "Kanpur", "Hyderabad", "Surat", "Pune", "Lucknow"],
+  selectedCity: "Chandigarh",
+  loading: false,
+  error: null,
 };
 
+// --------------------
+// Async Thunk (API Call)
+// --------------------
+// export const fetchDealersByCity = createAsyncThunk(
+//   "dealers/fetchDealersByCity",
+//   async (city: string, { rejectWithValue }) => {
+//      const backend = import.meta.env.VITE_BACKEND_URL || "";
+//     try {
+//       const res = await axios.post(`${backend}/api/v1/dashboard/top-dealers`, {
+//         city,
+//         limit: 10,
+//       });
+//       return res.data.data || [];
+//     } catch (err: any) {
+//       console.error("Error fetching dealers:", err);
+//       return rejectWithValue(err.response?.data || "Failed to fetch dealers");
+//     }
+//   }
+// );
+
+export const fetchDealersByCity = createAsyncThunk(
+  "dealers/fetchDealersByCity",
+  async (city: string, { rejectWithValue }) => {
+    const backend = import.meta.env.VITE_BACKEND_URL || "";
+    try {
+      const res = await axios.post(`${backend}/api/v1/dashboard/top-dealers`, {
+        city,
+        limit: 10,
+      });
+      return res.data.data || [];
+    } catch (err: any) {
+      return rejectWithValue(err.response?.data || "Failed to fetch dealers");
+    }
+  }
+);
+
+
+// --------------------
+// Slice
+// --------------------
 const dealerSlice = createSlice({
   name: "dealers",
   initialState,
@@ -46,7 +82,25 @@ const dealerSlice = createSlice({
       state.selectedCity = action.payload;
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchDealersByCity.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchDealersByCity.fulfilled, (state, action) => {
+        state.loading = false;
+        state.dealers = action.payload;
+      })
+      .addCase(fetchDealersByCity.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
+  },
 });
 
+// --------------------
+// Exports
+// --------------------
 export const { setDealers, setSelectedCity } = dealerSlice.actions;
 export default dealerSlice.reducer;

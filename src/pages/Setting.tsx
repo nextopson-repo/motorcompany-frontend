@@ -25,10 +25,10 @@ const Setting = () => {
     }
   }, [dispatch, profile]);
 
- const handleImageUpload = async (file: File) => {
-  await dispatch(updateUserProfile({ userProfileFile: file }));
-  await dispatch(fetchUserProfile());
-};
+  const handleImageUpload = async (file: File) => {
+    await dispatch(updateUserProfile({ userProfileFile: file }));
+    await dispatch(fetchUserProfile());
+  };
 
   if (loading || !profile) {
     return <p className="text-center my-[10%] ">Loading profile...</p>;
@@ -40,7 +40,7 @@ const Setting = () => {
         <img
           src="/settings/main-bg.png"
           alt="header car"
-          className="w-full h-full opacity-[30%] object-cover object-center"
+          className="w-full h-full opacity-30 object-cover object-center"
         />
       </div>
 
@@ -54,7 +54,7 @@ const Setting = () => {
           <AccountSidebar
             name={profile.fullName || ""}
             role={profile.userType || ""}
-            imageUrl={profile.userProfileUrl || "/user-img.png"}
+            imageUrl={profile.userProfileUrl || "/default-men-logo.jpg"}
             onUploadImage={handleImageUpload}
           />
 
@@ -62,10 +62,8 @@ const Setting = () => {
           <div className="w-full lg:w-fit flex-1 bg-white lg:shadow rounded-sm lg:p-8">
             <Routes>
               <Route index element={<Navigate to="profile" replace />} />
-              <Route
-                path="profile"
-                element={<Profile user={profile} />}
-              />
+              <Route path="profile" element={<Profile user={profile} imageUrl={profile.userProfileUrl || "/default-men-logo.jpg"}
+            onUploadImage={handleImageUpload} />} />
               <Route path="listings" element={<MyListing />} />
               <Route path="my-leads" element={<MyLeads />} />
               <Route path="interested-buyers" element={<InterestedBuyers />} />

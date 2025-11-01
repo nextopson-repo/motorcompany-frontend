@@ -9,6 +9,7 @@ import {
   User,
   CheckCircle2,
   CircleAlert,
+  CameraIcon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { CgProfile } from "react-icons/cg";
@@ -20,7 +21,17 @@ import {
   updateUserProfile,
 } from "../../store/slices/profileSlice";
 
-export default function Profile({ user }: { user: UserProfile }) {
+interface profileProps {
+  user: UserProfile;
+  imageUrl: string;
+  onUploadImage: (file: File) => void;
+}
+
+export default function Profile({
+  user,
+  imageUrl,
+  onUploadImage,
+}: profileProps) {
   const dispatch = useAppDispatch();
   const { loading, error } = useAppSelector((state) => state.profile);
   useEffect(() => {
@@ -62,12 +73,19 @@ export default function Profile({ user }: { user: UserProfile }) {
   const handleSave = async () => {
     try {
       const payload = {
-      ...localUser,
-    };
-    await dispatch(updateUserProfile(payload)).unwrap();
-    alert("Profile updated successfully!");
+        ...localUser,
+      };
+      await dispatch(updateUserProfile(payload)).unwrap();
+      alert("Profile updated successfully!");
     } catch (err) {
       alert(`Failed to update profile : ${err}`);
+    }
+  };
+
+  const handleImageChange = (e: any) => {
+    const file = e.target.files[0];
+    if (file) {
+      onUploadImage(file);
     }
   };
 
@@ -80,23 +98,37 @@ export default function Profile({ user }: { user: UserProfile }) {
 
       {/* Profile Image */}
       <div className="md:hidden flex justify-center mb-4 md:mb-6 relative">
-        <div className="block md:hidden absolute h-22 -z-0 w-full">
-          <img
-            src="/settings/main-bg.png"
-            alt="header car"
-            className="w-full h-full opacity-[60%] object-cover object-center"
-          />
-        </div>
-
         <div className="relative pt-6">
-          <img
-            src={user.userProfileUrl || "/user-img.png"}
-            alt="profile"
-            className="w-24 h-24 rounded-full object-cover border-2 border-gray-300"
-          />
-          <button className="absolute bottom-0 right-0 bg-red-500 text-white p-2 rounded-full shadow">
-            <Edit size={14} />
-          </button>
+          <div className="block md:hidden w-full">
+            <div className="flex flex-col items-center gap-2">
+              {/* Just show the image — no label needed */}
+              <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
+                <img
+                  src={imageUrl || "/default-men-logo.jpg"}
+                  alt={"profile Avatar"}
+                  className="w-24 h-24 rounded-full object-cover border-2 border-gray-300"
+                />
+              </div>
+
+              {/* Camera icon button triggers hidden input */}
+              <button
+                type="button"
+                onClick={() => document.getElementById("profileImage")?.click()}
+                className="absolute bottom-0 right-0 bg-[#cb202d] p-1 rounded-full hover:bg-[#cb202e] cursor-pointer"
+              >
+                <CameraIcon className="w-4 h-4 text-white" />
+              </button>
+
+              {/* Hidden file input */}
+              <input
+                type="file"
+                id="profileImage"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageChange}
+              />
+            </div>
+          </div>
         </div>
       </div>
 

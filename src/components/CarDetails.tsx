@@ -6,7 +6,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronUp,
-  CopyIcon,
+  // CopyIcon,
   Flag,
   Flame,
   MapPin,
@@ -102,7 +102,7 @@ const CarDetails = () => {
       prev === visibleImages.length - 1 ? 0 : prev + 1
     );
 
-console.log("carData :",car)
+  console.log("carData :", car);
 
   // Car map fields (handle different naming)
   const title =
@@ -118,12 +118,13 @@ console.log("carData :",car)
   const fuelType = car.fuelType ?? car.fuel ?? "";
   const transmission = car.transmission ?? "";
   const address = car.address ?? {};
-  const carUser = car.user ?? {};
-  const userId = carUser.id ?? "";
+  // const carUser = car.user ?? {};
+  // const userId = carUser.id ?? "";
 
   // OWNER DETAILS
   const owner = car.owner ?? {};
   const ownerId = owner.id ?? "";
+  const ownerImage = owner.userProfileUrl ?? "";
   const ownerName = owner.fullName ?? "N/A";
   const ownerType = owner.userType ?? "N/A";
 
@@ -135,7 +136,7 @@ console.log("carData :",car)
       try {
         await navigator.share({
           title: "Check out this profile on Dhikcar",
-          text: `Check out ${car.title}'s Car`,
+          text: `Check out ${ownerName}'s Car`,
           url: profileUrl,
         });
       } catch (error) {
@@ -154,27 +155,49 @@ console.log("carData :",car)
   }
 
   const handlePhoneClick = async () => {
-    console.log("button clicked");
+    try {
+      console.log("📞 Phone button clicked");
 
-    const enquiryPayload = {
-      carId: car.id,
-      userId: currentUser,
-      Calling: "",
-    };
+      console.log(car.id, "and" , currentUser)
 
-    await dispatch(createEnquiry(enquiryPayload));
+      if (!car?.id || !currentUser) {
+        console.warn("Missing carId or userId for enquiry");
+        return;
+      }
 
-    // 2. Mobile: Initiate call
-    if (isMobile()) {
-      window.location.href = `tel:${owner.mobileNumber}`;
-      return;
+      // 🔹 1. Send enquiry API call
+      const enquiryPayload = {
+        carId: car.id,
+        userId: currentUser,
+        calling: true,
+      };
+
+      const result = await dispatch(createEnquiry(enquiryPayload));
+
+      if (createEnquiry.fulfilled.match(result)) {
+        console.log("✅ Enquiry created successfully:", result.payload);
+      } else {
+        console.error("❌ Enquiry creation failed:", result.payload);
+      }
+
+      // 🔹 2. Initiate call or WhatsApp
+      const phoneDigits = car.owner?.mobileNumber?.replace(/[^+\d]/g, "");
+      if (!phoneDigits) return;
+
+      if (isMobile()) {
+        window.location.href = `tel:${phoneDigits}`;
+      } else {
+        const whatsAppMsg = encodeURIComponent(
+          `Hello, I'm interested in your car listing: ${car.carTitle}.`
+        );
+        window.open(
+          `https://wa.me/${phoneDigits}?text=${whatsAppMsg}`,
+          "_blank"
+        );
+      }
+    } catch (err) {
+      console.error("⚠️ handlePhoneClick error:", err);
     }
-    // 3. Desktop: WhatsApp Web
-    const whatsAppMsg = encodeURIComponent(
-      `Hello, I'm interested in your car listing: ${car.carTitle}.`
-    );
-    const phoneDigits = owner.mobileNumber.replace(/[^+\d]/g, "");
-    window.open(`https://wa.me/${phoneDigits}?text=${whatsAppMsg}`, "_blank");
   };
 
   return (
@@ -319,7 +342,7 @@ console.log("carData :",car)
                     <FaHeart size={10} className="m-1" />
                   </span>
                 </button>
-                <button className="text-red-500 flex flex-col items-center gap-1 cursor-pointer active:scale-95">
+                <button className="text-red-500 flex flex-col items-center gap-1 cursor-pointer active:scale-95" onClick={handleShareCar}>
                   <span className="border border-gray-200 rounded-sm">
                     <FaShareAlt size={10} className="m-1" />
                   </span>
@@ -334,9 +357,9 @@ console.log("carData :",car)
               <div className="flex items-center gap-2">
                 <User className="text-gray-500 h-[14px] w-[14px]" />
                 <span className="text-black text-[10px] leading-tight font-semibold capitalize">
-                  {carUser?.fullName ?? "Unknown"}{" "}
+                  {ownerName ?? "Unknown"}{" "}
                   <span className="text-[8px] text-gray-700">
-                    ({carUser?.userType ?? "Unknown"})
+                    ({ownerType ?? "Unknown"})
                   </span>
                 </span>
               </div>
@@ -397,21 +420,21 @@ console.log("carData :",car)
                   </div>
                   <div className="py-2 px-2">
                     <div className="flex items-center gap-2 py-2">
-                      <div className="flex items-center justify-center w-24 h-16">
-                        <img src="/user-img.png" alt="seller img" />
+                      <div className="flex items-center justify-center w-28 h-20 rounded-full overflow-hidden object-contain">
+                        <img
+                          src={ownerImage || "/user-img.png"}
+                          alt="seller img"
+                        />
                       </div>
 
                       <div className="flex flex-col gap-2 w-full pb-1 pl-1">
                         <div className="flex items-center justify-between">
                           <h1 className="font-bold text-lg capitalize truncate">
-                            {carUser?.fullName || "Unknown"}
+                            {ownerName || "Unknown"}
                           </h1>
                           <span className="flex items-center gap-2 px-2">
-                            <p className="text-[#9e9e9e] bg-[#f4f4f4] p-[2px] px-1 rounded-sm text-[10px]">
-                              {carUser?.userType || "N/A"}
-                            </p>
                             <Link
-                              to={`/seller-details/${userId}`}
+                              to={`/seller-details/${ownerId}`}
                               className="text-sky-500 font-normal text-xs underline"
                             >
                               View
@@ -419,13 +442,16 @@ console.log("carData :",car)
                           </span>
                         </div>
 
-                        <span className="flex items-center gap-2 text-gray-500 text-sm">
+                        {/* <span className="flex items-center gap-2 text-gray-500 text-sm">
                           <span>+91</span>
                           {carUser?.mobileNumber || "Not Provided"}
                           <button className="px-2 cursor-pointer hover:scale-[1.1]">
                             <CopyIcon className="h-4 w-4 text-black" />
                           </button>
-                        </span>
+                        </span> */}
+                        <p className="text-[#9e9e9e] bg-[#f4f4f4] p-[2px] px-1 rounded-sm text-[10px] w-fit">
+                          {ownerType || "N/A"}
+                        </p>
                       </div>
                     </div>
 
@@ -625,8 +651,11 @@ console.log("carData :",car)
                   </div>
                   <div className="py-3 px-8">
                     <div className="flex items-center gap-2">
-                      <div className="flex items-center justify-center w-32 h-24">
-                        <img src="/user-img.png" alt="seller img" />
+                      <div className="flex items-center justify-center w-32 h-24 rounded-full overflow-hidden object-contain">
+                        <img
+                          src={ownerImage || "/user-img.png"}
+                          alt="seller img"
+                        />
                       </div>
 
                       <div className="flex flex-col gap-2 w-full pb-3 pl-3">
@@ -658,8 +687,9 @@ console.log("carData :",car)
                     </div>
 
                     <div className="flex items-center  gap-4 my-2">
-                      <button className="flex items-center justify-center gap-3 w-full hover:font-semibold text-xl p-2 border rounded-sm cursor-pointer hover:text-white hover:bg-[#24272c]"
-                      onClick={handlePhoneClick}
+                      <button
+                        className="flex items-center justify-center gap-3 w-full hover:font-semibold text-xl p-2 border rounded-sm cursor-pointer hover:text-white hover:bg-[#24272c]"
+                        onClick={handlePhoneClick}
                       >
                         <Phone className=" h-6 w-6" /> Phone
                       </button>

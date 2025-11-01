@@ -41,4 +41,3 @@ export const getVariants = (brand: string, model: string): string[] => {
 
 // Export car data for reference
 export { carData };
-
