@@ -156,7 +156,7 @@ export const fetchCarDetailsById = createAsyncThunk<
     const data = await res.json();
 
     const carDetailsWithOwner = { ...data.car, owner: data.owner };
-    return { carId, carDetails: carDetailsWithOwner };
+      return { carId, carDetails: carDetailsWithOwner, ownerDetails: data.owner };
   } catch (err: any) {
     return rejectWithValue(err.message || "Failed to fetch car details");
   }

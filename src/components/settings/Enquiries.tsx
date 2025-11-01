@@ -93,9 +93,6 @@ const Enquiries: React.FC = () => {
               key={enquiry.id}
               enquiry={enquiry}
               car={enquiry.carDetails}
-              onCall={() =>
-                console.log("Calling dealer:", enquiry.mobileNumber)
-              }
             />
           ))}
         </div>

@@ -1,6 +1,6 @@
 import React from "react";
 import { MapPin, Phone } from "lucide-react";
-import { toast } from "react-hot-toast";
+// import { toast } from "react-hot-toast";
 
 interface LeadCardProps {
   name: string;

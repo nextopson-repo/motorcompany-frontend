@@ -5,12 +5,13 @@ import {
   EllipsisVertical,
   Eye,
 } from "lucide-react";
-import type { Enquiry } from "../store/slices/enqueriesSlice";
+import type { CarDetails, Enquiry } from "../store/slices/enqueriesSlice";
 import { formatPriceToL, formatPriceToLakh, formatShortNumber } from "../utils/formatPrice";
 import { useState, useRef, useEffect } from "react";
 
 interface EnquiryCardProps {
   enquiry: Enquiry;
+  car?: CarDetails;
 }
 
 export default function EnquiryCard({ enquiry }: EnquiryCardProps) {
