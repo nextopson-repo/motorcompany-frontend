@@ -1,7 +1,7 @@
 # Dhikcar Admin Panel
  
 A modern, responsive admin panel for managing car dealership operations built with React, TypeScript, and Tailwind CSS.
- 
+
 ## Features
 
 ### 🚗 Vehicle Management
