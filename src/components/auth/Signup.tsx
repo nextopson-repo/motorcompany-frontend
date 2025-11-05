@@ -5,6 +5,19 @@ import { AuthApiService } from "../../services/api";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { addUser, login } from "../../store/slices/appSlice";
 
+const cities = [
+  "Chandigarh",
+  "Delhi",
+  "Mumbai",
+  "Pune",
+  "Hyderabad",
+  "Ahmedabad",
+  "Surat",
+  "Jaipur",
+  "Kanpur",
+  "Lucknow",
+];
+
 export default function Signup() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -17,9 +30,9 @@ export default function Signup() {
     "Owner"
   );
   const [mobile, setMobile] = useState("");
-  const [addressState, setAddressState] = useState("");
+  // const [addressState, setAddressState] = useState("");
   const [addressCity, setAddressCity] = useState("");
-  const [addressLocality, setAddressLocality] = useState("");
+  // const [addressLocality, setAddressLocality] = useState("");
   const [message, setMessage] = useState("");
 
   // Get mobile number from login page if redirected
@@ -46,9 +59,7 @@ export default function Signup() {
         fullName: name,
         mobileNumber: mobile,
         userType: userType,
-        addressLocality: addressLocality,
         addressCity: addressCity,
-        addressState: addressState,
       });
 
       if (response.success && response.data) {
@@ -80,19 +91,19 @@ export default function Signup() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-64px)] p-4">
-      <div className="bg-white rounded-xl shadow-xl p-8 w-full max-w-2xl">
-        <div className="flex justify-center mb-6">
+    <div className="flex items-center justify-center min-h-[calc(100vh-64px)] p-3">
+      <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-2xl">
+        <div className="flex justify-center mb-2">
           <div className="bg-blue-600 p-4 rounded-full">
             <Car size={32} className="text-white" />
           </div>
         </div>
-        <h1 className="text-3xl font-bold text-gray-900 text-center mb-2">
+        <h1 className="text-3xl font-bold text-gray-900 text-center mb-4">
           Create Account
         </h1>
-        <p className="text-gray-600 text-center mb-8">
+        {/* <p className="text-gray-600 text-center mb-8">
           Sign up to start selling cars
-        </p>
+        </p> */}
 
         {/* Message Display */}
         {message && (
@@ -111,7 +122,6 @@ export default function Signup() {
         <div className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* name, mobile, userType fields */}
-            <div className="space-y-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   <User className="w-4 h-4 inline mr-1" />
@@ -166,62 +176,61 @@ export default function Signup() {
                   maxLength={10}
                 />
               </div>
-            </div>
 
-            {/* address fields */}
-            <div className="space-y-6">
+              {/* city field */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  <MapPin className="w-4 h-4 inline mr-1" />
-                  State *
+                <label className="block text-sm font-semibold text-gray-800 mb-2">
+                  <MapPin className="w-4 h-4 inline mr-1 text-blue-600" />
+                  City <span className="text-red-500">*</span>
                 </label>
-                <input
-                  type="text"
-                  placeholder="Enter your Location State"
-                  value={addressState}
-                  onChange={(e) => {
-                    setAddressState(e.target.value);
-                    setError("");
-                  }}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                />
-              </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  <MapPin className="w-4 h-4 inline mr-1" />
-                  City *
-                </label>
-                <input
-                  type="text"
-                  placeholder="Enter your Location City"
-                  value={addressCity}
-                  onChange={(e) => {
-                    setAddressCity(e.target.value);
-                    setError("");
-                  }}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                />
-              </div>
+                <div className="relative">
+                  <select
+                    value={addressCity}
+                    onChange={(e) => {
+                      setAddressCity(e.target.value);
+                      setError("");
+                    }}
+                    className={`
+            w-full px-4 py-3 pr-10 rounded-xl
+            bg-white text-gray-800
+            border border-gray-300 shadow-sm
+            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+            hover:border-blue-400 transition-all duration-200
+            appearance-none cursor-pointer
+          `}
+                  >
+                    <option value="" disabled className="text-gray-400">
+                      Select your city
+                    </option>
+                    {cities.map((city) => (
+                      <option key={city} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  <MapPin className="w-4 h-4 inline mr-1" />
-                  Locality *
-                </label>
-                <input
-                  type="text"
-                  placeholder="Enter your Location Locality"
-                  value={addressLocality}
-                  onChange={(e) => {
-                    setAddressLocality(e.target.value);
-                    setError("");
-                  }}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                />
+                  {/* Custom dropdown arrow */}
+                  <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center">
+                    <svg
+                      className="w-5 h-5 text-gray-500 transition-transform duration-200 group-focus-within:rotate-180"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </div>
+                </div>
               </div>
-            </div>
           </div>
+
+          {/* {error && <p className="text-sm text-red-500 mt-1">{error}</p>} */}
 
           <button
             onClick={handleSignup}
@@ -232,7 +241,7 @@ export default function Signup() {
           </button>
         </div>
 
-        <div className="text-center mt-6">
+        <div className="text-center mt-3">
           <p className="text-gray-600">
             Already have an account?{" "}
             <Link

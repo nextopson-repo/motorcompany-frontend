@@ -36,6 +36,8 @@ export default function Login() {
           createdAt: new Date().toLocaleDateString()
         };
 
+        console.log("login temp: ", response);
+
         // Save session token and user data to localStorage
         localStorage.setItem('sessionToken', response.data.sessionToken);
         localStorage.setItem('user', JSON.stringify(user));

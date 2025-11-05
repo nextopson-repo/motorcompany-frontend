@@ -366,9 +366,9 @@ export class AuthApiService {
         fullName: string;
         mobileNumber: string;
         userType: 'Owner' | 'Dealer' | 'EndUser';
-        addressState: string;
+
         addressCity: string;
-        addressLocality: string;
+
       }): Promise<ApiResponse<{ user: User }>> {
         return apiClient.post<{ user: User }>(API_ENDPOINTS.SIGNUP_SEND_OTP, userData);
       }

@@ -12,14 +12,7 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 import type { Vehicle } from "../../types";
-import useGCitySheetData from "../../hooks/useGCitySheetData";
 import useGCarSheetData from "../../hooks/useDCarSheetData";
-
-interface LocationData {
-  [state: string]: {
-    [city: string]: Set<string>;
-  };
-}
 
 // Props type definition
 interface CarDetailsFormProps {
@@ -131,9 +124,9 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
-    addressState: "",
+    // addressState: "",
     addressCity: "",
-    addressLocality: "",
+    // addressLocality: "",
     description: "",
     brand: "",
     model: "",
@@ -152,43 +145,13 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
 
   // google city
   const sheetId = import.meta.env.VITE_GOOGLE_SHEETS_ID;
-  const range = "landmark!A:Z";
   const carRange = "sheet2!A:Z";
   const apiKey = import.meta.env.VITE_GOOGLE_SHEETS_API_KEY;
-  const {
-    data: sheetData,
-    loading: sheetLoading,
-    // error: sheetError,
-  } = useGCitySheetData(sheetId, range, apiKey);
   const {
     data: carSheetData,
     loading: carSheetLoading,
     // error: carSheetError,
   } = useGCarSheetData(sheetId, carRange, apiKey);
-
-  // Build nested locationData object from Google Sheet
-  const locationData: LocationData = sheetData.reduce((acc, item) => {
-    const state = item["Haryana"];
-    const city = item["Gurgaon"];
-    const locality = item["Aath Marla"];
-    if (!state || !city || !locality) return acc;
-    if (!acc[state]) acc[state] = {};
-    if (!acc[state][city]) acc[state][city] = new Set();
-    acc[state][city].add(locality);
-    return acc;
-  }, {} as LocationData);
-
-  const locationDataObj = Object.fromEntries(
-    Object.entries(locationData).map(([state, cities]) => [
-      state,
-      Object.fromEntries(
-        Object.entries(cities).map(([city, localitiesSet]) => [
-          city,
-          Array.from(localitiesSet).sort(),
-        ])
-      ),
-    ])
-  ) as { [state: string]: { [city: string]: string[] } };
 
   // Build nested locationData object from Google Sheet
   const carDataObj = carSheetData.reduce((acc, item) => {
@@ -222,21 +185,10 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
 
   useEffect(() => {
     if (mode === "edit" && vehicle) {
-      const defaultState = Object.keys(locationDataObj)[0] || "";
-      const state = vehicle.address?.state || defaultState;
-
-      const stateData = locationDataObj[state];
-      const defaultCity = stateData ? Object.keys(stateData)[0] || "" : "";
-      const city = vehicle.address?.city || defaultCity;
-
-      const cityData = stateData?.[city];
-      const defaultLocality = cityData?.[0] || "";
-      const locality = vehicle.address?.locality || defaultLocality;
-
       setFormData({
-        addressState: state,
-        addressCity: city,
-        addressLocality: locality,
+        // addressState: state,
+        addressCity: vehicle.address?.city || "",
+        // addressLocality: locality,
         brand: vehicle.brand || "",
         model: vehicle.model || "",
         variant: vehicle.variant || "",
@@ -281,38 +233,11 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
   ) => {
     const { name, value } = e.target;
 
-    setFormData((prev) => {
-      const updated = { ...prev, [name]: value };
-
-      if (name === "addressState") {
-        const stateData = locationData[value];
-        if (stateData) {
-          const firstCity = Object.keys(stateData)[0] || "";
-          const firstLocality = stateData[value]
-            ? Array.from(stateData[value])[0] || ""
-            : "";
-          updated.addressCity = firstCity;
-          updated.addressLocality = firstLocality;
-        } else {
-          updated.addressCity = "";
-          updated.addressLocality = "";
-        }
-      }
-
-      if (name === "addressCity") {
-        const stateData = locationData[prev.addressState];
-        if (stateData && stateData[value]) {
-          const firstLocality = stateData[value]
-            ? Array.from(stateData[value])[0] || ""
-            : "";
-          updated.addressLocality = firstLocality;
-        } else {
-          updated.addressLocality = "";
-        }
-      }
-
-      return updated;
-    });
+    // sirf city field update karega
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const removeImage = (index: number) => {
@@ -342,9 +267,9 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
     }
 
     if (
-      !formData.addressState ||
-      !formData.addressCity ||
-      !formData.addressLocality
+      // !formData.addressState ||
+      !formData.addressCity
+      // !formData.addressLocality
     ) {
       toast.error(
         "Please select complete address details (State, City, and Locality)"
@@ -383,9 +308,9 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
 
     // Required fields according to backend interface
     formDataToSend.append("userId", parsedUser.id);
-    formDataToSend.append("addressState", formData.addressState);
+    formDataToSend.append("addressState", "c");
     formDataToSend.append("addressCity", formData.addressCity);
-    formDataToSend.append("addressLocality", formData.addressLocality);
+    formDataToSend.append("addressLocality", "c");
 
     // Car details
     const carTitle = `${formData.brand} ${formData.model}`.trim();
@@ -481,64 +406,30 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* Location Fields */}
-                <Dropdown
-                  label="State"
-                  placeholder="Select State"
-                  options={Object.keys(locationDataObj)}
-                  value={formData.addressState}
-                  onChange={(val) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      addressState: val,
-                      addressCity: "",
-                      addressLocality: "",
-                    }))
-                  }
-                  disabled={sheetLoading}
-                />
-
+                {/* City Location Fields */}
                 <Dropdown
                   label="City"
                   placeholder="Select City"
-                  options={
-                    formData.addressState &&
-                    locationDataObj[formData.addressState]
-                      ? Object.keys(locationDataObj[formData.addressState])
-                      : []
-                  }
+                  options={[
+                    "Ahmedabad",
+                    "Chandigarh",
+                    "Delhi",
+                    "Hyderabad",
+                    "Jaipur",
+                    "Kanpur",
+                    "Lucknow",
+                    "Mumbai",
+                    "Pune",
+                    "Surat",
+                  ]}
                   value={formData.addressCity}
-                  disabled={!formData.addressState || sheetLoading}
+                  // disabled={sheetLoading}
                   onChange={(val) =>
                     setFormData((prev) => ({
                       ...prev,
                       addressCity: val,
-                      addressLocality: "",
+                      // addressLocality: "",
                     }))
-                  }
-                />
-
-                <Dropdown
-                  label="Locality"
-                  placeholder="Select your neighbourhood"
-                  options={
-                    formData.addressState &&
-                    formData.addressCity &&
-                    locationDataObj[formData.addressState] &&
-                    locationDataObj[formData.addressState][formData.addressCity]
-                      ? locationDataObj[formData.addressState][
-                          formData.addressCity
-                        ]
-                      : []
-                  }
-                  value={formData.addressLocality}
-                  disabled={
-                    !formData.addressState ||
-                    !formData.addressCity ||
-                    sheetLoading
-                  }
-                  onChange={(val) =>
-                    setFormData((prev) => ({ ...prev, addressLocality: val }))
                   }
                 />
               </div>
@@ -555,10 +446,13 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
 
               <div className=" space-y-6">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                  {/* Brand */}
                   <Dropdown
                     label="Brand"
                     placeholder="Select Brand"
-                    options={Object.keys(carDataNested)}
+                    options={Object.keys(carDataNested).sort((a, b) =>
+                      a.localeCompare(b)
+                    )}
                     value={formData.brand}
                     onChange={(val) =>
                       setFormData((prev) => ({
@@ -570,12 +464,15 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
                     }
                   />
 
+                  {/* Model */}
                   <Dropdown
                     label="Model"
                     placeholder="Select Model"
                     options={
                       formData.brand && carDataNested[formData.brand]
-                        ? Object.keys(carDataNested[formData.brand])
+                        ? Object.keys(carDataNested[formData.brand]).sort(
+                            (a, b) => a.localeCompare(b)
+                          )
                         : []
                     }
                     value={formData.model}
@@ -589,6 +486,7 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
                     }
                   />
 
+                  {/* Variant */}
                   <Dropdown
                     label="Variant"
                     placeholder="Select Variant"
@@ -596,7 +494,9 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
                       formData.brand &&
                       formData.model &&
                       carDataNested[formData.brand]?.[formData.model]
-                        ? carDataNested[formData.brand][formData.model]
+                        ? [
+                            ...carDataNested[formData.brand][formData.model],
+                          ].sort((a, b) => a.localeCompare(b))
                         : []
                     }
                     value={formData.variant}

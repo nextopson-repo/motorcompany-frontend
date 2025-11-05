@@ -219,28 +219,6 @@ export function useVehicleOperations() {
     }
   }, []);
 
-  // const updateVehicle = useCallback(async (id: string, vehicle: Partial<Vehicle>) => {
-  //   setLoading(true);
-  //   setError(null);
-
-  //   try {
-  //     const response = await VehicleApiService.updateVehicle(id, vehicle);
-
-  //     if (response.success) {
-  //       return response.data;
-  //     } else {
-  //       setError(response.error || 'Failed to update vehicle');
-  //       return null;
-  //     }
-  //   } catch (err) {
-  //     const errorMessage = err instanceof Error ? err.message : 'Failed to update vehicle';
-  //     setError(errorMessage);
-  //     return null;
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }, []);
-
   const deleteVehicle = useCallback(async (id: string) => {
     setLoading(true);
     setError(null);
@@ -263,28 +241,6 @@ export function useVehicleOperations() {
       setLoading(false);
     }
   }, []);
-
-  // const uploadImage = useCallback(async (file: File) => {
-  //   setLoading(true);
-  //   setError(null);
-
-  //   try {
-  //     const response = await VehicleApiService.uploadVehicleImage(file);
-
-  //     if (response.success && response.data) {
-  //       return response.data.url;
-  //     } else {
-  //       setError(response.error || 'Failed to upload image');
-  //       return null;
-  //     }
-  //   } catch (err) {
-  //     const errorMessage = err instanceof Error ? err.message : 'Failed to upload image';
-  //     setError(errorMessage);
-  //     return null;
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }, []);
 
   const uploadCar = useCallback(async (formData: FormData) => {
     if (!formData || !(formData instanceof FormData)) {
@@ -428,8 +384,8 @@ export function useAuth() {
           mobileNumber: otpData.mobileNumber,
           userType: otpData.userType,
           addressCity: otpData.addressCity,
-          addressState: otpData.addressState,
-          addressLocality: otpData.addressLocality,
+          // addressState: otpData.addressState,
+          // addressLocality: otpData.addressLocality,
 
         });
 
