@@ -154,7 +154,7 @@ const CarCard: React.FC<CarCardProps> = ({ vehicle, onDelete, onEdit }) => {
         {/* Location */}
         <div className="flex items-start text-sm text-gray-600 mb-4">
           <MapPin className="w-4 h-4 mr-2 text-gray-400 mt-0.5 flex-shrink-0" />
-          <span className="line-clamp-2">{vehicle.address?.city}, {vehicle.address?.state}</span>
+          <span className="line-clamp-2">{vehicle.address?.city}</span>
         </div>
 
         {/* Owner Info */}
