@@ -143,7 +143,7 @@ const CarDetailsForm: React.FC<CarDetailsFormProps> = ({
     seats: "4",
   });
 
-  // google city
+  // google car(brand, model, variant)
   const sheetId = import.meta.env.VITE_GOOGLE_SHEETS_ID;
   const carRange = "sheet2!A:Z";
   const apiKey = import.meta.env.VITE_GOOGLE_SHEETS_API_KEY;
