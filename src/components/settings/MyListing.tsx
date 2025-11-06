@@ -28,6 +28,8 @@ export const MyListing = () => {
     error,
   } = useAppSelector((state) => state.listings);
 
+  console.log("carsData", listings);
+
   useEffect(() => {
     dispatch(fetchUserCars());
   }, [dispatch]);
@@ -39,6 +41,9 @@ export const MyListing = () => {
   const handleAction = (action: string, id: string) => {
     if (action === "Mark as Sold") {
       dispatch(markCarAsSold(id)).then(() => dispatch(fetchUserCars()));
+    } else if (action === "show Lead") {
+      navigate("/settings/my-leads", { state: { carId: id } });
+      console.log("action : ", id)
     } else if (action === "Delete") {
       dispatch(deleteCar(id)).then(() => dispatch(fetchUserCars()));
     }
@@ -97,7 +102,7 @@ export const MyListing = () => {
             to="/settings/my-leads"
             className="whitespace-nowrap bg-black text-white px-3 py-2 rounded-xs md:rounded-sm flex items-center gap-2 text-[10px] md:text-xs"
           >
-            Show All Cars
+            Show All Leads
           </Link>
         </div>
       </div>
@@ -168,7 +173,7 @@ export const MyListing = () => {
                           car.isSold ? "text-gray-400" : "text-gray-900"
                         }`}
                       />
-                      {car.address.city}, {car.address.state}
+                      {car.address.city}
                     </div>
                   </div>
 
@@ -205,7 +210,7 @@ export const MyListing = () => {
                             <AiFillHeart className="w-4 h-4 text-green-600" />
                           </span>
                           <span className="text-[8px] w-[50px]">
-                            {car.liked || 0} Peoples Liked
+                            {car?.isSaved || 0} Peoples Liked
                           </span>
                         </button>
                       </span>
@@ -266,7 +271,7 @@ export const MyListing = () => {
                       >
                         <FlameIcon className="w-4 h-4 text-red-600" />
                         <span className="text-[9px]">
-                          Trending Viewed by {car.trending || 0} users
+                          Trending Viewed by {car.enquiries.viewProperty || 0} users
                         </span>
                       </div>
                     </div>
@@ -286,7 +291,7 @@ export const MyListing = () => {
                       car.isSold ? "text-gray-400" : "text-gray-900"
                     }`}
                   />
-                  {car.address.city}, {car.address.state}
+                  {car.address.city}
                 </div>
 
                 {/* Price */}

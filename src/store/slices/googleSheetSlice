@@ -1,0 +1,71 @@
+// import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
+// import axios from "axios";
+
+// // 🔹 Replace with your actual Sheet ID and Range
+// const SHEET_ID = "YOUR_GOOGLE_SHEET_ID";
+// const RANGE = "Sheet1!A:Z";
+// const API_KEY = "YOUR_GOOGLE_API_KEY";
+
+// // --------------------------------
+// // Async Thunk for Fetching Data
+// // --------------------------------
+// export const fetchGoogleSheetData = createAsyncThunk(
+//   "googleSheet/fetchData",
+//   async (_, { rejectWithValue }) => {
+//     try {
+//       const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
+//       const response = await axios.get(url);
+
+//       // Convert rows into objects (optional)
+//       const [headers, ...rows] = response.data.values;
+//       const formatted = rows.map((row: string[]) =>
+//         headers.reduce((acc: any, header: string, i: number) => {
+//           acc[header] = row[i] || "";
+//           return acc;
+//         }, {})
+//       );
+
+//       return formatted;
+//     } catch (err: any) {
+//       return rejectWithValue(err.response?.data || err.message);
+//     }
+//   }
+// );
+
+// // --------------------------------
+// // Slice
+// // --------------------------------
+// interface GoogleSheetState {
+//   data: any[];
+//   loading: boolean;
+//   error: string | null;
+// }
+
+// const initialState: GoogleSheetState = {
+//   data: [],
+//   loading: false,
+//   error: null,
+// };
+
+// const googleSheetSlice = createSlice({
+//   name: "googleSheet",
+//   initialState,
+//   reducers: {},
+//   extraReducers: (builder) => {
+//     builder
+//       .addCase(fetchGoogleSheetData.pending, (state) => {
+//         state.loading = true;
+//         state.error = null;
+//       })
+//       .addCase(fetchGoogleSheetData.fulfilled, (state, action: PayloadAction<any[]>) => {
+//         state.loading = false;
+//         state.data = action.payload;
+//       })
+//       .addCase(fetchGoogleSheetData.rejected, (state, action) => {
+//         state.loading = false;
+//         state.error = action.payload as string;
+//       });
+//     },
+// });
+
+// export default googleSheetSlice.reducer;

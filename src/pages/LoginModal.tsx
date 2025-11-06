@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "../store/store";
 import { useAuth } from "../context/useAuth";
 import { verifyOtp, loginUser } from "../store/slices/authSlices/authSlice";
+import toast from "react-hot-toast";
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -23,7 +24,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const [otpToken, setOtpToken] = useState("");
   const [step, setStep] = useState<"mobile" | "otp">("mobile");
   const [mobileNumber, setMobileNumber] = useState("");
-  const [checkbox, setCheckbox] = useState(false)
+  const [checkbox, setCheckbox] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
 
   const { loading, error } = useSelector((state: RootState) => state.auth);
@@ -40,10 +41,14 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   if (!isOpen) return null;
 
   const handleSendOtp = async () => {
+    if (!checkbox) {
+      toast.error("Please accept the terms and conditions");
+      return false;
+    }
     try {
-      const action = await dispatch(loginUser({mobileNumber, checkbox}));
+      const action = await dispatch(loginUser({ mobileNumber, checkbox }));
       const data: any = action.payload;
-      console.log("login data", data)
+      // console.log("login data", data);
 
       if (data?.statusCode === 200 && data?.responseObject?.user?.id) {
         setUserId(data.responseObject.user.id);
@@ -51,16 +56,25 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
         return true;
       } else {
         throw new Error(data?.message || "Failed to send OTP");
+        // toast.error("Failed to Send OTP:");
       }
-    } catch (err) {
-      console.error("Send OTP error:", err);
+    } catch (err: any) {
+      toast.error(err.message || "An error occurred");
       return false;
     }
   };
 
   // 🔹 Verify OTP
-  const handleVerifyOtp = async (otp: string): Promise<{ success: boolean; isFullyVerified: boolean; user?: any; token?: string }> => {
+  const handleVerifyOtp = async (
+    otp: string
+  ): Promise<{
+    success: boolean;
+    isFullyVerified: boolean;
+    user?: any;
+    token?: string;
+  }> => {
     if (!userId) {
+      toast.error("User ID missing, please restart login");
       return {
         success: false,
         isFullyVerified: false,
@@ -77,6 +91,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       const token = data?.responseObject?.token;
 
       if (!user || !token) {
+        toast.error("Invalid OTP or login failed");
         return {
           success: false,
           isFullyVerified: false,
@@ -85,7 +100,8 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
       if (!user.fullName || !user.email) {
         setShowSignup(true);
-        setOtpToken(token); 
+        setOtpToken(token);
+        toast("Additional details required, please complete signup");
         return {
           success: true,
           isFullyVerified: false,
@@ -95,7 +111,6 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       } else {
         login(user, token);
         onClose();
-        alert("Login Success");
         return {
           success: true,
           isFullyVerified: true,
@@ -105,6 +120,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       }
     } catch (err: any) {
       console.error(err);
+      toast.error(err.message || "OTP verification error");
       return {
         success: false,
         isFullyVerified: false,
@@ -113,11 +129,12 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   };
 
   const handleSignupRegistered = () => {
-  setShowSignup(false);
-};
+    setShowSignup(false);
+  };
 
   return (
     <>
+      {/* <Toaster position="top-right" reverseOrder={false} /> */}
       {showSignup ? (
         <SignupModal
           isOpen={showSignup}
@@ -145,7 +162,8 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             <div className="px-2 md:p-6 mt-4 md:mt-0 flex flex-col justify-center">
               <h2 className="text-lg font-semibold mb-2">Log In / Register</h2>
               <p className="text-[10px] mb-4 leading-3.5">
-                For an enhanced experience, track your orders and receive regular updates.
+                For an enhanced experience, track your orders and receive
+                regular updates.
               </p>
 
               <AuthPanel
@@ -156,17 +174,25 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 onVerifyOtp={handleVerifyOtp}
                 mobileNumber={mobileNumber}
                 setCheckbox={setCheckbox}
-                checkbox = {checkbox}
+                checkbox={checkbox}
                 setMobileNumber={setMobileNumber}
                 openSignupModal={() => setShowSignup(true)}
               />
 
-              {loading && <p className="text-sm text-gray-500 mt-2">Processing...</p>}
-              {error && <p className="text-sm text-red-600 mt-2">{String(error)}</p>}
+              {loading && (
+                <p className="text-sm text-gray-500 mt-2">Processing...</p>
+              )}
+              {error && (
+                <p className="text-sm text-red-600 mt-2">{String(error)}</p>
+              )}
             </div>
 
             <div className="block sm:hidden h-fit p-2 py-4">
-              <img src="/loginImg.png" alt="Login Image" className="w-full h-full" />
+              <img
+                src="/loginImg.png"
+                alt="Login Image"
+                className="w-full h-full"
+              />
             </div>
           </div>
         </div>

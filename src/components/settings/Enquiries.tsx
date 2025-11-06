@@ -26,7 +26,7 @@ const Enquiries: React.FC = () => {
     if (userId) {
       dispatch(fetchEnquiries({ userId }))
         .unwrap()
-        .catch((err) => toast.error(err));
+        .catch((err) => toast.error(err, { id: "error message" }));
     }
   }, [dispatch, userId]);
 
@@ -43,7 +43,7 @@ const Enquiries: React.FC = () => {
 
   // 💀 Handle errors
   useEffect(() => {
-    if (error) toast.error(error);
+    if (error) toast.error(error, { id: "error message" });
   }, [error]);
 
   console.log("enquiry :",enquiries)

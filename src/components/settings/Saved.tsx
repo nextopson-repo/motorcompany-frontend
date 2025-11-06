@@ -17,6 +17,8 @@ const Saved: React.FC = () => {
     (state: RootState) => state.saved
   );
 
+  // console.log("saved cars :",cars)
+
   const [isSortOpen, setIsSortOpen] = useState(false);
 
   // 🔥 Fetch user's saved cars on mount
@@ -93,7 +95,7 @@ const Saved: React.FC = () => {
             </button>
 
             {isSortOpen && (
-              <div className="absolute right-0 mt-[1px] w-54 bg-white text-xs rounded-md shadow-lg z-20 p-1">
+              <div className="absolute right-0 mt-px w-54 bg-white text-xs rounded-md shadow-lg z-20 p-1">
                 {sortOptions.map((opt) => (
                   <button
                     key={opt.value}
@@ -152,7 +154,7 @@ const Saved: React.FC = () => {
                 className="flex flex-row rounded-sm border border-gray-100 p-1"
               >
                 {/* Left Image */}
-                <div className="h-fit w-28 sm:w-36 flex-shrink-0 relative">
+                <div className="h-fit w-28 sm:w-36 shrink-0 relative">
                   <img
                     src={car.carImages?.[0]?.imageUrl || car.carImages?.[0]?.imageKey || "/fallback-car-img.png"}
                     alt="car image"
@@ -186,7 +188,7 @@ const Saved: React.FC = () => {
 
                   <div className="flex items-center justify-between pl-2 pr-1">
                     <div className="text-[8px] flex items-center text-gray-900">
-                      <MapPinIcon className="w-[10px] h-[10px] mr-1 text-gray-900" />
+                      <MapPinIcon className="w-2.5 h-2.5 mr-1 text-gray-900" />
                       {car.address?.city || "Unknown City"}
                     </div>
                     <p className="font-bold text-xs flex items-center gap-2 text-gray-900">

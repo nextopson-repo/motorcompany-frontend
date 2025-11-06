@@ -8,9 +8,36 @@ import { selectAuth } from "../store/slices/authSlices/authSlice";
 import { ChevronDown, Plus } from "lucide-react";
 import { openLogin } from "../store/slices/authSlices/loginModelSlice";
 import { brandOptions, fuelOptions, transmissionOptions } from "../data/filterOptions";
-import { locationData } from "../components/sellMyCar/sellHero";
+// import { locationData } from "../components/sellMyCar/sellHero";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+
+export const locationData: Record<string, Record<string, string[]>> = {
+  Rajasthan: {
+    Jaipur: ["Malviya Nagar", "Vaishali Nagar"],
+  },
+  UttarPradesh: {
+    Kanpur: ["Swaroop Nagar", "Kakadeo"],
+    Lucknow: ["Hazratganj", "Gomti Nagar"],
+  },
+  Maharashtra: {
+    Pune: ["Kothrud", "Hinjewadi"],
+    Mumbai: ["Kothrud", "Hinjewadi"],
+  },
+  Gujarat: {
+    Ahmedabad: ["Navrangpura", "Maninagar"],
+    Surat: ["Navrangpura", "Maninagar"],
+  },
+  Punjab: {
+    Chandigarh: ["Sector 17", "Manimajra"],
+  },
+  Telangana: {
+    Hyderabad: ["Banjara Hills", "Hitech City"],
+  },
+  Delhi: {
+    NewDelhi: ["Connaught Place", "Saket"],
+  },
+};
 
 // Filter state type
 interface FilterState {

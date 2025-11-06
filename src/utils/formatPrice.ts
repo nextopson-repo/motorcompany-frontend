@@ -1,11 +1,19 @@
 export function formatPriceToLakh(price: any): string {
-   const numericPrice = Number(price);
+  const numericPrice = Number(price);
   if (!Number.isFinite(numericPrice)) return "";
 
-  const inLakh = numericPrice / 100000;
-  const formatted = inLakh % 1 === 0 ? inLakh : inLakh.toFixed(1);
-  return `${formatted} Lakhs`;
+  if (numericPrice >= 10000000) {
+    // 1 crore = 10,000,000
+    const inCrore = numericPrice / 10000000;
+    const formatted = inCrore % 1 === 0 ? inCrore : inCrore.toFixed(2);
+    return `${formatted} Cr`;
+  } else {
+    const inLakh = numericPrice / 100000;
+    const formatted = inLakh % 1 === 0 ? inLakh : inLakh.toFixed(1);
+    return `${formatted} Lakh`;
+  }
 }
+
 
 export function formatPriceToL(price: any): string {
   const numericPrice = Number(price);

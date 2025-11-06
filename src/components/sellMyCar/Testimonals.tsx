@@ -8,35 +8,35 @@ import "swiper/css";
 const testimonials = [
   {
     id: 1,
-    date: "12 Mar, 2024",
+    date: "12 Oct, 2025",
     bgImg: "/Testimonals/card-1.png",
     profileImg: "https://randomuser.me/api/portraits/men/58.jpg", // Example Indian male avatar
     name: "Arjun Patel",
     location: "Ahmedabad, Gujarat",
     rating: 4.8,
-    text: "Smooth and trustworthy car buying ex",
+    text: "Smooth and fast car buying experience.",
     description:
-      "I found the perfect car within my budget with clear details and genuine sellers. The whole transaction felt safe and seamless from start to finish. Highly recommended!",
+      "Had a wonderful experience From car selection to test drive , booking and delivery was very smooth. Quick and transparent documentation",
     response:
       "Thank you, Arjun! We are delighted to hear about your positive experience. We strive to keep our marketplace transparent and easy to use.",
   },
   {
     id: 2,
-    date: "10 Feb, 2024",
+    date: "29 Sep, 2025",
     bgImg: "/Testimonals/card-2.png",
     profileImg: "https://randomuser.me/api/portraits/women/15.jpg", // Example Indian female avatar
     name: "Neha Sharma",
     location: "New Delhi, Delhi",
     rating: 4.6,
-    text: "Great selection and prompt support",
+    text: "Help to select right car.",
     description:
-      "The variety of cars available was impressive and the support team was very responsive to my questions. It made buying a car online comfortable and easy.",
+      "Recently took delivery of Honda. The whole experience experience of purchase was very smooth. We were given time for test ride, understand the product.",
     response:
       "Thanks for your feedback, Neha! Our team is committed to supporting our users at every step and providing great vehicle options.",
   },
   {
     id: 3,
-    date: "05 Jan, 2024",
+    date: "05 Oct, 2025",
     bgImg: "/Testimonals/card-3.png",
     profileImg: "https://randomuser.me/api/portraits/men/48.jpg",
     name: "Rohit Singh",
@@ -44,13 +44,13 @@ const testimonials = [
     rating: 4.3,
     text: "Good overall, needs faster delivery",
     description:
-      "The listing information was detailed and accurate. I would have loved faster delivery service, but overall a reliable platform. i'm recommend anyone this website.",
+      "Had a great experience with them. They are supportive and understanding. They provide you a genuine product with the cheap and affordable prices. ",
     response:
       "Thank you, Rohit. We appreciate your honest feedback and are actively working on improving our delivery timelines.",
   },
   {
     id: 4,
-    date: "20 Apr, 2024",
+    date: "20 Oct, 2025",
     bgImg: "/Testimonals/card-1.png",
     profileImg: "https://randomuser.me/api/portraits/women/54.jpg",
     name: "Pooja Desai",
@@ -58,13 +58,13 @@ const testimonials = [
     rating: 5.0,
     text: "Excellent service and smooth payment",
     description:
-      "From browsing to payment confirmation, everything was handled very professionally. The platform gave me confidence to make such a big purchase online.",
+      "Good variety of vehicles and they provide valuable inputs on the cars. Also, offer reasonable prices. Good people to deal with.",
     response:
       "We really appreciate your encouraging words, Pooja! We aim to make car buying simple and safe for all our customers.",
   },
   {
     id: 5,
-    date: "15 Mar, 2024",
+    date: "15 Oct, 2025",
     bgImg: "/Testimonals/card-2.png",
     profileImg: "https://randomuser.me/api/portraits/men/44.jpg",
     name: "Amit Verma",
@@ -72,13 +72,13 @@ const testimonials = [
     rating: 4.7,
     text: "Reliable platform with genuine listings",
     description:
-      "I could browse many verified cars and had no worries about security. The transparency helped me trust the platform fully for my purchase.",
+      "I could browse many cars and had no worries about security. The transparency helped me trust the platform fully for my purchase.",
     response:
       "Thank you for trusting us, Amit! Transparency and reliability are our core values, and we are glad you experienced that firsthand.",
   },
   {
     id: 6,
-    date: "01 Feb, 2024",
+    date: "01 Nov, 2025",
     bgImg: "/Testimonals/card-3.png",
     profileImg: "https://randomuser.me/api/portraits/women/40.jpg",
     name: "Sneha Reddy",
@@ -86,7 +86,7 @@ const testimonials = [
     rating: 4.5,
     text: "Helpful support and smooth vehicle selection",
     description:
-      "The customer support was very helpful in answering my queries promptly which made choosing a car easier. I highly recommend this platform to friends and family.",
+      "Customer support team was very helpful in answering my queries which made choosing a car easier. I highly recommend this platform to friends and family.",
     response:
       "Thanks for your recommendation, Sneha! We're glad our support could assist you. We look forward to helping more customers like you.",
   },
@@ -188,7 +188,7 @@ const Testimonials: React.FC = () => {
 
               {/* Title */}
               <h3 className="text-[11px] lg:text-xs mb-2 line-clamp-2 text-black font-medium">
-                {t.text} ...
+                {t.text}
               </h3>
 
               {/* Review Text */}

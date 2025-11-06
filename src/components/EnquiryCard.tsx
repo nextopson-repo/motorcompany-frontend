@@ -138,8 +138,7 @@ export default function EnquiryCard({ enquiry }: EnquiryCardProps) {
 
                 <div className="hidden text-[9px] md:text-[10px] font-medium lg:flex items-center mt-2 text-gray-700">
                   <MapPin className="w-3 md:w-3.5 h-3 md:h-3.5 mr-1" />
-                  {car?.address?.city || "Unknown City"},{" "}
-                  {car?.address?.state || "Unknown State"}
+                  {car?.address?.city || "Unknown City"}
                 </div>
               </div>
 
@@ -209,8 +208,7 @@ export default function EnquiryCard({ enquiry }: EnquiryCardProps) {
                   </p>
                   <p className="text-[10px] font-semibold text-gray-800 flex items-center">
                     <MapPin className="w-3 h-3 mr-1" />{" "}
-                    {car?.address?.city || "Unknown City"},{" "}
-                    {car?.address?.state || "Unknown State"}
+                    {car?.address?.city || "Unknown City"}
                   </p>
                 </div>
 
@@ -230,7 +228,7 @@ export default function EnquiryCard({ enquiry }: EnquiryCardProps) {
           <div className="flex md:hidden items-center justify-between px-2 mt-2">
             <div className="text-[8px] flex items-center text-gray-700">
               <MapPin className="w-2.5 h-2.5 mr-1" />
-              {car?.address?.city || "Unknown City"},{" "}{car?.address?.state || "Unknown City"}
+              {car?.address?.city || "Unknown City"}
             </div>
             <p className="font-bold text-xs text-gray-900">
               Rs. {formatPriceToL(car?.carPrice || 0)}

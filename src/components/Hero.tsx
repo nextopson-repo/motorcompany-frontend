@@ -1,29 +1,150 @@
-import { Search } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/effect-fade";
 import { BiCaretDown } from "react-icons/bi";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../store/store";
 import { fetchCars, updateSelectedFilter } from "../store/slices/carSlice";
 import { useNavigate } from "react-router-dom";
 import { setSearchTerm } from "../store/slices/savedSlice";
 const heroImages = ["/Hero-car.png", "/hero-car-2.jpg", "/hero-car-3.jpg"];
+import { Search } from "lucide-react";
+
+interface DropdownProps {
+  label: string;
+  placeholder: string;
+  options: string[];
+  value: string;
+  isOpen: boolean;
+  onToggle: () => void;
+  onChange: (v: string) => void;
+}
+
+const bodyTypes = [
+  "SUV",
+  "Sedan",
+  "Hatchback",
+  "Convertible",
+  "Coupe",
+  "Wagon",
+  "Van",
+  "Pickup Truck",
+  "Crossover",
+  "Minivan",
+];
+
+function Dropdown({ placeholder, options, value, onChange }: DropdownProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Filter options by search
+  const filtered = options.filter((opt: string) =>
+    opt.toLowerCase().includes(search.toLowerCase())
+  );
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div className="w-full relative font-[Inter]" ref={dropdownRef}>
+      {/* Dropdown Button */}
+      <div
+        onClick={() => setIsOpen(!isOpen)}
+        className={`flex items-center justify-between border border-gray-300 rounded-md px-3 py-2 text-sm bg-white cursor-pointer transition-all duration-200 ${
+          isOpen ? "ring-2 ring-gray-400 border-[#EE1422]" : ""
+        }`}
+      >
+        <span
+          className={`truncate text-gray-700 ${
+            !value ? "text-gray-400" : "text-gray-700"
+          }`}
+        >
+          {value || placeholder}
+        </span>
+        <BiCaretDown
+          className={`text-gray-500 text-base transition-transform duration-200 ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        />
+      </div>
+
+      {/* Dropdown Options */}
+      {isOpen && (
+        <div className="absolute mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg z-20 max-h-48 overflow-y-auto animate-fadeIn">
+          {/* Search Input */}
+          {/* <div className="sticky top-0 bg-white border-b">
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search..."
+              className="w-full px-3 py-2 text-xs outline-none text-gray-700"
+              autoFocus
+            />
+          </div> */}
+
+          {/* Options */}
+          {filtered.length > 0 ? (
+            filtered.map((opt: string) => (
+              <div
+                key={opt}
+                onClick={() => {
+                  onChange(opt);
+                  setIsOpen(false);
+                  setSearch("");
+                }}
+                className={`px-3 py-2 text-xs cursor-pointer hover:bg-gray-400/20 transition ${
+                  opt === value ? "bg-gray-400/40 font-semibold" : ""
+                }`}
+              >
+                {opt}
+              </div>
+            ))
+          ) : (
+            <div className="px-3 py-2 text-gray-400 text-xs text-center">
+              No results found
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 
 const Hero: React.FC = () => {
-  const selectedFilters = useSelector((state: RootState) => state.cars.selectedFilters);
+  const selectedFilters = useSelector(
+    (state: RootState) => state.cars.selectedFilters
+  );
   const dispatch = useDispatch<AppDispatch>();
 
   const navigate = useNavigate();
-  const [searchMode, setSearchMode] = useState<"model" | "budget">("model");
+  const [searchMode, setSearchMode] = useState<"brand" | "budget">("brand");
   const [query, setQuery] = useState("");
+
+  // ⬇️ Add these right below
+  const [selectedBudget, setSelectedBudget] = useState("");
+  const [selectedBodyType, setSelectedBodyType] = useState("");
+  const [isBudgetOpen, setIsBudgetOpen] = useState(false);
+  const [isBodyTypeOpen, setIsBodyTypeOpen] = useState(false);
 
   const handleSearch = () => {
     if (!query.trim()) return;
-    if (searchMode === "model") {
+    if (searchMode === "brand") {
       dispatch(setSearchTerm(query));
       dispatch(fetchCars({ searchTerm: query }));
     } else {
@@ -59,7 +180,7 @@ const Hero: React.FC = () => {
           }}
         >
           {/* Search input with animated last word */}
-          <div className="flex justify-between items-center w-full bg-white rounded-sm px-3 py-[10px] relative ">
+          <div className="flex justify-between items-center w-full bg-white rounded-sm px-3 py-2.5 relative ">
             <div className="flex items-center">
               <Search className="text-gray-400 mr-2 h-5 w-5" />
               <span className="text-gray-400 text-sm truncate">
@@ -71,8 +192,8 @@ const Hero: React.FC = () => {
               />
             </div>
           </div>
-          <button className="text-white text-sm flex items-center font-semibold bg-[#ED1D2B] px-3 py-[10px] gap-2 rounded-xs ">
-            Model
+          <button className="text-white text-sm flex items-center font-semibold bg-[#ED1D2B] px-3 py-2.5 gap-2 rounded-xs ">
+            Brand
             <span>
               <BiCaretDown className="text-white text-sm" />
             </span>
@@ -123,21 +244,21 @@ const Hero: React.FC = () => {
       </div>
 
       {/* Search Bar */}
-      <div className="hidden lg:block relative z-20 -mt-28 ml-14 max-w-xs xs:max-w-md sm:max-w-xl md:max-w-2xl bg-white/95 rounded-lg p-4 md:p-4 space-y-3 shadow-xs">
+      <div className="hidden lg:block relative z-20 -mt-28 ml-14 max-w-xs xs:max-w-md sm:max-w-xl md:max-w-2xl bg-white/94 rounded-lg p-4 md:p-4 space-y-3 shadow-sm">
         <div className="flex items-center justify-between">
           <p className="font-semibold text-sm md:text-[1.20rem] text-center sm:text-left">
             Lets Find the perfect car for you
           </p>
-          <div className="border-[1px] border-gray-200 bg-white rounded-md ">
+          <div className="border-px border-gray-200 bg-white rounded-md ">
             <button
               className={`text-xs px-8 py-2 rounded-l-sm ${
-                searchMode === "model"
+                searchMode === "brand"
                   ? "bg-[#EE1422] text-white"
                   : "hover:text-white hover:bg-[#EE1422]"
               }`}
-              onClick={() => setSearchMode("model")}
+              onClick={() => setSearchMode("brand")}
             >
-              By Model
+              By Brand
             </button>
             <button
               className={`text-xs px-8 py-2 rounded-r-sm ${
@@ -145,33 +266,52 @@ const Hero: React.FC = () => {
                   ? "bg-[#EE1422] text-white"
                   : "hover:text-white hover:bg-[#EE1422]"
               }`}
-               onClick={() => setSearchMode("budget")}
+              onClick={() => setSearchMode("budget")}
             >
               By Budget
             </button>
           </div>
         </div>
         <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
-          {/* Search input with animated last word */}
-          <div className="flex justify-between items-center w-full bg-white rounded-sm px-3 py-2 relative ">
-            <div className="flex items-center">
-              <Search className="text-gray-400 mr-2" size={16} />
-              <input
-                type={searchMode === "budget" ? "number" : "text"}
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder={
-                  searchMode === "model"
-                    ? "Search Car by Model"
-                    : "Search Car by Budget"
-                }
-                className="absolute left-9 top-0 md:w-[90%] h-full z-20 px-2 text-sm"
+          {/* Search input + conditional dropdown */}
+          <div className="w-full">
+            {/* Conditional Dropdown */}
+            {searchMode === "brand" ? (
+              <Dropdown
+                label="Body Type"
+                placeholder="Select Body Type"
+                options={bodyTypes}
+                value={selectedBodyType}
+                isOpen={isBodyTypeOpen}
+                onToggle={() => setIsBodyTypeOpen(!isBodyTypeOpen)}
+                onChange={(val: string) => {
+                  setSelectedBodyType(val);
+                  setQuery(val); // ✅ sync dropdown with query
+                }}
               />
-            </div>
-            <span>
-              <BiCaretDown className="text-black text-xs md:text-xs whitespace-nowrap" />
-            </span>
+            ) : (
+              <Dropdown
+                label="Budget Range"
+                placeholder="Select Budget Range"
+                options={[
+                  "₹50k - ₹2 Lakh",
+                  "₹2Lakh - ₹5 Lakh",
+                  "₹5Lakh - ₹10 Lakh",
+                  "₹10Lakh - ₹20 Lakh",
+                  "₹20Lakh - ₹40 Lakh",
+                  "Above ₹40 Lakh",
+                ]}
+                value={selectedBudget}
+                isOpen={isBudgetOpen}
+                onToggle={() => setIsBudgetOpen(!isBudgetOpen)}
+                onChange={(val: string) => {
+                  setSelectedBudget(val);
+                  setQuery(val); // ✅ sync dropdown with query
+                }}
+              />
+            )}
           </div>
+
           <button
             className="text-white font-semibold bg-gray-900 px-8 py-[7px] rounded-sm cursor-pointer hover:bg-gray-700 "
             onClick={handleSearch}

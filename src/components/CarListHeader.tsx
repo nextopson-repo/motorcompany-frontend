@@ -184,7 +184,7 @@ const CarListHeader: React.FC<CarListHeaderProps> = ({
           </button>
 
           {openDropdown === "sort" && (
-            <div className="absolute right-0 mt-[1px] w-40 lg:w-54 bg-white text-xs rounded-md shadow-lg z-50 p-1">
+            <div className="absolute right-0 mt-px w-40 lg:w-54 bg-white text-xs rounded-md shadow-lg z-50 p-1">
               {sortOptions.map((opt) => (
                 <button
                   key={opt.value}

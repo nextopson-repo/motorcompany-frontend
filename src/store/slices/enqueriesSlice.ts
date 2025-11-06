@@ -4,6 +4,7 @@ import {
   type PayloadAction,
 } from "@reduxjs/toolkit";
 import axios from "axios";
+import toast from "react-hot-toast"; // ✅ import toast
 import type { RootState } from "../store";
 
 // ---------------- TYPES ----------------
@@ -103,11 +104,13 @@ export const createEnquiry = createAsyncThunk<
       }
     );
 
+    toast.success("Enquiry created successfully 🚗", { id: "create-enquiry" }); // ✅ Toast success
     return response.data;
   } catch (error: any) {
-    return thunkAPI.rejectWithValue(
-      error.response?.data?.message || "Failed to create enquiry"
-    );
+    const message =
+      error.response?.data?.message || "Failed to create enquiry";
+    toast.error(message, { id: "create-enquiry-error" }); // ❌ Toast error
+    return thunkAPI.rejectWithValue(message);
   }
 });
 
@@ -123,13 +126,14 @@ export const fetchEnquiries = createAsyncThunk<
       { userId }
     );
 
-    // API gives `carEnquiries` array
     const data = response.data?.carEnquiries || [];
+    toast.success("Enquiries loaded successfully 💬", { id: "fetch-enquiries" }); // ✅ Toast success
     return data;
   } catch (error: any) {
-    return thunkAPI.rejectWithValue(
-      error.response?.data?.message || "Failed to fetch enquiries"
-    );
+    const message =
+      error.response?.data?.message || "Failed to fetch enquiries";
+    toast.error(message, { id: "fetch-enquiries-error" }); // ❌ Toast error
+    return thunkAPI.rejectWithValue(message);
   }
 });
 
@@ -155,10 +159,16 @@ export const fetchCarDetailsById = createAsyncThunk<
     if (!res.ok) throw new Error(await res.text());
     const data = await res.json();
 
+    // toast.success("Car details fetched successfully 🏎️", {
+    //   id: "fetch-car-details",
+    // }); // ✅ Toast success
+
     const carDetailsWithOwner = { ...data.car, owner: data.owner };
-      return { carId, carDetails: carDetailsWithOwner, ownerDetails: data.owner };
+    return { carId, carDetails: carDetailsWithOwner, ownerDetails: data.owner };
   } catch (err: any) {
-    return rejectWithValue(err.message || "Failed to fetch car details");
+    const message = err.message || "Failed to fetch car details";
+    toast.error(message, { id: "fetch-car-details-error" }); // ❌ Toast error
+    return rejectWithValue(message);
   }
 });
 
@@ -216,91 +226,3 @@ const enquiriesSlice = createSlice({
 
 export const { toggleCalling } = enquiriesSlice.actions;
 export default enquiriesSlice.reducer;
-
-// import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-
-// export interface Enquiry {
-//   id: string;
-//   carTitle: string;
-//   kmDriven: string;
-//   carType: string;
-//   mileage: string;
-//   fuelType: string;
-//   transmission: string;
-//   location: string;
-//   price: number;
-//   emi: string;
-//   owner: {
-//     name: string;
-//     role: string;
-//     phone: string;
-//     address: string;
-//     avatar: string;
-//     timeAgo: string;
-//   };
-//   image: string;
-// }
-
-// interface EnquiryState {
-//   enquiries: Enquiry[];
-// }
-
-// const initialState: EnquiryState = {
-//   enquiries: [
-//     {
-//       id: "1",
-//       carTitle: "2021 Renault KWID Climber 1.0 MT Opt",
-//       kmDriven: "30,000 kms",
-//       carType: "SUV 5 Seater",
-//       mileage: "19.4 Kmpl",
-//       fuelType: "Petrol",
-//       transmission: "Manual",
-//       location: "Kurla East, Mumbai",
-//       price: 982000,
-//       emi: "Rs. 6,203 / mo",
-//       owner: {
-//         name: "Sourav Chakraborty",
-//         role: "Owner",
-//         phone: "+91-9876543210",
-//         address: "Kurla East, Mumbai - 700986",
-//         avatar: "https://i.pravatar.cc/100?img=3",
-//         timeAgo: "10 min ago",
-//       },
-//       image: "/fallback-car-img.png",
-//     },
-//     {
-//       id: "2",
-//       carTitle: "2021 Renault KWID Climber 1.0 MT Opt",
-//       kmDriven: "30,000 kms",
-//       carType: "SUV 5 Seater",
-//       mileage: "19.4 Kmpl",
-//       fuelType: "Petrol",
-//       transmission: "Manual",
-//       location: "Kurla East, Mumbai",
-//       price: 562000,
-//       emi: "Rs. 6,203 / mo",
-//       owner: {
-//         name: "Annette Black",
-//         role: "Owner",
-//         phone: "+91-9876543210",
-//         address: "Kurla East, Mumbai - 700986",
-//         avatar: "https://i.pravatar.cc/100?img=5",
-//         timeAgo: "10 min ago",
-//       },
-//       image: "/fallback-car-img.png",
-//     },
-//   ],
-// };
-
-// const enquiriesSlice = createSlice({
-//   name: "enquiries",
-//   initialState,
-//   reducers:{
-//     addEnquiry: (state, action: PayloadAction<Enquiry>) => {
-//       state.enquiries.push(action.payload);
-//     },
-//   },
-// });
-
-// export const { addEnquiry } = enquiriesSlice.actions;
-// export default enquiriesSlice.reducer;

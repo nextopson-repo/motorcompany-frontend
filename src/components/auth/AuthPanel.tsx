@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import toast from "react-hot-toast";
 
 type AuthPanelProps = {
   userId?: string;
@@ -94,19 +95,21 @@ const AuthPanel: React.FC<AuthPanelProps> = ({
     try {
       const data = await onVerifyOtp(otp);
 
-      console.log("data-97", data);
+      // console.log("data-97", data);
 
       if (data.success) {
         // Fully verified → login user immediately
         if (data.user?.fullName && data.user?.email) {
           setMessage("Login successful!");
+           toast.success(`${data.user?.fullName} Login Success!`);
         } else {
           openSignupModal();
         }
       }else{
-        setMessage("response success but some error");
+        setError("Please Try again!");
       }
     } catch (err: any){
+       toast.error(err.message || "OTP Verification failed ");
       setError(err.message || "OTP verification failed ");
     } finally {
       setLoading(false);
@@ -125,9 +128,11 @@ const AuthPanel: React.FC<AuthPanelProps> = ({
       const success = await onSendOtp(mobileNumber);
       if (success) {
         setResendCooldown(30);
+         toast.success("OTP resent successfully!");
         setMessage("OTP resent successfully!");
       }
     } catch (err: any) {
+       toast.error(err.message);
       setError(err.message || "Failed to resend OTP");
     } finally {
       setLoading(false);

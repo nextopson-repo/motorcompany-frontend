@@ -42,7 +42,7 @@ const RefundPolicy = () => (
       with your registered details, transaction ID, and a short description of
       the issue. Once your request is verified, our team will initiate the
       refund process within <strong>2 to 3 business days</strong>, and the
-      amount will be credited to your original payment method.
+      amount will be credited to your original payment method within <strong>5 to 7 business days</strong>.
     </p>
     <p className="text-sm">
       Refunds will <strong>not</strong> be provided in cases where the service

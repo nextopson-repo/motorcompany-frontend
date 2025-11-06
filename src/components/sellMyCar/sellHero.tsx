@@ -4,8 +4,12 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import { resetUploadState, uploadCar } from "../../store/slices/carUploadSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAuth, updateUserType } from "../../store/slices/authSlices/authSlice";
+import {
+  selectAuth,
+  updateUserType,
+} from "../../store/slices/authSlices/authSlice";
 import { openLogin } from "../../store/slices/authSlices/loginModelSlice";
+import toast from "react-hot-toast";
 
 interface DropdownProps {
   label: string;
@@ -71,37 +75,11 @@ function Dropdown({
   );
 }
 
-export const locationData: Record<string, Record<string, string[]>> = {
-    Rajasthan: {
-      Jaipur: ["Malviya Nagar", "Vaishali Nagar"],
-    },
-    UttarPradesh: {
-      Kanpur: ["Swaroop Nagar", "Kakadeo"],
-      Lucknow: ["Hazratganj", "Gomti Nagar"],
-    },
-    Maharashtra: {
-      Pune: ["Kothrud", "Hinjewadi"],
-      Mumbai: ["Kothrud", "Hinjewadi"],
-    },
-    Gujarat: {
-      Ahmedabad: ["Navrangpura", "Maninagar"],
-      Surat: ["Navrangpura", "Maninagar"],
-    },
-    Punjab: {
-      Chandigarh: ["Sector 17", "Manimajra"],
-    },
-    Telangana: {
-      Hyderabad: ["Banjara Hills", "Hitech City"],
-    },
-    Delhi: {
-      NewDelhi: ["Connaught Place", "Saket"],
-    },
-};
-
 export default function SellHero() {
   const dispatch = useAppDispatch();
   const loginDispatch = useDispatch();
   const { user, token } = useSelector(selectAuth);
+  console.log("userType :", user?.userType);
   const navigate = useNavigate();
 
   const handleAccess = () => {
@@ -113,7 +91,7 @@ export default function SellHero() {
   };
 
   const location = useLocation();
-  const { success } = useAppSelector((state) => state.carUpload);
+  const { loading, success } = useAppSelector((state) => state.carUpload);
   const uploadedImages = useAppSelector((state) => state.carImage.files);
 
   const [showForm, setShowForm] = useState(false);
@@ -127,9 +105,9 @@ export default function SellHero() {
     if (location.state?.editCar) {
       const car = location.state.editCar;
       setEditCar(car);
-      setState(car?.address?.state || "");
+      // setState(car?.address?.state || "");
       setCity(car?.address?.city || "");
-      setLocality(car?.address?.locality || "");
+      // setLocality(car?.address?.locality || "");
       setShowForm(true);
     }
   }, [location]);
@@ -149,7 +127,10 @@ export default function SellHero() {
 
     Object.entries({
       carId: editCar?.id || "",
-      carName: carData.brand && carData.model ? `${carData.brand} ${carData.model}` : editCar?.carName || "",
+      carName:
+        carData.brand && carData.model
+          ? `${carData.brand} ${carData.model}`
+          : editCar?.carName || "",
       brand: carData.brand || editCar?.brand || "",
       model: carData.model || editCar?.model || "",
       variant: carData.variant || editCar?.variant || "",
@@ -165,8 +146,8 @@ export default function SellHero() {
       kmDriven: String(carData.kmDriven || editCar?.kmDriven || ""),
       seats: String(carData.seats || editCar?.seats || ""),
       addressCity: city || editCar?.address?.city || "",
-      addressState: state || editCar?.address?.state || "",
-      addressLocality: locality || editCar?.address?.locality || "",
+      addressState: state || editCar?.address?.state || "c",
+      addressLocality: locality || editCar?.address?.locality || "c",
     }).forEach(([key, value]) => formData.append(key, value || ""));
 
     uploadedImages.forEach((file) => {
@@ -174,6 +155,7 @@ export default function SellHero() {
       formData.append("carImages", file);
     });
 
+    toast(`Files Uploading...`);
     dispatch(uploadCar(formData));
   };
 
@@ -184,9 +166,8 @@ export default function SellHero() {
     }
   }, [success, dispatch, navigate]);
 
-
   return (
-    <section className="relative w-full max-w-8xl mx-auto h-[326px] sm:h-112 lg:h-[88vh] bg-black mb-[230px] sm:mb-5 lg:mb-0 mt-12 lg:mt-10">
+    <section className="relative w-full max-w-8xl mx-auto h-[326px] sm:h-112 lg:h-[88vh] bg-black mb-[230px] sm:mb-5 lg:mb-0 mt-12 lg:mt-10 ">
       {/* Background Image */}
       <div
         className="h-auto sm:h-auto lg:h-auto absolute inset-0 bg-cover bg-no-repeat opacity-60 mb-1"
@@ -197,9 +178,9 @@ export default function SellHero() {
       />
 
       {/* Overlay Content */}
-      <div className="relative max-w-7xl h-full lg:h-[93vh] mx-auto px-4 lg:px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-9 items-center md:gap-10 backdrop-blur-[3px]">
+      <div className="relative max-w-7xl h-full lg:h-[93vh] mx-auto px-4 lg:px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-9 items-center md:gap-10 backdrop-blur-[3px] z-45">
         {/* Left Content */}
-        <div className="h-full w-full text-white lg:col-span-6 mt-0 sm:mt-14 lg:mt-28 md:px-2 pr-8 lg:pr-0 py-8 lg:py-0">
+        <div className="h-full w-full text-white lg:col-span-6 mt-0 sm:mt-14 lg:mt-28 md:px-2 pr-8 lg:pr-0 py-8 lg:py-0 z-1">
           <p className="hidden lg:block text-sm mb-14">
             Home <span className="text-gray-300"> &gt; </span>{" "}
             <span className="font-medium underline underline-offset-3">
@@ -288,6 +269,7 @@ export default function SellHero() {
 
               {/* User Type */}
               {/* User Type (only show if user is EndUser) */}
+              {/* User Type Selection (only for EndUser) */}
               {user?.userType === "EndUser" && (
                 <div className="mb-3">
                   <label htmlFor="userType" className="text-[10px] md:text-xs">
@@ -295,8 +277,12 @@ export default function SellHero() {
                   </label>
                   <div className="grid grid-cols-3 gap-3 md:gap-5 mb-2 md:mb-4 text-[10px] md:text-xs mt-1">
                     <button
-                      onClick={() => dispatch(updateUserType({ userId: user.id, userType: "Owner" }))}
-                      className={`flex-1 py-[6px] rounded ${
+                      onClick={() =>
+                        dispatch(
+                          updateUserType({ userId: user.id, userType: "Owner" })
+                        )
+                      }
+                      className={`flex-1 py-1.5 rounded ${
                         userRole === "owner"
                           ? "bg-green-50 text-green-700 font-medium"
                           : "bg-white border border-gray-300 text-gray-600"
@@ -306,8 +292,15 @@ export default function SellHero() {
                     </button>
 
                     <button
-                      onClick={() => dispatch(updateUserType({ userId: user.id, userType: "Dealer" }))}
-                      className={`flex-1 py-[6px] rounded ${
+                      onClick={() =>
+                        dispatch(
+                          updateUserType({
+                            userId: user.id,
+                            userType: "Dealer",
+                          })
+                        )
+                      }
+                      className={`flex-1 py-1.5 rounded ${
                         userRole === "dealer"
                           ? "bg-green-50 text-green-700 font-medium"
                           : "bg-white border border-gray-300 text-gray-600"
@@ -322,48 +315,66 @@ export default function SellHero() {
               {/* Location Fields */}
               <div className="space-y-0">
                 <Dropdown
-                  label="State"
-                  placeholder="Select State"
-                  options={Object.keys(locationData)}
-                  value={state}
-                  onChange={(val) => {
-                    setState(val);
-                    setCity("");
-                    setLocality("");
-                  }}
-                />
-
-                <Dropdown
                   label="City"
                   placeholder="Select City"
-                  options={state ? Object.keys(locationData[state] || {}) : []}
+                  options={[
+                    "Ahmedabad",
+                    "Chandigarh",
+                    "Delhi",
+                    "Hyderabad",
+                    "Jaipur",
+                    "Kanpur",
+                    "Lucknow",
+                    "Mumbai",
+                    "Pune",
+                    "Surat",
+                  ]}
                   value={city}
                   onChange={(val) => {
                     setCity(val);
                     setLocality("");
                   }}
                 />
-
-                <Dropdown
-                  label="Locality"
-                  placeholder="Select you neighbourhood"
-                  options={
-                    state && city ? locationData[state]?.[city] || [] : []
-                  }
-                  value={locality}
-                  onChange={(val) => setLocality(val)}
-                />
               </div>
+
               <button
+                disabled={loading}
                 onClick={() => (user ? setShowForm(true) : handleAccess())}
-                className="w-full text-xs md:text-base mt-4 bg-[#24272C] text-white py-[6px] md:py-2 rounded-xs hover:bg-black transition"
+                className={`w-full mt-4 py-2 rounded bg-[#24272C] text-white ${
+                  loading ? "opacity-50 cursor-not-allowed" : "hover:bg-black"
+                }`}
               >
-                Next
+                {loading ? "Uploading..." : "Next"}
               </button>
             </div>
           )}
         </div>
       </div>
+
+      {loading && (
+        <div className="absolute top-[35%] left-[45.5%] translate-1/2 z-50 bg-red-600 rounded-full">
+          <svg
+            className="animate-spin h-16 w-16 text-gray-300"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-100 text-white"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="1"
+            ></circle>
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+            ></path>
+          </svg>
+        </div>
+      )}
     </section>
   );
 }

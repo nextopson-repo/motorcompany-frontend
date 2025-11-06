@@ -3,6 +3,7 @@ import { ChevronRight } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "../../store/store";
 import { signup } from "../../store/slices/authSlices/authSlice";
+import { setSuccessMessage } from "../../store/slices/toastSlice";
 
 interface SignupModalProps {
   isOpen: boolean;
@@ -64,7 +65,8 @@ export default function SignupModal({
         onRegistered();
         onClose();
         onLoginClose();
-        alert("You are signed up Successfully");
+        // alert("You are signed up Successfully");
+        dispatch(setSuccessMessage("Signup Success. Welcome!"));
       } else {
         setError(data?.message || "Signup failed");
       }

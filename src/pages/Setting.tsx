@@ -30,9 +30,6 @@ const Setting = () => {
     await dispatch(fetchUserProfile());
   };
 
-  if (loading || !profile) {
-    return <p className="text-center my-[10%] ">Loading profile...</p>;
-  }
 
   return (
     <div className="relative w-full h-fit lg:min-h-screen overflow-hidden">
@@ -52,9 +49,9 @@ const Setting = () => {
         <div className="flex flex-col lg:flex-row gap-8 md:p-4 pt-12 md:pt-14 lg:pt-14">
           {/* Sidebar */}
           <AccountSidebar
-            name={profile.fullName || ""}
-            role={profile.userType || ""}
-            imageUrl={profile.userProfileUrl || "/default-men-logo.jpg"}
+            name={profile?.fullName || ""}
+            role={profile?.userType || ""}
+            imageUrl={profile?.userProfileUrl || "/default-men-logo.jpg"}
             onUploadImage={handleImageUpload}
           />
 
@@ -65,16 +62,29 @@ const Setting = () => {
               <Route
                 path="profile"
                 element={
-                  <Profile
-                    user={profile}
-                    imageUrl={profile.userProfileUrl || "/default-men-logo.jpg"}
-                    onUploadImage={handleImageUpload}
-                  />
+                  profile ? (
+                    <Profile
+                      user={profile}
+                      imageUrl={
+                        profile.userProfileUrl || "/default-men-logo.jpg"
+                      }
+                      onUploadImage={handleImageUpload}
+                      loading={loading}
+                    />
+                  ) : (
+                    <div>User profile not available</div>
+                  )
                 }
               />
               <Route path="listings" element={<MyListing />} />
               <Route path="my-leads" element={<MyLeads />} />
-              <Route path="interested-buyers" element={<InterestedBuyers />} />
+              {/* <Route path="interested-buyers" element={<InterestedBuyers />} /> */}
+              {profile?.userType === "Dealer" && (
+                <Route
+                  path="interested-buyers"
+                  element={<InterestedBuyers />}
+                />
+              )}
               <Route path="enquiries" element={<Enquiries />} />
               <Route path="saved" element={<Saved />} />
               <Route path="buy-packages" element={<BuyPackages />} />

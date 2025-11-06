@@ -13,8 +13,8 @@ import {
   bodyTypeOptions,
 } from "../data/filterOptions";
 import { ArrowLeft, Loader2 } from "lucide-react";
-import { locationData } from "../components/sellMyCar/sellHero";
 import { getModels, getVariants } from "../utils/carData";
+import { locationData } from "./Requirements";
 
 const CreateRequirement: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();

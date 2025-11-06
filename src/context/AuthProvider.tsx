@@ -7,6 +7,7 @@ import {
   logout as clearAuthAction,
   updateUser as updateUserAction,
 } from "../store/slices/authSlices/authSlice";
+import toast from "react-hot-toast";
 
 type Props = { children: React.ReactNode };
 
@@ -41,6 +42,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
     try {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
+      toast.success("Logout Successfully!");
     } catch (error) {
       console.warn("Error removing auth from localStorage", error);
     }

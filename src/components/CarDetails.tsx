@@ -444,7 +444,7 @@ const CarDetails = () => {
               <div>
                 <p className="text-black flex items-center text-[10px]">
                   <MapPin className="text-black mr-1 h-3.5 w-3.5" />{" "}
-                  {address?.city ?? "Unknown"}, {address?.state ?? "Unknown"}
+                  {address?.city ?? "Unknown"}
                 </p>
               </div>
             </div>
@@ -552,7 +552,7 @@ const CarDetails = () => {
             )}
 
             <p className="text-[10px] text-gray-500 flex items-center justify-center gap-1">
-              <Flame className="text-[#cb202d] h-[14px] w-[14px]" />
+              <Flame className="text-[#cb202d] h-3.5 w-3.5" />
               Trending Viewed By {car.views ?? 0} user's
             </p>
           </div>
@@ -634,7 +634,7 @@ const CarDetails = () => {
         </div>
 
         {/*desktop & laptop RIGHT SIDE */}
-        <div className="hidden lg:block sticky lg:col-span-4 space-y-6">
+        <div className="hidden lg:block sticky lg:col-span-4 space-y-6 mb-6">
           <div className="sticky top-20 right-0 space-y-6">
             {/* Car Details Card */}
             <div className="border border-gray-100 p-4 rounded-lg space-y-3 shadow">
@@ -678,7 +678,7 @@ const CarDetails = () => {
 
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <User className="text-gray-500 h-[14px] w-[14px]" />
+                  <User className="text-gray-500 h-3.5 w-3.5" />
                   <span className="text-black text-[10px] leading-tight font-semibold capitalize">
                     {ownerName ?? "Unknown"}{" "}
                     <span className="text-[8px] text-gray-700">
@@ -689,8 +689,8 @@ const CarDetails = () => {
 
                 <div>
                   <p className="text-black font-semibold flex items-center text-[10px]">
-                    <MapPin className="text-black mr-1 h-[14px] w-[14px]" />{" "}
-                    {address?.city ?? "Unknown"}, {address?.state ?? "Unknown"}
+                    <MapPin className="text-black mr-1 h-3.5 w-3.5" />{" "}
+                    {address?.city ?? "Unknown"}
                   </p>
                 </div>
               </div>
@@ -703,7 +703,7 @@ const CarDetails = () => {
                     handleAccess();
                   }
                 }}
-                className="w-full text-sm bg-black text-white px-6 py-[6px] rounded-sm hover:bg-black/90 cursor-pointer"
+                className="w-full text-sm bg-black text-white px-6 py-1.5 rounded-sm hover:bg-black/90 cursor-pointer"
               >
                 Contact Seller
               </button>

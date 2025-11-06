@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import HeroPage from "./pages/HeroPage";
@@ -24,8 +25,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import RefundPolicy from "./pages/RefundPolicy";
 import Requirements from "./pages/Requirements";
 import CreateRequirement from "./pages/CreateRequirement";
-import { Toaster } from "react-hot-toast";
-
+import { setSuccessMessage } from "./store/slices/toastSlice";
 
 
 const App = () => {
@@ -37,6 +37,15 @@ const App = () => {
   const [citySearch, setCitySearch] = useState("");
   const { isOpen } = useSelector((state: RootState) => state.loginModel);
   const hideNavFooter = ["/register", "/forgot-password"];
+  const successMessage = useSelector((state: RootState) => state.toast.successMessage);
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(setSuccessMessage(null));
+    }
+  }, [successMessage, dispatch]);
+  
 
   useEffect(() => {
     dispatch(fetchCars(BACKEND_URL));
@@ -56,17 +65,19 @@ const App = () => {
     };
   }, [isOpen, isLocationModalOpen]);
 
+
   return (
     <div className="flex flex-col min-h-screen">
       <AppInitializer />
 
+      <Toaster position="top-right" reverseOrder={false}/>
+      
       <ScrollToTop />
       {!hideNavFooter.includes(location.pathname) && (
         <Navbar onSelectCityClick={() => setIsLocationModalOpen(true)} />
       )}
 
       <main className="flex-1 z-0 ">
-        <Toaster position="top-right" reverseOrder={false} />
         <Routes>
           <Route path="/" element={<HeroPage />} />
           <Route path="/buy-car" element={<BuyCars />} />

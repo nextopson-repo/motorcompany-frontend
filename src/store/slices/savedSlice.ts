@@ -5,6 +5,7 @@ import {
 } from "@reduxjs/toolkit";
 import type { CarRecord } from "../../types/car";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 interface SavedState {
   cars: CarRecord[];
@@ -48,12 +49,12 @@ export const fetchSavedCars = createAsyncThunk(
         }
       );
 
-      // console.log("response :", response)
-      
+      // console.log("response :", response.data.result.savedCars);
 
-      const savedCars: CarRecord[] = response.data.result.savedCars.map(
-        (item: any) => {
+      const savedCars: CarRecord[] = response.data.result.savedCars
+        .map((item: any) => {
           const car = item.property;
+          if(!car) return null;
           return {
             id: car.id,
             brand: car.brand,
@@ -73,21 +74,31 @@ export const fetchSavedCars = createAsyncThunk(
             })),
             // ✅ Owner info
             user: {
-              fullName: item.savedCar?.ownerFullName || "Unknown",
-              userType: item.savedCar?.ownerType || "Owner",
+              // fullName: item.savedCar?.fullName || "Unknown",
+              fullName: user.fullName || "Unknown",
+              userType: user.userType || "unknown",
             },
             updatedAt: car.updatedAt,
             createdAt: car.createdAt,
             savedCarId: item.savedCar.id,
           };
-        }
-      );
+        })
+        .filter(Boolean);
 
       const savedCarIds = response.data.result.savedCars.map(
         (item: any) => item.savedCar.id
       );
+
+      // console.log("carId:", savedCarIds)
+
+      toast.success("fetched saved cars successfully!", {
+        id: "fetch saved cars",
+      });
       return { savedCars, savedCarIds };
     } catch (err: any) {
+      toast.error(err.response?.data?.message || err.message, {
+        id: "error saved cars",
+      });
       return rejectWithValue(err.response?.data?.message || err.message);
     }
   }
@@ -114,8 +125,13 @@ export const createSaveCar = createAsyncThunk(
         }
       );
 
+      toast.success("Car saved successfully!");
+
       return carId;
     } catch (err: any) {
+      toast.error(
+        err.response?.data?.message || err.message || "Failed to save car"
+      );
       return rejectWithValue(err.response?.data?.message || err.message);
     }
   }
@@ -142,8 +158,15 @@ export const removeSaveCar = createAsyncThunk(
         }
       );
 
+      toast.success("Removed saved car successfully!");
+
       return carId;
     } catch (err: any) {
+      toast.error(
+        err.response?.data?.message ||
+          err.message ||
+          "Failed to Remove saved car"
+      );
       return rejectWithValue(err.response?.data?.message || err.message);
     }
   }

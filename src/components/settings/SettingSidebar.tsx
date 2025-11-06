@@ -39,7 +39,9 @@ export default function SettingSidebar({
     { name: "My Listing", path: "/settings/listings" },
     { name: "Add Car", path: "/sell" },
     { name: "My Enqueries", path: "/settings/enquiries" },
-    { name: "Interested Buyers List", path: "/settings/interested-buyers" },
+   ...(role === "Dealer"
+    ? [{ name: "Interested Buyers List", path: "/settings/interested-buyers" }]
+    : []),
     { name: "Saved", path: "/settings/saved" },
     { name: "Buy Packages", path: "/settings/buy-packages" },
     { name: "Bought Packages & Billing", path: "/settings/bought-packages" },

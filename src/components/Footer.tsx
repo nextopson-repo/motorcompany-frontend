@@ -1,33 +1,33 @@
-import { ChevronRight, Copyright } from "lucide-react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import type { AppDispatch } from "../store/store";
 import { updateSelectedFilter } from "../store/slices/carSlice";
 import { setLocation } from "../store/slices/locationSlice";
+import { ChevronRight, Copyright } from "lucide-react";
+import type { AppDispatch } from "../store/store";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 const Footer = () => {
   const Navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
   const carForSaleCities = [
-    { title: "Delhi" },
-    { title: "Chandigarh" },
     { title: "Ahemdabad" },
-    { title: "Pune" },
+    { title: "Chandigarh" },
+    { title: "Delhi" },
+    { title: "Hyderabad" },
     { title: "Jaipur" },
   ];
-
+  
   const carForSaleCities2 = [
+    { title: "Kanpur" },
     { title: "Lucknow" },
     { title: "Mumbai" },
+    { title: "Pune" },
     { title: "Surat" },
-    { title: "hyderabad" },
-    { title: "Kanpur" },
   ];
 
   const linksData = [
-    { page: "About Us", link: "/about" },
-    { page: "Careers", link: "/career" },
+    // { page: "About Us", link: "/#" },
+    // { page: "Careers", link: "/#" },
     { page: "Terms & Conditions", link: "/terms" },
     { page: "Privacy Policy", link: "/privacy" },
     { page: "Refund Policy", link: "/refund" },
@@ -143,7 +143,7 @@ const Footer = () => {
           <h4 className="text-md md:text-md font-semibold text-gray-900 mb-2">
             Car for Sale
           </h4>
-          <ul className="space-y-[6px] text-xs md:text-[10px] font-semibold text-gray-700 xl:text-xs">
+          <ul className="space-y-1.5 text-xs md:text-[10px] font-semibold text-gray-700 xl:text-xs">
             {carForSaleCities.map((cities, index) => (
               <li key={index}>
                 <p className="hover:underline" onClick={() => handleCityClick(cities.title)}>
@@ -156,7 +156,7 @@ const Footer = () => {
 
         {/* Car For Sell col 2 */}
         <div className="col-span-3 mt-8 lg:pl-10 xl:pr-4">
-          <ul className="space-y-[6px] text-xs md:text-[10px] font-semibold text-gray-700 xl:text-xs">
+          <ul className="space-y-1.5 text-xs md:text-[10px] font-semibold text-gray-700 xl:text-xs">
             {carForSaleCities2.map((cities, index) => (
               <li key={index}>
                 <p className="hover:underline" onClick={() => handleCityClick(cities.title)}>
@@ -167,11 +167,11 @@ const Footer = () => {
           </ul>
         </div>
 
-        <div className="col-span-6 md:col-span-3 lg:col-span-3 lg:mt-6 lg:pl-16 px-4">
+        <div className="col-span-6 md:col-span-3 lg:col-span-3 lg:mt-6 lg:pl-16 px-4 lg:self-center">
           <h4 className="block md:hidden text-md md:text-md font-semibold text-gray-900 mb-2">
             Company
           </h4>
-          <ul className="hidden md:block space-y-[6px] text-xs md:text-[10px] font-semibold text-gray-700 xl:text-xs">
+          <ul className="hidden md:block space-y-1.5 text-xs md:text-[10px] font-semibold text-gray-700 xl:text-xs lg:mt-5">
             {linksData.map((link, index) => (
               <li key={index}>
                 <a href={link.link} className="hover:underline">
@@ -184,7 +184,7 @@ const Footer = () => {
           <span className="grid grid-cols-2 md:hidden justify-between gap-4 mb-4">
             {/* Left side - 3 links */}
             <ul className="space-y-[6px] text-xs md:text-[10px] font-semibold text-gray-700 xl:text-xs">
-              {linksData.slice(0, 3).map((link, index) => (
+              {linksData.slice(0, 4).map((link, index) => (
                 <li key={index}>
                   <a href={link.link} className="hover:underline">
                     {link.page}
@@ -194,7 +194,7 @@ const Footer = () => {
             </ul>
 
             {/* Right side - 2 links */}
-            <ul className="space-y-[6px] text-xs md:text-[10px] font-semibold text-gray-700 xl:text-xs">
+            {/* <ul className="hidden space-y-[6px] text-xs md:text-[10px] font-semibold text-gray-700 xl:text-xs">
               {linksData.slice(3, 5).map((link, index) => (
                 <li key={index}>
                   <a href={link.link} className="hover:underline">
@@ -202,7 +202,7 @@ const Footer = () => {
                   </a>
                 </li>
               ))}
-            </ul>
+            </ul> */}
           </span>
 
           <p className="flex md:hidden items-center justify-center gap-2 text-gray-800 text-[10px]">

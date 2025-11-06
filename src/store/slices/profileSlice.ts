@@ -3,7 +3,7 @@ import {
   type PayloadAction,
   createAsyncThunk,
 } from "@reduxjs/toolkit";
-// Use axios for multipart/form-data; use fetch when CORS mode is required
+import toast from "react-hot-toast";
 import type { RootState } from "../store";
 
 // --------------------
@@ -23,6 +23,7 @@ export interface UserProfile {
 }
 
 interface ProfileState {
+  success: boolean;
   user: UserProfile | null;
   loading: boolean;
   error: string | null;
@@ -36,6 +37,7 @@ interface ProfileState {
 // Initial State
 // --------------------
 const initialState: ProfileState = {
+  success: false,
   user: null,
   loading: false,
   error: null,
@@ -56,41 +58,36 @@ export const fetchUserProfile = createAsyncThunk<
   try {
     const userStr = localStorage.getItem("user");
     const token = localStorage.getItem("token");
-    if (!userStr) return rejectWithValue("User not found in localStorage");
-    if (!token) return rejectWithValue("Token not found in localStorage");
+    if (!userStr) throw new Error("User not found in localStorage");
+    if (!token) throw new Error("Token not found in localStorage");
 
     const user = JSON.parse(userStr) as { id?: string };
-    if (!user?.id) return rejectWithValue("User ID not found");
+    if (!user?.id) throw new Error("User ID not found");
 
     const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-    const res = await fetch(
-      `${BACKEND_URL}/api/v1/profile/get-userProfile`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ userId: user.id }),
-        mode: "cors",
-        credentials: "include",
-      }
-    );
+    const res = await fetch(`${BACKEND_URL}/api/v1/profile/get-userProfile`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ userId: user.id }),
+      mode: "cors",
+      credentials: "include",
+    });
 
     const data = await res.json();
-    if (!data?.data) return rejectWithValue("Invalid response from server");
+    if (!data?.data) throw new Error("Invalid response from server");
     return data.data as UserProfile;
-  } catch (err) {
-    const message =
-      typeof err === "object" && err && "message" in err
-        ? String((err as { message?: unknown }).message || "Failed to fetch profile")
-        : "Failed to fetch profile";
-    return rejectWithValue(message);
+  } catch (err: any) {
+    const msg = err.message || "Failed to fetch profile";
+    toast.error(msg, { id: "error" });
+    return rejectWithValue(msg);
   }
 });
 
 // --------------------
-// Update Profile (supports image upload)
+// Update Profile
 // --------------------
 export const updateUserProfile = createAsyncThunk<
   UserProfile,
@@ -101,26 +98,21 @@ export const updateUserProfile = createAsyncThunk<
     const token = localStorage.getItem("token");
     const userStr = localStorage.getItem("user");
 
-    if (!userStr) return rejectWithValue("User not found in localStorage");
-    if (!token) return rejectWithValue("Token not found in localStorage");
+    if (!userStr) throw new Error("User not found in localStorage");
+    if (!token) throw new Error("Token not found in localStorage");
 
     const user = JSON.parse(userStr) as { id?: string };
-    if (!user?.id) return rejectWithValue("User ID not found");
+    if (!user?.id) throw new Error("User ID not found");
 
     const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-
-    // ✅ Build FormData (text + file fields)
     const formData = new FormData();
     formData.append("userId", user.id);
 
     for (const [key, value] of Object.entries(userData)) {
-      if (value === undefined || value === null) continue;
-
-      if (key === "userProfileFile" && value instanceof File) {
-        formData.append("profileImage", value); // match backend field name
-      } else {
-        formData.append(key, String(value));
-      }
+      if (!value) continue;
+      if (key === "userProfileFile" && value instanceof File)
+        formData.append("profileImage", value);
+      else formData.append(key, String(value));
     }
 
     const axios = (await import("axios")).default;
@@ -136,16 +128,11 @@ export const updateUserProfile = createAsyncThunk<
       }
     );
 
-    if (!res.data?.data) return rejectWithValue("Invalid response from update API");
+    if (!res.data?.data) throw new Error("Invalid response from update API");
 
-    // ✅ Update token if provided
-    if (res.data.token) {
-      localStorage.setItem("token", res.data.token);
-    }
-
+    if (res.data.token) localStorage.setItem("token", res.data.token);
     const updatedUser = res.data.data as UserProfile;
 
-    // ✅ Update user in localStorage
     localStorage.setItem(
       "user",
       JSON.stringify({
@@ -154,27 +141,21 @@ export const updateUserProfile = createAsyncThunk<
         email: updatedUser.email,
         userType: updatedUser.userType,
         isEmailVerified: updatedUser.emailVerified,
-        isMobileVerified: true, // assuming mobile verified already
+        isMobileVerified: true,
         userProfileUrl: updatedUser.userProfileUrl,
-        isFullyVerified: false,
         mobileNumber: updatedUser.mobileNumber,
         profileImg: updatedUser.userProfileUrl,
       })
     );
 
+    toast.success("Profile updated successfully!", { id: "profile-update" });
     return updatedUser;
-  } catch (err) {
-    const message =
-      typeof err === "object" && err && "message" in err
-        ? String(
-            (err as { message?: unknown }).message ||
-              "Failed to update profile"
-          )
-        : "Failed to update profile";
-    return rejectWithValue(message);
+  } catch (err: any) {
+    const msg = err.message || "Failed to update profile";
+    toast.error(msg, { id: "profile-update error" });
+    return rejectWithValue(msg);
   }
 });
-
 
 // --------------------
 // OTP Send & Verify
@@ -186,7 +167,7 @@ export const sendOtp = createAsyncThunk<
 >("profile/sendOtp", async (_, { rejectWithValue, getState }) => {
   try {
     const { user } = getState().profile;
-    if (!user?.email) return rejectWithValue("Email not found");
+    if (!user?.email) throw new Error("Email not found");
 
     const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
     const res = await fetch(`${BACKEND_URL}/api/v1/auth/send-otp`, {
@@ -197,13 +178,13 @@ export const sendOtp = createAsyncThunk<
       credentials: "include",
     });
     const data = await res.json();
+
+    toast.success("OTP sent successfully!", { id: "otp send" });
     return { message: data.message || "OTP sent" };
-  } catch (err) {
-    const message =
-      typeof err === "object" && err && "message" in err
-        ? String((err as { message?: unknown }).message || "OTP sending failed")
-        : "OTP sending failed";
-    return rejectWithValue(message);
+  } catch (err: any) {
+    const msg = err.message || "OTP sending failed";
+    toast.error(msg, { id: "otp error" });
+    return rejectWithValue(msg);
   }
 });
 
@@ -214,7 +195,7 @@ export const verifyOtp = createAsyncThunk<
 >("profile/verifyOtp", async ({ otp }, { rejectWithValue, getState }) => {
   try {
     const { user } = getState().profile;
-    if (!user?.email) return rejectWithValue("Email not found");
+    if (!user?.email) throw new Error("Email not found");
 
     const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
     const res = await fetch(`${BACKEND_URL}/api/v1/auth/verify-otp`, {
@@ -225,13 +206,13 @@ export const verifyOtp = createAsyncThunk<
       credentials: "include",
     });
     const data = await res.json();
+
+    toast.success("OTP verified successfully!", { id: "otp verified" });
     return { message: data.message || "OTP verified" };
-  } catch (err) {
-    const message =
-      typeof err === "object" && err && "message" in err
-        ? String((err as { message?: unknown }).message || "OTP verification failed")
-        : "OTP verification failed";
-    return rejectWithValue(message);
+  } catch (err: any) {
+    const msg = err.message || "OTP verification failed";
+    toast.error(msg, { id: "otp error" });
+    return rejectWithValue(msg);
   }
 });
 
@@ -250,13 +231,16 @@ const profileSlice = createSlice({
       state,
       action: PayloadAction<{ field: keyof UserProfile; value: string }>
     ) {
-      if (state.user) (state.user as Record<string, unknown>)[action.payload.field] = action.payload.value;
+      if (state.user)
+        (state.user as Record<string, unknown>)[action.payload.field] =
+          action.payload.value;
     },
     setOtp(state, action: PayloadAction<string>) {
       state.otp = action.payload;
     },
     setError(state, action: PayloadAction<string | null>) {
       state.error = action.payload;
+      if (action.payload) toast.error(action.payload, { id: "error message" });
     },
     setLoading(state, action: PayloadAction<boolean>) {
       state.loading = action.payload;
@@ -268,22 +252,28 @@ const profileSlice = createSlice({
     },
     clearProfile(state) {
       Object.assign(state, initialState);
+      toast.success("Profile cleared!", { id: "profile-clear" });
     },
   },
   extraReducers: (builder) => {
     builder
+      // Fetch
       .addCase(fetchUserProfile.pending, (state) => {
         state.loading = true;
         state.error = null;
+         state.success = false;
       })
       .addCase(fetchUserProfile.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
+        state.success = true; // ✅ mark as success
       })
       .addCase(fetchUserProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Failed to fetch profile";
+         state.success = false;
       })
+      // Update
       .addCase(updateUserProfile.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -296,6 +286,7 @@ const profileSlice = createSlice({
         state.loading = false;
         state.error = action.payload || "Failed to update profile";
       })
+      // OTP
       .addCase(sendOtp.pending, (state) => {
         state.loading = true;
         state.error = null;

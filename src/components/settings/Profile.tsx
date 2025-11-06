@@ -20,20 +20,58 @@ import {
   resetOtpState,
   updateUserProfile,
 } from "../../store/slices/profileSlice";
+import toast from "react-hot-toast";
 
 interface profileProps {
   user: UserProfile;
   imageUrl: string;
   onUploadImage: (file: File) => void;
+  loading: boolean;
 }
+
+const SkeletonField = ({ full = false }: { full?: boolean }) => (
+  <div className={`flex flex-col ${full ? "md:col-span-2" : ""}`}>
+    <span className="h-4 bg-gray-200 rounded w-24 mb-2 animate-pulse" />
+    <span className="h-7 bg-gray-200 rounded w-full animate-pulse mb-2" /> {" "}
+  </div>
+);
+
+const SkeletonProfile = () => (
+  <main className="w-full flex-1 mx-auto relative mb-8 lg:mb-0">
+    {/* Header */}{" "}
+    <div className="flex items-center gap-3 md:mb-6 py-1.5 px-4 md:px-0">
+      <span className="h-8 bg-gray-200 rounded w-32 animate-pulse" />{" "}
+    </div>
+    {/* Profile Image */}{" "}
+    <div className="md:hidden flex justify-center mb-4 md:mb-6 relative">
+      <div className="w-24 h-24 rounded-full bg-gray-200 animate-pulse" />{" "}
+    </div>
+    {/* Skeleton Fields */}{" "}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 px-4 md:px-0">
+      <SkeletonField />
+      <SkeletonField />
+      <SkeletonField />
+      <SkeletonField full />
+      <SkeletonField full />
+      <SkeletonField />
+      <SkeletonField />{" "}
+    </div>
+    {/* Skeleton Buttons */}{" "}
+    <div className="mt-4 md:mt-8 px-4 md:px-0">
+      {" "}
+      <span className="h-10 bg-gray-200 rounded w-full animate-pulse block" />{" "}
+    </div>{" "}
+  </main>
+);
 
 export default function Profile({
   user,
   imageUrl,
   onUploadImage,
+  loading,
 }: profileProps) {
   const dispatch = useAppDispatch();
-  const { loading, error } = useAppSelector((state) => state.profile);
+  const { success, error } = useAppSelector((state) => state.profile);
   useEffect(() => {
     setLocalUser(user);
   }, [user]);
@@ -41,13 +79,21 @@ export default function Profile({
 
   const [editMode, setEditMode] = useState(false);
 
-  if (!user) {
-    return (
-      <main className="flex-1 p-4">
-        <p className="text-gray-500">No profile data available.</p>
-      </main>
-    );
+  if (loading) {
+    return <SkeletonProfile />;
   }
+  if(success === true){
+    toast.success("Profile fetched successfully!", { id: "profile-fetch" });
+    console.log("Profile fetched successfully!")
+  }
+
+  // if (!user) {
+  //   return (
+  //     <main className="flex-1 p-4">
+  //       <p className="text-gray-500">No profile data available.</p>
+  //     </main>
+  //   );
+  // }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLocalUser({
@@ -63,9 +109,9 @@ export default function Profile({
   };
 
   const handleEmailVerification = () => {
-    alert("Verify link send on your email.");
+    toast.error("Verify link send on your email.", { id: "verify email" });
     if (!user.email) {
-      alert("Please enter a valid email before verifying.");
+      toast.error("Please enter a valid email before verifying.", { id: "error on verifying" });
       return;
     }
   };
@@ -76,9 +122,8 @@ export default function Profile({
         ...localUser,
       };
       await dispatch(updateUserProfile(payload)).unwrap();
-      alert("Profile updated successfully!");
     } catch (err) {
-      alert(`Failed to update profile : ${err}`);
+      toast.error(`Failed to update profile : ${err}`, { id: "error in update" });
     }
   };
 
@@ -92,7 +137,7 @@ export default function Profile({
   return (
     <main className="w-full flex-1 mx-auto relative mb-8 lg:mb-0">
       {/* Header */}
-      <div className="flex items-center gap-3 md:mb-6 bg-white text-black py-[6px] px-4 md:px-0 z-10">
+      <div className="flex items-center gap-3 md:mb-6 bg-white text-black py-1.5 px-4 md:px-0 z-10">
         <h1 className="text-md md:text-2xl font-semibold">My Profile</h1>
       </div>
 
@@ -133,133 +178,141 @@ export default function Profile({
       </div>
 
       {/* Profile Fields */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 px-4 md:px-0">
-        <Field
-          icon={<User size={12} />}
-          label="Full Name"
-          name="fullName"
-          value={localUser.fullName}
-          editable={editMode}
-          onChange={handleChange}
-        />
-        <Field
-          icon={<CgProfile size={12} />}
-          label="User Type"
-          name="userType"
-          value={localUser.userType}
-          editable={false}
-          onChange={handleChange}
-        />
-        <Field
-          icon={<Phone size={12} />}
-          label="Phone Number"
-          name="mobileNumber"
-          value={localUser.mobileNumber}
-          editable={false}
-          onChange={handleChange}
-        />
+      {!user ? (
+        <div className="flex justify-center items-center h-[450px]">
+          <p className="text-gray-500 text-center">
+            No profile data available.
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 px-4 md:px-0">
+          <Field
+            icon={<User size={12} />}
+            label="Full Name"
+            name="fullName"
+            value={localUser?.fullName}
+            editable={editMode}
+            onChange={handleChange}
+          />
+          <Field
+            icon={<CgProfile size={12} />}
+            label="User Type"
+            name="userType"
+            value={localUser?.userType}
+            editable={false}
+            onChange={handleChange}
+          />
+          <Field
+            icon={<Phone size={12} />}
+            label="Phone Number"
+            name="mobileNumber"
+            value={localUser?.mobileNumber}
+            editable={false}
+            onChange={handleChange}
+          />
 
-        {/* ✅ Email Field with Verify Button */}
-        <div className="flex flex-col">
-          <span className="text-gray-700 text-[10px] md:text-xs font-semibold flex items-center gap-2 md:gap-1">
-            <Mail size={12} />
-            Email
-          </span>
-          <div className="flex items-center gap-2 my-2">
-            {localUser.emailVerified ? (
-              <span className="flex items-center text-green-600 text-[11px] font-semibold">
-                <CheckCircle2 size={14} className="mr-1" />
-                Verified
-              </span>
-            ) : (
-              <div className="relative flex items-center">
-                {/* Alert Icon with hover trigger */}
-                <div
-                  className="group relative flex items-center"
-                  onClick={handleEmailVerification}
-                >
-                  <CircleAlert
-                    size={16}
-                    className="text-red-600 cursor-pointer transition-transform duration-200 group-hover:scale-110"
-                  />
-
-                  {/* Tooltip Badge */}
+          {/* ✅ Email Field with Verify Button */}
+          <div className="flex flex-col">
+            <span className="text-gray-700 text-[10px] md:text-xs font-semibold flex items-center gap-2 md:gap-1">
+              <Mail size={12} />
+              Email
+            </span>
+            <div className="flex items-center gap-2 my-2">
+              {localUser?.emailVerified ? (
+                <span className="flex items-center text-green-600 text-[11px] font-semibold">
+                  <CheckCircle2 size={14} className="mr-1" />
+                  Verified
+                </span>
+              ) : (
+                <div className="relative flex items-center">
+                  {/* Alert Icon with hover trigger */}
                   <div
-                    className="absolute top-full left-1/2 -translate-x-1/2 mt-2 
+                    className="group relative flex items-center"
+                    onClick={handleEmailVerification}
+                  >
+                    <CircleAlert
+                      size={16}
+                      className="text-red-600 cursor-pointer transition-transform duration-200 group-hover:scale-110"
+                    />
+
+                    {/* Tooltip Badge */}
+                    <div
+                      className="absolute top-full left-1/2 -translate-x-1/2 mt-2 
       bg-white text-black text-[10px] rounded-md shadow-md border border-gray-200 
       px-2 py-1.5 w-max max-w-[150px] 
       opacity-0 pointer-events-none scale-90 
       group-hover:opacity-100 group-hover:scale-100 
       transition-all duration-200 z-20"
-                  >
-                    <p className="text-[8px] text-center">
-                      Your email is not verified. <br /> For verify click on
-                      above icon
-                    </p>
+                    >
+                      <p className="text-[8px] text-center">
+                        Your email is not verified. <br /> For verify click on
+                        above icon
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              // <button
-              //   onClick={handleEmailVerification}
-              //   // disabled={emailVerificationLoading}
-              //   className="text-[11px] bg-red-500 text-white px-2 md:px-3 py-1 rounded hover:bg-red-600 transition-all"
-              // >
-              //   {/* {emailVerificationLoading ? "Sending..." : "Verify Now"} */}
-              //   {"Verify Now"}
-              // </button>
-            )}
-            {editMode ? (
-              <input
-                type="text"
-                name="email"
-                value={localUser.email}
-                onChange={handleChange}
-                className="flex-1 border rounded-xs md:rounded px-3 py-2 text-xs md:text-sm bg-gray-100"
-              />
-            ) : (
-              <span className="flex-1 text-gray-700 text-xs md:text-sm bg-gray-100 rounded px-3 py-2 capitalize">
-                {localUser.email}
-              </span>
-            )}
+                // <button
+                //   onClick={handleEmailVerification}
+                //   // disabled={emailVerificationLoading}
+                //   className="text-[11px] bg-red-500 text-white px-2 md:px-3 py-1 rounded hover:bg-red-600 transition-all"
+                // >
+                //   {/* {emailVerificationLoading ? "Sending..." : "Verify Now"} */}
+                //   {"Verify Now"}
+                // </button>
+              )}
+              {editMode ? (
+                <input
+                  type="text"
+                  name="email"
+                  value={localUser?.email}
+                  onChange={handleChange}
+                  className="flex-1 border rounded-xs md:rounded px-3 py-2 text-xs md:text-sm bg-gray-100"
+                />
+              ) : (
+                <span className="flex-1 text-gray-700 text-xs md:text-sm bg-gray-100 rounded px-3 py-2 capitalize">
+                  {localUser?.email}
+                </span>
+              )}
+            </div>
           </div>
-        </div>
 
-        <Field
-          icon={<MapPinHouse size={12} />}
-          label="Address"
-          name="address"
-          value={localUser.address}
-          editable={editMode}
-          onChange={handleChange}
-          full
-        />
-        <Field
-          icon={<MapPin size={12} />}
-          label="Landmark"
-          name="landmark"
-          value={localUser.landmark}
-          editable={editMode}
-          onChange={handleChange}
-          full
-        />
-        <Field
-          icon={<Building size={12} />}
-          label="City"
-          name="city"
-          value={localUser.city}
-          editable={editMode}
-          onChange={handleChange}
-        />
-        <Field
-          icon={<PinIcon size={12} />}
-          label="Pin Code"
-          name="pin"
-          value={localUser.pin}
-          editable={editMode}
-          onChange={handleChange}
-        />
-      </div>
+          <Field
+            icon={<MapPinHouse size={12} />}
+            label="Address"
+            name="address"
+            value={localUser?.address}
+            editable={editMode}
+            onChange={handleChange}
+            full
+          />
+          <Field
+            icon={<MapPin size={12} />}
+            label="Landmark"
+            name="landmark"
+            value={localUser?.landmark}
+            editable={editMode}
+            onChange={handleChange}
+            full
+          />
+          <Field
+            icon={<Building size={12} />}
+            label="City"
+            name="city"
+            value={localUser?.city}
+            editable={editMode}
+            onChange={handleChange}
+          />
+          <Field
+            icon={<PinIcon size={12} />}
+            label="Pin Code"
+            name="pin"
+            value={localUser?.pin}
+            editable={editMode}
+            onChange={handleChange}
+          />
+        </div>
+      )}
 
       {/* Error */}
       <span>

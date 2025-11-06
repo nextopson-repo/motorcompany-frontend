@@ -1,32 +1,80 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../store/store";
-import { ChevronDown, MapPin, Phone, SearchIcon } from "lucide-react";
+import { MapPin, Phone, SearchIcon } from "lucide-react";
+import { fetchBuyers } from "../../store/slices/buyersSlice";
+import toast from "react-hot-toast";
 
 const InterestedBuyers: React.FC = () => {
-  const buyers = useSelector((state: RootState) => state.buyers.buyers);
-  const [isSortOpen, setIsSortOpen] = useState(false);
+  // const buyers = useSelector((state: RootState) => state.buyers.buyers);
+  const dispatch = useDispatch();
+  const { buyers, loading, error } = useSelector((state: RootState) => state.buyers);
 
-  const sortOptions = [
-    { value: "Indore", label: "Indore" },
-    { value: "Bhopal", label: "Bhopal" },
-    { value: "Pune", label: "Pune" },
-    { value: "Ahmedabad", label: "Ahmedabad" },
-    { value: "Delhi", label: "Delhi" },
-    { value: "Kanpur", label: "Kanpur" },
-    { value: "Lucknow", label: "Lucknow" },
-    { value: "Chandigarh", label: "Chandigarh" },
-    { value: "Jaipur", label: "Jaipur" },
-    { value: "Hyderabad", label: "Hyderabad" },
-  ];
+  useEffect(() => {
+    dispatch(fetchBuyers() as any);
+  }, [dispatch]);
 
-  const currentSortLabel =
-    // sortOptions.find((o) => o.value === sortOption)?.label ||
-    sortOptions.find((o) => o.value)?.label ||
-    sortOptions[0].label;
+  useEffect(() => {
+    if (error) {
+      toast.error(error, { id: "error message" });
+      
+    }
+  }, [error]);
+  // const [isSortOpen, setIsSortOpen] = useState(false);
+
+  // const sortOptions = [
+  //   { value: "Indore", label: "Indore" },
+  //   { value: "Bhopal", label: "Bhopal" },
+  //   { value: "Pune", label: "Pune" },
+  //   { value: "Ahmedabad", label: "Ahmedabad" },
+  //   { value: "Delhi", label: "Delhi" },
+  //   { value: "Kanpur", label: "Kanpur" },
+  //   { value: "Lucknow", label: "Lucknow" },
+  //   { value: "Chandigarh", label: "Chandigarh" },
+  //   { value: "Jaipur", label: "Jaipur" },
+  //   { value: "Hyderabad", label: "Hyderabad" },
+  // ];
+
+  // const currentSortLabel =
+  //   // sortOptions.find((o) => o.value === sortOption)?.label ||
+  //   sortOptions.find((o) => o.value)?.label ||
+  //   sortOptions[0].label;
+
+   // check is mobile or desktop
+    function isMobile() {
+      return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    }
+  
+    function handlePhoneClick (phone: string, carName: string) {
+      try {
+        toast.success("Calling...", { id: "calling" });
+        
+        // 🔹 2. Initiate call or WhatsApp
+        const phoneDigits = phone?.replace(/[^+\d]/g, "");
+        if (!phoneDigits) return;
+  
+        if (isMobile()) {
+          window.location.href = `tel:${phoneDigits}`;
+        } else {
+          const whatsAppMsg = encodeURIComponent(
+            `Hello, I'm seen you enquiry: ${carName}.`
+          );
+          window.open(
+            `https://wa.me/${phoneDigits}?text=${whatsAppMsg}`,
+            "_blank"
+          );
+        }
+      } catch (err: any) {
+        toast.error(err, { id: "error message" });
+        console.error("⚠️ handlePhoneClick error:", err);
+        
+      }
+    };
+
 
   return (
     <div className="w-full mx-auto">
+      {/* <Toaster position="top-right" reverseOrder={false} /> */}
       {/* header */}
       <div className="w-full mb-4 lg:mb-6 px-4 md:px-0 flex flex-col md:flex-row gap-2 md:gap-0 md:items-center justify-between sm:mt-2 lg:mt-0">
         <h2 className="text-md md:text-2xl font-bold py-2 md:py-0">Interested Buyers</h2>
@@ -40,20 +88,19 @@ const InterestedBuyers: React.FC = () => {
               className="w-full focus:outline-none text-[10px] md:text-xs text-black placeholder:text-black"
             />
           </span>
-          <button
+          {/* <button
             onClick={() => setIsSortOpen(!isSortOpen)}
             className="bg-[#24272C] text-white rounded-sm px-2 py-2 text-sm  sm:w-auto flex items-center justify-between border border-gray-300 transition cursor-pointer hover:bg-gray-800"
           >
-            {/* <span className="font-medium text-xs md:text-md">Sort By :</span> */}
             <span className="text-xs ml-1">{currentSortLabel}</span>
             <ChevronDown
               className={`w-3 h-3 ml-2 text-white transform transition-transform duration-200 ${
                 isSortOpen ? "rotate-180" : ""
               }`}
             />
-          </button>
+          </button> */}
 
-          {isSortOpen && (
+          {/* {isSortOpen && (
             <div className="absolute right-0 mt-9 w-32 bg-gray-50 text-xs rounded-md shadow-lg z-20 p-1">
               {sortOptions.map((opt) => (
                 <button
@@ -71,18 +118,28 @@ const InterestedBuyers: React.FC = () => {
                 </button>
               ))}
             </div>
-          )}
+          )} */}
         </div>
       </div>
       
       {/* main Listing */}
       <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-4 md:gap-4 px-4 md:px-0 mb-10">
-        {buyers.map((buyer) => (
+         {loading ? (
+          // Skeleton loaders while fetching
+          [...Array(6)].map((_, i) => (
+            <div key={i} className="border border-gray-300 rounded-md md:rounded-md overflow-hidden shadow animate-pulse p-4">
+              <div className="bg-gray-300 rounded-full h-10 w-10 mb-3" />
+              <div className="h-4 bg-gray-300 mb-2 rounded w-3/4"></div>
+              <div className="h-3 bg-gray-300 rounded w-1/2"></div>
+            </div>
+          ))
+        ) : buyers?.length > 0 ? (
+        buyers.map((buyer: any) => (
           <div
             key={buyer.id}
             className="border border-gray-300 rounded-xs md:rounded-sm overflow-hidden shadow hover:shadow-lg transition-shadow"
           >
-            <div className="bg-[#24272C] text-white p-2 py-[6px] md:py-2 rounded-xs flex items-center justify-between">
+            <div className="bg-[#24272C] text-white p-2 py-1.5 md:py-2 rounded-xs flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div>
                   <img
@@ -96,12 +153,12 @@ const InterestedBuyers: React.FC = () => {
                   <p className="text-[10px]">{buyer.role}</p>
                 </div>
               </div>
-              <a
-                href="tel"
-                className="p-2 rounded-xs bg-white hover:bg-gray-300"
+              <button
+                onClick={() => handlePhoneClick(buyer.phone, buyer.carName)}
+                className="p-2 rounded-xs bg-white hover:bg-gray-300 cursor-pointer"
               >
                 <Phone className="h-3 w-3 text-black" />
-              </a>
+              </button>
             </div>
             <div className="p-2 space-y-2">
               {/* <div className="flex items-center text-black font-medium text-[10px]">
@@ -110,7 +167,7 @@ const InterestedBuyers: React.FC = () => {
               </div> */}
               <div className="flex items-center text-black font-medium text-[10px]">
                 <MapPin className="h-3 w-3 text-black mr-2" strokeWidth={1.2} />
-                <span>{buyer.location}</span>
+                <span>{buyer.location || "Bhopal"}</span>
               </div>
               <div className="flex items-center text-black font-medium text-[10px]">
                 <img src="/like.png" alt="like img" className="h-3 w-3 mr-2" />
@@ -118,7 +175,10 @@ const InterestedBuyers: React.FC = () => {
               </div>
             </div>
           </div>
-        ))}
+        ))
+        ) : (
+          <p className="text-center text-gray-500 py-6">No buyers found.</p>
+        )}
       </div>
     </div>
   );

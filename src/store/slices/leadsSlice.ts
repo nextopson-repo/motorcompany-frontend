@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import type { RootState } from "../store";
+import toast from "react-hot-toast";
 
 // ------------------
 // Interfaces
@@ -11,6 +12,8 @@ interface Lead {
   city: string;
   timeAgo: string;
   image: string;
+  carId: string;
+  carName: string;
 }
 
 interface LeadsState {
@@ -38,7 +41,7 @@ export const fetchCarLeads = createAsyncThunk(
     try {
       const state = getState() as RootState;
       const userId = state.auth.user?.id;
-      console.log("lead user id:",userId)
+      // console.log("lead user id:",userId)
 
       if (!userId) {
         return rejectWithValue("User not logged in");
@@ -49,9 +52,11 @@ export const fetchCarLeads = createAsyncThunk(
       });
 
       console.log("📦 Car Leads Response:", res.data);
+      toast.success("Car leads fetched successfully ✅", { id: "lead-success" });
 
-      return res.data?.leads || []; // assuming API returns { data: [...] }
+      return res.data?.leads || [];
     } catch (err: any) {
+      toast.error(err.response?.data?.message || "Failed to fetch leads ❌", { id: "lead-error" });
       console.error("❌ Error fetching car leads:", err);
       return rejectWithValue(err.response?.data?.message || "Failed to fetch leads");
     }
@@ -83,46 +88,3 @@ const leadsSlice = createSlice({
 });
 
 export default leadsSlice.reducer;
-
-
-
-// import { createSlice } from "@reduxjs/toolkit";
-
-// interface Lead {
-//   id: number;
-//   name: string;
-//   city: string;
-//   timeAgo: string;
-//   image: string;
-// }
-
-// interface LeadsState {
-//   leads: Lead[];
-// }
-
-// const initialState: LeadsState = {
-//   leads: [
-//     {
-//       id: 1,
-//       name: "Sourav Chakraborty",
-//       city: "Mumbai",
-//       timeAgo: "3 weeks ago",
-//       image: "https://randomuser.me/api/portraits/men/1.jpg",
-//     },
-//     {
-//       id: 2,
-//       name: "Marvin McKinney",
-//       city: "Mumbai",
-//       timeAgo: "3 weeks ago",
-//       image: "https://randomuser.me/api/portraits/women/2.jpg",
-//     },
-//   ],
-// };
-
-// const leadsSlice = createSlice({
-//   name: "leads",
-//   initialState,
-//   reducers: {},
-// });
-
-// export default leadsSlice.reducer;

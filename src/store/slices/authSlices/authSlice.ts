@@ -4,6 +4,7 @@ import {
   type PayloadAction,
 } from "@reduxjs/toolkit";
 import type { RootState } from "../../store";
+import toast from "react-hot-toast";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -31,7 +32,7 @@ export const signup = createAsyncThunk(
     thunkAPI
   ) => {
     try {
-      console.log("received token", otpToken);
+      // console.log("received token", otpToken);
       const res = await fetch(`${BACKEND_URL}/api/v1/auth/signup`, {
         method: "POST",
         headers: {
@@ -44,6 +45,7 @@ export const signup = createAsyncThunk(
 
       return await res.json();
     } catch (err: any) {
+      toast.error("Failed to signup", err.message);
       return thunkAPI.rejectWithValue(err.message);
     }
   }
@@ -60,8 +62,10 @@ export const sendOtp = createAsyncThunk(
         body: JSON.stringify({ mobileNumber }),
         mode: "cors",
       });
+      toast.success("OTP Send Successfully!");
       return await res.json();
     } catch (err: any) {
+      toast.error(err.message);
       return thunkAPI.rejectWithValue(err.message);
     }
   }
@@ -94,17 +98,16 @@ export const verifyOtp = createAsyncThunk<
     });
 
     const data = await res.json();
-    console.log("slice data:", data);
-
     return {
       success: data?.success || false,
       message: data?.message || "No message",
       responseObject: data?.responseObject || null,
       statusCode: data?.statusCode || 500,
-      user: data?.user, // optional extra
-      token: data?.token, // optional extra
+      user: data?.user,
+      token: data?.token,
     };
   } catch (err: any) {
+    toast.error(err.message);
     return thunkAPI.rejectWithValue(err.message);
   }
 });
@@ -132,6 +135,7 @@ export const loginUser = createAsyncThunk(
       });
       return await res.json();
     } catch (err: any) {
+      toast.error(err.message);
       return thunkAPI.rejectWithValue(err.message);
     }
   }
@@ -166,8 +170,10 @@ export const resendMobileOtp = createAsyncThunk(
         body: JSON.stringify({ mobileNumber }),
         mode: "cors",
       });
+      toast.error(`OTP Resend On ${mobileNumber}`);
       return await res.json();
     } catch (err: any) {
+      toast.error(err.message);
       return thunkAPI.rejectWithValue(err.message);
     }
   }
@@ -200,6 +206,7 @@ export const updateUserType = createAsyncThunk(
 
       return data;
     } catch (err: any) {
+      toast.error(err.message);
       return thunkAPI.rejectWithValue(err.message);
     }
   }
@@ -315,8 +322,21 @@ const authSlice = createSlice({
       .addCase(updateUserType.pending, pending)
       .addCase(updateUserType.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+
+
+        if (state.user) {
+          state.user = {
+            ...state.user,
+            userType: action.payload?.userType || state.user.userType,
+          };
+        } else if (action.payload?.user) {
+          state.user = action.payload.user;
+        }
+
+        localStorage.setItem("user", JSON.stringify(state.user));
+        toast.success(`User type updated to ${state.user.userType}`);
       })
+
       .addCase(updateUserType.rejected, rejected);
   },
 });

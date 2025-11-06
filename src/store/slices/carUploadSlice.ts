@@ -1,4 +1,9 @@
-import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  type PayloadAction,
+} from "@reduxjs/toolkit";
+import toast from "react-hot-toast";
 
 // --- Types based on your Postman response ---
 interface CarImage {
@@ -96,11 +101,15 @@ export const uploadCar = createAsyncThunk<UploadCarResponse, any>(
       });
 
       const data = await res.json();
-      if (!res.ok) return rejectWithValue(data.message || "Failed to upload car");
+      if (!res.ok) {
+         toast.error(data.message || "Failed to upload car");
+        return rejectWithValue(data.message || "Failed to upload car");
+      }
+       toast.success("Your Car Uploaded Successfully!");
       return data;
     } catch (error: any) {
+       toast.error(error.message);
       return rejectWithValue(error.message);
-      
     }
   }
 );
@@ -124,11 +133,14 @@ const carUploadSlice = createSlice({
         state.error = null;
         state.success = false;
       })
-      .addCase(uploadCar.fulfilled, (state, action: PayloadAction<UploadCarResponse>) => {
-        state.loading = false;
-        state.success = true;
-        state.car = action.payload.car;
-      })
+      .addCase(
+        uploadCar.fulfilled,
+        (state, action: PayloadAction<UploadCarResponse>) => {
+          state.loading = false;
+          state.success = true;
+          state.car = action.payload.car;
+        }
+      )
       .addCase(uploadCar.rejected, (state, action: PayloadAction<any>) => {
         state.loading = false;
         state.error = action.payload;
@@ -139,74 +151,3 @@ const carUploadSlice = createSlice({
 
 export const { resetUploadState } = carUploadSlice.actions;
 export default carUploadSlice.reducer;
-
-
-
-
-// import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
-
-// interface UploadState {
-//   loading: boolean;
-//   error: string | null;
-//   success: boolean;
-// }
-
-// const initialState: UploadState = {
-//   loading: false,
-//   error: null,
-//   success: false,
-// };
-
-// export const uploadCar = createAsyncThunk(
-//   "carUpload/uploadCar",
-//   async (payload: any, { rejectWithValue }) => {
-//     try {
-//       const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-//       const token = localStorage.getItem("token"); 
-//       const res = await fetch(`${BACKEND_URL}/api/v1/car/create-update`, {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json",
-//             Authorization: token ? `Bearer ${token}` : "",
-//          },
-//         body: JSON.stringify(payload),
-//       });
-//       const data = await res.json();
-//       if (!res.ok) return rejectWithValue(data.message || "Failed to upload car");
-//       return data;
-//     } catch (error: any) {
-//       return rejectWithValue(error.message);
-//     }
-//   }
-// );
-
-// const carUploadSlice = createSlice({
-//   name: "carUpload",
-//   initialState,
-//   reducers: {
-//     resetUploadState: (state) => {
-//       state.loading = false;
-//       state.error = null;
-//       state.success = false;
-//     },
-//   },
-//   extraReducers: (builder) => {
-//     builder
-//       .addCase(uploadCar.pending, (state) => {
-//         state.loading = true;
-//         state.error = null;
-//         state.success = false;
-//       })
-//       .addCase(uploadCar.fulfilled, (state) => {
-//         state.loading = false;
-//         state.success = true;
-//       })
-//       .addCase(uploadCar.rejected, (state, action: PayloadAction<any>) => {
-//         state.loading = false;
-//         state.error = action.payload;
-//         state.success = false;
-//       });
-//   },
-// });
-
-// export const { resetUploadState } = carUploadSlice.actions;
-// export default carUploadSlice.reducer;

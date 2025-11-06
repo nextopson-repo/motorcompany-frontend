@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { ChevronDown, Search } from "lucide-react";
 import ImageUploadOverlay from "../ImageUploadOverlay";
+import useGCarSheetData from "../../hooks/useGCarSheetData";
+import toast from "react-hot-toast";
 
 interface DropdownProps {
   label: string;
@@ -13,7 +15,7 @@ interface DropdownProps {
 }
 
 // Dropdown component remains unchanged, keeping it concise here
- function Dropdown({
+function Dropdown({
   label,
   placeholder,
   options,
@@ -33,10 +35,10 @@ interface DropdownProps {
       <label className="text-[10px] md:text-xs lg:text-sm">{label}</label>
       <div
         onClick={onToggle}
-        className="relative w-full flex items-center border border-gray-200 rounded-sm px-3 py-[6px] lg:py-2 mt-[2px] lg:mt-1 text-[10px] lg:text-xs cursor-pointer bg-white"
+        className="relative w-full flex items-center border border-gray-200 rounded-sm px-3 py-1.5 lg:py-2 mt-0.5 lg:mt-1 text-[10px] lg:text-xs cursor-pointer bg-white"
       >
         <Search
-          className="w-3 lg:w-[14px] h-3 lg:h-[14px] text-red-500 mr-2"
+          className="w-3 lg:w-3.5 h-3 lg:h-3.5 text-red-500 mr-2"
           strokeWidth={1.2}
         />
         <span className="text-[10px] flex-1 text-gray-600">
@@ -80,51 +82,50 @@ interface DropdownProps {
   );
 }
 
-const carData: Record<string, { model: string; variants: string[] }[]> = {
-  Hyundai: [
-    { model: "i20", variants: ["Magna", "Sportz", "Asta", "Asta (O)"] },
-    { model: "Creta", variants: ["E", "S", "SX", "SX(O)"] },
-    { model: "Venue", variants: ["S", "SX", "SX(O)"] },
-  ],
-  "Maruti Suzuki": [
-    { model: "Swift", variants: ["LXI", "VXI", "ZXI", "ZXI+"] },
-    { model: "Baleno", variants: ["Sigma", "Delta", "Zeta", "Alpha"] },
-    { model: "Dzire", variants: ["LXI", "VXI", "ZXI"] },
-  ],
-  Honda: [
-    { model: "City", variants: ["V", "VX", "ZX"] },
-    { model: "Amaze", variants: ["E", "S", "VX"] },
-  ],
-  Toyota: [
-    { model: "Innova Crysta", variants: ["GX", "VX", "ZX"] },
-    { model: "Fortuner", variants: ["2.7 Petrol", "2.8 Diesel"] },
-  ],
-  Mahindra: [
-    { model: "XUV700", variants: ["MX", "AX3", "AX5", "AX7"] },
-    { model: "Thar", variants: ["AX", "LX Diesel", "LX Petrol"] },
-  ],
-  Kia: [
-    { model: "Seltos", variants: ["HTE", "HTK", "HTX", "GTX+"] },
-    { model: "Sonet", variants: ["HTE", "HTK+", "GTX+"] },
-  ],
-  "Tata Motors": [
-    { model: "Nexon", variants: ["XE", "XM", "XZ", "XZ+"] },
-    { model: "Harrier", variants: ["XE", "XM", "XZ"] },
-  ],
-  "MG Motors": [
-    { model: "Hector", variants: ["Style", "Smart", "Sharp"] },
-    { model: "ZS EV", variants: ["Excite", "Exclusive"] },
-  ],
-  Renault: [
-    { model: "Kwid", variants: ["RXE", "RXL", "RXT"] },
-    { model: "Triber", variants: ["RXE", "RXL", "RXT"] },
-  ],
-  Skoda: [
-    { model: "Kushaq", variants: ["Active", "Ambition", "Style"] },
-    { model: "Slavia", variants: ["Active", "Ambition", "Style"] },
-  ],
-};
-
+// const carData: Record<string, { model: string; variants: string[] }[]> = {
+//   Hyundai: [
+//     { model: "i20", variants: ["Magna", "Sportz", "Asta", "Asta (O)"] },
+//     { model: "Creta", variants: ["E", "S", "SX", "SX(O)"] },
+//     { model: "Venue", variants: ["S", "SX", "SX(O)"] },
+//   ],
+//   "Maruti Suzuki": [
+//     { model: "Swift", variants: ["LXI", "VXI", "ZXI", "ZXI+"] },
+//     { model: "Baleno", variants: ["Sigma", "Delta", "Zeta", "Alpha"] },
+//     { model: "Dzire", variants: ["LXI", "VXI", "ZXI"] },
+//   ],
+//   Honda: [
+//     { model: "City", variants: ["V", "VX", "ZX"] },
+//     { model: "Amaze", variants: ["E", "S", "VX"] },
+//   ],
+//   Toyota: [
+//     { model: "Innova Crysta", variants: ["GX", "VX", "ZX"] },
+//     { model: "Fortuner", variants: ["2.7 Petrol", "2.8 Diesel"] },
+//   ],
+//   Mahindra: [
+//     { model: "XUV700", variants: ["MX", "AX3", "AX5", "AX7"] },
+//     { model: "Thar", variants: ["AX", "LX Diesel", "LX Petrol"] },
+//   ],
+//   Kia: [
+//     { model: "Seltos", variants: ["HTE", "HTK", "HTX", "GTX+"] },
+//     { model: "Sonet", variants: ["HTE", "HTK+", "GTX+"] },
+//   ],
+//   "Tata Motors": [
+//     { model: "Nexon", variants: ["XE", "XM", "XZ", "XZ+"] },
+//     { model: "Harrier", variants: ["XE", "XM", "XZ"] },
+//   ],
+//   "MG Motors": [
+//     { model: "Hector", variants: ["Style", "Smart", "Sharp"] },
+//     { model: "ZS EV", variants: ["Excite", "Exclusive"] },
+//   ],
+//   Renault: [
+//     { model: "Kwid", variants: ["RXE", "RXL", "RXT"] },
+//     { model: "Triber", variants: ["RXE", "RXL", "RXT"] },
+//   ],
+//   Skoda: [
+//     { model: "Kushaq", variants: ["Active", "Ambition", "Style"] },
+//     { model: "Slavia", variants: ["Active", "Ambition", "Style"] },
+//   ],
+// };
 
 // ---------- Realistic Dropdown Data ----------  // Fuel type, transmission, ownership, body type options remain unchanged
 const fuelTypeOptions = ["Petrol", "Diesel", "CNG", "Electric"];
@@ -161,13 +162,6 @@ export default function SellHeroForm({
 
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
-  const modelOptions =
-    brand && carData[brand] ? carData[brand].map((m) => m.model) : [];
-  const variantOptions =
-    brand && model
-      ? carData[brand].find((m) => m.model === model)?.variants || []
-      : [];
-
   const [fuelType, setFuelType] = useState(defaultValues?.fuelType || "Petrol");
   const [transmission, setTransmission] = useState(
     defaultValues?.transmission || "Manual"
@@ -185,6 +179,46 @@ export default function SellHeroForm({
   const [seats, setSeats] = useState(defaultValues?.seats?.toString() || "");
 
   const [showOverlay, setShowOverlay] = useState(false);
+
+  // google car(brand, model, variant)
+  const sheetId = import.meta.env.VITE_SHEET_ID;
+  const carRange = "sheet2!A:Z";
+  const apiKey = import.meta.env.VITE_API_KEY;
+  const {
+    data: carSheetData,
+    loading: carSheetLoading,
+    // error: carSheetError,
+  } = useGCarSheetData(sheetId, carRange, apiKey);
+
+  // Build nested locationData object from Google Sheet
+  const carDataObj = carSheetData.reduce((acc, item) => {
+    // Clean up all keys: remove spaces + lowercase
+    const normalizedItem = Object.fromEntries(
+      Object.entries(item).map(([k, v]) => [k.trim().toLowerCase(), v])
+    );
+
+    const brand = normalizedItem["brand"];
+    const model = normalizedItem["model"];
+    const variant = normalizedItem["variant"];
+
+    if (!brand || !model) return acc;
+    if (!acc[brand]) acc[brand] = {};
+    if (!acc[brand][model]) acc[brand][model] = new Set();
+    if (variant) acc[brand][model].add(variant);
+    return acc;
+  }, {} as { [brand: string]: { [model: string]: Set<string> } });
+
+  const carDataNested = Object.fromEntries(
+    Object.entries(carDataObj).map(([brand, models]) => [
+      brand,
+      Object.fromEntries(
+        Object.entries(models).map(([model, variants]) => [
+          model,
+          Array.from(variants),
+        ])
+      ),
+    ])
+  );
 
   const formatPrice = (val: string) => {
     const num = val.replace(/\D/g, "");
@@ -217,18 +251,18 @@ export default function SellHeroForm({
       kmDriven,
       images: uploadedImages,
     };
-    console.log("Payload ready for submit:", payload);
+    // console.log("Payload ready for submit:", payload);
     onSubmit(payload);
     setShowOverlay(false);
   };
 
   return (
-    <div className="bg-white overflow-y-auto [&::-webkit-scrollbar]:w-[0px] [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
+    <div className="bg-white overflow-y-auto [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
       {/* Stepper */}
-       <div className="w-full flex items-center justify-between mb-3 md:mb-4">
-         {/* Step 1 */}
-         <div className="flex items-center">
-           <div
+      <div className="w-full flex items-center justify-between mb-3 md:mb-4">
+        {/* Step 1 */}
+        <div className="flex items-center">
+          <div
             className={`w-4 lg:w-6 h-4 lg:h-6 text-[10px] lg:text-sm rounded-full flex items-center justify-center  font-medium shadow-md ${
               step === 1
                 ? "bg-black text-white"
@@ -240,7 +274,7 @@ export default function SellHeroForm({
         </div>
 
         {/* Connector 1 */}
-        <div className="flex-1 border-t-[1.5px] lg:border-t-[2px] border-dashed border-gray-300 mx-2"></div>
+        <div className="flex-1 border-t-[1.5px] lg:border-t-0.5 border-dashed border-gray-300 mx-2"></div>
 
         {/* Step 2 */}
         <div className="flex items-center">
@@ -256,7 +290,7 @@ export default function SellHeroForm({
         </div>
 
         {/* Connector 2 */}
-        <div className="flex-1 border-t-[1.5px] lg:border-t-[2px] border-dashed border-gray-300 mx-2"></div>
+        <div className="flex-1 border-t-[1.5px] lg:border-t-0.5 border-dashed border-gray-300 mx-2"></div>
 
         {/* Step 3 */}
         <div className="flex items-center">
@@ -273,17 +307,18 @@ export default function SellHeroForm({
       </div>
 
       <h2 className="text-xs lg:text-md font-semibold mb-1 lg:mb-4">
-         Enter Car Details
-       </h2>
+        Enter Car Details
+      </h2>
 
-       {/* STEP 1 */}
-       {step === 1 && (
+      {/* STEP 1 */}
+      {step === 1 && (
         <div className="space-y-2 relative">
           <Dropdown
             label="Brand"
             placeholder="Search car brand"
-            // options={brandOptions}
-            options={Object.keys(carData)}
+            options={Object.keys(carDataNested).sort((a, b) =>
+              a.localeCompare(b)
+            )}
             isOpen={openDropdown === "brand"}
             onToggle={() =>
               setOpenDropdown(openDropdown === "brand" ? null : "brand")
@@ -293,14 +328,19 @@ export default function SellHeroForm({
               setModel("");
               setVariant("");
             }}
-            value={brand}
-            // onChange={setBrand}
+            value={brand || carSheetLoading}
           />
           <Dropdown
             label="Model"
             placeholder="Search car model"
-            options={modelOptions}
-            value={model}
+            options={
+              brand && carDataNested[brand]
+                ? Object.keys(carDataNested[brand]).sort((a, b) =>
+                    a.localeCompare(b)
+                  )
+                : []
+            }
+            value={model || carSheetLoading}
             isOpen={openDropdown === "model"}
             onToggle={() =>
               setOpenDropdown(openDropdown === "model" ? null : "model")
@@ -309,21 +349,23 @@ export default function SellHeroForm({
               setModel(val);
               setVariant("");
             }}
-            // onChange={setModel}
           />
           <Dropdown
             label="Variant"
             placeholder="Search car variant"
-            options={variantOptions}
-            value={variant}
+            options={
+              brand && model && carDataNested[brand]?.[model]
+                ? [...carDataNested[brand][model]]
+                : []
+            }
+            value={variant || carSheetLoading}
             isOpen={openDropdown === "variant"}
             onToggle={() =>
               setOpenDropdown(openDropdown === "variant" ? null : "variant")
             }
             onChange={setVariant}
-
-            // onChange={setVariant}
           />
+
           <div>
             <label className="text-[10px] md:text-xs lg:text-sm">
               Manufacturing Year
@@ -333,7 +375,7 @@ export default function SellHeroForm({
               value={manufactureYear}
               onChange={(e) => setManufactureYear(e.target.value)}
               placeholder="2000"
-              className="w-full border border-gray-200 rounded-sm px-3 py-[6px] lg:py-2 mt-[2px] lg:mt-1 text-[10px] lg:text-xs"
+              className="w-full border border-gray-200 rounded-sm px-3 py-1.5 lg:py-2 mt-0.5 lg:mt-1 text-[10px] lg:text-xs"
             />
           </div>
           <div className="flex justify-between pt-1 lg:pt-2 gap-3">
@@ -342,14 +384,14 @@ export default function SellHeroForm({
             ) : (
               <button
                 onClick={onBack}
-                className="bg-gray-50 text-gray-400 border border-gray-200 text-xs lg:text-sm  px-6 py-[6px] lg:py-2 rounded-xs cursor-pointer active:scale-90"
+                className="bg-gray-50 text-gray-400 border border-gray-200 text-xs lg:text-sm  px-6 py-1.5 lg:py-2 rounded-xs cursor-pointer active:scale-90"
               >
                 Back
               </button>
             )}
             <button
               onClick={nextStep}
-              className="bg-[#24272C] text-white text-xs lg:text-sm font-semibold w-full py-[6px] lg:py-2 rounded-xs cursor-pointer active:scale-90"
+              className="bg-[#24272C] text-white text-xs lg:text-sm font-semibold w-full py-1.5 lg:py-2 rounded-xs cursor-pointer active:scale-90"
             >
               Next
             </button>
@@ -372,7 +414,7 @@ export default function SellHeroForm({
                 <button
                   key={fuel}
                   onClick={() => setFuelType(fuel)}
-                  className={`flex-1 py-[6px] rounded-xs ${
+                  className={`flex-1 py-1.5 rounded-xs ${
                     fuelType === fuel
                       ? "bg-[#24272C] text-white font-medium"
                       : "bg-white border border-gray-300 text-gray-600"
@@ -391,12 +433,12 @@ export default function SellHeroForm({
             >
               Transmission
             </label>
-            <div className="grid grid-cols-3 gap-2 mb-2 lg:mb-4 text-[10px] lg:text-xs mt-[2px] lg:mt-1">
+            <div className="grid grid-cols-3 gap-2 mb-2 lg:mb-4 text-[10px] lg:text-xs mt-0.5 lg:mt-1">
               {transmissionOptions.map((trans) => (
                 <button
                   key={trans}
                   onClick={() => setTransmission(trans)}
-                  className={`flex-1 py-[6px] rounded-xs ${
+                  className={`flex-1 py-1.5 rounded-xs ${
                     transmission === trans
                       ? "bg-[#24272C] text-white font-medium"
                       : "bg-white border border-gray-300 text-gray-600"
@@ -417,7 +459,7 @@ export default function SellHeroForm({
               placeholder="50000km"
               value={kmDriven}
               onChange={(e) => setKmDriven(e.target.value)}
-              className="w-full border border-gray-300 rounded-sm px-3 py-[6px] lg:py-2 mt-[2px] lg:mt-1 text-[10px] lg:text-xs"
+              className="w-full border border-gray-300 rounded-sm px-3 py-1.5 lg:py-2 mt-0.5 lg:mt-1 text-[10px] lg:text-xs"
             />
           </div>
 
@@ -430,20 +472,20 @@ export default function SellHeroForm({
               placeholder="Enter Registration Year"
               value={registrationYear}
               onChange={(e) => setRegistrationYear(e.target.value)}
-              className="w-full border border-gray-300 rounded-sm px-3 py-[6px] lg:py-2 mt-[2px] lg:mt-1 text-[10px] lg:text-xs"
+              className="w-full border border-gray-300 rounded-sm px-3 py-1.5 lg:py-2 mt-0.5 lg:mt-1 text-[10px] lg:text-xs"
             />
           </div>
 
           <div className="flex justify-between pt-1 lg:pt-2 gap-3">
             <button
               onClick={prevStep}
-              className="bg-gray-50 text-gray-400 border border-gray-200 text-xs lg:text-sm  px-6 py-[6px] lg:py-2 rounded-xs cursor-pointer active:scale-90"
+              className="bg-gray-50 text-gray-400 border border-gray-200 text-xs lg:text-sm  px-6 py-1.5 lg:py-2 rounded-xs cursor-pointer active:scale-90"
             >
               Back
             </button>
             <button
               onClick={nextStep}
-              className="bg-[#24272C] text-white text-xs lg:text-sm font-semibold w-full py-[6px] lg:py-2 rounded-xs cursor-pointer active:scale-90"
+              className="bg-[#24272C] text-white text-xs lg:text-sm font-semibold w-full py-1.5 lg:py-2 rounded-xs cursor-pointer active:scale-90"
             >
               Next
             </button>
@@ -463,20 +505,19 @@ export default function SellHeroForm({
               placeholder="5"
               value={seats}
               onChange={(e) => setSeats(e.target.value)}
-              className="w-full border border-gray-300 rounded-sm px-3 py-[6px] lg:py-2 mt-[2px] lg:mt-1 text-[10px] lg:text-xs"
+              className="w-full border border-gray-300 rounded-sm px-3 py-1.5 lg:py-2 mt-0.5 lg:mt-1 text-[10px] lg:text-xs"
             />
           </div>
-
           <div>
             <label className="text-[10px] md:text-xs lg:text-sm">
               Ownership
             </label>
-            <div className="grid grid-cols-4 gap-2 mb-1 lg:mb-2 text-[10px] lg:text-xs mt-[2px] lg:mt-1">
+            <div className="grid grid-cols-4 gap-2 mb-1 lg:mb-2 text-[10px] lg:text-xs mt-0.5 lg:mt-1">
               {ownershipOptions.map((own) => (
                 <button
                   key={own}
                   onClick={() => setOwnership(own)}
-                  className={`py-[6px] rounded-xs ${
+                  className={`py-1.5 rounded-xs ${
                     ownership === own
                       ? "bg-[#24272C] text-white font-medium"
                       : "bg-white border border-gray-300 text-gray-600"
@@ -487,7 +528,6 @@ export default function SellHeroForm({
               ))}
             </div>
           </div>
-
           <Dropdown
             label="Body Type"
             placeholder="Select body type"
@@ -507,20 +547,30 @@ export default function SellHeroForm({
               value={price}
               onChange={(e) => setPrice(formatPrice(e.target.value))}
               placeholder="10,00,000"
-              className="w-full border border-gray-300 rounded-sm px-3 py-[6px] lg:py-2 mt-[2px] lg:mt-1 text-[10px] lg:text-xs"
+              min={50000}
+              required
+              className="w-full border border-gray-300 rounded-sm px-3 py-1.5 lg:py-2 mt-0.5 lg:mt-1 text-[10px] lg:text-xs"
             />
           </div>
-
           <div className="flex justify-between pt-1 lg:pt-2 gap-3">
             <button
               onClick={prevStep}
-              className="bg-gray-50 text-gray-400 border border-gray-200 text-xs lg:text-sm  px-6 py-[6px] lg:py-2 rounded-xs cursor-pointer active:scale-90"
+              className="bg-gray-50 text-gray-400 border border-gray-200 text-xs lg:text-sm  px-6 py-1.5 lg:py-2 rounded-xs cursor-pointer active:scale-90"
             >
               Back
             </button>
             <button
-              onClick={() => setShowOverlay(true)}
-              className="bg-[#24272C] text-white text-xs lg:text-sm font-semibold w-full py-[6px] lg:py-2 rounded-xs cursor-pointer active:scale-90"
+              onClick={() => {
+                const numericValue = parseInt(price.replace(/,/g, "")) || 0;
+
+                if (!price || numericValue < 50000) {
+                  toast("Price must be at least ₹50,000");
+                  return; // stop if invalid
+                }
+
+                setShowOverlay(true); // proceed to next
+              }}
+              className="bg-[#24272C] text-white text-xs lg:text-sm font-semibold w-full py-1.5 lg:py-2 rounded-xs cursor-pointer active:scale-90"
             >
               Next
             </button>

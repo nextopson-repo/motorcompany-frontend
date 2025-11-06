@@ -4,16 +4,23 @@ import LeadCard from "../LeadCard";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuth } from "../../store/slices/authSlices/authSlice";
 import { fetchCarLeads } from "../../store/slices/leadsSlice";
+import { useLocation } from "react-router-dom";
 
 const MyLeads: React.FC = () => {
   const dispatch = useDispatch();
   const { user } = useSelector(selectAuth);
   const { leads, loading } = useSelector((state: any) => state.leads);
+  const location = useLocation();
+
+  const navigationCarId = location.state?.carId || leads.carId || null;
+
+  const leadsCarId = leads.carId;
 
   // 🔹 Local states for date filtering
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [filteredLeads, setFilteredLeads] = useState<any[]>([]);
+  const [error] = useState<string | null>(null);
 
   useEffect(() => {
     if (user) {
@@ -40,7 +47,38 @@ const MyLeads: React.FC = () => {
     setFilteredLeads(filtered);
   };
 
-  console.log("🎯 Filtered Leads:", filteredLeads);
+  const activeCarId = navigationCarId || leadsCarId;
+
+  useEffect(() => {
+  if (leads && activeCarId) {
+    const filtered = leads.filter((lead: any) => lead.carId === activeCarId);
+    setFilteredLeads(filtered);
+  } else {
+    setFilteredLeads(leads);
+  }
+}, [leads, activeCarId]);
+
+  // useEffect(() => {
+  //   if (!leads) {
+  //     setError("Leads data not found.");
+  //     setFilteredLeads([]);
+  //     return;
+  //   }
+
+  //   let filtered = leads;
+  //   if (carId) {
+  //     filtered = leads.filter((lead: any) => lead.carId === carId);
+  //     if (filtered.length === 0) {
+  //       setError("No leads found for the selected car.");
+  //     } else {
+  //       setError(null);
+  //     }
+  //   } else {
+  //     setError(null); 
+  //   }
+
+  //   setFilteredLeads(filtered);
+  // }, [leads, carId]);
 
   return (
     <div className="w-full min-h-screen p-4 sm:p-6 lg:p-0">
@@ -111,15 +149,19 @@ const MyLeads: React.FC = () => {
               </div>
             ))}
           </>
+        ) : error ? (
+          <p className="text-center text-red-500 py-4">{error}</p>
         ) : filteredLeads.length > 0 ? (
-          filteredLeads.map((lead: any) => (
+          filteredLeads?.map((lead: any) => (
             <LeadCard
               key={lead.enquiryId}
               name={lead.fullName}
-              city={lead.city}
+              city={lead.carAddress.city}
               timeAgo={new Date(lead.createdAt).toLocaleDateString("en-IN")}
-              image={lead.image}
+              image={lead.userProfileUrl}
               phone={lead.mobileNumber}
+              carId={lead.carId}
+              carName={lead.carName}
             />
           ))
         ) : (

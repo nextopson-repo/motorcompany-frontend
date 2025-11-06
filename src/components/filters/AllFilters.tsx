@@ -11,7 +11,7 @@ import {
   toggleFuel,
   setPriceRange,
   setModelYearRange,
-  setCity,
+  // setCity,
   setOwnership,
   setModelKmDriven
 } from "../../store/slices/filterSlice";
@@ -56,24 +56,24 @@ const bodyTypes = [
   { id: 6, name: "Coupe", vehicles: 26, img: "/CarCategories/coupe1.png" },
 ];
 
- const cities = [
-  { name: "Chandigarh", img: "/Cities/chandigarh-img.png" },
-  { name: "Ahmedabad", img: "/Cities/ahmedabad-img.png" },
-  { name: "Pune", img: "/Cities/pune-img.png" },
-  { name: "Hyderabad", img: "/Cities/hyderabad-img.png" },
-  { name: "Kanpur", img: "/Cities/kanpur-img.png" },
-  { name: "Indore", img: "/Cities/indore-img.png" },
-  { name: "Lucknow", img: "/Cities/lucknow-img.png" },
-  { name: "Delhi", img: "/Cities/dehli-img.png" },
-  { name: "Bhopal", img: "/Cities/bhopal-img.png" },
-  { name: "Jaipur", img: "/Cities/jaipur-img.png" },
-];
+//  const cities = [
+//   { name: "Chandigarh", img: "/Cities/chandigarh-img.png" },
+//   { name: "Ahmedabad", img: "/Cities/ahmedabad-img.png" },
+//   { name: "Pune", img: "/Cities/pune-img.png" },
+//   { name: "Hyderabad", img: "/Cities/hyderabad-img.png" },
+//   { name: "Kanpur", img: "/Cities/kanpur-img.png" },
+//   { name: "Indore", img: "/Cities/indore-img.png" },
+//   { name: "Lucknow", img: "/Cities/lucknow-img.png" },
+//   { name: "Delhi", img: "/Cities/dehli-img.png" },
+//   { name: "Bhopal", img: "/Cities/bhopal-img.png" },
+//   { name: "Jaipur", img: "/Cities/jaipur-img.png" },
+// ];
 
 const filterOptions = [
   "Price Range",
   "Brand + Models",
   "Model Year",
-  "Location",
+  // "Location",
   "Body Type",
   "Fuel Type",
   "Kilometer Driven",
@@ -84,7 +84,7 @@ const filterOptions = [
 
 const AllFilters: React.FC<AllFiltersProps> = ({ onClose }) => {
   const dispatch = useDispatch();
-  const { brand, fuelType, priceRange, modelYearRange, city, modelKmDriven } =
+  const { brand, fuelType, priceRange, modelYearRange, modelKmDriven } =
     useSelector((s: RootState) => s.filters);
 
   const [activeFilter, setActiveFilter] = useState("Brand + Models");
@@ -272,7 +272,7 @@ const AllFilters: React.FC<AllFiltersProps> = ({ onClose }) => {
           )}
 
           {/* Location */}
-          {activeFilter === "Location" && (
+          {/* {activeFilter === "Location" && (
             <div className="p-4">
               <h2 className="font-semibold text-md mb-2">Select City</h2>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -290,7 +290,7 @@ const AllFilters: React.FC<AllFiltersProps> = ({ onClose }) => {
                 ))}
               </div>
             </div>
-          )}
+          )} */}
 
            {/* Body Type */}
            {activeFilter === "Body Type" && (
