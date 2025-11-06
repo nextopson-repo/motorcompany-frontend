@@ -96,7 +96,7 @@ export default function SellHero() {
 
   const [showForm, setShowForm] = useState(false);
   const [userRole] = useState<"owner" | "dealer">("owner");
-  const [state, setState] = useState("");
+  const [state] = useState("");
   const [city, setCity] = useState("");
   const [locality, setLocality] = useState("");
   const [editCar, setEditCar] = useState<any>(null);
