@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../store/store";
 import LocationFilter from "./LocationFilter";
 import BrandModelFilter from "./BrandModelFilter";
@@ -8,14 +8,30 @@ import ModelYearFilter from "./ModelYearFilter";
 import BodyTypeFilter from "./BodyTypeFilter";
 import AllFilters from "./AllFilters";
 import RoleFilter from "./RoleFilter";
+import {
+  setSelectedFilters,
+  type SelectedFilters,
+} from "../../store/slices/carSlice";
 
 const FilterBar = () => {
   const [openFilter, setOpenFilter] = useState<null | string>(null);
-  const userType = useSelector((state: RootState) => state.filters.ownership);
+  const dispatch = useDispatch();
+  // const userType = useSelector((state: RootState) => state.filters.ownership);
+  const {
+    selectedFilters,
+    // loading,
+    // error,
+    // searchTerm,
+    // sortOption,
+  } = useSelector((state: RootState) => state.cars);
   const city = useSelector((state: RootState) => state.filters.city);
 
   const toggleFilter = (name: string) => {
     setOpenFilter(openFilter === name ? null : name);
+  };
+
+  const handleFilterChange = (newFilters: SelectedFilters) => {
+    dispatch(setSelectedFilters(newFilters));
   };
 
   return (
@@ -36,7 +52,13 @@ const FilterBar = () => {
 
       {/* Ownership Dropdown */}
       <div className="whitespace-nowrap">
-        <RoleFilter userType={userType} />
+        <RoleFilter
+          userType={selectedFilters.userType}
+          selectedFilters={{
+            ...selectedFilters,
+          }}
+          onSelectedFiltersChange={handleFilterChange}
+        />
       </div>
 
       {/* City Selector */}

@@ -2,67 +2,70 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import type { AppDispatch, RootState } from "../store/store";
-import {
-  createOrUpdateRequirement,
-} from "../store/slices/requirementsSlice";
+import { createOrUpdateRequirement } from "../store/slices/requirementsSlice";
 import { selectAuth } from "../store/slices/authSlices/authSlice";
 import { openLogin } from "../store/slices/authSlices/loginModelSlice";
 import {
   fuelOptions,
   transmissionOptions,
-  bodyTypeOptions,
+  // bodyTypeOptions,
 } from "../data/filterOptions";
 import { ArrowLeft, Loader2 } from "lucide-react";
-import { getModels, getVariants } from "../utils/carData";
-import { locationData } from "./Requirements";
+import { getModels, getVariants, getBrands } from "../utils/carData";
+// import { locationData } from "./Requirements";
 
 const CreateRequirement: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { user, token } = useSelector(selectAuth);
-  const { loading, error, selectedRequirement } = useSelector((state: RootState) => state.requirements);
-  const requirementId = selectedRequirement?.requirementId || selectedRequirement?.id;
-  const buyers = useSelector((state: RootState) => state.buyers.buyers);
-  
-  // Extract unique brands from buyers' preferences
-  const getBrandsFromBuyers = (): string[] => {
-    const brandSet = new Set<string>();
-    buyers.forEach((buyer) => {
-      buyer.preferences.forEach((pref) => {
-        // Normalize preferences - some might be brands, some might be models
-        // Common brands in preferences: Maruti Suzuki, Ford, Mahindra, Hyundai
-        // Nexon is a model, so we'll map it to Tata Motors
-        if (pref === "Nexon") {
-          brandSet.add("Tata Motors");
-        } else {
-          brandSet.add(pref);
-        }
-      });
-    });
-    return Array.from(brandSet).sort();
-  };
+  const { loading, error, selectedRequirement } = useSelector(
+    (state: RootState) => state.requirements
+  );
+  const requirementId =
+    selectedRequirement?.requirementId || selectedRequirement?.id;
+  // const buyers = useSelector((state: RootState) => state.buyers.buyers);
 
-  const availableBrands = getBrandsFromBuyers();
+  // console.log("buyers :", buyers)
+
+  // Extract unique brands from buyers' preferences
+  // const getBrandsFromBuyers = (): string[] => {
+  //   const brandSet = new Set<string>();
+  //   buyers.forEach((buyer) => {
+  //     buyer.preferences.forEach((pref) => {
+  //       // Normalize preferences - some might be brands, some might be models
+  //       // Common brands in preferences: Maruti Suzuki, Ford, Mahindra, Hyundai
+  //       // Nexon is a model, so we'll map it to Tata Motors
+  //       if (pref === "Nexon") {
+  //         brandSet.add("Tata Motors");
+  //       } else {
+  //         brandSet.add(pref);
+  //       }
+  //     });
+  //   });
+  //   return Array.from(brandSet).sort();
+  // };
+
+  // const availableBrands = getBrandsFromBuyers();
 
   // Form state
   const [formData, setFormData] = useState({
     city: "",
-    locality: "",
-    state: "",
+    locality: "c",
+    state: "c",
     carName: "",
     brand: "",
     model: "",
     variant: "",
     fuelType: "" as "" | "Petrol" | "Diesel" | "CNG" | "Electric",
     transmission: "" as "" | "Manual" | "Automatic",
-    bodyType: "",
+    bodyType: "sedan",
     ownership: "" as "" | "1st" | "2nd" | "3rd" | "3+",
-    manufacturingYear: "",
-    registrationYear: "",
+    manufacturingYear: "2025",
+    registrationYear: "2025",
     minPrice: "",
     maxPrice: "",
-    maxKmDriven: "",
-    seats: "",
+    maxKmDriven: "1000",
+    seats: "4",
     description: "",
   });
 
@@ -77,46 +80,62 @@ const CreateRequirement: React.FC = () => {
   }, [user, token, dispatch]);
 
   // Helper function to format state name for display (add spaces before capital letters)
-  const formatStateName = (state: string): string => {
-    return state.replace(/([A-Z])/g, " $1").trim();
-  };
+  // const formatStateName = (state: string): string => {
+  //   return state.replace(/([A-Z])/g, " $1").trim();
+  // };
 
   // Helper function to get state key from formatted name
-  const getStateKey = (formattedState: string): string => {
-    return formattedState.replace(/\s+/g, "");
-  };
+  // const getStateKey = (formattedState: string): string => {
+  //   return formattedState.replace(/\s+/g, "");
+  // };
 
   // Get available states from locationData
-  const availableStates = Object.keys(locationData);
+  // const availableStates = Object.keys(locationData);
 
   // Get available cities based on selected state
-  const getAvailableCities = (): string[] => {
-    if (!formData.state) return [];
-    const stateKey = getStateKey(formData.state);
-    return Object.keys(locationData[stateKey] || {});
-  };
+  // const getAvailableCities = (): string[] => {
+  //   // if (!formData.state) return [];
+  //   // const stateKey = getStateKey(formData.state);
+  //   // return Object.keys(locationData[stateKey] || {});
+  // };
+
+  const getAvailableCities = [
+    "Ahmedabad",
+    "Chandigarh",
+    "Delhi",
+    "Hyderabad",
+    "Jaipur",
+    "Kanpur",
+    "Lucknow",
+    "Mumbai",
+    "Pune",
+    "Surat",
+  ];
 
   // Get available localities based on selected state and city
-  const getAvailableLocalities = (): string[] => {
-    if (!formData.state || !formData.city) return [];
-    const stateKey = getStateKey(formData.state);
-    return locationData[stateKey]?.[formData.city] || [];
-  };
+  // const getAvailableLocalities = (): string[] => {
+  //   if (!formData.state || !formData.city) return [];
+  //   const stateKey = getStateKey(formData.state);
+  //   return locationData[stateKey]?.[formData.city] || [];
+  // };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
   ) => {
     const { name, value } = e.target;
-    
+
     // Reset dependent fields when parent changes
-    if (name === "state") {
-      setFormData((prev) => ({
-        ...prev,
-        state: value,
-        city: "",
-        locality: "",
-      }));
-    } else if (name === "city") {
+    // if (name === "state") {
+    //   setFormData((prev) => ({
+    //     ...prev,
+    //     state: value,
+    //     city: "",
+    //     locality: "",
+    //   }));
+    // } else
+    if (name === "city") {
       setFormData((prev) => ({
         ...prev,
         city: value,
@@ -155,25 +174,27 @@ const CreateRequirement: React.FC = () => {
     }
 
     // Validate required fields
-    if (!formData.city || !formData.locality) {
-      setLocalError("City and Locality are required");
+    if (!formData.city) {
+      setLocalError("City are required");
       return;
     }
 
     try {
+      const carName = `${(formData.brand, formData.model)}`;
+
       const payload: any = {
         userId: user.id,
         city: formData.city,
-        locality: formData.locality,
-        state: formData.state || undefined,
-        carName: formData.carName || undefined,
+        locality: formData.locality || "c",
+        state: formData.state || "c",
+        carName: carName || undefined,
         brand: formData.brand || undefined,
         model: formData.model || undefined,
         variant: formData.variant || undefined,
         fuelType: formData.fuelType || undefined,
         transmission: formData.transmission || undefined,
         bodyType: formData.bodyType || undefined,
-        ownership: formData.ownership || undefined,
+        ownership: formData.ownership || "1st",
         manufacturingYear: formData.manufacturingYear
           ? parseInt(formData.manufacturingYear)
           : undefined,
@@ -184,8 +205,8 @@ const CreateRequirement: React.FC = () => {
         maxPrice: formData.maxPrice ? parseInt(formData.maxPrice) : undefined,
         maxKmDriven: formData.maxKmDriven
           ? parseInt(formData.maxKmDriven)
-          : undefined,
-        seats: formData.seats ? parseInt(formData.seats) : undefined,
+          : "1000",
+        seats: formData.seats ? parseInt(formData.seats) : "4",
         description: formData.description || undefined,
       };
 
@@ -204,8 +225,8 @@ const CreateRequirement: React.FC = () => {
     }
   };
 
-  const currentYear = new Date().getFullYear();
-  const yearOptions = Array.from({ length: 30 }, (_, i) => currentYear - i);
+  // const currentYear = new Date().getFullYear();
+  // const yearOptions = Array.from({ length: 30 }, (_, i) => currentYear - i);
 
   return (
     <div className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-10 my-12">
@@ -223,7 +244,8 @@ const CreateRequirement: React.FC = () => {
 
       {success && (
         <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
-          Requirement {requirementId ? "updated" : "created"} successfully! Redirecting...
+          Requirement {requirementId ? "updated" : "created"} successfully!
+          Redirecting...
         </div>
       )}
 
@@ -238,7 +260,7 @@ const CreateRequirement: React.FC = () => {
         <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
           <h2 className="text-xl font-semibold mb-4">Location</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
+            {/* <div>
               <label className="block text-sm font-medium mb-2">
                 State <span className="text-red-500">*</span>
               </label>
@@ -256,7 +278,7 @@ const CreateRequirement: React.FC = () => {
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
             <div>
               <label className="block text-sm font-medium mb-2">
                 City <span className="text-red-500">*</span>
@@ -266,18 +288,18 @@ const CreateRequirement: React.FC = () => {
                 value={formData.city}
                 onChange={handleChange}
                 required
-                disabled={!formData.state}
+                // disabled={!formData.state}
                 className="w-full p-2 border rounded-md disabled:bg-gray-100 disabled:cursor-not-allowed"
               >
                 <option value="">Select City</option>
-                {getAvailableCities().map((city) => (
+                {getAvailableCities.map((city) => (
                   <option key={city} value={city}>
                     {city}
                   </option>
                 ))}
               </select>
             </div>
-            <div>
+            {/* <div>
               <label className="block text-sm font-medium mb-2">
                 Locality <span className="text-red-500">*</span>
               </label>
@@ -296,15 +318,15 @@ const CreateRequirement: React.FC = () => {
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
           </div>
         </div>
 
         {/* Car Details Section */}
         <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
           <h2 className="text-xl font-semibold mb-4">Car Details</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 gap-4">
+            {/* <div>
               <label className="block text-sm font-medium mb-2">Car Name</label>
               <input
                 type="text"
@@ -314,7 +336,7 @@ const CreateRequirement: React.FC = () => {
                 placeholder="e.g., Swift Dzire"
                 className="w-full p-2 border rounded-md"
               />
-            </div>
+            </div> */}
             <div>
               <label className="block text-sm font-medium mb-2">Brand</label>
               <select
@@ -324,8 +346,8 @@ const CreateRequirement: React.FC = () => {
                 className="w-full p-2 border rounded-md"
               >
                 <option value="">Select Brand</option>
-                {availableBrands.map((brand) => (
-                  <option key={brand} value={brand}>
+                {getBrands().map((brand) => (
+                  <option key={brand} value={brand} >
                     {brand}
                   </option>
                 ))}
@@ -341,11 +363,12 @@ const CreateRequirement: React.FC = () => {
                 className="w-full p-2 border rounded-md disabled:bg-gray-100 disabled:cursor-not-allowed"
               >
                 <option value="">Select Model</option>
-                {formData.brand && getModels(formData.brand).map((model) => (
-                  <option key={model} value={model}>
-                    {model}
-                  </option>
-                ))}
+                {formData.brand &&
+                  getModels(formData.brand).map((model) => (
+                    <option key={model} value={model}>
+                      {model}
+                    </option>
+                  ))}
               </select>
             </div>
             <div>
@@ -358,15 +381,19 @@ const CreateRequirement: React.FC = () => {
                 className="w-full p-2 border rounded-md disabled:bg-gray-100 disabled:cursor-not-allowed"
               >
                 <option value="">Select Variant</option>
-                {formData.brand && formData.model && getVariants(formData.brand, formData.model).map((variant) => (
-                  <option key={variant} value={variant}>
-                    {variant}
-                  </option>
-                ))}
+                {formData.brand &&
+                  formData.model &&
+                  getVariants(formData.brand, formData.model).map((variant) => (
+                    <option key={variant} value={variant}>
+                      {variant}
+                    </option>
+                  ))}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Fuel Type</label>
+              <label className="block text-sm font-medium mb-2">
+                Fuel Type
+              </label>
               <select
                 name="fuelType"
                 value={formData.fuelType}
@@ -382,7 +409,9 @@ const CreateRequirement: React.FC = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Transmission</label>
+              <label className="block text-sm font-medium mb-2">
+                Transmission
+              </label>
               <select
                 name="transmission"
                 value={formData.transmission}
@@ -397,7 +426,7 @@ const CreateRequirement: React.FC = () => {
                 ))}
               </select>
             </div>
-            <div>
+            {/* <div>
               <label className="block text-sm font-medium mb-2">Body Type</label>
               <select
                 name="bodyType"
@@ -412,8 +441,8 @@ const CreateRequirement: React.FC = () => {
                   </option>
                 ))}
               </select>
-            </div>
-            <div>
+            </div> */}
+            {/* <div>
               <label className="block text-sm font-medium mb-2">Ownership</label>
               <select
                 name="ownership"
@@ -427,8 +456,8 @@ const CreateRequirement: React.FC = () => {
                 <option value="3rd">3rd Owner</option>
                 <option value="3+">3+ Owner</option>
               </select>
-            </div>
-            <div>
+            </div> */}
+            {/* <div>
               <label className="block text-sm font-medium mb-2">
                 Manufacturing Year
               </label>
@@ -445,8 +474,8 @@ const CreateRequirement: React.FC = () => {
                   </option>
                 ))}
               </select>
-            </div>
-            <div>
+            </div> */}
+            {/* <div>
               <label className="block text-sm font-medium mb-2">
                 Registration Year
               </label>
@@ -463,8 +492,8 @@ const CreateRequirement: React.FC = () => {
                   </option>
                 ))}
               </select>
-            </div>
-            <div>
+            </div> */}
+            {/* <div>
               <label className="block text-sm font-medium mb-2">Seats</label>
               <input
                 type="number"
@@ -476,8 +505,8 @@ const CreateRequirement: React.FC = () => {
                 max="10"
                 className="w-full p-2 border rounded-md"
               />
-            </div>
-            <div>
+            </div> */}
+            {/* <div>
               <label className="block text-sm font-medium mb-2">Max KM Driven</label>
               <input
                 type="number"
@@ -487,7 +516,7 @@ const CreateRequirement: React.FC = () => {
                 placeholder="e.g., 50000"
                 className="w-full p-2 border rounded-md"
               />
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -496,7 +525,9 @@ const CreateRequirement: React.FC = () => {
           <h2 className="text-xl font-semibold mb-4">Price</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Min Price (₹)</label>
+              <label className="block text-sm font-medium mb-2">
+                Min Price (₹)
+              </label>
               <input
                 type="number"
                 name="minPrice"
@@ -507,7 +538,9 @@ const CreateRequirement: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Max Price (₹)</label>
+              <label className="block text-sm font-medium mb-2">
+                Max Price (₹)
+              </label>
               <input
                 type="number"
                 name="maxPrice"
@@ -545,8 +578,10 @@ const CreateRequirement: React.FC = () => {
                 <Loader2 className="w-5 h-5 animate-spin" />
                 {requirementId ? "Updating..." : "Creating..."}
               </>
+            ) : requirementId ? (
+              "Update Requirement"
             ) : (
-              requirementId ? "Update Requirement" : "Post Requirement"
+              "Post Requirement"
             )}
           </button>
           <button
@@ -563,4 +598,3 @@ const CreateRequirement: React.FC = () => {
 };
 
 export default CreateRequirement;
-

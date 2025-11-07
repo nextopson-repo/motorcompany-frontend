@@ -19,7 +19,6 @@ import carImageReducer from "./slices/carImageSlice";
 import requirementsReducer from "./slices/requirementsSlice";
 import leadsReducer from "./slices/leadsSlice";
 import toastReducer from "./slices/toastSlice";
-// import googleSheetReducer from "./slices/googleSheetSlice";
 
 export const store = configureStore({
   reducer: {
@@ -43,7 +42,6 @@ export const store = configureStore({
     requirements: requirementsReducer,
     leads: leadsReducer,
     toast: toastReducer,
-    // googleSheet: googleSheetReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -82,51 +82,6 @@ function Dropdown({
   );
 }
 
-// const carData: Record<string, { model: string; variants: string[] }[]> = {
-//   Hyundai: [
-//     { model: "i20", variants: ["Magna", "Sportz", "Asta", "Asta (O)"] },
-//     { model: "Creta", variants: ["E", "S", "SX", "SX(O)"] },
-//     { model: "Venue", variants: ["S", "SX", "SX(O)"] },
-//   ],
-//   "Maruti Suzuki": [
-//     { model: "Swift", variants: ["LXI", "VXI", "ZXI", "ZXI+"] },
-//     { model: "Baleno", variants: ["Sigma", "Delta", "Zeta", "Alpha"] },
-//     { model: "Dzire", variants: ["LXI", "VXI", "ZXI"] },
-//   ],
-//   Honda: [
-//     { model: "City", variants: ["V", "VX", "ZX"] },
-//     { model: "Amaze", variants: ["E", "S", "VX"] },
-//   ],
-//   Toyota: [
-//     { model: "Innova Crysta", variants: ["GX", "VX", "ZX"] },
-//     { model: "Fortuner", variants: ["2.7 Petrol", "2.8 Diesel"] },
-//   ],
-//   Mahindra: [
-//     { model: "XUV700", variants: ["MX", "AX3", "AX5", "AX7"] },
-//     { model: "Thar", variants: ["AX", "LX Diesel", "LX Petrol"] },
-//   ],
-//   Kia: [
-//     { model: "Seltos", variants: ["HTE", "HTK", "HTX", "GTX+"] },
-//     { model: "Sonet", variants: ["HTE", "HTK+", "GTX+"] },
-//   ],
-//   "Tata Motors": [
-//     { model: "Nexon", variants: ["XE", "XM", "XZ", "XZ+"] },
-//     { model: "Harrier", variants: ["XE", "XM", "XZ"] },
-//   ],
-//   "MG Motors": [
-//     { model: "Hector", variants: ["Style", "Smart", "Sharp"] },
-//     { model: "ZS EV", variants: ["Excite", "Exclusive"] },
-//   ],
-//   Renault: [
-//     { model: "Kwid", variants: ["RXE", "RXL", "RXT"] },
-//     { model: "Triber", variants: ["RXE", "RXL", "RXT"] },
-//   ],
-//   Skoda: [
-//     { model: "Kushaq", variants: ["Active", "Ambition", "Style"] },
-//     { model: "Slavia", variants: ["Active", "Ambition", "Style"] },
-//   ],
-// };
-
 // ---------- Realistic Dropdown Data ----------  // Fuel type, transmission, ownership, body type options remain unchanged
 const fuelTypeOptions = ["Petrol", "Diesel", "CNG", "Electric"];
 const transmissionOptions = ["Manual", "Automatic"];
@@ -258,6 +213,11 @@ export default function SellHeroForm({
 
   return (
     <div className="bg-white overflow-y-auto [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
+      <div
+        className={`${
+          showOverlay ? "pointer-events-none" : ""
+        }`}
+      >
       {/* Stepper */}
       <div className="w-full flex items-center justify-between mb-3 md:mb-4">
         {/* Step 1 */}
@@ -390,7 +350,13 @@ export default function SellHeroForm({
               </button>
             )}
             <button
-              onClick={nextStep}
+              onClick={() => {
+                if (!brand || !model || !variant || !manufactureYear) {
+                  toast.error("Please fill all Details!");
+                  return;
+                }
+                nextStep();
+              }}
               className="bg-[#24272C] text-white text-xs lg:text-sm font-semibold w-full py-1.5 lg:py-2 rounded-xs cursor-pointer active:scale-90"
             >
               Next
@@ -484,7 +450,13 @@ export default function SellHeroForm({
               Back
             </button>
             <button
-              onClick={nextStep}
+              onClick={() => {
+                if (!kmDriven || !registrationYear) {
+                  toast.error("Please fill all Details!");
+                  return;
+                }
+                nextStep();
+              }}
               className="bg-[#24272C] text-white text-xs lg:text-sm font-semibold w-full py-1.5 lg:py-2 rounded-xs cursor-pointer active:scale-90"
             >
               Next
@@ -563,12 +535,17 @@ export default function SellHeroForm({
               onClick={() => {
                 const numericValue = parseInt(price.replace(/,/g, "")) || 0;
 
-                if (!price || numericValue < 50000) {
-                  toast("Price must be at least ₹50,000");
-                  return; // stop if invalid
+                if (!price || !bodyType || !seats) {
+                  toast.error("Please fill all Details!");
+                  return;
                 }
 
-                setShowOverlay(true); // proceed to next
+                if (!price || numericValue < 50000) {
+                  toast.error("Price must be at least ₹50,000");
+                  return;
+                }
+
+                setShowOverlay(true);
               }}
               className="bg-[#24272C] text-white text-xs lg:text-sm font-semibold w-full py-1.5 lg:py-2 rounded-xs cursor-pointer active:scale-90"
             >
@@ -577,6 +554,7 @@ export default function SellHeroForm({
           </div>
         </div>
       )}
+      </div>
 
       {/* Overlay for Image Upload */}
       {showOverlay && (

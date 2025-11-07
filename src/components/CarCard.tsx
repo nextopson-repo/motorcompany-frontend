@@ -7,20 +7,14 @@ import { formatPriceToLakh, formatTimeAgo } from "../utils/formatPrice";
 import { useAppDispatch, useAppSelector } from "../store/redux/hooks";
 import { createSaveCar, removeSaveCar } from "../store/slices/savedSlice";
 
-interface CarCardProps {
-  car: CarRecord;
-}
+interface CarCardProps { car: CarRecord;}
 
 const CarCard: React.FC<CarCardProps> = ({ car }) => {
   const image = car.carImages?.[0] || "/fallback-car-img.png";
   const updateTime = car.updatedAt;
-
-  // console.log("car:", car);
   const dispatch = useAppDispatch();
   const CarId = useAppSelector((state) => state.saved.savedCarIds);
-
   const isSaved = CarId.includes(car.savedCarId!);
-  // console.log(car.savedCarId!)
 
   return (
     <div className="bg-white rounded-md overflow-hidden flex flex-col card-shadow-custom mb-3">

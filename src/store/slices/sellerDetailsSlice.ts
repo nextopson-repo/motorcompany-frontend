@@ -70,6 +70,8 @@ export const fetchSellerCars = createAsyncThunk<
     });
     const data: { cars: Array<Record<string, unknown>> } = await res.json();
 
+    console.log("seller data:", data)
+
     // Map backend cars to our Car interface
     const cars: Car[] = data.cars.map((c) => {
       const car = c as Record<string, unknown>;
@@ -84,11 +86,11 @@ export const fetchSellerCars = createAsyncThunk<
         mileage: (car as Record<string, any>).mileage ? `${(car as Record<string, any>).mileage} Kmpl` : "N/A",
         fuel: String((car as Record<string, any>).fuel || ""),
         transmission: String((car as Record<string, any>).transmission || ""),
-        location: `${String(address.city || "")}, ${String(address.state || "")}`,
+        location: `${String(address.city || "")}`,
         price: String((car as Record<string, any>).price || 0),
         emi: (car as Record<string, any>).emi ? `₹ ${(car as Record<string, any>).emi} /mo` : `₹ 7599 /mo`,
-        likes: Number((car as Record<string, any>).likes || 1),
-        views: Number(((car as Record<string, any>).enquiries as any)?.viewProperty || 1),
+        likes: Number((car as Record<string, any>).likes || 0),
+        views: Number(((car as Record<string, any>).enquiries as any)?.viewProperty || 0),
         createdAt: String(car.createdAt),
       } as Car;
     });
@@ -102,7 +104,7 @@ export const fetchSellerCars = createAsyncThunk<
       name: String(owner.name || ""),
       role: String(owner.role || "Owner"),
       joinDate: String(owner.joinDate || "10th September, 2025"),
-      location: fAddress ? `${String(fAddress.city || "")}, ${String(fAddress.state || "")}` : "city, state",
+      location: fAddress ? `${String(fAddress.city || "")}` : "city",
       email: String(owner.email || ""),
       phone: String(owner.mobileNumber || ""),
       verified: Boolean(owner.verified ?? true), //

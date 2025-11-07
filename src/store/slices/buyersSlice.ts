@@ -31,9 +31,10 @@ export const fetchBuyers = createAsyncThunk<
   { rejectValue: string }
 >("buyers/fetchBuyers", async (_, { rejectWithValue }) => {
   try {
+    const backend = import.meta.env.VITE_BACKEND_URL || "";
     const token = localStorage.getItem("token");
     const response = await axios.post(
-      "https://www.dhikkar.online/api/v1/hotleads/get",
+      `{${backend}/api/v1/hotleads/get}`,
       { page: 1, limit: 10 },
       {
         headers: {

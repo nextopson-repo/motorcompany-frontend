@@ -7,11 +7,11 @@ import { BiCaretDown } from "react-icons/bi";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../store/store";
-import { fetchCars, updateSelectedFilter } from "../store/slices/carSlice";
+import { fetchCars, setSearchTerm, updateSelectedFilter } from "../store/slices/carSlice";
 import { useNavigate } from "react-router-dom";
-import { setSearchTerm } from "../store/slices/savedSlice";
 const heroImages = ["/Hero-car.png", "/hero-car-2.jpg", "/hero-car-3.jpg"];
 import { Search } from "lucide-react";
+import useGCarSheetData from "../hooks/useGCarSheetData";
 
 interface DropdownProps {
   label: string;
@@ -22,19 +22,6 @@ interface DropdownProps {
   onToggle: () => void;
   onChange: (v: string) => void;
 }
-
-const bodyTypes = [
-  "SUV",
-  "Sedan",
-  "Hatchback",
-  "Convertible",
-  "Coupe",
-  "Wagon",
-  "Van",
-  "Pickup Truck",
-  "Crossover",
-  "Minivan",
-];
 
 function Dropdown({ placeholder, options, value, onChange }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -59,6 +46,7 @@ function Dropdown({ placeholder, options, value, onChange }: DropdownProps) {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
 
   return (
     <div className="w-full relative font-[Inter]" ref={dropdownRef}>
@@ -130,6 +118,7 @@ const Hero: React.FC = () => {
   const selectedFilters = useSelector(
     (state: RootState) => state.cars.selectedFilters
   );
+  // const brandList = useSelector((state: RootState) => state.cars.filters.brand);
   const dispatch = useDispatch<AppDispatch>();
 
   const navigate = useNavigate();
@@ -138,9 +127,9 @@ const Hero: React.FC = () => {
 
   // ⬇️ Add these right below
   const [selectedBudget, setSelectedBudget] = useState("");
-  const [selectedBodyType, setSelectedBodyType] = useState("");
+  const [selectedBrands, setSelectedBrands] = useState("");
   const [isBudgetOpen, setIsBudgetOpen] = useState(false);
-  const [isBodyTypeOpen, setIsBodyTypeOpen] = useState(false);
+  const [isBrandsOpen, setIsBrandsOpen] = useState(false);
 
   const handleSearch = () => {
     if (!query.trim()) return;
@@ -160,7 +149,7 @@ const Hero: React.FC = () => {
           fetchCars({
             selectedFilters: {
               ...selectedFilters,
-              priceRange: [0, maxPrice],
+              priceRange: [50000, maxPrice],
             },
           })
         );
@@ -168,6 +157,36 @@ const Hero: React.FC = () => {
     }
     navigate("/buy-car");
   };
+
+
+  // google car(brand, model, variant)
+  const sheetId = import.meta.env.VITE_SHEET_ID;
+  const carRange = "sheet2!A:Z";
+  const apiKey = import.meta.env.VITE_API_KEY;
+  const {
+    data: carSheetData,
+    // loading: carSheetLoading,
+    // error: carSheetError,
+  } = useGCarSheetData(sheetId, carRange, apiKey);
+
+  // Build nested locationData object from Google Sheet
+  const carDataObj = carSheetData.reduce((acc, item) => {
+    // Clean up all keys: remove spaces + lowercase
+    const normalizedItem = Object.fromEntries(
+      Object.entries(item).map(([k, v]) => [k.trim().toLowerCase(), v])
+    );
+
+    const brand = normalizedItem["brand"];
+
+    if (!brand) return acc;
+    if (!acc[brand]) acc[brand] = {};
+
+    return acc;
+  }, {} as { [brand: string]: { [model: string]: Set<string> } });
+
+  const carDataNested = Object.fromEntries(
+    Object.entries(carDataObj).map(([brand]) => [brand])
+  );
 
   return (
     <div className="w-full lg:max-w-7xl px-2 lg:px-0">
@@ -278,14 +297,16 @@ const Hero: React.FC = () => {
             {/* Conditional Dropdown */}
             {searchMode === "brand" ? (
               <Dropdown
-                label="Body Type"
-                placeholder="Select Body Type"
-                options={bodyTypes}
-                value={selectedBodyType}
-                isOpen={isBodyTypeOpen}
-                onToggle={() => setIsBodyTypeOpen(!isBodyTypeOpen)}
+                label="Brand"
+                placeholder="Select Brands"
+                 options={Object.keys(carDataNested).sort((a, b) =>
+                  a.localeCompare(b)
+                )}
+                value={selectedBrands}
+                isOpen={isBrandsOpen}
+                onToggle={() => setIsBrandsOpen(!isBrandsOpen)}
                 onChange={(val: string) => {
-                  setSelectedBodyType(val);
+                  setSelectedBrands(val);
                   setQuery(val); // ✅ sync dropdown with query
                 }}
               />
@@ -306,7 +327,7 @@ const Hero: React.FC = () => {
                 onToggle={() => setIsBudgetOpen(!isBudgetOpen)}
                 onChange={(val: string) => {
                   setSelectedBudget(val);
-                  setQuery(val); // ✅ sync dropdown with query
+                  setQuery(val);
                 }}
               />
             )}

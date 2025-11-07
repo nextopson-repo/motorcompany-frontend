@@ -83,7 +83,7 @@ export default function SellerDetails() {
               className="w-16 h-16 rounded-full border mb-3 object-cover"
             />
             <span className="flex flex-col gap-1 mb-2">
-              <h2 className="max-w-[9rem] sm:max-w-[11rem] lg:max-w-[9rem] font-semibold text-md sm:text-lg lg:text-sm text-center capitalize whitespace-nowrap truncate text-ellipsis">
+              <h2 className="max-w-36 sm:max-w-44 lg:max-w-36 font-semibold text-md sm:text-lg lg:text-sm text-center capitalize whitespace-nowrap truncate text-ellipsis">
                 {seller.name || "Unknown Seller"}
               </h2>
               <p className="text-gray-500 text-xs sm:text-sm lg:text-[10px] lg:text-xs font-semibold">
@@ -101,11 +101,11 @@ export default function SellerDetails() {
         <div className="space-y-1">
           {seller.location && (
           <p className="text-[10px] sm:text-sm lg:text-[10px] flex items-center gap-1">
-            <MapPin className="h-[14px] w-[14px] mb-[2px]" /> {seller.location}
+            <MapPin className="h-3.5 w-3.5 mb-0.5" /> {seller.location}
           </p>
         )}
         {seller.email && (
-          <p className="text-[10px] sm:text-sm lg:text-[10px] break-words flex items-center gap-1">
+          <p className="text-[10px] sm:text-sm lg:text-[10px] wrap-break-words flex items-center gap-1">
             <Mail className="h-3 w-3" /> {seller.email}
           </p>
         )}
@@ -115,7 +115,7 @@ export default function SellerDetails() {
               <Phone className="h-3 w-3" /> {seller.phone}
             </span>
             {seller.verified && (
-              <span className="text-[10px] text-green-600 font-bold p-[2px] border border-green-600 rounded-xs flex items-center gap-2 px-4">
+              <span className="text-[10px] text-green-600 font-bold p-0.5 border border-green-600 rounded-xs flex items-center gap-2 px-4">
                 Verified
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -164,20 +164,22 @@ export default function SellerDetails() {
             key={car.id}
             className="flex flex-row bg-white shadow rounded-xs overflow-hidden p-2 border border-gray-200"
           >
-            <img
+           <div className="lg:w-md lg:h-36">
+             <img
               src={car.image || "/placeholder-car.png"}
               alt={car.title}
-              className="w-88 h-36 object-cover rounded-sm"
+              className="w-full h-full object-cover rounded-sm"
             />
+           </div>
 
             <div className="w-full  px-4 flex flex-col justify-between">
               <div className="space-y-2">
-                <h3 className="font-semibold text-md max-w-[230px]">
+                <h3 className="font-semibold text-md max-w-80">
                   {car.title}
                 </h3>
 
                 <p className="text-[10px] mt-1 font-semibold">
-                  {formatShortNumber(car.kms)} | {car.type} | {car.seats} Seater | {car.fuel} |{" "}
+                  {formatShortNumber(car.kms)} | {car.type} {car.seats} Seater | {car.fuel} |{" "}
                   {car.transmission}
                 </p>
 
@@ -192,9 +194,9 @@ export default function SellerDetails() {
               <span className="space-y-1 mb-2">
                 <p className="font-bold text-md">
                  ₹ {formatPriceToLakh(car.price || 0)}
-                  <span className="text-[10px] text-orange-600 ml-2">
+                  {/* <span className="text-[10px] text-orange-600 ml-2">
                     Make your Offer
-                  </span>
+                  </span> */}
                 </p>
                 <p className="text-[10px] font-medium">{formatTimeAgo(car.createdAt)}</p>
               </span>

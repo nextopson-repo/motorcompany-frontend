@@ -1,33 +1,30 @@
-// components/CarListHeader.tsx
 import { MapPin, ChevronDown, X, SearchIcon } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import LocationModal from "./LocationModal";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../store/store";
 import { setLocation } from "../store/slices/locationSlice";
-import { setSearchTerm, setSelectedFilters, setSortOption } from "../store/slices/carSlice";
+import {
+  setSearchTerm,
+  setSelectedFilters,
+  setSortOption,
+  updateSelectedFilter,
+} from "../store/slices/carSlice";
 import FilterBar from "./filters/FilterBar";
+import { cityData } from "../data/cityData";
+import { sortOptions } from "../data/filterOptions";
 
 interface CarListHeaderProps {
   carCount?: number;
 }
 
-const cities = [
-  "Surat",
-  "Mumbai",
-  "Delhi",
-  "Bangalore",
-  "Hyderabad",
-  "Chennai",
-  "Pune",
-  "Jaipur",
-  "Ahmedabad",
-  "Lucknow",
-];
+interface Filters {
+  price: number[];
+  year: number[];
+  [key: string]: number[];
+}
 
-const CarListHeader: React.FC<CarListHeaderProps> = ({
-  carCount = 0,
-}) => {
+const CarListHeader: React.FC<CarListHeaderProps> = ({ carCount = 0 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const selectedFilters = useSelector(
     (state: RootState) => state.cars.selectedFilters
@@ -44,14 +41,6 @@ const CarListHeader: React.FC<CarListHeaderProps> = ({
 
   const locationRef = useRef<HTMLDivElement>(null);
   const sortRef = useRef<HTMLDivElement>(null);
-
-  const sortOptions = [
-    { value: "popularity", label: "Popularity" },
-    { value: "yearNewToOld", label: "Newest" },
-    { value: "yearOldToNew", label: "Oldest" },
-    { value: "priceLowToHigh", label: "Price - Low to High" },
-    { value: "priceHighToLow", label: "Price - High to Low" },
-  ];
 
   const currentSortLabel =
     sortOptions.find((o) => o.value === sortOption)?.label ||
@@ -76,6 +65,11 @@ const CarListHeader: React.FC<CarListHeaderProps> = ({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const defaultFilters: Filters = {
+    price: [0, 10000000],
+    year: [2000, 2025],
+  };
 
   return (
     <div className="w-full mb-2 lg:mb-4">
@@ -129,11 +123,14 @@ const CarListHeader: React.FC<CarListHeaderProps> = ({
 
             {openDropdown === "location" && (
               <div className="absolute right-0 mt-1 w-[150px] bg-white border border-gray-200 rounded-md shadow-lg z-50">
-                {cities.map((city, idx) => (
+                {cityData.map((city, idx) => (
                   <button
                     key={idx}
                     onClick={() => {
                       handleLocationChange(city);
+                      dispatch(
+                        updateSelectedFilter({ key: "location", value: [city] })
+                      );
                       setOpenDropdown(null);
                     }}
                     className={`block w-full text-left px-3 py-2 text-xs hover:bg-gray-200 ${
@@ -157,18 +154,17 @@ const CarListHeader: React.FC<CarListHeaderProps> = ({
       </div>
 
       {/* Middle Section */}
-      <div className="px-4 md:px-0 py-2 rounded-xs lg:rounded-md flex items-center justify-between gap-[6px] lg:gap-3 relative">
+      <div className="px-4 md:px-0 py-2 rounded-xs lg:rounded-md flex items-center justify-between gap-1.5 lg:gap-3 relative">
         <h2 className="w-full text-xs md:text-xs lg:text-[1rem] font-semibold flex items-center gap-1 truncate overflow-ellipsis">
-          {carCount}
-          <span className="">Second Hand</span> Cars in{" "}
-          {location || "All Locations"}
+          {carCount}{" "}
+          Cars in {location || "All Locations"}
         </h2>
         <div ref={sortRef} className="relative z-5">
           <button
             onClick={() =>
               setOpenDropdown(openDropdown === "sort" ? null : "sort")
             }
-            className="bg-black lg:bg-white text-white lg:text-black rounded-sm px-3 lg:px-4 py-[6px] lg:py-2 text-sm sm:w-auto flex items-center justify-between border border-gray-200 hover:bg-gray-200"
+            className="bg-black lg:bg-white text-white lg:text-black rounded-sm px-3 lg:px-4 py-1.5 lg:py-2 text-sm sm:w-auto flex items-center justify-between border border-gray-200 hover:bg-gray-200"
           >
             <div className="hidden lg:block font-semibold text-[10px] whitespace-nowrap">
               Sort By :
@@ -189,6 +185,7 @@ const CarListHeader: React.FC<CarListHeaderProps> = ({
                 <button
                   key={opt.value}
                   onClick={() => {
+                    console.log("sort", opt.value);
                     dispatch(setSortOption(opt.value));
                     setOpenDropdown(null);
                   }}
@@ -205,37 +202,42 @@ const CarListHeader: React.FC<CarListHeaderProps> = ({
       </div>
 
       {/* Filter Bottom Section chips */}
-      {/* Filter Chips Section */}
       <div className="hidden w-full lg:flex flex-wrap gap-3 mt-1 lg:mt-2">
-        {Object.entries(selectedFilters).map(([filterType, values]) =>
-          Array.isArray(values) && values.length > 0
-            ? values.map((val) => (
-                <div
-                  key={`${filterType}-${val}`}
-                  className="flex items-center gap-2 px-2 py-1 rounded-xs border border-blue-400 w-fit"
-                >
-                  <p className="text-[10px] font-semibold text-blue-500">
-                    {val}
-                  </p>
-                  <button
-                    className="hover:bg-blue-100 rounded-full p-[2px]"
-                    onClick={() => {
-                      // ✅ remove this value from selectedFilters
-                      const updated = [...values].filter((v) => v !== val);
-                      dispatch(
-                        setSelectedFilters({
-                          ...selectedFilters,
-                          [filterType]: updated,
-                        })
-                      );
-                    }}
-                  >
-                    <X className="w-[10px] h-[10px] text-blue-500" />
-                  </button>
-                </div>
-              ))
-            : null
-        )}
+        {Object.entries(selectedFilters).map(([filterType, values]) => {
+          // Skip if values are same as defaults
+          const isDefault =
+            Array.isArray(values) &&
+            Array.isArray(defaultFilters[filterType]) &&
+            values.length === defaultFilters[filterType].length &&
+            values.every((v, i) => v === defaultFilters[filterType][i]);
+
+          if (!Array.isArray(values) || values.length === 0 || isDefault)
+            return null;
+
+          // Otherwise show the filter chips
+          return values.map((val) => (
+            <div
+              key={`${filterType}-${val}`}
+              className="flex items-center gap-2 px-2 py-1 rounded-xs border border-blue-400 w-fit"
+            >
+              <p className="text-[10px] font-semibold text-blue-500">{val}</p>
+              <button
+                className="hover:bg-blue-100 rounded-full p-0.5"
+                onClick={() => {
+                  const updated = values.filter((v) => v !== val);
+                  dispatch(
+                    setSelectedFilters({
+                      ...selectedFilters,
+                      [filterType]: updated,
+                    })
+                  );
+                }}
+              >
+                <X className="w-2.5 h-2.5 text-blue-500" />
+              </button>
+            </div>
+          ));
+        })}
       </div>
 
       <LocationModal

@@ -1,16 +1,19 @@
 import { useState, useRef, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { setOwnership } from "../../store/slices/filterSlice";
 import { ChevronDown } from "lucide-react";
+import { type SelectedFilters } from "../../store/slices/carSlice";
 
-const RoleFilter = ({ userType }: { userType: string }) => {
+interface RoleFilterProps {
+  userType: "EndUser" | "Dealer" | "Owner";
+  onSelectedFiltersChange: (filters: SelectedFilters) => void;
+  selectedFilters: SelectedFilters;
+}
+
+const RoleFilter = ({ userType,  selectedFilters, onSelectedFiltersChange }: RoleFilterProps) => {
   const [openFilter, setOpenFilter] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0 });
-  const dispatch = useDispatch();
 
-  // Recalculate dropdown position
   useEffect(() => {
     if (openFilter && buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
@@ -21,7 +24,6 @@ const RoleFilter = ({ userType }: { userType: string }) => {
     }
   }, [openFilter]);
 
-  // Close on outside click
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (
@@ -42,32 +44,44 @@ const RoleFilter = ({ userType }: { userType: string }) => {
 
   return (
     <div className="relative inline-block">
-      {/* Trigger Button */}
       <button
         ref={buttonRef}
         className="px-3 py-2 bg-black text-white border rounded-sm text-xs flex items-center gap-2"
         onClick={() => setOpenFilter((prev) => !prev)}
       >
-        {userType} <ChevronDown className="h-4 w-4" />
+        {userType === "EndUser"
+          ? "All Cars"
+          : userType === "Dealer"
+          ? "Dealer Cars"
+          : "Owner Cars"}
+        <ChevronDown className="h-4 w-4" />
       </button>
 
-      {/* Dropdown */}
       {openFilter && (
         <div
           ref={dropdownRef}
           className="fixed z-50 bg-white shadow rounded w-32 border border-gray-200"
           style={{ top: dropdownPos.top, left: dropdownPos.left }}
         >
-          {["All Cars", "Dealer Cars", "Owner Cars"].map((opt) => (
+          {[
+            { label: "All Cars", value: "EndUser" },
+            { label: "Dealer Cars", value: "Dealer" },
+            { label: "Owner Cars", value: "Owner" },
+          ].map((opt) => (
             <button
-              key={opt}
-              className="block w-full text-left px-3 py-2 hover:bg-gray-100 text-sm"
+              key={opt.value}
+              className={`block w-full text-left px-3 py-2 hover:bg-gray-100 text-sm ${
+                userType === opt.value ? "bg-gray-100 font-semibold" : ""
+              }`}
               onClick={() => {
-                dispatch(setOwnership(opt as "All" | "Dealer" | "Owner"));
+                onSelectedFiltersChange({
+                  ...selectedFilters,
+                  userType: opt.value as "EndUser" | "Dealer" | "Owner",
+                })
                 setOpenFilter(false);
               }}
             >
-              {opt}
+              {opt.label}
             </button>
           ))}
         </div>

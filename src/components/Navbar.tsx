@@ -335,7 +335,7 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
           >
             <span className="h-5 w-5"><img src="/mobile sidebar logo/my_listings.png" alt="icon"/></span> My Listing
           </NavLink>
-          <NavLink
+          {/* <NavLink
             to="/settings/my-leads"
             className={({ isActive }) =>
               isActive ? "text-[#EE1422] text-md flex items-center gap-2" : "text-black text-md flex items-center gap-2"
@@ -343,7 +343,7 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
             onClick={() => setIsRightSidebarOpen(false)}
           >
            <span className="h-5 w-5"><img src="/mobile sidebar logo/" alt="icon"/></span> My Leads
-          </NavLink>
+          </NavLink> */}
           <NavLink
             to="/sell"
             className={({ isActive }) =>
@@ -405,7 +405,7 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
                 setShowDialog(true);
                 setIsRightSidebarOpen(false);
               }}
-              className="w-full py-[6px] mt-2 cursor-pointer text-sm transition text-red-500 border border-red-400 rounded-xs hover:bg-gray-200 active:scale-95 active:bg-red-500 active:text-white"
+              className="w-full py-1.5 mt-2 cursor-pointer text-sm transition text-red-500 border border-red-400 rounded-xs hover:bg-gray-200 active:scale-95 active:bg-red-500 active:text-white"
             >
               Logout
             </button>

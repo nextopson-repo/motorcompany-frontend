@@ -25,7 +25,7 @@ export default function ImageUploadOverlay({
   const [previewURLs, setPreviewURLs] = useState<string[]>([]);
   const [error, setError] = useState("");
 
-  const MAX_IMAGES = 5;
+  const MAX_IMAGES = 10;
   const MAX_SIZE_MB = 20;
 
   // Cleanup previews
@@ -87,8 +87,8 @@ export default function ImageUploadOverlay({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center lg:justify-end z-50 p-4 overflow-hidden">
-      <div className="bg-white rounded-xl p-6 w-full lg:w-[50%] max-w-sm lg:mr-6 shadow-2xl relative overflow-y-auto max-h-[85vh] transition-all">
+    <div className="fixed inset-0 lg:bg-black/50 lg:backdrop-blur-[1px] flex items-end lg:items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl p-6 w-full lg:w-[50%] max-w-sm lg:mr-6 shadow-2xl relative overflow-y-auto lg:max-h-[85vh] transition-all">
         {/* Close Button */}
         <button
           onClick={() => {
@@ -134,12 +134,13 @@ export default function ImageUploadOverlay({
               <p className="text-red-500 mt-2 text-xs text-center">{error}</p>
             )}
 
-            {previewURLs.length > 0 && (
-              <div className="h-full grid grid-cols-2 gap-2 mt-3 overflow-y-auto">
+            <div className="max-h-40 overflow-y-auto">
+              {previewURLs.length > 0 && (
+              <div className="h-full grid grid-cols-2 gap-2 mt-5">
                 {previewURLs.map((url, index) => (
                   <div
                     key={index}
-                    className="relative group rounded-md overflow-hidden shadow-sm"
+                    className="h-22 relative group rounded-md overflow-hidden shadow-sm"
                   >
                     <img
                       src={url}
@@ -148,7 +149,7 @@ export default function ImageUploadOverlay({
                     />
                     <button
                       onClick={() => handleRemoveImage(index)}
-                      className="absolute top-1 right-1 bg-black/60 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition"
+                      className="absolute top-1 right-1 bg-black/60 text-white p-1 rounded-full lg:opacity-0 group-hover:opacity-100 transition"
                     >
                       <X size={12} />
                     </button>
@@ -156,6 +157,7 @@ export default function ImageUploadOverlay({
                 ))}
               </div>
             )}
+            </div>
           </>
         )}
 

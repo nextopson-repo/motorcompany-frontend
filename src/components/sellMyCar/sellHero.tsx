@@ -10,6 +10,7 @@ import {
 } from "../../store/slices/authSlices/authSlice";
 import { openLogin } from "../../store/slices/authSlices/loginModelSlice";
 import toast from "react-hot-toast";
+import { cityData } from "../../data/cityData";
 
 interface DropdownProps {
   label: string;
@@ -79,7 +80,7 @@ export default function SellHero() {
   const dispatch = useAppDispatch();
   const loginDispatch = useDispatch();
   const { user, token } = useSelector(selectAuth);
-  console.log("userType :", user?.userType);
+  // console.log("userType :", user?.userType);
   const navigate = useNavigate();
 
   const handleAccess = () => {
@@ -167,18 +168,19 @@ export default function SellHero() {
   }, [success, dispatch, navigate]);
 
   return (
-    <section className="relative w-full max-w-8xl mx-auto h-[326px] sm:h-112 lg:h-[88vh] bg-black mb-[230px] sm:mb-5 lg:mb-0 mt-12 lg:mt-10 ">
+    <section className="relative w-full max-w-7xl mx-auto h-fit lg:h-screen sm:bg-black/50 mb-5 sm:mb-0 mt-12 lg:mt-0 lg:pt-10 ">
       {/* Background Image */}
       <div
-        className="h-auto sm:h-auto lg:h-auto absolute inset-0 bg-cover bg-no-repeat opacity-60 mb-1"
+        className="h-[326px] sm:h-[326px] lg:h-[88vh] absolute inset-0 bg-no-repeat bg-cover mb-1 lg:mt-10"
         style={{
-          backgroundImage: "url('/sell-my-car-hero-bg1.jpg')",
+          backgroundImage:
+            "linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/sell-my-car-hero-bg1.jpg')",
           backgroundPosition: "center calc(100% - 75%)",
         }}
       />
 
       {/* Overlay Content */}
-      <div className="relative max-w-7xl h-full lg:h-[93vh] mx-auto px-4 lg:px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-9 items-center md:gap-10 backdrop-blur-[3px] z-45">
+      <div className="relative max-w-7xl h-full  mx-auto px-4 lg:px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-9 items-center md:gap-10 backdrop-blur-[3px] z-45">
         {/* Left Content */}
         <div className="h-full w-full text-white lg:col-span-6 mt-0 sm:mt-14 lg:mt-28 md:px-2 pr-8 lg:pr-0 py-8 lg:py-0 z-1">
           <p className="hidden lg:block text-sm mb-14">
@@ -250,7 +252,7 @@ export default function SellHero() {
           </ul>
         </div>
 
-        <div className="sm:w-72 bg-white rounded-lg shadow-md lg:shadow-lg border border-gray-200 p-4 lg:p-6 sm:mt-6 sm:m-4 lg:col-span-3">
+        <div className="sm:w-78 bg-white rounded-lg shadow-md lg:shadow-lg border border-gray-200 p-4 lg:p-6 sm:mt-6 sm:my-2 lg:col-span-3">
           {showForm && (
             <SellHeroForm
               onBack={() => setShowForm(false)}
@@ -267,9 +269,7 @@ export default function SellHero() {
                 you started
               </h2>
 
-              {/* User Type */}
-              {/* User Type (only show if user is EndUser) */}
-              {/* User Type Selection (only for EndUser) */}
+              {/* User Type conditional*/}
               {user?.userType === "EndUser" && (
                 <div className="mb-3">
                   <label htmlFor="userType" className="text-[10px] md:text-xs">
@@ -317,18 +317,7 @@ export default function SellHero() {
                 <Dropdown
                   label="City"
                   placeholder="Select City"
-                  options={[
-                    "Ahmedabad",
-                    "Chandigarh",
-                    "Delhi",
-                    "Hyderabad",
-                    "Jaipur",
-                    "Kanpur",
-                    "Lucknow",
-                    "Mumbai",
-                    "Pune",
-                    "Surat",
-                  ]}
+                  options={cityData}
                   value={city}
                   onChange={(val) => {
                     setCity(val);
@@ -339,7 +328,21 @@ export default function SellHero() {
 
               <button
                 disabled={loading}
-                onClick={() => (user ? setShowForm(true) : handleAccess())}
+                onClick={() => {
+                  if (!city) {
+                    toast.error("Please select a city!");
+                    return;
+                  }
+                  if (user?.userType === "EndUser") {
+                    toast.error("Please select a your User Type!");
+                    return;
+                  }
+                  if (user) {
+                    setShowForm(true);
+                  } else {
+                    handleAccess();
+                  }
+                }}
                 className={`w-full mt-4 py-2 rounded bg-[#24272C] text-white ${
                   loading ? "opacity-50 cursor-not-allowed" : "hover:bg-black"
                 }`}

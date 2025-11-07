@@ -11,16 +11,17 @@ import {
   transmissionOptions,
   bodyTypeOptions,
   ownershipOptions,
-  stateOptions,
+  // stateOptions,
   cityOptions,
 } from "../../data/filterOptions";
+
 
 // ---------- Types ----------
 export type SelectedFilters = {
   userType: "EndUser" | "Dealer" | "Owner";
   brand: string[];
   bodyType: string[];
-  fuel: string[];
+  fuelType: string[];
   transmission: string[];
   ownership: string[];
   location: string[];
@@ -53,7 +54,7 @@ export type CarsState = {
     priceRange: [number, number] | null;
     yearRange: [number, number] | null;
     cityOptions?: string[];
-    stateOptions?: string[];
+    // stateOptions?: string[];
   };
   selectedFilters: SelectedFilters;
   searchTerm: string;
@@ -70,23 +71,24 @@ const initialState: CarsState = {
   filters: {
     priceRange: null,
     yearRange: null,
+    // brand: [],
     brand: brandOptions,
     fuel: fuelOptions,
     transmission: transmissionOptions,
     bodyType: bodyTypeOptions,
     ownership: ownershipOptions,
     userType: "EndUser",
-    stateOptions,
+    // stateOptions,
     cityOptions,
   },
   selectedFilters: {
     brand: [],
     bodyType: [],
-    fuel: [],
+    fuelType: [],
     transmission: [],
     ownership: [],
     location: [],
-    priceRange: [0, 10000000],
+    priceRange: [50000, 10000000],
     yearRange: [2000, new Date().getFullYear()],
     userType: "EndUser",
   },
@@ -106,14 +108,14 @@ const buildBody = (payload?: {
   const sf = payload.selectedFilters;
 
   if (sf) {
-    if (sf.brand?.length) body.brand = sf.brand;
+    if (sf.brand?.length) body.brands = sf.brand;
     if (sf.bodyType?.length) body.bodyType = sf.bodyType;
-    if (sf.fuel?.length) body.fuel = sf.fuel;
+    if (sf.fuelType?.length) body.fuelType = sf.fuelType;
     if (sf.transmission?.length) body.transmission = sf.transmission;
     if (sf.ownership?.length) body.ownership = sf.ownership;
     if (sf.location?.length) body.location = sf.location;
     if (sf.priceRange)
-      body.price = { min: sf.priceRange[0], max: sf.priceRange[1] };
+      body.priceRange = { min: sf.priceRange[0], max: sf.priceRange[1] };
     if (sf.yearRange)
       body.modelYear = { min: sf.yearRange[0], max: sf.yearRange[1] };
     if (sf.userType && sf.userType !== "EndUser") body.userType = sf.userType;
@@ -121,10 +123,10 @@ const buildBody = (payload?: {
 
   if (payload.searchTerm) body.search = payload.searchTerm;
   if (payload.sortOption) body.sort = payload.sortOption;
-   body.sort =
-    payload.sortOption === "oldest" || payload.sortOption === "newest"
-      ? payload.sortOption
-      : "newest";
+  //  body.sort =
+  //   payload.sortOption === "oldest" || payload.sortOption === "newest"
+  //     ? payload.sortOption
+  //     : "newest";
 
   return body;
 };
@@ -229,14 +231,15 @@ const carSlice = createSlice({
     clearAllFilters(state) {
       state.selectedFilters = initialState.selectedFilters;
       state.searchTerm = "";
-      state.sortOption = "popularity";
+      state.sortOption = "newest";
+      state.cars = state.allCars;
     },
     setCityAndStateOptions(
       state,
       action: PayloadAction<{ cityOptions: string[]; stateOptions: string[] }>
     ) {
       state.filters.cityOptions = action.payload.cityOptions;
-      state.filters.stateOptions = action.payload.stateOptions;
+      // state.filters.stateOptions = action.payload.stateOptions;
     },
   },
   extraReducers: (builder) => {
@@ -252,9 +255,15 @@ const carSlice = createSlice({
             .length > 0;
 
         if (isFiltered) {
-          state.cars = action.payload; // filtered result
+          state.cars = action.payload; // filtered cars
+          if (state.allCars.length === 0) {
+            // agar allCars empty hai to ek baar fill kar do
+            state.allCars = action.payload;
+          }
         } else {
-          state.allCars = action.payload; // unfiltered result
+          // first load or clear filters — allCars set karo
+          state.allCars = action.payload;
+          state.cars = action.payload;
         }
       })
       .addCase(fetchCars.rejected, (state, action) => {
