@@ -17,14 +17,18 @@ import {
 import { fetchSellerCars } from "../store/slices/sellerDetailsSlice";
 import { Link, useParams } from "react-router-dom";
 import { AiFillHeart } from "react-icons/ai";
-import { formatPriceToLakh, formatShortNumber, formatTimeAgo } from "../utils/formatPrice";
+import {
+  formatPriceToLakh,
+  formatShortNumber,
+  formatTimeAgo,
+} from "../utils/formatPrice";
 // import { setSelectedCar } from "../store/slices/carSlice";
 
 export default function SellerDetails() {
   const { userId } = useParams<{ userId: string }>();
   const dispatch = useDispatch<AppDispatch>();
   const seller = useSelector((state: RootState) => state.SellerDetails);
-  console.log("seller data:",seller)
+  // console.log("seller data:",seller)
   const [viewMode, setViewMode] = useState<"list" | "card">("list");
   // const handleViewMore = () => dispatch(setSelectedCar(seller.cars.));
 
@@ -52,24 +56,24 @@ export default function SellerDetails() {
 
   // share profile link
   const handleShareProfile = async () => {
-  const profileUrl = `${window.location.origin}/profile/${userId}`; // or username
-  
-  if (navigator.share) {
-    try {
-      await navigator.share({
-        title: 'Check out this profile on Dhikcar',
-        text: `Check out ${seller.name}'s profile`,
-        url: profileUrl,
-      });
-    } catch (error) {
-      console.log('Error sharing:', error);
+    const profileUrl = `${window.location.origin}/profile/${userId}`; // or username
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "Check out this profile on Dhikcar",
+          text: `Check out ${seller.name}'s profile`,
+          url: profileUrl,
+        });
+      } catch (error) {
+        console.log("Error sharing:", error);
+      }
+    } else {
+      // Fallback: Copy to clipboard
+      navigator.clipboard.writeText(profileUrl);
+      alert("Profile link copied to clipboard!");
     }
-  } else {
-    // Fallback: Copy to clipboard
-    navigator.clipboard.writeText(profileUrl);
-    alert('Profile link copied to clipboard!');
-  }
-};
+  };
 
   return (
     <div className="grid lg:grid-cols-4 gap-8 mt-20 max-w-5xl mx-auto mb-4 overflow-hidden">
@@ -82,11 +86,11 @@ export default function SellerDetails() {
               alt={seller.name || "Seller"}
               className="w-16 h-16 rounded-full border mb-3 object-cover"
             />
-            <span className="flex flex-col gap-1 mb-2">
-              <h2 className="max-w-36 sm:max-w-44 lg:max-w-36 font-semibold text-md sm:text-lg lg:text-sm text-center capitalize whitespace-nowrap truncate text-ellipsis">
+            <span className="flex flex-col mb-2">
+              <h2 className="max-w-36 sm:max-w-44 lg:max-w-36 font-semibold text-md sm:text-lg lg:text-md text-center capitalize whitespace-nowrap truncate text-ellipsis">
                 {seller.name || "Unknown Seller"}
               </h2>
-              <p className="text-gray-500 text-xs sm:text-sm lg:text-[10px] lg:text-xs font-semibold">
+              <p className="text-gray-500 text-xs sm:text-sm lg:text-[10px] lg:text-xs font-semibold bg-gray-100 w-fit p-0.5 px-1 rounded-sm">
                 {seller.role || "EndUser"}
               </p>
             </span>
@@ -100,52 +104,58 @@ export default function SellerDetails() {
 
         <div className="space-y-1">
           {seller.location && (
-          <p className="text-[10px] sm:text-sm lg:text-[10px] flex items-center gap-1">
-            <MapPin className="h-3.5 w-3.5 mb-0.5" /> {seller.location}
-          </p>
-        )}
-        {seller.email && (
-          <p className="text-[10px] sm:text-sm lg:text-[10px] wrap-break-words flex items-center gap-1">
-            <Mail className="h-3 w-3" /> {seller.email}
-          </p>
-        )}
-        {seller.phone && (
-          <p className="text-[10px] sm:text-sm lg:text-[10px] flex items-center justify-between">
-            <span className="flex items-center gap-1">
-              <Phone className="h-3 w-3" /> {seller.phone}
-            </span>
-            {seller.verified && (
-              <span className="text-[10px] text-green-600 font-bold p-0.5 border border-green-600 rounded-xs flex items-center gap-2 px-4">
-                Verified
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="12"
-                  viewBox="0 0 36 36"
-                  fill="none"
-                >
-                  <path
-                    d="M17.6351 0.812837C17.7765 0.497936 18.2235 0.497935 18.3649 0.812836L20.5065 5.58323C20.6153 5.82563 20.9259 5.89652 21.1291 5.72533L25.1285 2.35657C25.3925 2.13419 25.7953 2.32818 25.786 2.67323L25.6457 7.90042C25.6386 8.16603 25.8877 8.36464 26.145 8.29859L31.2099 6.99868C31.5443 6.91287 31.823 7.26241 31.665 7.56928L29.2706 12.2179C29.1489 12.4542 29.2872 12.7412 29.5477 12.7933L34.675 13.8197C35.0135 13.8875 35.113 14.3234 34.8374 14.5313L30.6632 17.6807C30.4511 17.8407 30.4511 18.1593 30.6632 18.3193L34.8374 21.4687C35.113 21.6766 35.0135 22.1125 34.675 22.1803L29.5477 23.2067C29.2872 23.2588 29.1489 23.5458 29.2706 23.7821L31.665 28.4307C31.823 28.7376 31.5443 29.0871 31.2099 29.0013L26.145 27.7014C25.8877 27.6354 25.6386 27.834 25.6457 28.0996L25.786 33.3268C25.7953 33.6718 25.3925 33.8658 25.1285 33.6434L21.1291 30.2747C20.9259 30.1035 20.6153 30.1744 20.5065 30.4168L18.3649 35.1872C18.2235 35.5021 17.7765 35.5021 17.6351 35.1872L15.4935 30.4168C15.3847 30.1744 15.0741 30.1035 14.8709 30.2747L10.8715 33.6434C10.6075 33.8658 10.2047 33.6718 10.214 33.3268L10.3543 28.0996C10.3614 27.834 10.1123 27.6354 9.85497 27.7014L4.79006 29.0013C4.45571 29.0871 4.17696 28.7376 4.33501 28.4307L6.72938 23.7821C6.85105 23.5458 6.71284 23.2588 6.4523 23.2067L1.32495 22.1803C0.98649 22.1125 0.887005 21.6766 1.16255 21.4687L5.33679 18.3193C5.5489 18.1593 5.5489 17.8407 5.33679 17.6807L1.16255 14.5313C0.887004 14.3234 0.986491 13.8875 1.32496 13.8197L6.4523 12.7933C6.71284 12.7412 6.85105 12.4542 6.72938 12.2179L4.33502 7.56928C4.17696 7.26241 4.45571 6.91287 4.79005 6.99868L9.85497 8.29859C10.1123 8.36464 10.3614 8.16603 10.3543 7.90042L10.214 2.67323C10.2047 2.32817 10.6075 2.13419 10.8715 2.35657L14.8709 5.72534C15.0741 5.89652 15.3847 5.82563 15.4935 5.58323L17.6351 0.812837Z"
-                    fill="#329537"
-                  />
-                  <path
-                    d="M23.525 15.1309C23.6731 14.9776 23.7549 14.7724 23.7531 14.5593C23.7512 14.3463 23.6658 14.1425 23.5152 13.9919C23.3645 13.8412 23.1607 13.7558 22.9477 13.7539C22.7347 13.7521 22.5294 13.834 22.3762 13.982L16.4449 19.9132L13.7637 17.232C13.6104 17.084 13.4052 17.0021 13.1922 17.0039C12.9791 17.0058 12.7753 17.0912 12.6247 17.2419C12.4741 17.3925 12.3886 17.5963 12.3867 17.8093C12.3849 18.0224 12.4668 18.2276 12.6148 18.3809L15.8648 21.6309C16.0172 21.7832 16.2238 21.8687 16.4392 21.8687C16.6547 21.8687 16.8613 21.7832 17.0137 21.6309L23.5137 15.1309H23.525Z"
-                    fill="white"
-                  />
-                </svg>
+            <p className="text-[10px] sm:text-sm lg:text-[10px] flex items-center gap-1">
+              <MapPin className="h-3.5 w-3.5 mb-0.5" /> {seller.location}
+            </p>
+          )}
+          {seller.email && (
+            <p className="text-[10px] sm:text-sm lg:text-[10px] wrap-break-words flex items-center gap-1">
+              <Mail className="h-3 w-3" /> {seller.email}
+            </p>
+          )}
+          {seller.phone && (
+            <p className="text-[10px] sm:text-sm lg:text-[10px] flex items-center justify-between">
+              <span className="flex items-center gap-1">
+                <Phone className="h-3 w-3" />{" "} <span>+91</span>
+                {seller.phone
+                  ? seller.phone.replace(/(?<=\d{5})\d/g, "*") //back few number masked
+                      // .replace(/.(?=.{5})/g, "*") //front few number masked
+                      .replace(/(.{5})(.{5})/, "$1 $2")
+                  : "N/A"}
               </span>
-            )}
-          </p>
-        )}
+              {seller.verified && (
+                <span className="text-[10px] text-green-600 font-bold p-0.5 border border-green-600 rounded-xs flex items-center gap-2 px-4">
+                  Verified
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 36 36"
+                    fill="none"
+                  >
+                    <path
+                      d="M17.6351 0.812837C17.7765 0.497936 18.2235 0.497935 18.3649 0.812836L20.5065 5.58323C20.6153 5.82563 20.9259 5.89652 21.1291 5.72533L25.1285 2.35657C25.3925 2.13419 25.7953 2.32818 25.786 2.67323L25.6457 7.90042C25.6386 8.16603 25.8877 8.36464 26.145 8.29859L31.2099 6.99868C31.5443 6.91287 31.823 7.26241 31.665 7.56928L29.2706 12.2179C29.1489 12.4542 29.2872 12.7412 29.5477 12.7933L34.675 13.8197C35.0135 13.8875 35.113 14.3234 34.8374 14.5313L30.6632 17.6807C30.4511 17.8407 30.4511 18.1593 30.6632 18.3193L34.8374 21.4687C35.113 21.6766 35.0135 22.1125 34.675 22.1803L29.5477 23.2067C29.2872 23.2588 29.1489 23.5458 29.2706 23.7821L31.665 28.4307C31.823 28.7376 31.5443 29.0871 31.2099 29.0013L26.145 27.7014C25.8877 27.6354 25.6386 27.834 25.6457 28.0996L25.786 33.3268C25.7953 33.6718 25.3925 33.8658 25.1285 33.6434L21.1291 30.2747C20.9259 30.1035 20.6153 30.1744 20.5065 30.4168L18.3649 35.1872C18.2235 35.5021 17.7765 35.5021 17.6351 35.1872L15.4935 30.4168C15.3847 30.1744 15.0741 30.1035 14.8709 30.2747L10.8715 33.6434C10.6075 33.8658 10.2047 33.6718 10.214 33.3268L10.3543 28.0996C10.3614 27.834 10.1123 27.6354 9.85497 27.7014L4.79006 29.0013C4.45571 29.0871 4.17696 28.7376 4.33501 28.4307L6.72938 23.7821C6.85105 23.5458 6.71284 23.2588 6.4523 23.2067L1.32495 22.1803C0.98649 22.1125 0.887005 21.6766 1.16255 21.4687L5.33679 18.3193C5.5489 18.1593 5.5489 17.8407 5.33679 17.6807L1.16255 14.5313C0.887004 14.3234 0.986491 13.8875 1.32496 13.8197L6.4523 12.7933C6.71284 12.7412 6.85105 12.4542 6.72938 12.2179L4.33502 7.56928C4.17696 7.26241 4.45571 6.91287 4.79005 6.99868L9.85497 8.29859C10.1123 8.36464 10.3614 8.16603 10.3543 7.90042L10.214 2.67323C10.2047 2.32817 10.6075 2.13419 10.8715 2.35657L14.8709 5.72534C15.0741 5.89652 15.3847 5.82563 15.4935 5.58323L17.6351 0.812837Z"
+                      fill="#329537"
+                    />
+                    <path
+                      d="M23.525 15.1309C23.6731 14.9776 23.7549 14.7724 23.7531 14.5593C23.7512 14.3463 23.6658 14.1425 23.5152 13.9919C23.3645 13.8412 23.1607 13.7558 22.9477 13.7539C22.7347 13.7521 22.5294 13.834 22.3762 13.982L16.4449 19.9132L13.7637 17.232C13.6104 17.084 13.4052 17.0021 13.1922 17.0039C12.9791 17.0058 12.7753 17.0912 12.6247 17.2419C12.4741 17.3925 12.3886 17.5963 12.3867 17.8093C12.3849 18.0224 12.4668 18.2276 12.6148 18.3809L15.8648 21.6309C16.0172 21.7832 16.2238 21.8687 16.4392 21.8687C16.6547 21.8687 16.8613 21.7832 17.0137 21.6309L23.5137 15.1309H23.525Z"
+                      fill="white"
+                    />
+                  </svg>
+                </span>
+              )}
+            </p>
+          )}
         </div>
 
         <div className="mt-4 flex flex-col sm:flex-row gap-3 w-full">
-          <button className="w-full text-xs sm:text-[10px] bg-black text-white px-4 py-[6px] rounded-sm hover:bg-gray-900 flex items-center justify-center gap-2 whitespace-nowrap"
-          onClick={handleShareProfile}
+          <button
+            className="w-full text-xs sm:text-[10px] bg-black text-white px-4 py-1.5 rounded-sm hover:bg-gray-900 flex items-center justify-center gap-2 whitespace-nowrap"
+            onClick={handleShareProfile}
           >
             <Share2 className="h-3 w-3" /> Share Profile
           </button>
-          <button className="w-full text-xs sm:text-[10px] border px-4 py-[6px] rounded-sm text-gray-700 hover:bg-gray-100 flex items-center justify-center gap-2 whitespace-nowrap">
+          <button className="w-full text-xs sm:text-[10px] border px-4 py-1.5 rounded-sm text-gray-700 hover:bg-gray-100 flex items-center justify-center gap-2 whitespace-nowrap">
             <Flag className="h-3 w-3" /> Report User
           </button>
         </div>
@@ -164,23 +174,21 @@ export default function SellerDetails() {
             key={car.id}
             className="flex flex-row bg-white shadow rounded-xs overflow-hidden p-2 border border-gray-200"
           >
-           <div className="lg:w-md lg:h-36">
-             <img
-              src={car.image || "/placeholder-car.png"}
-              alt={car.title}
-              className="w-full h-full object-cover rounded-sm"
-            />
-           </div>
+            <div className="lg:w-md lg:h-36">
+              <img
+                src={car.image || "/placeholder-car.png"}
+                alt={car.title}
+                className="w-full h-full object-cover rounded-sm"
+              />
+            </div>
 
             <div className="w-full  px-4 flex flex-col justify-between">
               <div className="space-y-2">
-                <h3 className="font-semibold text-md max-w-80">
-                  {car.title}
-                </h3>
+                <h3 className="font-semibold text-md max-w-80">{car.title}</h3>
 
                 <p className="text-[10px] mt-1 font-semibold">
-                  {formatShortNumber(car.kms)} | {car.type} {car.seats} Seater | {car.fuel} |{" "}
-                  {car.transmission}
+                  {formatShortNumber(car.kms)} | {car.type} {car.seats} Seater |{" "}
+                  {car.fuel} | {car.transmission}
                 </p>
 
                 {car.location && (
@@ -193,12 +201,14 @@ export default function SellerDetails() {
 
               <span className="space-y-1 mb-2">
                 <p className="font-bold text-md">
-                 ₹ {formatPriceToLakh(car.price || 0)}
+                  ₹ {formatPriceToLakh(car.price || 0)}
                   {/* <span className="text-[10px] text-orange-600 ml-2">
                     Make your Offer
                   </span> */}
                 </p>
-                <p className="text-[10px] font-medium">{formatTimeAgo(car.createdAt)}</p>
+                <p className="text-[10px] font-medium">
+                  {formatTimeAgo(car.createdAt)}
+                </p>
               </span>
             </div>
 
@@ -212,7 +222,7 @@ export default function SellerDetails() {
                 </p>
               </span>
               <span className="text-[8px] whitespace-nowrap text-gray-500 mr-4 flex items-center gap-1">
-                <Flame className="text-[#cb202d] h-[12px] w-[12px]" />
+                <Flame className="text-[#cb202d] h-4 w-4" />
                 Trending Viewed by {car.views} user's
               </span>
             </div>
@@ -246,7 +256,7 @@ export default function SellerDetails() {
               <IdCard className="h-5 w-5" />
             </button>
           </span>
-          <button className="text-sm px-4 py-[6px] bg-black text-white flex items-center rounded-sm gap-2">
+          <button className="text-sm px-4 py-1.5 bg-black text-white flex items-center rounded-sm gap-2">
             Latest <ChevronDown className="text-white h-4 w-4" />
           </button>
         </div>
@@ -261,7 +271,7 @@ export default function SellerDetails() {
               className="flex flex-row rounded-sm border border-gray-100 p-1"
             >
               {/* Left Image */}
-              <div className="h-fit w-28 sm:w-36 flex-shrink-0 relative">
+              <div className="h-fit w-28 sm:w-36 shrink-0 relative">
                 <img
                   src={"/fallback-car-img.png"}
                   alt="car image"
@@ -295,7 +305,7 @@ export default function SellerDetails() {
                 {/* Mobile bottom */}
                 <div className="flex items-center justify-between pl-2 pr-1">
                   <div className="text-[8px] flex items-center text-gray-900">
-                    <MapPinIcon className="w-[10px] h-[10px] mr-1 text-gray-900" />
+                    <MapPinIcon className="w-2.5 h-2.5 mr-1 text-gray-900" />
                     {car.location}
                   </div>
                   <div>
@@ -363,7 +373,7 @@ export default function SellerDetails() {
                   <span className="min-w-12 text-[8px]">{"2 min ago"}</span>
                 </div>
 
-                <p className="text-[9px] font-[500] text-black whitespace-nowrap overflow-hidden text-ellipsis mb-1">
+                <p className="text-[9px] font-medium text-black whitespace-nowrap overflow-hidden text-ellipsis mb-1">
                   {car.type} {` ${car.seats} Seater`} | {car.fuel} |{" "}
                   {car.transmission}
                 </p>
@@ -376,7 +386,7 @@ export default function SellerDetails() {
                         ({seller.role || "Unknown"})
                       </span>
                     </p>
-                    <p className="flex items-center gap-1 text-[8px] capitalize bg-[#CFCFCF] rounded-xs w-fit py-[2px] pl-1 pr-2 mt-2">
+                    <p className="flex items-center gap-1 text-[8px] capitalize bg-[#CFCFCF] rounded-xs w-fit py-0.5 pl-1 pr-2 mt-2">
                       <MapPin size={8} /> {car.location || "Unknown"}
                     </p>
                   </div>
@@ -393,7 +403,7 @@ export default function SellerDetails() {
                   <button className="flex items-center justify-center w-full mx-auto border border-gray-500 gap-2 text-[11px] font-semibold group-hover:text-gray-700 text-gray-900 py-1 rounded transition cursor-pointer">
                     View More
                     <span className="rounded-full bg-gray-900 group-hover:bg-gray-700 transition">
-                      <ChevronRight size={10} className="text-white p-[1px]" />
+                      <ChevronRight size={10} className="text-white p-px" />
                     </span>
                   </button>
                 </Link>

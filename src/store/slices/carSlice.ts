@@ -15,7 +15,6 @@ import {
   cityOptions,
 } from "../../data/filterOptions";
 
-
 // ---------- Types ----------
 export type SelectedFilters = {
   userType: "EndUser" | "Dealer" | "Owner";
@@ -44,6 +43,8 @@ export type CarsState = {
   cars: CarWithOwner[];
   loading: boolean;
   error: string | null;
+  page: number; // ✅ current page
+  hasMore: boolean;
   filters: {
     brand: string[];
     bodyType: string[];
@@ -68,9 +69,11 @@ const initialState: CarsState = {
   cars: [],
   loading: false,
   error: null,
+  page: 1,
+  hasMore: true,
   filters: {
-    priceRange: null,
-    yearRange: null,
+    priceRange: [50000, 10000000], //1cr = 1,00,00,000/-
+    yearRange: [2000, new Date().getFullYear()],
     // brand: [],
     brand: brandOptions,
     fuel: fuelOptions,
@@ -88,7 +91,7 @@ const initialState: CarsState = {
     transmission: [],
     ownership: [],
     location: [],
-    priceRange: [50000, 10000000],
+    priceRange: [50000, 10000000], //1cr = 1,00,00,000/-
     yearRange: [2000, new Date().getFullYear()],
     userType: "EndUser",
   },
@@ -111,14 +114,22 @@ const buildBody = (payload?: {
     if (sf.brand?.length) body.brands = sf.brand;
     if (sf.bodyType?.length) body.bodyType = sf.bodyType;
     if (sf.fuelType?.length) body.fuelType = sf.fuelType;
-    if (sf.transmission?.length) body.transmission = sf.transmission;
+    if (sf.transmission?.length) body.transmissionType = sf.transmission;
     if (sf.ownership?.length) body.ownership = sf.ownership;
     if (sf.location?.length) body.location = sf.location;
     if (sf.priceRange)
       body.priceRange = { min: sf.priceRange[0], max: sf.priceRange[1] };
     if (sf.yearRange)
       body.modelYear = { min: sf.yearRange[0], max: sf.yearRange[1] };
-    if (sf.userType && sf.userType !== "EndUser") body.userType = sf.userType;
+    if (sf.userType) {
+      if (sf.userType === "EndUser") {
+        body.ownerType = ["Dealer", "Owner"];
+      } else if (sf.userType === "Dealer") {
+        body.ownerType = ["Dealer"];
+      } else if (sf.userType === "Owner") {
+        body.ownerType = ["Owner"];
+      }
+    }
   }
 
   if (payload.searchTerm) body.search = payload.searchTerm;
@@ -133,20 +144,29 @@ const buildBody = (payload?: {
 
 // ---------- Fetch all cars ----------
 export const fetchCars = createAsyncThunk<
-  CarWithOwner[],
+  {
+    cars: CarWithOwner[];
+    page: number;
+  },
   | {
       selectedFilters?: SelectedFilters;
       searchTerm?: string;
       sortOption?: string;
+      page?: number; // ✅ pagination add kiya
+      limit?: number;
     }
   | undefined,
   { state: RootState }
 >("cars/fetchCars", async (arg, { rejectWithValue }) => {
   try {
     const backend = import.meta.env.VITE_BACKEND_URL || "";
-    const url = `${backend}/api/v1/car/getAll`;
-    const body = buildBody(arg);
+
+    const page = arg?.page || 1;
+    const limit = arg?.limit || 12;
+
+    const url = `${backend}/api/v1/car/getAll?page=${page}&limit=${limit}`;
     const token = localStorage.getItem("token");
+    const body = buildBody(arg);
 
     const res = await fetch(url, {
       method: "POST",
@@ -161,16 +181,17 @@ export const fetchCars = createAsyncThunk<
     if (!res.ok) throw new Error(await res.text());
     const data = await res.json();
 
-    // Assume data.cars is an array and each car has optional owner
-    return data.cars.map((car: any) => ({
+    // ✅ Ensure data.cars is always array
+    const cars = (data.cars || []).map((car: any) => ({
       ...car,
       owner: car.owner ?? undefined,
     }));
+
+    return { cars, page };
   } catch (err: any) {
     return rejectWithValue(err.message || "Unknown error");
   }
 });
-
 // ---------- Fetch car by ID (unique) ----------
 export const fetchSelectedCarById = createAsyncThunk<
   CarWithOwner,
@@ -209,37 +230,60 @@ const carSlice = createSlice({
     setFiltersMeta(state, action: PayloadAction<CarsState["filters"]>) {
       state.filters = action.payload;
     },
+
     setSelectedFilters(state, action: PayloadAction<SelectedFilters>) {
       state.selectedFilters = action.payload;
+      state.page = 1; // ✅ reset pagination
+      state.hasMore = true;
     },
+
     updateSelectedFilter(
       state,
       action: PayloadAction<{ key: keyof SelectedFilters; value: any }>
     ) {
       const { key, value } = action.payload;
       (state.selectedFilters as any)[key] = value;
+      state.page = 1; // ✅ reset to first page whenever filter updates
+      state.hasMore = true;
     },
+
     setSearchTerm(state, action: PayloadAction<string>) {
       state.searchTerm = action.payload;
+      state.page = 1;
+      state.hasMore = true;
     },
+
     setSortOption(state, action: PayloadAction<string>) {
       state.sortOption = action.payload;
+      state.page = 1;
+      state.hasMore = true;
     },
+
     setSelectedCar(state, action: PayloadAction<CarWithOwner | null>) {
       state.selectedCar = action.payload;
     },
+
     clearAllFilters(state) {
       state.selectedFilters = initialState.selectedFilters;
       state.searchTerm = "";
       state.sortOption = "newest";
-      state.cars = state.allCars;
+      state.page = 1;
+      state.hasMore = true;
+      state.cars = [];
     },
+
     setCityAndStateOptions(
       state,
       action: PayloadAction<{ cityOptions: string[]; stateOptions: string[] }>
     ) {
       state.filters.cityOptions = action.payload.cityOptions;
       // state.filters.stateOptions = action.payload.stateOptions;
+    },
+
+    resetCars(state) {
+      state.cars = [];
+      state.page = 1;
+      state.hasMore = true;
     },
   },
   extraReducers: (builder) => {
@@ -250,20 +294,31 @@ const carSlice = createSlice({
       })
       .addCase(fetchCars.fulfilled, (state, action) => {
         state.loading = false;
+        const { cars, page } = action.payload;
+
+        // ✅ Pagination logic
+        if (page === 1) {
+          state.cars = cars;
+        } else {
+          state.cars = [...state.cars, ...cars];
+        }
+
+        // ✅ Stop loading when no more data
+          state.page = page;
+        state.hasMore = cars.length >= 12;
+
+        // if (page === 1) {
+        //   state.allCars = cars;
+        // }
+
+        // ✅ Filter logic only applies on first page (not while loading more)
         const isFiltered =
           Object.keys(buildBody({ selectedFilters: state.selectedFilters }))
             .length > 0;
 
-        if (isFiltered) {
-          state.cars = action.payload; // filtered cars
-          if (state.allCars.length === 0) {
-            // agar allCars empty hai to ek baar fill kar do
-            state.allCars = action.payload;
-          }
-        } else {
-          // first load or clear filters — allCars set karo
-          state.allCars = action.payload;
-          state.cars = action.payload;
+        if (isFiltered && page === 1) {
+          state.cars = cars;
+          state.allCars = cars;
         }
       })
       .addCase(fetchCars.rejected, (state, action) => {

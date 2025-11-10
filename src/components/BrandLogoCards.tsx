@@ -9,78 +9,15 @@ import { updateSelectedFilter } from "../store/slices/carSlice";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../store/store";
 import { useNavigate } from "react-router-dom";
+import { brandLogos } from "../data/Data";
 
-const BrandLogoCards: React.FC = () => {
+interface BrandLogoCardsProps {
+    getTotalCount: (type: string, value: string) => number;
+}
+
+const BrandLogoCards:  React.FC<BrandLogoCardsProps> = ({ getTotalCount }) => {
   const dispatch = useDispatch<AppDispatch>();
   const Navigate = useNavigate();
-
-  const brandLogos = [
-    {
-      Brand: "Tata",
-      logo: "/CarsLogo/tata-motors.png",
-      description: "120 Cars Available",
-    },
-    {
-      Brand: "Honda",
-      logo: "/CarsLogo/honda.png",
-      description: "120 Cars Available",
-    },
-    {
-      Brand: "Mahindra",
-      logo: "/CarsLogo/mahindra.png",
-      description: "120 Cars Available",
-    },
-    {
-      Brand: "Hyundai",
-      logo: "/CarsLogo/hyundai.png",
-      description: "120 Cars Available",
-    },
-    {
-      Brand: "Ford",
-      logo: "/CarsLogo/ford.png",
-      description: "120 Cars Available",
-    },
-    {
-      Brand: "Volkswagen",
-      logo: "/CarsLogo/volkswagon.png",
-      description: "120 Cars Available",
-    },
-    {
-      Brand: "Maruti Suzuki",
-      logo: "/CarsLogo/maruti-suzuki.png",
-      description: "120 Cars Available",
-    },
-    {
-      Brand: "Suzuki",
-      logo: "/CarsLogo/suzuki.avif",
-      description: "120 Cars Available",
-    },
-    {
-      Brand: "Audi",
-      logo: "/CarsLogo/Audi.png",
-      description: "120 Cars Available",
-    },
-    {
-      Brand: "BMW",
-      logo: "/CarsLogo/BMW.png",
-      description: "120 Cars Available",
-    },
-    {
-      Brand: "Range Rover",
-      logo: "/CarsLogo/RangeRover.png",
-      description: "20 Cars Available",
-    },
-    {
-      Brand: "Ferrari",
-      logo: "/CarsLogo/Ferrari.png",
-      description: "5 Cars Available",
-    },
-    {
-      Brand: "Lamborghini",
-      logo: "/CarsLogo/Lamborghini.png",
-      description: "4 Cars Available",
-    },
-  ];
 
   // in city card click handler
   const handleBrandClick = (brandName: string) => {
@@ -131,7 +68,8 @@ const BrandLogoCards: React.FC = () => {
                     {car.Brand}
                   </p>
                   <p className="text-[10px] md:text-[10px] text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis -mt-2">
-                    {car.description}
+                    {/* {car.count} */}
+                    {getTotalCount("brand", car.Brand)} Cars Available
                   </p>
                 </div>
               </div>

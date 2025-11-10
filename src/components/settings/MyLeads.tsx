@@ -22,11 +22,18 @@ const MyLeads: React.FC = () => {
   const [filteredLeads, setFilteredLeads] = useState<any[]>([]);
   const [error] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (user) {
-      dispatch(fetchCarLeads() as any);
-    }
-  }, [dispatch, user]);
+ useEffect(() => {
+  if (!user) return;
+
+  if (navigationCarId) {
+    // ✅ fetch leads for specific car
+    dispatch(fetchCarLeads({ carId: navigationCarId }) as any);
+  } else {
+    // ✅ fetch all leads
+   dispatch(fetchCarLeads({ userId: user}) as any );
+  }
+}, [dispatch, user, navigationCarId]);
+
 
   useEffect(() => {
     if (leads) setFilteredLeads(leads);
@@ -57,28 +64,6 @@ const MyLeads: React.FC = () => {
     setFilteredLeads(leads);
   }
 }, [leads, activeCarId]);
-
-  // useEffect(() => {
-  //   if (!leads) {
-  //     setError("Leads data not found.");
-  //     setFilteredLeads([]);
-  //     return;
-  //   }
-
-  //   let filtered = leads;
-  //   if (carId) {
-  //     filtered = leads.filter((lead: any) => lead.carId === carId);
-  //     if (filtered.length === 0) {
-  //       setError("No leads found for the selected car.");
-  //     } else {
-  //       setError(null);
-  //     }
-  //   } else {
-  //     setError(null); 
-  //   }
-
-  //   setFilteredLeads(filtered);
-  // }, [leads, carId]);
 
   return (
     <div className="w-full min-h-screen p-4 sm:p-6 lg:p-0">

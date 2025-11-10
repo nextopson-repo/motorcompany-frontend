@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import type { RootState } from "../store";
 import toast from "react-hot-toast";
 
 // ------------------
@@ -22,9 +21,6 @@ interface LeadsState {
   error: string | null;
 }
 
-// ------------------
-// Initial State
-// ------------------
 const initialState: LeadsState = {
   leads: [],
   loading: false,
@@ -32,24 +28,34 @@ const initialState: LeadsState = {
 };
 
 // ------------------
-// Async Thunk
+// Base URL
 // ------------------
 const BASE_URL = import.meta.env.VITE_BACKEND_URL || "";
+
+// ------------------
+// Async Thunk (Modified)
+// ------------------
 export const fetchCarLeads = createAsyncThunk(
   "leads/fetchCarLeads",
-  async (_, { getState, rejectWithValue }) => {
+  async (
+    payload: { userId?: string; carId?: string },
+    { rejectWithValue }
+  ) => {
     try {
-      const state = getState() as RootState;
-      const userId = state.auth.user?.id;
-      // console.log("lead user id:",userId)
+      let bodyData = {};
 
-      if (!userId) {
-        return rejectWithValue("User not logged in");
+      // ✅ case 1: agar carId diya gaya hai (Show Lead button case)
+      if (payload.carId) {
+        bodyData = { carId: payload.carId };
+      }
+      // ✅ case 2: otherwise userId use karo
+      else if (payload.userId) {
+        bodyData = { userId: payload.userId };
+      } else {
+        return rejectWithValue("Either userId or carId is required");
       }
 
-      const res = await axios.post(`${BASE_URL}/api/v1/car/get-car-leads`, {
-        userId,
-      });
+      const res = await axios.post(`${BASE_URL}/api/v1/car/get-car-leads`, bodyData);
 
       console.log("📦 Car Leads Response:", res.data);
       toast.success("Car leads fetched successfully ✅", { id: "lead-success" });
@@ -62,6 +68,7 @@ export const fetchCarLeads = createAsyncThunk(
     }
   }
 );
+
 
 // ------------------
 // Slice

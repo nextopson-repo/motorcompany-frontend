@@ -11,20 +11,16 @@ import type { AppDispatch, RootState } from "../store/store";
 import { useNavigate } from "react-router-dom";
 import { updateSelectedFilter } from "../store/slices/carSlice";
 import CarCardSkeleton from "./CarCardSkeleton";
+import { bodyTypes } from "../data/Data";
 
-const bodyTypes = [
-  { name: "Hatchback", vehicles: 26, img: "/CarCategories/hatchback.png" },
-  { name: "SUV", vehicles: 26, img: "/CarCategories/suv.png" },
-  { name: "Sedan Car", vehicles: 26, img: "/CarCategories/sedan.png" },
-  { name: "MUV", vehicles: 125, img: "/CarCategories/muv.png" },
-  { name: "Convertible", vehicles: 132, img: "/CarCategories/convertable.png" },
-  { name: "Coupe", vehicles: 26, img: "/CarCategories/coupe1.png" },
-];
 
-const HeroCategories: React.FC = () => {
+interface HeroCategoriesProps {
+  getTotalCount: (type: string, value: string) => number;
+}
+
+const HeroCategories: React.FC<HeroCategoriesProps> = ({ getTotalCount }) =>  {
   const Navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  // const cars = useSelector((state: RootState) => state.cars.cars);
   const { cars, loading } = useSelector((state: RootState) => state.cars);
 
   const handleCityClick = (type: string) => {
@@ -37,9 +33,9 @@ const HeroCategories: React.FC = () => {
       {/* Categories */}
       <div className="text-center py-4">
         <p className="text-xs md:text-xs text-[#EE1422] font-semibold mb-2 md:mb-4 flex items-center justify-center gap-5">
-          <span className="w-8 md:w-10 h-[1px] md:h-[1.5px] bg-[#EE1422]"></span>
+          <span className="w-8 md:w-10 h-px md:h-[1.5px] bg-[#EE1422]"></span>
           Categories
-          <span className="w-8 md:w-10 h-[1px] md:h-[1.5px] bg-[#EE1422]"></span>
+          <span className="w-8 md:w-10 h-px md:h-[1.5px] bg-[#EE1422]"></span>
         </p>
         <h2 className="text-[17px] md:text-[1.6rem] tracking-wide font-bold md:font-semibold ">
           Explore by Body Type
@@ -62,7 +58,8 @@ const HeroCategories: React.FC = () => {
             <span className="flex flex-col items-center">
               <p className="font-semibold text-xs md:text-xs">{type.name}</p>
               <span className="text-gray-500 text-[10px] md:text-[10px]">
-                {type.vehicles} Vehicles
+                {/* {count} Vehicles */}
+                {getTotalCount("body", type.name)} Vehicles
               </span>
             </span>
           </div>
@@ -74,9 +71,9 @@ const HeroCategories: React.FC = () => {
         {/* Top Heading */}
         <div className="text-[9px] md:text-sm text-center mb-3 md:mb-5 mx-auto">
           <p className="text-[#EE1422] text-xs md:text-xs font-semibold mb-2 md:mb-5 flex items-center justify-center gap-3 md:gap-5">
-            <span className="w-8 md:w-10 h-[1px] md:h-[1.5px] bg-[#EE1422]"></span>
+            <span className="w-8 md:w-10 h-px md:h-[1.5px] bg-[#EE1422]"></span>
             Recently Added Cars
-            <span className="w-8 md:w-10 h-[1px] md:h-[1.5px] bg-[#EE1422]"></span>
+            <span className="w-8 md:w-10 h-p md:h-[1.5px] bg-[#EE1422]"></span>
           </p>
           <h2 className="text-[17px] md:text-2xl font-bold md:font-semibold">
             The Latest Added and viewed cars
@@ -130,7 +127,7 @@ const HeroCategories: React.FC = () => {
         {/* Bottom Button */}
         <div className="flex justify-center">
           <button
-            className="w-[160px] md:w-[16.5rem] text-sm md:text-sm bg-[#EE1422] text-white font-[500] py-[6px] md:py-2 rounded-sm hover:bg-[#EE1422]/80 transition cursor-pointer"
+            className="w-40 md:w-66 text-sm md:text-sm bg-[#EE1422] text-white font-medium py-1.5 md:py-2 rounded-sm hover:bg-[#EE1422]/80 transition cursor-pointer"
             onClick={() => {
               Navigate("/buy-car");
             }}

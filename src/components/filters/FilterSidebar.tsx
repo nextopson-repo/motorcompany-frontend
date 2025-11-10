@@ -4,8 +4,7 @@ import { ChevronUp, ChevronDown, ListFilter, Search } from "lucide-react";
 import { type SelectedFilters } from "../../store/slices/carSlice";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../store/store";
-import { renderRange } from "../RenderRangeselector";
-// import { renderRange } from "../renderRange";
+import { getTrackBackground, Range } from "react-range";
 
 interface FilterSidebarProps {
   selectedFilters: SelectedFilters;
@@ -13,11 +12,68 @@ interface FilterSidebarProps {
   citiesByState?: Record<string, string[]>;
 }
 
+const renderRange = (
+    values: [number, number],
+    setValues: (range: [number, number]) => void,
+    min: number,
+    max: number,
+    step: number,
+    prefix?: string
+  ) => (
+    <div className="px-2">
+      <div className="flex justify-between text-sm font-medium mb-2">
+        <span className="text-[10px] font-semibold xl:text-xs text-red-600">
+          {prefix}
+          {values[0].toLocaleString()}
+        </span>
+        <span className="text-[10px] font-semibold xl:text-xs text-red-600">
+          {prefix}
+          {values[1].toLocaleString()}
+        </span>
+      </div>
+
+      <Range
+        values={values}
+        step={step}
+        min={min || 0}
+        max={max}
+        onChange={(vals) => setValues([vals[0], vals[1]])}
+        renderTrack={({ props, children }) => (
+          <div
+            {...props}
+            className="h-0.5 rounded relative w-full"
+            style={{
+              background: getTrackBackground({
+                values,
+                colors: ["#D1D5DB", "#EF4444", "#D1D5DB"],
+                min,
+                max,
+              }),
+            }}
+          >
+            {children}
+          </div>
+        )}
+        renderThumb={({ props }) => {
+          const { key, ...rest } = props || {};
+          return (
+            <div
+              key={key}
+              {...rest}
+              className="h-2.5 w-2.5 bg-red-600 border border-white rounded-full cursor-pointer"
+            />
+          );
+        }}
+      />
+    </div>
+  );
+
 export const FilterSidebar: React.FC<FilterSidebarProps> = ({
   selectedFilters,
   onSelectedFiltersChange,
 }) => {
   const {filters, allCars}= useSelector((state: RootState) => state.cars);
+  console.log("filters :",filters);
   const [brandSearch, setBrandSearch] = useState("");
   const [sectionStates, setSectionStates] = useState({
     priceRange: false,
@@ -68,7 +124,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
   };
 
   const minPrice = filters.priceRange?.[0] ?? 0;
-  const maxPrice = filters.priceRange?.[1] ?? 10000000;
+  const maxPrice = filters.priceRange?.[1] ?? 10000000;   //1cr = 1,00,00,000/-
   const minYear = filters.yearRange?.[0] ?? 2000;
   const maxYear = filters.yearRange?.[1] ?? new Date().getFullYear();
   const brands = filters.brand;

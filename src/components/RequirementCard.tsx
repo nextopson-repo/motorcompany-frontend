@@ -136,13 +136,13 @@ const RequirementCard: React.FC<Props> = ({
           </div>
         )}
 
-        {(fuelType || transmission || bodyType) && (
+        {/* {(fuelType || transmission || bodyType) && (
           <div className="flex gap-3 text-xs text-gray-500">
             {fuelType && <span>{fuelType}</span>}
             {transmission && <span>• {transmission}</span>}
-            {/* {bodyType && <span>• {bodyType}</span>} */}
+            {bodyType && <span>• {bodyType}</span>}
           </div>
-        )}
+        )} */}
 
         {/* Additional details - shown only when expanded */}
         {/* {isExpanded && (

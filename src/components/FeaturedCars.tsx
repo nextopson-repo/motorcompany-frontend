@@ -23,7 +23,7 @@ const FeaturedCars: React.FC = () => {
   ));
 
   return (
-    <section className="max-w-7xl mx-auto px-2 lg:px-8 py-6 lg:py-14 relative">
+    <section className="max-w-7xl mx-auto px-2 py-6 lg:py-14 relative">
       {/* Heading */}
       <div className="text-xs text-center mb-5 mx-auto">
         <p className="text-[#EE1422] text-xs md:text-xs font-bold mb-3 flex items-center justify-center gap-2 md:gap-5">
@@ -31,36 +31,42 @@ const FeaturedCars: React.FC = () => {
           Featured Cars
           <span className="w-8 md:w-10 h-px bg-[#EE1422]" />
         </p>
-        <h2 className="text-[17px] md:text-2xl font-bold">The Most Searched And Liked Cars</h2>
+        <h2 className="text-[17px] md:text-2xl font-bold">
+          The Most Searched And Liked Cars
+        </h2>
       </div>
 
       {/* Swiper */}
-      <Swiper
-        spaceBetween={20}
-        slidesPerView={1.2}
-        breakpoints={{
-          1280: { slidesPerView: 4, spaceBetween: 32 },
-          1140: { slidesPerView: 4, spaceBetween: 32 },
-          1024: { slidesPerView: 3.3, spaceBetween: 26 },
-          640: { slidesPerView: 2.5, spaceBetween: 20 },
-          475: { slidesPerView: 1.2, spaceBetween: 20 },
-        }}
-        modules={[Navigation]}
-        navigation={{
-          prevEl: ".custom-prev",
-          nextEl: ".custom-next",
-        }}
-      >
-        {loading
-          ? skeletons
-          : featuredCars?.length > 0
-          ? featuredCars.map((car) => (
-              <SwiperSlide key={car.id} className="pb-4 md:pb-5">
+      <div className="lg:px-4">
+        <Swiper
+          spaceBetween={20}
+          slidesPerView={1.2}
+          breakpoints={{
+            1280: { slidesPerView: 4, spaceBetween: 20 },
+            1140: { slidesPerView: 4, spaceBetween: 20 },
+            1024: { slidesPerView: 3.3, spaceBetween: 20 },
+            640: { slidesPerView: 2.5, spaceBetween: 20 },
+            475: { slidesPerView: 1.2, spaceBetween: 20 },
+          }}
+          modules={[Navigation]}
+          navigation={{
+            prevEl: ".custom-prev",
+            nextEl: ".custom-next",
+          }}
+        >
+          {loading ? (
+            skeletons
+          ) : featuredCars?.length > 0 ? (
+            featuredCars.map((car) => (
+              <SwiperSlide key={car.id} className="pb-4 md:pb-5 lg:px-2">
                 <CarCard car={car} />
               </SwiperSlide>
             ))
-          : <p>No featured cars found.</p>}
-      </Swiper>
+          ) : (
+            <p>No featured cars found.</p>
+          )}
+        </Swiper>
+      </div>
 
       {/* Nav buttons */}
       <button className="hidden lg:block custom-prev absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-30 bg-gray-900 text-white shadow-lg p-2 rounded-full hover:bg-gray-700">

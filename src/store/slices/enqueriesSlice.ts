@@ -62,6 +62,7 @@ export interface Enquiry {
   carTitle: string;
   calling: boolean;
   carDetails: CarDetails;
+  viewCount: string;
 }
 
 interface EnquiriesState {
@@ -107,8 +108,7 @@ export const createEnquiry = createAsyncThunk<
     toast.success("Enquiry created successfully 🚗", { id: "create-enquiry" }); // ✅ Toast success
     return response.data;
   } catch (error: any) {
-    const message =
-      error.response?.data?.message || "Failed to create enquiry";
+    const message = error.response?.data?.message || "Failed to create enquiry";
     toast.error(message, { id: "create-enquiry-error" }); // ❌ Toast error
     return thunkAPI.rejectWithValue(message);
   }
@@ -127,7 +127,9 @@ export const fetchEnquiries = createAsyncThunk<
     );
 
     const data = response.data?.carEnquiries || [];
-    toast.success("Enquiries loaded successfully 💬", { id: "fetch-enquiries" }); // ✅ Toast success
+    toast.success("Enquiries loaded successfully 💬", {
+      id: "fetch-enquiries",
+    }); // ✅ Toast success
     return data;
   } catch (error: any) {
     const message =
@@ -139,7 +141,17 @@ export const fetchEnquiries = createAsyncThunk<
 
 // ✅ Fetch car details
 export const fetchCarDetailsById = createAsyncThunk<
-  { carId: string; carDetails: CarDetails; ownerDetails: Owner },
+  {
+    carId: string;
+    carDetails: CarDetails;
+    ownerDetails: Owner;
+    enquiries: {
+      totalEnquiries: number;
+      uniqueUsers: number;
+      callingCount: number;
+      viewCount: number;
+    };
+  },
   string,
   { state: RootState; rejectValue: string }
 >("enquiries/fetchCarDetailsById", async (carId, { rejectWithValue }) => {
@@ -164,7 +176,12 @@ export const fetchCarDetailsById = createAsyncThunk<
     // }); // ✅ Toast success
 
     const carDetailsWithOwner = { ...data.car, owner: data.owner };
-    return { carId, carDetails: carDetailsWithOwner, ownerDetails: data.owner };
+    return {
+      carId,
+      carDetails: carDetailsWithOwner,
+      ownerDetails: data.owner,
+      enquiries: data.enquiries,
+    };
   } catch (err: any) {
     const message = err.message || "Failed to fetch car details";
     toast.error(message, { id: "fetch-car-details-error" }); // ❌ Toast error
@@ -219,7 +236,10 @@ const enquiriesSlice = createSlice({
         const enquiry = state.enquiries.find(
           (e) => e.carId === action.payload.carId
         );
-        if (enquiry) enquiry.carDetails = action.payload.carDetails;
+        if (enquiry) {
+          enquiry.carDetails = action.payload.carDetails;
+          enquiry.viewCount = action.payload.enquiries.viewCount.toString();
+        }
       });
   },
 });

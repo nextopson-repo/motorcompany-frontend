@@ -4,44 +4,13 @@ import { setLocation } from "../store/slices/locationSlice";
 import type { AppDispatch } from "../store/store";
 import { updateSelectedFilter } from "../store/slices/carSlice";
 import { useNavigate } from "react-router-dom";
+import { cities, fourCards } from "../data/Data";
 
-const cities = [
-  { name: "Chandigarh", cars: 2023, img: "/Cities/Chandigarh.png" },
-  { name: "Ahmedabad", cars: 2023, img: "/Cities/Ahemdabad.png" },
-  { name: "Pune", cars: 2023, img: "/Cities/pune.png" },
-  { name: "Hyderabad", cars: 2023, img: "/Cities/hyderabad.png" },
-  { name: "Kanpur", cars: 2023, img: "/Cities/Kanpur.png" },
-  { name: "Surat", cars: 2023, img: "/Cities/surat.png" }, //update image
-  { name: "Lucknow", cars: 2023, img: "/Cities/Lucknow.png" },
-  { name: "Delhi", cars: 2023, img: "/Cities/Delhi.png" },
-  { name: "Mumbai", cars: 2023, img: "/Cities/mumbai.png" }, //update image]
-  { name: "Jaipur", cars: 2023, img: "/Cities/jaipur.png" },
-];
+interface PopularCitiesProps{
+  getTotalCount: (type: string, value: string) => number;
+}
 
-const fourCards = [
-  {
-    title: "India's #1",
-    img: "/Indias.png",
-    description: "Largest Car Portal",
-  },
-  {
-    title: "Cars Sold",
-    img: "/carSold.png",
-    description: "Every 4 Minute",
-  },
-  {
-    title: "Offers",
-    img: "/offers.png",
-    description: "Stay Updated Pay less",
-  },
-  {
-    title: "Compare",
-    img: "/compare.png",
-    description: "Decode the right car",
-  },
-];
-
-const PopularCities: React.FC = () => {
+const PopularCities: React.FC<PopularCitiesProps> = ({ getTotalCount }) => {
   const Navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -77,9 +46,9 @@ const handleCityClick = (cityName: string) => {
       {/* Heading */}
       <div className="text-center">
         <p className="text-[#EE1422] font-semibold text-[11px] md:text-xs mb-2 md:mb-4 flex items-center justify-center gap-3 md:gap-5">
-          <span className="w-8 md:w-10 h-[1px] md:h-[1.5px] bg-[#EE1422]"></span>
+          <span className="w-8 md:w-10 h-px md:h-[1.5px] bg-[#EE1422]"></span>
           Location based Cars
-          <span className="w-8 md:w-10 h-[1px] md:h-[1.5px] bg-[#EE1422]"></span>
+          <span className="w-8 md:w-10 h-px md:h-[1.5px] bg-[#EE1422]"></span>
         </p>
         <h2 className="text-md md:text-2xl font-bold md:font-semibold">
           Search by Popular Cities
@@ -105,7 +74,7 @@ const handleCityClick = (cityName: string) => {
               </div>
               <p className="font-semibold text-[13px]">{city.name}</p>
               <span className="text-gray-400 text-[10px] mt-1">
-                {city.cars} Cars Available
+                {getTotalCount("location", city.name)} Cars Available
               </span>
             </div>
           ))}
@@ -166,8 +135,8 @@ const handleCityClick = (cityName: string) => {
               <img src={city.img} alt="city img" className="w-full h-full object-bottom object-contain"/>
             </div>
             <p className="font-semibold text-[9px] md:text-[13px] mt-2">{city.name}</p>
-            <span className="text-gray-400 text-[7px] md:text-[10px] mt-[1px] md:mt-0">
-              {city.cars} Cars Available
+            <span className="text-gray-400 text-[7px] md:text-[10px] mt-px md:mt-0">
+              {getTotalCount("location", city.name)} Cars Available
             </span>
           </div>
         ))}

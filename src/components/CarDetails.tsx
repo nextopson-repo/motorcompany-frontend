@@ -710,14 +710,14 @@ const CarDetails = () => {
 
               {/*desktop Seller Popup */}
               {showSellerPopup && (
-                <div className="fixed inset-0 bg-black/5 backdrop-blur-[1px] flex items-center justify-center z-50">
-                  <div className="bg-white rounded-lg w-lg relative ">
-                    <div className="flex items-center justify-between bg-[#BEFFC2] p-4 px-8 rounded-t-sm">
+                <div className="fixed inset-0 bg-black/20 backdrop-blur-[1px] flex items-center justify-center z-50">
+                  <div className="bg-white rounded-md w-md relative ">
+                    <div className="flex items-center justify-between bg-[#BEFFC2] p-3 px-8 rounded-t-md">
                       <span className="flex items-center gap-4">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
+                          width="20"
+                          height="20"
                           viewBox="0 0 36 36"
                           fill="none"
                         >
@@ -739,42 +739,43 @@ const CarDetails = () => {
                         className="hover:scale-[1.1] cursor-pointer"
                       >
                         <X
-                          strokeWidth={3.5}
+                          strokeWidth={2.5}
                           className="h-5 w-5 text-gray-900"
                         />
                       </button>
                     </div>
                     <div className="py-3 px-8">
                       <div className="flex items-center gap-2">
-                        <div className="flex items-center justify-center w-32 h-24 rounded-full overflow-hidden object-contain">
+                        <div className="flex items-center justify-center w-28 h-16 rounded-full overflow-hidden object-contain">
                           <img
                             src={ownerImage || "/user-img.png"}
                             alt="seller img"
+                            className="w-full h-full object-cover"
                           />
                         </div>
 
-                        <div className="flex flex-col gap-2 w-full pb-3 pl-3">
-                          <div className="flex items-center justify-between">
-                            <h1 className="font-bold text-2xl capitalize w-[220px] truncate">
+                        <div className="flex flex-col justify-center gap-1 w-full pb-3 pl-3">
+                          <div className="flex items-center justify-between mt-1">
+                            <h1 className="font-bold text-xl capitalize w-[220px] truncate">
                               {ownerName || "Unknown"}
                             </h1>
                             <span className="flex items-center gap-4 px-2">
                               <Link
                                 to={`/seller-details/${ownerId}`}
-                                className="text-sky-500 font-normal text-xs underline"
+                                className="text-sky-500 font-normal text-xs underline whitespace-nowrap"
                               >
-                                View
+                                View Profile
                               </Link>
                             </span>
                           </div>
 
-                          <span className="flex items-center gap-2 text-gray-500 text-lg">
+                          <span className="flex items-center gap-2 text-gray-500 text-sm">
                             {/* <span>+91</span>
                           {ownerMobile || "Not Provided"}
                           <button className="px-2 cursor-pointer hover:scale-[1.1]">
                             <CopyIcon className="h-5 w-5 text-black" />
                           </button> */}
-                            <p className="text-[#9e9e9e] bg-[#f4f4f4] p-1 px-2 rounded-sm">
+                            <p className="text-[#9e9e9e] bg-[#f4f4f4] p-0.5 px-2 rounded-sm">
                               {ownerType || "N/A"}
                             </p>
                           </span>
@@ -783,15 +784,20 @@ const CarDetails = () => {
 
                       <div className="flex items-center  gap-4 my-2">
                         <button
-                          className="flex items-center justify-center gap-3 w-full hover:font-semibold text-xl p-2 border rounded-sm cursor-pointer hover:text-white hover:bg-[#24272c]"
+                          className="flex items-center justify-center gap-3 w-full hover:font-semibold text-sm p-1.5 border rounded-sm cursor-pointer hover:text-white hover:bg-[#24272c]"
                           onClick={handlePhoneClick}
                         >
-                          <Phone className=" h-6 w-6" /> Phone
+                          <Phone className=" h-4.5 w-4.5" /> Phone
                         </button>
-                        <button className="flex items-center justify-center gap-3 w-full hover:font-semibold text-xl p-2 border rounded-sm cursor-pointer hover:text-white hover:bg-[#24272c]">
-                          <FaWhatsapp className=" h-6 w-6" /> What's app
+                        <button className="flex items-center justify-center gap-3 w-full hover:font-semibold text-sm p-1.5 border rounded-sm cursor-pointer hover:text-white hover:bg-[#24272c]">
+                          <FaWhatsapp className=" h-5 w-5" /> What'sApp
                         </button>
                       </div>
+                    </div>
+
+                    {/* Note */}
+                    <div className="">
+                      <p></p>
                     </div>
                   </div>
                 </div>
@@ -905,10 +911,7 @@ const CarDetails = () => {
 
       {/* similar cars slider */}
       <div
-        className="pb-3 lg:p-6 rounded-2xl lg:rounded-none border lg:border-none border-gray-100 "
-        style={{
-          boxShadow: "0 1px 10px 1px rgb(0, 0, 0, 0.15)",
-        }}
+        className="pb-3 lg:p-6 rounded-2xl lg:rounded-none border lg:border-none border-gray-100 shadow-[0_1px_10px_1px_rgba(0,0,0,0.15)] lg:shadow-none"
       >
         <div className="flex items-center justify-between mt-4 lg:mt-6 px-4 lg:px-0">
           <h2 className="text-md lg:text-2xl font-semibold py-3 ">

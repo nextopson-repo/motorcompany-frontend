@@ -3,11 +3,15 @@ import { Autoplay, EffectFade } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/effect-fade";
-import { BiCaretDown } from "react-icons/bi";
+import { BiCaretDown, BiCaretUp } from "react-icons/bi";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../store/store";
-import { fetchCars, setSearchTerm, updateSelectedFilter } from "../store/slices/carSlice";
+import {
+  fetchCars,
+  setSearchTerm,
+  updateSelectedFilter,
+} from "../store/slices/carSlice";
 import { useNavigate } from "react-router-dom";
 const heroImages = ["/Hero-car.png", "/hero-car-2.jpg", "/hero-car-3.jpg"];
 import { Search } from "lucide-react";
@@ -47,7 +51,6 @@ function Dropdown({ placeholder, options, value, onChange }: DropdownProps) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-
   return (
     <div className="w-full relative font-[Inter]" ref={dropdownRef}>
       {/* Dropdown Button */}
@@ -58,7 +61,7 @@ function Dropdown({ placeholder, options, value, onChange }: DropdownProps) {
         }`}
       >
         <span
-          className={`truncate text-gray-700 ${
+          className={`text-xs truncate text-gray-700 ${
             !value ? "text-gray-400" : "text-gray-700"
           }`}
         >
@@ -74,18 +77,6 @@ function Dropdown({ placeholder, options, value, onChange }: DropdownProps) {
       {/* Dropdown Options */}
       {isOpen && (
         <div className="absolute mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg z-20 max-h-48 overflow-y-auto animate-fadeIn">
-          {/* Search Input */}
-          {/* <div className="sticky top-0 bg-white border-b">
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search..."
-              className="w-full px-3 py-2 text-xs outline-none text-gray-700"
-              autoFocus
-            />
-          </div> */}
-
           {/* Options */}
           {filtered.length > 0 ? (
             filtered.map((opt: string) => (
@@ -130,6 +121,19 @@ const Hero: React.FC = () => {
   const [selectedBrands, setSelectedBrands] = useState("");
   const [isBudgetOpen, setIsBudgetOpen] = useState(false);
   const [isBrandsOpen, setIsBrandsOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const budgetOptions = [
+    { label: "50K - 2 Lakh", value: { min: 50000, max: 200000 } },
+    { label: "2 Lakh - 5 Lakh", value: { min: 200000, max: 500000 } },
+    { label: "5 Lakh - 10 Lakh", value: { min: 500000, max: 1000000 } },
+    { label: "10 Lakh - 20 Lakh", value: { min: 1000000, max: 2000000 } },
+    { label: "20 Lakh - 50 Lakh", value: { min: 2000000, max: 5000000 } },
+    {
+      label: "Above 50 Lakh",
+      value: { min: 5000000, max: Number.MAX_SAFE_INTEGER },
+    },
+  ];
 
   const handleSearch = () => {
     if (!query.trim()) return;
@@ -158,6 +162,13 @@ const Hero: React.FC = () => {
     navigate("/buy-car");
   };
 
+  useEffect(() => {
+    if (searchMode === "brand" && selectedBrands) {
+      setQuery(selectedBrands);
+    } else if (searchMode === "budget" && selectedBudget) {
+      setQuery(selectedBudget);
+    }
+  }, [selectedBrands, selectedBudget, searchMode]);
 
   // google car(brand, model, variant)
   const sheetId = import.meta.env.VITE_SHEET_ID;
@@ -190,7 +201,7 @@ const Hero: React.FC = () => {
 
   return (
     <div className="w-full lg:max-w-7xl px-2 lg:px-0">
-      {/* mobile search bar */}
+      {/* Mobile Search Bar */}
       <div className="block lg:hidden my-2 py-1">
         <div
           className="flex gap-2 items-center justify-between rounded-sm"
@@ -198,25 +209,116 @@ const Hero: React.FC = () => {
             boxShadow: "0px 1px 20px 0px rgba(0, 0, 0, 0.15)",
           }}
         >
-          {/* Search input with animated last word */}
-          <div className="flex justify-between items-center w-full bg-white rounded-sm px-3 py-2.5 relative ">
-            <div className="flex items-center">
-              <Search className="text-gray-400 mr-2 h-5 w-5" />
-              <span className="text-gray-400 text-sm truncate">
-                Search Car by Model
+          {/* Search Icon Button */}
+          <button
+            disabled={
+              searchMode === "brand" ? !selectedBrands : !selectedBudget
+            }
+            onClick={() => {
+              if (searchMode === "brand" && selectedBrands) {
+                setQuery(selectedBrands);
+              } else if (selectedBudget) {
+                setQuery(selectedBudget);
+              }
+              handleSearch();
+            }}
+            className={`ml-2.5 h-4 w-4 flex items-center justify-center transition-colors duration-200 ${
+              (searchMode === "brand" && selectedBrands) ||
+              (searchMode === "budget" && selectedBudget)
+                ? "text-gray-800 cursor-pointer" // 🔴 active
+                : "text-gray-400 cursor-not-allowed" // 🩶 inactive
+            }`}
+          >
+            <Search className="h-5 w-5" />
+          </button>
+          
+          <div className="flex justify-between items-center w-full bg-white rounded-sm px-1 py-2.5 relative">
+            <div
+              className="flex items-center w-full cursor-pointer"
+              onClick={() => setIsDropdownOpen((prev) => !prev)}
+            >
+              <span className="text-gray-600 text-sm truncate">
+                {searchMode === "brand"
+                  ? selectedBrands || "Select Brand"
+                  : selectedBudget || "Select Budget"}
               </span>
-              <input
-                type="text"
-                className="absolute left-9 top-0 md:w-[90%] h-full opacity-0 cursor-text z-20"
-              />
             </div>
+            <BiCaretDown
+              className={`text-gray-400 ml-2 h-4 w-4 transition-transform duration-200 ${
+                isDropdownOpen ? "rotate-180" : "rotate-0"
+              }`}
+            />
           </div>
-          <button className="text-white text-sm flex items-center font-semibold bg-[#ED1D2B] px-3 py-2.5 gap-2 rounded-xs ">
-            Brand
-            <span>
-              <BiCaretDown className="text-white text-sm" />
+
+          {/* Mode Toggle Button */}
+          <button
+            onClick={() => {
+              setIsDropdownOpen(false);
+              setSearchMode(searchMode === "brand" ? "budget" : "brand");
+            }}
+            className="text-white text-sm flex items-center font-semibold bg-[#ED1D2B] px-3 py-2.5 gap-2 rounded-sm transition-all duration-300 ease-in-out active:scale-95"
+          >
+            {/* Text label */}
+            <span className="capitalize">
+              {searchMode === "brand" ? "Brand" : "Budget"}
+            </span>
+            <span className="relative flex items-center justify-center w-5 h-5">
+              {/* Animated icon switch */}
+              <span
+                className={`absolute transition-all duration-300 ${
+                  searchMode === "brand"
+                    ? "opacity-100 rotate-0"
+                    : "opacity-0 rotate-90"
+                }`}
+              >
+                <BiCaretDown className="w-4 h-4" />
+              </span>
+              <span
+                className={`absolute transition-all duration-300 ${
+                  searchMode === "budget"
+                    ? "opacity-100 rotate-0"
+                    : "opacity-0 -rotate-90"
+                }`}
+              >
+                <BiCaretUp className="w-4 h-4" />
+              </span>
             </span>
           </button>
+
+          {/* Dropdown list */}
+          {isDropdownOpen && (
+            <div className="absolute left-0 right-0 top-25.5 translate-0 mx-2 bg-white border border-gray-200 rounded-md shadow-md z-30 max-h-64 overflow-y-auto">
+              {searchMode === "brand"
+                ? Object.keys(carDataNested)
+                    .sort((a, b) => a.localeCompare(b))
+                    .map((brand) => (
+                      <div
+                        key={brand}
+                        onClick={() => {
+                          setSelectedBrands(brand);
+                          setIsDropdownOpen(false);
+                          // handleSearch();
+                        }}
+                        className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                      >
+                        {brand}
+                      </div>
+                    ))
+                : budgetOptions.map((opt) => (
+                    <div
+                      key={opt.label}
+                      onClick={() => {
+                        setSelectedBudget(opt.label);
+                        setIsDropdownOpen(false);
+                        // handleSearch();
+                      }}
+                      className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                    >
+                      {opt.label}
+                    </div>
+                  ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -280,7 +382,7 @@ const Hero: React.FC = () => {
               By Brand
             </button>
             <button
-              className={`text-xs px-8 py-2 rounded-r-sm ${
+              className={`text-xs px-8 py-2 rounded-r-sm ml-px ${
                 searchMode === "budget"
                   ? "bg-[#EE1422] text-white"
                   : "hover:text-white hover:bg-[#EE1422]"
@@ -299,7 +401,7 @@ const Hero: React.FC = () => {
               <Dropdown
                 label="Brand"
                 placeholder="Select Brands"
-                 options={Object.keys(carDataNested).sort((a, b) =>
+                options={Object.keys(carDataNested).sort((a, b) =>
                   a.localeCompare(b)
                 )}
                 value={selectedBrands}
@@ -314,20 +416,18 @@ const Hero: React.FC = () => {
               <Dropdown
                 label="Budget Range"
                 placeholder="Select Budget Range"
-                options={[
-                  "₹50k - ₹2 Lakh",
-                  "₹2Lakh - ₹5 Lakh",
-                  "₹5Lakh - ₹10 Lakh",
-                  "₹10Lakh - ₹20 Lakh",
-                  "₹20Lakh - ₹40 Lakh",
-                  "Above ₹40 Lakh",
-                ]}
+                options={budgetOptions.map((opt) => opt.label)}
                 value={selectedBudget}
                 isOpen={isBudgetOpen}
                 onToggle={() => setIsBudgetOpen(!isBudgetOpen)}
-                onChange={(val: string) => {
-                  setSelectedBudget(val);
-                  setQuery(val);
+                onChange={(label: string) => {
+                  const selected = budgetOptions.find((b) => b.label === label);
+                  if (selected) {
+                    setSelectedBudget(label);
+                    setQuery(`${selected.value.min}-${selected.value.max}`); // actual numeric range
+                    // ya agar tu min/max alag alag bhejna chahta hai:
+                    // setQuery(selected.value)
+                  }
                 }}
               />
             )}

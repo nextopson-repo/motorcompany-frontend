@@ -78,7 +78,6 @@ const Setting = () => {
               />
               <Route path="listings" element={<MyListing />} />
               <Route path="my-leads" element={<MyLeads />} />
-              {/* <Route path="interested-buyers" element={<InterestedBuyers />} /> */}
               {profile?.userType === "Dealer" && (
                 <Route
                   path="interested-buyers"

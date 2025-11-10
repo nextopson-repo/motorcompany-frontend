@@ -5,11 +5,11 @@ import type { AppDispatch, RootState } from "../store/store";
 import { createOrUpdateRequirement } from "../store/slices/requirementsSlice";
 import { selectAuth } from "../store/slices/authSlices/authSlice";
 import { openLogin } from "../store/slices/authSlices/loginModelSlice";
-import {
-  fuelOptions,
-  transmissionOptions,
-  // bodyTypeOptions,
-} from "../data/filterOptions";
+// import {
+//   fuelOptions,
+//   transmissionOptions,
+//   // bodyTypeOptions,
+// } from "../data/filterOptions";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { getModels, getVariants, getBrands } from "../utils/carData";
 // import { locationData } from "./Requirements";
@@ -390,7 +390,7 @@ const CreateRequirement: React.FC = () => {
                   ))}
               </select>
             </div>
-            <div>
+            {/* <div>
               <label className="block text-sm font-medium mb-2">
                 Fuel Type
               </label>
@@ -407,8 +407,8 @@ const CreateRequirement: React.FC = () => {
                   </option>
                 ))}
               </select>
-            </div>
-            <div>
+            </div> */}
+            {/* <div>
               <label className="block text-sm font-medium mb-2">
                 Transmission
               </label>
@@ -425,7 +425,7 @@ const CreateRequirement: React.FC = () => {
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
             {/* <div>
               <label className="block text-sm font-medium mb-2">Body Type</label>
               <select
@@ -524,7 +524,7 @@ const CreateRequirement: React.FC = () => {
         <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
           <h2 className="text-xl font-semibold mb-4">Price</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
+            {/* <div>
               <label className="block text-sm font-medium mb-2">
                 Min Price (₹)
               </label>
@@ -536,7 +536,7 @@ const CreateRequirement: React.FC = () => {
                 placeholder="e.g., 500000"
                 className="w-full p-2 border rounded-md"
               />
-            </div>
+            </div> */}
             <div>
               <label className="block text-sm font-medium mb-2">
                 Max Price (₹)
@@ -554,7 +554,7 @@ const CreateRequirement: React.FC = () => {
         </div>
 
         {/* Description Section */}
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        {/* <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
           <h2 className="text-xl font-semibold mb-4">Description</h2>
           <textarea
             name="description"
@@ -564,7 +564,7 @@ const CreateRequirement: React.FC = () => {
             placeholder="Add any additional details or requirements..."
             className="w-full p-2 border rounded-md"
           />
-        </div>
+        </div> */}
 
         {/* Submit Button */}
         <div className="flex gap-4">

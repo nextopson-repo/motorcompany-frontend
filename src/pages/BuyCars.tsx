@@ -10,8 +10,6 @@ export default function BuyCars() {
   const dispatch = useDispatch<AppDispatch>();
   const {
     selectedFilters,
-    loading,
-    error,
     searchTerm,
     sortOption,
   } = useSelector((state: RootState) => state.cars);
@@ -50,7 +48,7 @@ export default function BuyCars() {
 
         {/* Car List */}
         <div className="w-full py-4 sm:px-6 lg:px-2">
-          <CarList loading={loading} error={error} />
+          <CarList />
         </div>
       </div>
 

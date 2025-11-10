@@ -114,7 +114,7 @@ export const MyListing = () => {
         {filteredListings.map((car: any) => (
           <div
             key={car.id}
-            className={`flex flex-row rounded-sm md:rounded-md border border-gray-100 p-1 md:p-2 ${
+            className={`flex flex-row rounded-sm md:rounded-md border border-gray-100 shadow-sm p-1 md:p-2 ${
               car.isSold ? "opacity-40" : ""
             }`}
           >

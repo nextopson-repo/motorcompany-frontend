@@ -149,7 +149,7 @@ export default function EnquiryCard({ enquiry }: EnquiryCardProps) {
                 </p>
                 <p className="text-[10px] text-gray-600 mt-1 flex items-center gap-1 font-medium">
                   <Eye className="h-3 w-3 text-orange-500" />{" "}
-                  {formatShortNumber(100)} Views 
+                  {formatShortNumber(enquiry.viewCount)} Views 
                   {/* above line ko update karna hai dynamic data se */}
                 </p>
               </div>
@@ -204,7 +204,7 @@ export default function EnquiryCard({ enquiry }: EnquiryCardProps) {
 
                   <p className="text-[10px] font-semibold text-gray-800 flex items-center">
                     <Phone className="w-3 h-3 mr-1" />{" "}
-                    {enquiry.mobileNumber || "N/A"}
+                    <span>+91-</span>{enquiry.mobileNumber.replace(/(?<=\d{5})\d/g, "*") || "N/A"}
                   </p>
                   <p className="text-[10px] font-semibold text-gray-800 flex items-center">
                     <MapPin className="w-3 h-3 mr-1" />{" "}

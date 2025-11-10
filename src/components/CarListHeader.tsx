@@ -90,6 +90,7 @@ const CarListHeader: React.FC<CarListHeaderProps> = ({ carCount = 0 }) => {
               className="w-5 md:w-4 h-5 md:h-4 text-black"
               strokeWidth={1.8}
             />
+
             <input
               type="text"
               placeholder="Search for Cars, Brands, Model..."
@@ -97,6 +98,29 @@ const CarListHeader: React.FC<CarListHeaderProps> = ({ carCount = 0 }) => {
               onChange={(e) => dispatch(setSearchTerm(e.target.value))}
               className="w-full focus:outline-none text-xs md:text-xs text-black placeholder:text-black"
             />
+
+            {/* ❌ Clear Button */}
+            {searchTerm && (
+              <button
+                onClick={() => dispatch(setSearchTerm(""))}
+                className="text-gray-500 hover:text-gray-700 transition"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            )}
           </span>
 
           {/* Location Dropdown */}
@@ -156,8 +180,7 @@ const CarListHeader: React.FC<CarListHeaderProps> = ({ carCount = 0 }) => {
       {/* Middle Section */}
       <div className="px-4 md:px-0 py-2 rounded-xs lg:rounded-md flex items-center justify-between gap-1.5 lg:gap-3 relative">
         <h2 className="w-full text-xs md:text-xs lg:text-[1rem] font-semibold flex items-center gap-1 truncate overflow-ellipsis">
-          {carCount}{" "}
-          Cars in {location || "All Locations"}
+          {carCount} Cars in {location || "All Locations"}
         </h2>
         <div ref={sortRef} className="relative z-5">
           <button

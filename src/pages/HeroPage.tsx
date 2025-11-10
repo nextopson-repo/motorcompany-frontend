@@ -6,8 +6,11 @@ import PopularCities from "../components/PopularCities";
 import BrandLogoCards from "../components/BrandLogoCards";
 import LocationModal from "../components/LocationModal";
 import FindDealers from "../components/FindDealers";
+import { useSelector } from "react-redux";
+import type { RootState } from "../store/store";
 
 const HeroPage = () => {
+  const {allCars}= useSelector((state: RootState) => state.cars);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [citySearch, setCitySearch] = useState("");
 
@@ -26,14 +29,34 @@ const HeroPage = () => {
     setIsLocationModalOpen(false);
   };
 
+    const getTotalCount = (type: string, value: string) =>
+      (Array.isArray(allCars) ? allCars : []).filter((car) => {
+        switch (type) {
+          case "brand":
+            return car.brand === value;
+          case "fuel":
+            return car.fuelType === value;
+          case "transmission":
+            return car.transmission === value;
+          case "body":
+            return car.bodyType === value;
+          case "ownership":
+            return car.ownership === value;
+          case "location":
+            return car.address?.city === value;
+          default:
+            return false;
+        }
+      }).length;
+
   return (
     <div className="mt-14 lg:mt-24 min-h-screen max-w-7xl mx-auto">
       <Hero />
-      <FeaturedCars />
+      <FeaturedCars/>
       <FindDealers />
-      <HeroCategories />
-      <BrandLogoCards />
-      <PopularCities />
+      <HeroCategories getTotalCount = {getTotalCount}/>
+      <BrandLogoCards getTotalCount = {getTotalCount} />
+      <PopularCities getTotalCount = {getTotalCount}/>
 
       {/* Location Modal (shared) */}
       <LocationModal

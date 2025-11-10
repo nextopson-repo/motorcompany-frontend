@@ -1,5 +1,8 @@
-import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import axios from "axios";
+import {
+  createAsyncThunk,
+  createSlice,
+  type PayloadAction,
+} from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 
 interface Buyer {
@@ -24,7 +27,7 @@ const initialState: BuyersState = {
   error: null,
 };
 
-// ✅ Fetch Buyers
+// ✅ Fetch Buyers (using fetch instead of axios)
 export const fetchBuyers = createAsyncThunk<
   Buyer[],
   void,
@@ -33,17 +36,24 @@ export const fetchBuyers = createAsyncThunk<
   try {
     const backend = import.meta.env.VITE_BACKEND_URL || "";
     const token = localStorage.getItem("token");
-    const response = await axios.post(
-      `{${backend}/api/v1/hotleads/get}`,
-      { page: 1, limit: 10 },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
 
-    const leads = response.data.data.leads;
+    const response = await fetch(`${backend}/api/v1/hotleads/get`, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ page: 1, limit: 10 }),
+    });
+
+    if (!response.ok) {
+      const errData = await response.json().catch(() => ({}));
+      throw new Error(errData.message || "Failed to fetch buyers");
+    }
+
+    const data = await response.json();
+    const leads = data.data?.leads || [];
 
     const buyers = leads.map((lead: any) => ({
       id: lead.id,
@@ -60,9 +70,7 @@ export const fetchBuyers = createAsyncThunk<
 
     return buyers;
   } catch (error: any) {
-    const message =
-      error.response?.data?.message || error.message || "Failed to fetch buyers";
-
+    const message = error.message || "Failed to fetch buyers";
     toast.error(message, { id: "buyers-fetch-error" });
     return rejectWithValue(message);
   }
