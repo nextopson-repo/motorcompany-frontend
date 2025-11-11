@@ -82,7 +82,7 @@ export default function SellerDetails() {
         <div>
           <div className="flex items-center gap-3">
             <img
-              src={seller.avatar || "/default-avatar.png"}
+              src={seller.avatar || "/default-men-logo.jpg"}
               alt={seller.name || "Seller"}
               className="w-16 h-16 rounded-full border mb-3 object-cover"
             />
@@ -102,7 +102,7 @@ export default function SellerDetails() {
           )}
         </div>
 
-        <div className="space-y-1">
+        <div className="space-y-1.5">
           {seller.location && (
             <p className="text-[10px] sm:text-sm lg:text-[10px] flex items-center gap-1">
               <MapPin className="h-3.5 w-3.5 mb-0.5" /> {seller.location}

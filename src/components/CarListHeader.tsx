@@ -19,11 +19,10 @@ interface CarListHeaderProps {
 }
 
 interface Filters {
-  price: number[];
-  year: number[];
-  [key: string]: number[];
+  price: { min: number; max: number };
+  year: { min: number; max: number };
+  [key: string]: any; // Baaki filters jo array ya different type ho sakte hain
 }
-
 const CarListHeader: React.FC<CarListHeaderProps> = ({ carCount = 0 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const selectedFilters = useSelector(
@@ -67,8 +66,8 @@ const CarListHeader: React.FC<CarListHeaderProps> = ({ carCount = 0 }) => {
   }, []);
 
   const defaultFilters: Filters = {
-    price: [0, 10000000],
-    year: [2000, 2025],
+    price: { min: 0, max: 10000000 },
+    year: { min: 2000, max: 2025 },
   };
 
   return (
@@ -228,11 +227,22 @@ const CarListHeader: React.FC<CarListHeaderProps> = ({ carCount = 0 }) => {
       <div className="hidden w-full lg:flex flex-wrap gap-3 mt-1 lg:mt-2">
         {Object.entries(selectedFilters).map(([filterType, values]) => {
           // Skip if values are same as defaults
+
           const isDefault =
-            Array.isArray(values) &&
-            Array.isArray(defaultFilters[filterType]) &&
-            values.length === defaultFilters[filterType].length &&
-            values.every((v, i) => v === defaultFilters[filterType][i]);
+            filterType === "price" || filterType === "year"
+              ? typeof values === "object" &&
+                values !== null &&
+                !Array.isArray(values) &&
+                (values as { min: number; max: number }).min ===
+                  (defaultFilters[filterType] as { min: number; max: number })
+                    .min &&
+                (values as { min: number; max: number }).max ===
+                  (defaultFilters[filterType] as { min: number; max: number })
+                    .max
+              : Array.isArray(values) &&
+                Array.isArray(defaultFilters[filterType]) &&
+                values.length === defaultFilters[filterType].length &&
+                values.every((v, i) => v === defaultFilters[filterType][i]);
 
           if (!Array.isArray(values) || values.length === 0 || isDefault)
             return null;

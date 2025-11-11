@@ -3,28 +3,41 @@ import CarCard from "./CarCard";
 import CarCardSkeleton from "./CarCardSkeleton";
 import CarListHeader from "./CarListHeader";
 import type { AppDispatch, RootState } from "../store/store";
-// import { useEffect } from "react";
 import { fetchCars } from "../store/slices/carSlice";
+import { useCallback, useRef } from "react";
 
 export default function CarList() {
   const dispatch = useDispatch<AppDispatch>();
-  const { cars, hasMore, page, loading, error } = useSelector(
+  const { cars, hasMore, page, loading } = useSelector(
     (state: RootState) => state.cars
   );
   const limit = 12;
 
-  // 🔹 Initial Fetch
-  // useEffect(() => {
-  //   if (cars.length === 0) {
-  //     dispatch(fetchCars({ page: 1, limit }));
-  //   }
-  // }, [dispatch]);
+  // const handleLoadMore = async () => {
+  //   if (!hasMore || loading) return;
+  //   await dispatch(fetchCars({ page: page + 1, limit }));
+  // };
 
-  // 🔹 Handle Load More
-  const handleLoadMore = async () => {
-    if (!hasMore || loading) return;
-    await dispatch(fetchCars({ page: page + 1, limit }));
-  };
+  // Reference for observer
+  const observer = useRef<IntersectionObserver | null>(null);
+  const lastCarRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new window.IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && hasMore) {
+            dispatch(fetchCars({ page: page + 1, limit }));
+          }
+        },
+        { threshold: 1 }
+      );
+      if (node) observer.current.observe(node);
+    },
+    [loading, hasMore, dispatch, page]
+  );
+
+  // toast.error(error, {id: "priceRange error"}); // baad me chalu karna hai
 
   return (
     <div className="h-full w-full overflow-hidden lg:pl-1 pb-2">
@@ -38,21 +51,28 @@ export default function CarList() {
             Array(6)
               .fill(0)
               .map((_, i) => <CarCardSkeleton key={i} />)
-          ) : error ? (
-            <p className="col-span-full text-center text-red-500 font-medium">
-              {error}
-            </p>
           ) : cars.length === 0 ? (
             <p className="col-span-full text-center text-gray-500">
               No cars found
             </p>
           ) : (
-            cars.map((car) => <CarCard key={car.id} car={car} />)
+            cars.map((car, idx) => {
+              // Last grid item pe ref lagao for auto-load
+              if (idx === cars.length - 1) {
+                return (
+                  <div ref={lastCarRef} key={car.id}>
+                    <CarCard car={car} />
+                  </div>
+                );
+              } else {
+                return <CarCard key={car.id} car={car} />;
+              }
+            })
           )}
         </div>
 
         {/* ✅ Load More Button */}
-        {cars.length > 0 && hasMore && (
+        {/* {cars.length > 0 && hasMore && (
           <div className="flex justify-center mt-4">
             <button
               onClick={handleLoadMore}
@@ -62,7 +82,7 @@ export default function CarList() {
               {loading ? "Loading..." : "Load More"}
             </button>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

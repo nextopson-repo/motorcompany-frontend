@@ -7,13 +7,9 @@ import {
   type ContactFormData,
 } from "../store/slices/contactSlice";
 import {
-  // FacebookIcon,
-  // InstagramIcon,
-  // LinkedinIcon,
   Mail,
   MapPin,
   Phone,
-  // YoutubeIcon,
 } from "lucide-react";
 
 export default function ContactUs() {
@@ -130,7 +126,7 @@ export default function ContactUs() {
                   <p className="text-sm text-gray-800 mb-1 font-semibold">
                     Call Us
                   </p>
-                  <a href="tel:8989227426" className="text-black text-[10px]">+91 - 8989227426</a>
+                  <a href="tel:8989227433" className="text-black text-[10px]">+91 - 8989227433</a>
                   {/* <p className="text-black text-[10px]">+1 555 0126</p> */}
                 </div>
               </div>

@@ -61,7 +61,7 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
         </p>
         <div className="flex items-end justify-between mb-4">
           <div className="space-y-4">
-            <p className="text-xs text-gray-600 mb-2 capitalize">
+            <p className="text-xs text-gray-600 mb-2 capitalize whitespace-nowrap">
               {car.user?.fullName || "Unknown"} (
               {car.user?.userType || "Unknown"})
             </p>
@@ -69,7 +69,7 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
               <MapPin size={8} /> {car.address?.city || "Unknown"}
             </p>
           </div>
-          <span className="text-lg font-bold text-gray-900 -mb-1">
+          <span className="text-lg font-bold text-gray-900 -mb-1 whitespace-nowrap">
             ₹ {formatPriceToLakh(car.carPrice || 0)}
           </span>
         </div>

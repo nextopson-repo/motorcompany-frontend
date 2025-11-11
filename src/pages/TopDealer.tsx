@@ -1,22 +1,31 @@
 import { MapPin, Phone, SearchIcon } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useAppSelector } from "../store/redux/hooks";
-import { fetchDealersByCity, setSelectedCity } from "../store/slices/dealerSlice";
+import {
+  fetchDealersByCity,
+  setSelectedCity,
+} from "../store/slices/dealerSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuth } from "../store/slices/authSlices/authSlice";
 import { openLogin } from "../store/slices/authSlices/loginModelSlice";
 import toast from "react-hot-toast";
 
 const TopDealer: React.FC = () => {
-  const { dealers, selectedCity, cities, loading } = useAppSelector((state) => state.dealers);
+  const { dealers, selectedCity, cities, loading } = useAppSelector(
+    (state) => state.dealers
+  );
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [dealerSearch, setDealerSearch] = useState("");
+  const filteredDealers = dealerSearch.trim().length > 0
+  ? dealers.filter(dealer =>
+      dealer.name?.toLowerCase().includes(dealerSearch.toLowerCase())
+    )
+  : dealers;
 
   const dispatch = useDispatch();
   const { user, token } = useSelector(selectAuth);
-
-  console.log(dealers)
-
+  // console.log(dealers)
   // Check login access
   const handleAccess = () => {
     if (!user || !token) {
@@ -36,7 +45,10 @@ const TopDealer: React.FC = () => {
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setOpen(false);
       }
     };
@@ -66,7 +78,9 @@ const TopDealer: React.FC = () => {
       if (isMobile()) {
         window.location.href = `tel:${phoneDigits}`;
       } else {
-        const msg = encodeURIComponent(`Hello ${dealer.name}, I'm interested in your cars.`);
+        const msg = encodeURIComponent(
+          `Hello ${dealer.name}, I'm interested in your cars.`
+        );
         window.open(`https://wa.me/${phoneDigits}?text=${msg}`, "_blank");
       }
     } catch (err) {
@@ -116,7 +130,9 @@ const TopDealer: React.FC = () => {
             <SearchIcon className="h-3 md:h-auto w-3 lg:w-4 text-black" />
             <input
               type="text"
-              placeholder="Search by Dealer Name, Phone..."
+              value={dealerSearch}
+              onChange={(e) => setDealerSearch(e.target.value)}
+              placeholder="Search by Dealer Name"
               className="w-full text-[10px] lg:text-sm placeholder:text-black focus:outline-none"
             />
           </span>
@@ -175,16 +191,15 @@ const TopDealer: React.FC = () => {
         </h2>
 
         {loading ? (
-          // 🟡 Loading skeletons
           <>
             {[...Array(5)].map((_, i) => (
               <SkeletonCard key={i} />
             ))}
           </>
-        ) : dealers.length === 0 ? (
+        ) : filteredDealers.length === 0 ? (
           <p className="text-center text-gray-500 py-6">No dealers found.</p>
         ) : (
-          dealers.map((dealer: any) => (
+          filteredDealers.map((dealer: any) => (
             <div
               key={dealer.id}
               className="flex flex-row items-center justify-between py-2 lg:p-4 border-b border-gray-100"
@@ -215,7 +230,7 @@ const TopDealer: React.FC = () => {
                 className="bg-gray-800 text-white px-2 lg:px-4 py-1.5 text-xs lg:text-base rounded-xs lg:rounded hover:bg-black/80 flex items-center gap-1 lg:gap-3 cursor-pointer"
                 onClick={() => {
                   if (user) {
-                    console.log("call button clicked")
+                    console.log("call button clicked");
                     handlePhoneClick(dealer);
                   } else {
                     handleAccess();

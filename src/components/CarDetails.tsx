@@ -268,8 +268,12 @@ const CarDetails = () => {
             {/* Thumbnails */}
             <div
               id="thumbs"
-              className="grid grid-cols-4 gap-2 overflow-x-auto scroll-smooth px-5"
-              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+              className="flex flex-nowrap gap-2 overflow-x-auto scroll-smooth px-5"
+              style={{
+                scrollbarWidth: "none",
+                msOverflowStyle: "none",
+                width: "calc(4 * 193px + 3 * 8px)", // approx width for 4 images + gaps
+              }}
             >
               {visibleImages.map((img: string, index: number) => (
                 <img
@@ -910,9 +914,7 @@ const CarDetails = () => {
       </div>
 
       {/* similar cars slider */}
-      <div
-        className="pb-3 lg:p-6 rounded-2xl lg:rounded-none border lg:border-none border-gray-100 shadow-[0_1px_10px_1px_rgba(0,0,0,0.15)] lg:shadow-none"
-      >
+      <div className="pb-3 lg:p-6 rounded-2xl lg:rounded-none border lg:border-none border-gray-100 shadow-[0_1px_10px_1px_rgba(0,0,0,0.15)] lg:shadow-none">
         <div className="flex items-center justify-between mt-4 lg:mt-6 px-4 lg:px-0">
           <h2 className="text-md lg:text-2xl font-semibold py-3 ">
             Similar Cars

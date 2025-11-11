@@ -153,7 +153,7 @@ const Hero: React.FC = () => {
           fetchCars({
             selectedFilters: {
               ...selectedFilters,
-              priceRange: [50000, maxPrice],
+              priceRange: {min: 0, max: maxPrice},
             },
           })
         );

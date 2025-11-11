@@ -108,7 +108,7 @@ export const fetchSellerCars = createAsyncThunk<
       email: String(owner.email || ""),
       phone: String(owner.mobileNumber || ""),
       verified: Boolean(owner.verified ?? true), //
-      avatar: String(owner.avatar || "/default-men-logo.jpg"),
+      avatar: String(owner.userProfileUrl || "/default-men-logo.jpg"),
     } as Omit<SellerState, "cars" | "loading" | "error">;
 
     return { seller, cars };

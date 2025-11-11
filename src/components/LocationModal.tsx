@@ -1,4 +1,4 @@
-import { MapPin, X } from "lucide-react";
+import { MapPin } from "lucide-react";
 import React, { useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "../store/store";
@@ -11,7 +11,8 @@ interface LocationModalProps {
   onClose: () => void;
   onLocationChange?: (loc: string) => void;
   citySearch: string;
-  setCitySearch: (val: string) => void;
+  // setCitySearch: (val: string) => void;
+    setCitySearch: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const LocationModal: React.FC<LocationModalProps> = ({
@@ -70,7 +71,7 @@ const LocationModal: React.FC<LocationModalProps> = ({
       {/* backdrop */}
       <div
         className="absolute inset-0 bg-black/40 backdrop-blur-[0.5px]"
-        onClick={onClose}
+        // onClick={onClose}
       />
 
       {/* modal */}
@@ -78,9 +79,9 @@ const LocationModal: React.FC<LocationModalProps> = ({
         {/* header */}
         <div className="flex items-center justify-between p-2 md:p-3 px-2 md:px-8 border-b border-gray-100">
           <h3 className="text-sm sm:text-lg font-semibold">Select your City</h3>
-          <button onClick={onClose} className="p-1 rounded hover:bg-black/5">
+          {/* <button onClick={onClose} className="p-1 rounded hover:bg-black/5">
             <X className="w-5 md:w-5 h-5 md:h-5" />
-          </button>
+          </button> */}
         </div>
 
         {/* search bar */}

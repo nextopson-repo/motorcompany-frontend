@@ -6,12 +6,10 @@ import {
 import type { RootState } from "../store";
 import type { CarRecord } from "../../types/car";
 import {
-  brandOptions,
   fuelOptions,
   transmissionOptions,
   bodyTypeOptions,
   ownershipOptions,
-  // stateOptions,
   cityOptions,
 } from "../../data/filterOptions";
 
@@ -24,8 +22,8 @@ export type SelectedFilters = {
   transmission: string[];
   ownership: string[];
   location: string[];
-  priceRange: [number, number];
-  yearRange: [number, number];
+  priceRange: {min: number, max:number};
+  yearRange: {min: number, max:number};
 };
 
 export type CarWithOwner = CarRecord & {
@@ -52,8 +50,8 @@ export type CarsState = {
     transmission: string[];
     ownership: string[];
     userType: string;
-    priceRange: [number, number] | null;
-    yearRange: [number, number] | null;
+    priceRange: {min: number, max:number} | null;
+    yearRange: {min: number, max:number} | null;
     cityOptions?: string[];
     // stateOptions?: string[];
   };
@@ -72,10 +70,9 @@ const initialState: CarsState = {
   page: 1,
   hasMore: true,
   filters: {
-    priceRange: [50000, 10000000], //1cr = 1,00,00,000/-
-    yearRange: [2000, new Date().getFullYear()],
-    // brand: [],
-    brand: brandOptions,
+    priceRange: {min: 0, max:10000000}, //1cr = 1,00,00,000/-
+    yearRange: {min: 2000, max:(new Date().getFullYear())},
+    brand: [],
     fuel: fuelOptions,
     transmission: transmissionOptions,
     bodyType: bodyTypeOptions,
@@ -91,8 +88,8 @@ const initialState: CarsState = {
     transmission: [],
     ownership: [],
     location: [],
-    priceRange: [50000, 10000000], //1cr = 1,00,00,000/-
-    yearRange: [2000, new Date().getFullYear()],
+    priceRange: {min: 0, max:10000000}, //1cr = 1,00,00,000/-
+    yearRange: {min: 2000, max:(new Date().getFullYear())},
     userType: "EndUser",
   },
   searchTerm: "",
@@ -101,6 +98,47 @@ const initialState: CarsState = {
 };
 
 // ---------- Helper ----------
+// const buildBody = (payload?: {
+//   selectedFilters?: SelectedFilters;
+//   searchTerm?: string;
+//   sortOption?: string;
+// }) => {
+//   if (!payload) return {};
+//   const body: any = {};
+//   const sf = payload.selectedFilters;
+
+//   if (sf) {
+//     if (sf.brand?.length) body.brands = sf.brand;
+//     if (sf.bodyType?.length) body.bodyType = sf.bodyType;
+//     if (sf.fuelType?.length) body.fuelType = sf.fuelType;
+//     if (sf.transmission?.length) body.transmissionType = sf.transmission;
+//     if (sf.ownership?.length) body.ownership = sf.ownership;
+//     if (sf.location?.length) body.location = sf.location;
+//     if (sf.priceRange)
+//       body.priceRange = { min: sf.priceRange[0], max: sf.priceRange[1] };
+//     if (sf.yearRange)
+//       body.modelYear = { min: sf.yearRange[0], max: sf.yearRange[1] };
+//     if (sf.userType) {
+//       if (sf.userType === "EndUser") {
+//         body.ownerType = ["Dealer", "Owner"];
+//       } else if (sf.userType === "Dealer") {
+//         body.ownerType = ["Dealer"];
+//       } else if (sf.userType === "Owner") {
+//         body.ownerType = ["Owner"];
+//       }
+//     }
+//   }
+
+//   if (payload.searchTerm) body.search = payload.searchTerm;
+//   if (payload.sortOption) body.sort = payload.sortOption;
+//   //  body.sort =
+//   //   payload.sortOption === "oldest" || payload.sortOption === "newest"
+//   //     ? payload.sortOption
+//   //     : "newest";
+
+//   return body;
+// };
+
 const buildBody = (payload?: {
   selectedFilters?: SelectedFilters;
   searchTerm?: string;
@@ -111,16 +149,31 @@ const buildBody = (payload?: {
   const sf = payload.selectedFilters;
 
   if (sf) {
+    // Add filters that are arrays
     if (sf.brand?.length) body.brands = sf.brand;
     if (sf.bodyType?.length) body.bodyType = sf.bodyType;
     if (sf.fuelType?.length) body.fuelType = sf.fuelType;
     if (sf.transmission?.length) body.transmissionType = sf.transmission;
     if (sf.ownership?.length) body.ownership = sf.ownership;
     if (sf.location?.length) body.location = sf.location;
-    if (sf.priceRange)
-      body.priceRange = { min: sf.priceRange[0], max: sf.priceRange[1] };
-    if (sf.yearRange)
-      body.modelYear = { min: sf.yearRange[0], max: sf.yearRange[1] };
+
+    // Validate priceRange and yearRange as objects with min and max numbers
+    const priceValid =
+      sf.priceRange &&
+      typeof sf.priceRange.min === "number" &&
+      typeof sf.priceRange.max === "number";
+
+    const yearValid =
+      sf.yearRange &&
+      typeof sf.yearRange.min === "number" &&
+      typeof sf.yearRange.max === "number";
+
+    // Add them only if valid
+    if (priceValid && yearValid) {
+      body.priceRange = { min: sf.priceRange.min, max: sf.priceRange.max };
+      body.modelYear = { min: sf.yearRange.min, max: sf.yearRange.max };
+    }
+
     if (sf.userType) {
       if (sf.userType === "EndUser") {
         body.ownerType = ["Dealer", "Owner"];
@@ -134,10 +187,8 @@ const buildBody = (payload?: {
 
   if (payload.searchTerm) body.search = payload.searchTerm;
   if (payload.sortOption) body.sort = payload.sortOption;
-  //  body.sort =
-  //   payload.sortOption === "oldest" || payload.sortOption === "newest"
-  //     ? payload.sortOption
-  //     : "newest";
+
+  console.log("Request body built:", body);
 
   return body;
 };
@@ -227,6 +278,15 @@ const carSlice = createSlice({
   name: "cars",
   initialState,
   reducers: {
+
+    clearError(state) {
+      state.error = null;
+    },
+
+     setBrandOptions(state, action: PayloadAction<string[]>) {
+      state.filters.brand = action.payload;
+    },
+
     setFiltersMeta(state, action: PayloadAction<CarsState["filters"]>) {
       state.filters = action.payload;
     },
@@ -307,10 +367,6 @@ const carSlice = createSlice({
           state.page = page;
         state.hasMore = cars.length >= 12;
 
-        // if (page === 1) {
-        //   state.allCars = cars;
-        // }
-
         // ✅ Filter logic only applies on first page (not while loading more)
         const isFiltered =
           Object.keys(buildBody({ selectedFilters: state.selectedFilters }))
@@ -342,6 +398,8 @@ const carSlice = createSlice({
 });
 
 export const {
+  clearError,
+  setBrandOptions,
   setFiltersMeta,
   setSelectedFilters,
   updateSelectedFilter,

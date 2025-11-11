@@ -55,7 +55,7 @@ const LeadCard: React.FC<LeadCardProps> = ({ name, city, timeAgo, image, phone, 
     <div className="flex justify-between items-center py-3 px-4 bg-white hover:bg-gray-50 rounded-md shadow-sm border border-gray-100 transition-all">
       <div className="flex items-center gap-3">
         <img
-          src={image}
+          src={image || "/default-men-logo.jpg"}
           alt={name}
           className="w-12 h-12 rounded-full object-cover"
         />
