@@ -58,6 +58,7 @@ const CarDetails = () => {
 
   const [showSellerPopup, setShowSellerPopup] = useState(false);
   const [mainImageIndex, setMainImageIndex] = useState(0);
+  const [isContain, setIsContain] = useState(true); 
 
   // safe: use selectedCar first, else try find in cars array; never call .find on non-array
   const car: any =
@@ -222,29 +223,38 @@ const CarDetails = () => {
       <div className="relative h-fit lg:grid lg:grid-cols-13 lg:mx-6 lg:my-3 md:gap-6 ">
         {/* LEFT SIDE */}
         <div className="lg:col-span-9 space-y-6">
-          {/* Main Image */}
           <div className="relative z-0">
+            {/* Main Image */}
             <img
               src={visibleImages[mainImageIndex]}
               alt={title}
-              className="w-full h-56 sm:h-68 lg:h-96 object-cover lg:rounded-lg shadow"
+              className={`w-full h-56 sm:h-68 lg:h-96 ${
+                isContain ? "object-contain bg-gray-200" : "object-cover"
+              } lg:rounded-lg shadow transition-all duration-300`}
             />
-            {/* Arrows */}
+
+            {/* Left Arrow */}
             <button
-              onClick={() => {
-                handlePrevImage();
-              }}
+              onClick={handlePrevImage}
               className="z-50 absolute top-1/2 left-2 -translate-y-1/2 bg-white p-1 lg:p-2 rounded-full shadow hover:bg-gray-200 hover:scale-[1.02] cursor-pointer active:bg-gray-300 active:scale-95"
             >
               <ChevronLeft className="text-black w-4 lg:h-6 h-4 lg:w-6" />
             </button>
+
+            {/* Right Arrow */}
             <button
-              onClick={() => {
-                handleNextImage();
-              }}
+              onClick={handleNextImage}
               className="z-50 absolute top-1/2 right-2 -translate-y-1/2 bg-white p-1 lg:p-2 rounded-full shadow hover:bg-gray-200 hover:scale-[1.02] cursor-pointer active:bg-gray-300 active:scale-95"
             >
               <ChevronRight className="text-black w-4 lg:h-6 h-4 lg:w-6" />
+            </button>
+
+            {/* ✅ Toggle Button (overlay on top-right) */}
+            <button
+              onClick={() => setIsContain(!isContain)}
+              className="absolute top-3 right-3 z-50 bg-white/80 backdrop-blur-sm text-xs font-medium px-3 py-1 rounded-full shadow hover:bg-white hover:scale-105 active:scale-95 transition"
+            >
+              {isContain ? "Zoom" : "Zoom Out"}
             </button>
           </div>
 

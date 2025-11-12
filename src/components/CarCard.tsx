@@ -26,7 +26,7 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
               : image?.presignedUrl || image?.imageUrl || ""
           }
           alt={`${car.brand} ${car.model}`}
-          className="w-full h-40 lg:h-48 object-cover rounded-sm"
+          className="w-full h-40 lg:h-48 object-cover rounded-sm hover:object-contain hover:transition-all hover:duration-900"
           loading="lazy"
         />
         <span
@@ -57,7 +57,7 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
         </div>
         <p className="text-xs text-black whitespace-nowrap overflow-hidden text-ellipsis mb-2">
           {car.bodyType} {car.seats ? ` ${car.seats} Seater` : ""} |{" "}
-          {car.fuelType} | {car.transmission}
+          {car.fuelType} | {car.transmission} | {car.ownership ? ` ${car.ownership} owner` : ""}
         </p>
         <div className="flex items-end justify-between mb-4">
           <div className="space-y-4">

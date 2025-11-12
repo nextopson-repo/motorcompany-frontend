@@ -2,6 +2,7 @@ import type React from "react";
 import { useEffect, useState } from "react";
 import { ChevronUp, ChevronDown, ListFilter, Search } from "lucide-react";
 import {
+  setBrandModelMap,
   setBrandOptions,
   type SelectedFilters,
 } from "../../store/slices/carSlice";
@@ -77,9 +78,12 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
   onSelectedFiltersChange,
 }) => {
   const dispatch = useDispatch();
-  const { filters, allCars } = useSelector((state: RootState) => state.cars);
+  const { filters } = useSelector((state: RootState) => state.cars);
   const brands = useSelector((state: RootState) => state.cars.filters.brand);
-  console.log("filters :", filters);
+  const brandModelMap = useSelector(
+    (state: RootState) => (state.cars.filters as any).brandModelsMap || {}
+  );
+
   const [brandSearch, setBrandSearch] = useState("");
   const [sectionStates, setSectionStates] = useState({
     priceRange: false,
@@ -97,15 +101,38 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
   const apiKey = import.meta.env.VITE_API_KEY;
   const { data, loading, error } = useGCarSheetData(sheetId, range, apiKey);
 
-  useEffect(() => {
-    if (!loading && !error && data.length > 0) {
-      const carBrands = [
-        ...new Set(data.map((item) => item["Brand"]).filter(Boolean)),
-      ];
-      // console.log("google sheet brands:", carBrands);
-      dispatch(setBrandOptions(carBrands));
-    }
-  }, [data, loading, error]);
+ useEffect(() => {
+  if (!loading && !error && data.length > 0) {
+    // Safe column getters
+    const getBrand = (row: any) => row["Brand"] || row["A"];
+    const getModel = (row: any) => row["Model"] || row["B"];
+
+    // Unique brand list
+    const carBrands = [
+      ...new Set(data.map((i: any) => getBrand(i)).filter(Boolean)),
+    ];
+
+    // ✅ Properly type the accumulator
+    const brandModelsMap = data.reduce<Record<string, string[]>>(
+      (acc, row) => {
+        const brand = getBrand(row);
+        const model = getModel(row);
+        if (!brand || !model) return acc;
+        if (!acc[brand]) acc[brand] = [];
+        if (!acc[brand].includes(model)) acc[brand].push(model);
+
+        return acc;
+      },
+      {} 
+    );
+
+    console.log("✅ Brand→Model map:", brandModelsMap);
+
+    dispatch(setBrandOptions(carBrands));
+    dispatch(setBrandModelMap(brandModelsMap));
+  }
+}, [data, loading, error]);
+
 
   const toggleSection = (section: keyof typeof sectionStates) => {
     setSectionStates((prev) => ({
@@ -150,22 +177,14 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
     return [Math.max(values[0], min), Math.min(values[1], max)];
   };
 
-  const minPrice = filters.priceRange?.min ?? 0;
+  const minPrice = filters.priceRange?.min ?? 1;
   const maxPrice = filters.priceRange?.max ?? 10000000;
   const minYear = filters.yearRange?.min ?? 2000;
   const maxYear = filters.yearRange?.max ?? new Date().getFullYear();
-  // const brands = filters.brand;
-  // const brands = brands;
   const bodyTypes = filters.bodyType;
   const fuelTypes = filters.fuel;
   const transmissions = filters.transmission;
   const ownerships = filters.ownership;
-
-  // const priceRangeArray: [number, number] = selectedFilters.priceRange
-  //   ? [selectedFilters.priceRange.min, selectedFilters.priceRange.max]
-  //   : null;
-
-  // const safePriceRange = safeRange(priceRangeArray, minPrice, maxPrice);
 
   const bodyTypeImages: Record<string, string> = {
     suv: "/CarCategories/suv.png",
@@ -176,25 +195,25 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
     muv: "/CarCategories/muv.png",
   };
 
-  const getTotalCount = (type: string, value: string) =>
-    (Array.isArray(allCars) ? allCars : []).filter((car) => {
-      switch (type) {
-        case "brand":
-          return car.brand === value;
-        case "fuel":
-          return car.fuelType === value;
-        case "transmission":
-          return car.transmission === value;
-        case "body":
-          return car.bodyType === value;
-        case "ownership":
-          return car.ownership === value;
-        case "location":
-          return car.address?.city === value;
-        default:
-          return false;
-      }
-    }).length;
+  // const getTotalCount = (type: string, value: string) =>
+  //   (Array.isArray(allCars) ? allCars : []).filter((car) => {
+  //     switch (type) {
+  //       case "brand":
+  //         return car.brand === value;
+  //       case "fuel":
+  //         return car.fuelType === value;
+  //       case "transmission":
+  //         return car.transmission === value;
+  //       case "body":
+  //         return car.bodyType === value;
+  //       case "ownership":
+  //         return car.ownership === value;
+  //       case "location":
+  //         return car.address?.city === value;
+  //       default:
+  //         return false;
+  //     }
+  //   }).length;
 
   return (
     <aside className="py-4 w-48 lg:w-60 ">
@@ -292,7 +311,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
           )}
 
         {/* Brands + Models */}
-        <div className="border-b border-gray-200 py-3">
+        {/* <div className="border-b border-gray-200 py-3">
           <button
             onClick={() => toggleSection("brands")}
             className="flex items-center justify-between w-full mb-2"
@@ -322,9 +341,8 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
 
               <span className="text-[7px]">Top Brands</span>
 
-              {/* Yahan scrollable banayein */}
               <div
-                className="max-h-44 overflow-y-auto space-y-2 pr-1" // max-h-44 ~ 176px (adjust as per list item height)
+                className="max-h-44 overflow-y-auto space-y-2 pr-1" 
                 style={{ minHeight: "90px" }}
               >
                 {brands
@@ -350,14 +368,135 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                         }
                       />
                       <span className="font-semibold">{brand}</span>
-                      <span className="ml-auto text-[10px] text-gray-500">
-                        {getTotalCount("brand", brand)}
-                      </span>
                     </label>
                   ))}
 
                 {brands.filter((brand) =>
                   brand.toLowerCase().includes(brandSearch.toLowerCase())
+                ).length === 0 && (
+                  <p className="text-xs text-gray-400">No matching brands</p>
+                )}
+              </div>
+            </div>
+          )}
+        </div> */}
+        {/* Brands + Models */}
+        <div className="border-b border-gray-200 py-3">
+          <button
+            onClick={() => toggleSection("brands")}
+            className="flex items-center justify-between w-full mb-2"
+          >
+            <h3 className="text-sm font-semibold">Brands + Models</h3>
+            {sectionStates.brands ? (
+              <ChevronUp size={16} className="text-gray-900" />
+            ) : (
+              <ChevronDown size={16} className="text-gray-500" />
+            )}
+          </button>
+
+          {sectionStates.brands && (
+            <div className="space-y-3">
+              {/* 🔍 Search input */}
+              <div className="flex items-center px-2 py-1.5 rounded bg-[#F2F3F7]">
+                <Search className="w-3 h-3 text-gray-800 mr-2" />
+                <input
+                  type="text"
+                  placeholder="Search cars by brands..."
+                  value={brandSearch}
+                  onChange={(e) => setBrandSearch(e.target.value)}
+                  className="w-full rounded text-[10px] bg-[#F2F3F7] placeholder:text-black outline-none"
+                />
+              </div>
+
+              <span className="text-[7px]">Top Brands</span>
+
+              {/* 🧾 Scrollable list */}
+              <div
+                className="max-h-60 overflow-y-auto space-y-2 pr-1"
+                style={{ minHeight: "90px" }}
+              >
+                {brands
+                  .filter((brand) =>
+                    brand?.toLowerCase().includes(brandSearch.toLowerCase())
+                  )
+                  .map((brand) => {
+                    const brandModels = brandModelMap?.[brand] || [];
+
+                    return (
+                      <div key={brand} className="space-y-1">
+                        {/* ✅ Brand Checkbox */}
+                        <label className="flex items-center gap-2 cursor-pointer text-[10px] pr-2">
+                          <input
+                            type="checkbox"
+                            className="accent-red-600"
+                            checked={selectedFilters.brand.includes(brand)}
+                            onChange={() => {
+                              const isSelected =
+                                selectedFilters.brand.includes(brand);
+                              const newBrands = isSelected
+                                ? selectedFilters.brand.filter(
+                                    (b) => b !== brand
+                                  )
+                                : [...selectedFilters.brand, brand];
+
+                              // 🧩 If brand is unchecked → remove its models too
+                              const updatedModels = isSelected
+                                ? selectedFilters.model.filter(
+                                    (m) => !brandModels.includes(m)
+                                  )
+                                : selectedFilters.model;
+
+                              onSelectedFiltersChange({
+                                ...selectedFilters,
+                                brand: newBrands,
+                                model: updatedModels,
+                              });
+                            }}
+                          />
+                          <span className="font-semibold">{brand}</span>
+                        </label>
+
+                        {/* 🧠 Show models only if brand selected */}
+                        {selectedFilters.brand.includes(brand) && (
+                          <div className="ml-4 border-l pl-2 border-gray-300 space-y-1 max-h-28 overflow-y-auto">
+                            {brandModels.map((model: any) => (
+                              <label
+                                key={model}
+                                className="flex items-center gap-2 text-[9px] cursor-pointer"
+                              >
+                                <input
+                                  type="checkbox"
+                                  className="accent-red-500"
+                                  checked={selectedFilters.model.includes(
+                                    model
+                                  )}
+                                  onChange={() => {
+                                    const isSelected =
+                                      selectedFilters.model.includes(model);
+                                    const newModels = isSelected
+                                      ? selectedFilters.model.filter(
+                                          (m) => m !== model
+                                        )
+                                      : [...selectedFilters.model, model];
+
+                                    onSelectedFiltersChange({
+                                      ...selectedFilters,
+                                      model: newModels,
+                                    });
+                                  }}
+                                />
+                                <span>{model}</span>
+                              </label>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+
+                {/* ❌ No matching brand */}
+                {brands.filter((b) =>
+                  b.toLowerCase().includes(brandSearch.toLowerCase())
                 ).length === 0 && (
                   <p className="text-xs text-gray-400">No matching brands</p>
                 )}
@@ -452,9 +591,9 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                       className="w-10 h-6 object-contain"
                     />
                     <span className="font-semibold">{body}</span>
-                    <span className="ml-auto text-[10px] text-gray-500">
+                    {/* <span className="ml-auto text-[10px] text-gray-500">
                       {getTotalCount("body", body)}
-                    </span>
+                    </span> */}
                   </label>
                 );
               })}
@@ -496,9 +635,9 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                     }
                   />
                   <span className="font-semibold">{fuel}</span>
-                  <span className="ml-auto text-[10px] text-gray-500">
+                  {/* <span className="ml-auto text-[10px] text-gray-500">
                     {getTotalCount("fuel", fuel)}
-                  </span>
+                  </span> */}
                 </label>
               ))}
             </div>
@@ -543,9 +682,9 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                     }
                   />
                   <span className="font-semibold">{trans}</span>
-                  <span className="ml-auto text-[10px] text-gray-500">
+                  {/* <span className="ml-auto text-[10px] text-gray-500">
                     {getTotalCount("transmission", trans)}
-                  </span>
+                  </span> */}
                 </label>
               ))}
             </div>
@@ -586,9 +725,9 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                     }
                   />
                   <span className="font-semibold">{owner}</span>
-                  <span className="ml-auto text-[10px] text-gray-500">
+                  {/* <span className="ml-auto text-[10px] text-gray-500">
                     {getTotalCount("ownership", owner)}
-                  </span>
+                  </span> */}
                 </label>
               ))}
             </div>

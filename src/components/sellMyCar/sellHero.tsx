@@ -11,6 +11,7 @@ import {
 import { openLogin } from "../../store/slices/authSlices/loginModelSlice";
 import toast from "react-hot-toast";
 import { cityData } from "../../data/cityData";
+import imageCompression from "browser-image-compression";
 
 interface DropdownProps {
   label: string;
@@ -114,51 +115,121 @@ export default function SellHero() {
   }, [location]);
 
   // This function receives carData with images array directly from SellHeroForm and dispatches upload
-  const handleFinalSubmit = async (carData: any) => {
-    if (!uploadedImages.length) {
-      alert("Please upload at least one image");
-      return;
+  // const handleFinalSubmit = async (carData: any) => {
+  //   if (!uploadedImages.length) {
+  //     toast.error("Please upload at least one image");
+  //     return;
+  //   }
+
+  //   const formData = new FormData();
+
+  //   formData.append("userId", user?.id || "");
+  //   formData.append("isSale", "Sell");
+  //   formData.append("isSold", "false");
+
+  //   Object.entries({
+  //     carId: editCar?.id || "",
+  //     carName:
+  //       carData.brand && carData.model
+  //         ? `${carData.brand} ${carData.model}`
+  //         : editCar?.carName || "",
+  //     brand: carData.brand || editCar?.brand || "",
+  //     model: carData.model || editCar?.model || "",
+  //     variant: carData.variant || editCar?.variant || "",
+  //     fuelType: carData.fuelType || editCar?.fuelType || "",
+  //     transmission: carData.transmission || editCar?.transmission || "",
+  //     bodyType: carData.bodyType || editCar?.bodyType || "",
+  //     ownership: carData.ownership || editCar?.ownership || "",
+  //     manufacturingYear:
+  //       carData.manufactureYear || editCar?.manufacturingYear || "",
+  //     registrationYear:
+  //       carData.registrationYear || editCar?.registrationYear || "",
+  //     carPrice: String(carData.price || editCar?.price || "").replace(/,/g, ""),
+  //     kmDriven: String(carData.kmDriven || editCar?.kmDriven || ""),
+  //     seats: String(carData.seats || editCar?.seats || ""),
+  //     addressCity: city || editCar?.address?.city || "",
+  //     addressState: state || editCar?.address?.state || "c",
+  //     addressLocality: locality || editCar?.address?.locality || "c",
+  //   }).forEach(([key, value]) => formData.append(key, value || ""));
+
+  //   uploadedImages.forEach((file) => {
+  //     console.log("Uploading file:", file.name);
+  //     formData.append("carImages", file);
+  //   });
+
+  //   toast(`Files Uploading...`);
+  //   dispatch(uploadCar(formData));
+  // };
+
+
+const handleFinalSubmit = async (carData: any) => {
+  if (!uploadedImages.length) {
+    toast.error("Please upload at least one image");
+    return;
+  }
+
+  // 🧠 Compression options
+  const compressionOptions = {
+    maxSizeMB: 1, // under 1MB
+    maxWidthOrHeight: 1080, // resize to 1080p max
+    useWebWorker: true,
+  };
+
+  const formData = new FormData();
+
+  formData.append("userId", user?.id || "");
+  formData.append("isSale", "Sell");
+  formData.append("isSold", "false");
+
+  Object.entries({
+    carId: editCar?.id || "",
+    carName:
+      carData.brand && carData.model
+        ? `${carData.brand} ${carData.model}`
+        : editCar?.carName || "",
+    brand: carData.brand || editCar?.brand || "",
+    model: carData.model || editCar?.model || "",
+    variant: carData.variant || editCar?.variant || "",
+    fuelType: carData.fuelType || editCar?.fuelType || "",
+    transmission: carData.transmission || editCar?.transmission || "",
+    bodyType: carData.bodyType || editCar?.bodyType || "",
+    ownership: carData.ownership || editCar?.ownership || "",
+    manufacturingYear:
+      carData.manufactureYear || editCar?.manufacturingYear || "",
+    registrationYear:
+      carData.registrationYear || editCar?.registrationYear || "",
+    carPrice: String(carData.price || editCar?.price || "").replace(/,/g, ""),
+    kmDriven: String(carData.kmDriven || editCar?.kmDriven || ""),
+    seats: String(carData.seats || editCar?.seats || ""),
+    addressCity: city || editCar?.address?.city || "",
+    addressState: state || editCar?.address?.state || "c",
+    addressLocality: locality || editCar?.address?.locality || "c",
+  }).forEach(([key, value]) => formData.append(key, value || ""));
+
+  try {
+    toast("Compressing images... ⏳");
+
+    // 🧩 Compress each image one by one
+    for (const file of uploadedImages) {
+      console.log("Original:", file.name, file.size / 1024, "KB");
+      const compressedFile = await imageCompression(file, compressionOptions);
+      console.log("Compressed:", compressedFile.name, compressedFile.size / 1024, "KB");
+
+      // Append compressed image
+      formData.append("carImages", compressedFile);
     }
 
-    const formData = new FormData();
+    toast.success("Images compressed successfully! 🚗");
 
-    formData.append("userId", user?.id || "");
-    formData.append("isSale", "Sell");
-    formData.append("isSold", "false");
-
-    Object.entries({
-      carId: editCar?.id || "",
-      carName:
-        carData.brand && carData.model
-          ? `${carData.brand} ${carData.model}`
-          : editCar?.carName || "",
-      brand: carData.brand || editCar?.brand || "",
-      model: carData.model || editCar?.model || "",
-      variant: carData.variant || editCar?.variant || "",
-      fuelType: carData.fuelType || editCar?.fuelType || "",
-      transmission: carData.transmission || editCar?.transmission || "",
-      bodyType: carData.bodyType || editCar?.bodyType || "",
-      ownership: carData.ownership || editCar?.ownership || "",
-      manufacturingYear:
-        carData.manufactureYear || editCar?.manufacturingYear || "",
-      registrationYear:
-        carData.registrationYear || editCar?.registrationYear || "",
-      carPrice: String(carData.price || editCar?.price || "").replace(/,/g, ""),
-      kmDriven: String(carData.kmDriven || editCar?.kmDriven || ""),
-      seats: String(carData.seats || editCar?.seats || ""),
-      addressCity: city || editCar?.address?.city || "",
-      addressState: state || editCar?.address?.state || "c",
-      addressLocality: locality || editCar?.address?.locality || "c",
-    }).forEach(([key, value]) => formData.append(key, value || ""));
-
-    uploadedImages.forEach((file) => {
-      console.log("Uploading file:", file.name);
-      formData.append("carImages", file);
-    });
-
-    toast(`Files Uploading...`);
+    // Now send to backend
+    toast("Uploading car data...");
     dispatch(uploadCar(formData));
-  };
+  } catch (err) {
+    console.error("Image compression failed:", err);
+    toast.error("Image compression failed. Try again with smaller files.");
+  }
+};
+
 
   useEffect(() => {
     if (success) {

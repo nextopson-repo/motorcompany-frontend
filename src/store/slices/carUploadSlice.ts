@@ -101,6 +101,7 @@ export const uploadCar = createAsyncThunk<UploadCarResponse, any>(
       });
 
       const data = await res.json();
+      console.log("car upload:",data)
       if (!res.ok) {
          toast.error(data.message || "Failed to upload car");
         return rejectWithValue(data.message || "Failed to upload car");

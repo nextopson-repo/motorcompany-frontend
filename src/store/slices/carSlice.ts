@@ -17,13 +17,15 @@ import {
 export type SelectedFilters = {
   userType: "EndUser" | "Dealer" | "Owner";
   brand: string[];
+  model: string[];
   bodyType: string[];
   fuelType: string[];
   transmission: string[];
   ownership: string[];
   location: string[];
-  priceRange: {min: number, max:number};
-  yearRange: {min: number, max:number};
+  priceRange: { min: number; max: number };
+  yearRange: { min: number; max: number };
+  brandModelsMap?: Record<string, string[]>;
 };
 
 export type CarWithOwner = CarRecord & {
@@ -45,13 +47,14 @@ export type CarsState = {
   hasMore: boolean;
   filters: {
     brand: string[];
+    model: string[];
     bodyType: string[];
     fuel: string[];
     transmission: string[];
     ownership: string[];
     userType: string;
-    priceRange: {min: number, max:number} | null;
-    yearRange: {min: number, max:number} | null;
+    priceRange: { min: number; max: number } | null;
+    yearRange: { min: number; max: number } | null;
     cityOptions?: string[];
     // stateOptions?: string[];
   };
@@ -70,9 +73,10 @@ const initialState: CarsState = {
   page: 1,
   hasMore: true,
   filters: {
-    priceRange: {min: 0, max:10000000}, //1cr = 1,00,00,000/-
-    yearRange: {min: 2000, max:(new Date().getFullYear())},
+    priceRange: { min: 1, max: 10000000 }, //1cr = 1,00,00,000/-
+    yearRange: { min: 2000, max: new Date().getFullYear() },
     brand: [],
+    model: [],
     fuel: fuelOptions,
     transmission: transmissionOptions,
     bodyType: bodyTypeOptions,
@@ -83,13 +87,14 @@ const initialState: CarsState = {
   },
   selectedFilters: {
     brand: [],
+    model: [],
     bodyType: [],
     fuelType: [],
     transmission: [],
     ownership: [],
     location: [],
-    priceRange: {min: 0, max:10000000}, //1cr = 1,00,00,000/-
-    yearRange: {min: 2000, max:(new Date().getFullYear())},
+    priceRange: { min: 1, max: 10000000 }, //1cr = 1,00,00,000/-
+    yearRange: { min: 2000, max: new Date().getFullYear() },
     userType: "EndUser",
   },
   searchTerm: "",
@@ -151,6 +156,7 @@ const buildBody = (payload?: {
   if (sf) {
     // Add filters that are arrays
     if (sf.brand?.length) body.brands = sf.brand;
+    if (sf.model?.length) body.model = sf.model;
     if (sf.bodyType?.length) body.bodyType = sf.bodyType;
     if (sf.fuelType?.length) body.fuelType = sf.fuelType;
     if (sf.transmission?.length) body.transmissionType = sf.transmission;
@@ -278,13 +284,19 @@ const carSlice = createSlice({
   name: "cars",
   initialState,
   reducers: {
-
     clearError(state) {
       state.error = null;
     },
 
-     setBrandOptions(state, action: PayloadAction<string[]>) {
+    setBrandOptions(state, action: PayloadAction<string[]>) {
       state.filters.brand = action.payload;
+    },
+    setModelOptions(state, action: PayloadAction<string[]>) {
+      state.filters.model = action.payload;
+    },
+    setBrandModelMap(state, action: PayloadAction<Record<string, string[]>>) {
+      // store a brand → models map inside filters
+      (state.filters as any).brandModelsMap = action.payload;
     },
 
     setFiltersMeta(state, action: PayloadAction<CarsState["filters"]>) {
@@ -364,7 +376,7 @@ const carSlice = createSlice({
         }
 
         // ✅ Stop loading when no more data
-          state.page = page;
+        state.page = page;
         state.hasMore = cars.length >= 12;
 
         // ✅ Filter logic only applies on first page (not while loading more)
@@ -400,6 +412,8 @@ const carSlice = createSlice({
 export const {
   clearError,
   setBrandOptions,
+  setModelOptions,
+  setBrandModelMap,
   setFiltersMeta,
   setSelectedFilters,
   updateSelectedFilter,

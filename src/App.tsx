@@ -79,15 +79,7 @@ const App = () => {
       <main className="flex-1 z-0 ">
         <Routes>
           <Route path="/" element={<HeroPage />} />
-          <Route
-            path="/buy-car"
-            element={
-              <BuyCars
-                // citySearch={citySearch}
-                // setCitySearch={setCitySearch}
-              />
-            }
-          />
+          <Route path="/buy-car" element={<BuyCars />} />
           <Route path="/buy-car/:id" element={<CarDetail />} />
           <Route path="/saved" element={<Saved />} />
           <Route path="sell" element={<Sell />} />
