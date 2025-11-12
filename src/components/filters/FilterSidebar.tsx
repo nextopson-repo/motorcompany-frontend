@@ -126,7 +126,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
       {} 
     );
 
-    console.log("✅ Brand→Model map:", brandModelsMap);
+    // console.log("✅ Brand→Model map:", brandModelsMap);
 
     dispatch(setBrandOptions(carBrands));
     dispatch(setBrandModelMap(brandModelsMap));

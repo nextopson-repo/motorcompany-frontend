@@ -60,7 +60,7 @@ const Enquiries: React.FC = () => {
             <Search className="text-black" size={14} />
             <input
               type="text"
-              placeholder="Search for Cars, Brands, Models..."
+              placeholder="Search by Brands, Models..."
               className="w-full py-2 placeholder:text-xs placeholder:text-[#24272C] focus:outline-none bg-transparent"
             />
           </span>

@@ -75,7 +75,7 @@ function MultiSelectDropdown({
       </label>
       <button
         type="button"
-        className="border border-gray-200 bg-gray-50 rounded w-full text-left px-3 py-2 text-sm flex items-center justify-between focus:ring-1"
+        className="border border-gray-200 bg-gray-50 rounded w-full text-left px-3 py-2 text-sm flex items-center justify-between focus:ring-1 cursor-pointer"
         onClick={() => setOpen((v) => !v)}
       >
         <span className={selected.length === 0 ? "text-gray-400" : ""}>
@@ -152,12 +152,6 @@ const Requirements: React.FC = () => {
 
   const [showFilters, setShowFilters] = useState(false);
   const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
-
-  // State/city selectors
-  // const stateOptions = stateList.map(formatStateName);
-
-  // const cityOptions = pendingFilter.city ? Array(cityData) : [];
-  const cityOptions = cityData;
 
   // google car(brand, model, variant)
   const sheetId = import.meta.env.VITE_SHEET_ID;
@@ -351,25 +345,25 @@ const Requirements: React.FC = () => {
     <div className="p-4 sm:p-6 lg:p-10 max-w-7xl mx-auto my-12 transition-all duration-300">
       {/* HEADER BUTTONS */}
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3 mb-5">
-        <div>
+        <div className="flex items-center justify-between lg:flex-none">
           <h2 className="text-xl sm:text-2xl font-semibold">Requirements</h2>
           <p className="text-sm text-gray-500">Total: {totalCount}</p>
         </div>
-        <div className="flex items-center flex-wrap gap-3 min-w-0">
+        <div className="flex items-center flex-wrap gap-1.5 lg:gap-3 min-w-0">
           <button
             onClick={() => {
               if (!user || !token) dispatch(openLogin());
               else navigate("/create-requirement");
             }}
-            className="text-sm bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition flex items-center gap-2"
+            className="text-xs lg:text-sm bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition flex items-center gap-2 cursor-pointer"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="w-4 h-4 hidden lg:block" />
             Post Requirement
           </button>
 
           <button
             onClick={() => setShowFilters((f) => !f)}
-            className="text-sm border rounded-md px-4 py-2 hover:bg-gray-100 transition flex items-center gap-2"
+            className="text-xs lg:text-sm border rounded-md px-4 py-2 hover:bg-gray-100 transition flex items-center gap-2 cursor-pointer"
           >
             {showFilters ? "Hide Filter" : "Show Filter"}
           </button>
@@ -377,7 +371,7 @@ const Requirements: React.FC = () => {
           {/* Sort dropdown */}
           <div className="relative">
             <button
-              className="text-sm border rounded-md px-4 py-2 hover:bg-gray-100 transition flex items-center gap-2 min-w-[140px]"
+              className="text-xs lg:text-sm border rounded-md px-4 py-2 hover:bg-gray-100 transition flex items-center gap-2 min-w-[140px] cursor-pointer"
               onClick={() => setSortDropdownOpen((v) => !v)}
               type="button"
             >
@@ -390,7 +384,7 @@ const Requirements: React.FC = () => {
             {sortDropdownOpen && (
               <div className="absolute mt-1 w-full bg-white border rounded shadow z-30 animate-fade-in">
                 <button
-                  className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${
+                  className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 rounded-t cursor-pointer ${
                     sortOption === "newToOld" ? "font-semibold" : ""
                   }`}
                   onClick={() => {
@@ -402,7 +396,7 @@ const Requirements: React.FC = () => {
                   Newest First
                 </button>
                 <button
-                  className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${
+                  className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 rounded-b cursor-pointer ${
                     sortOption === "oldToNew" ? "font-semibold" : ""
                   }`}
                   onClick={() => {
@@ -421,7 +415,7 @@ const Requirements: React.FC = () => {
 
       {/* 🧱 MAIN CONTENT LAYOUT */}
       <div
-        className={`flex flex-col lg:flex-row gap-6 transition-all duration-300 ${
+        className={`flex flex-col-reverse lg:flex-row gap-6 transition-all duration-300 ${
           showFilters ? "lg:gap-10" : "lg:gap-0"
         }`}
       >
@@ -470,7 +464,7 @@ const Requirements: React.FC = () => {
 
         {/* 🎛️ FILTER PANEL (RIGHT SIDE) */}
         {showFilters && (
-          <div className="lg:w-1/4 bg-white rounded-xl border border-gray-200 shadow-sm h-fit sticky top-20 p-5 animate-fade-in">
+          <div className="w-full lg:w-1/4 bg-white rounded-xl border border-gray-200 shadow-sm h-fit lg:sticky top-20 p-5 animate-fade-in">
             <div className="text-[11px] uppercase tracking-wide text-gray-500 mb-3">
               Filters
             </div>
@@ -506,7 +500,7 @@ const Requirements: React.FC = () => {
 
               <MultiSelectDropdown
                 label="City"
-                options={cityOptions}
+                options={cityData}
                 selected={pendingFilter.city || []}
                 onChange={(option) => toggleMultiSelect("city", option)}
                 placeholder="Select cities"
@@ -544,7 +538,7 @@ const Requirements: React.FC = () => {
                       userType: e.target.value,
                     }))
                   }
-                  className="border bg-gray-50 p-2 rounded w-full text-sm h-9"
+                  className="border bg-gray-50 p-2 rounded w-full text-sm h-9 cursor-pointer "
                 >
                   <option value="">Any</option>
                   <option value="Owner">Owner</option>
@@ -610,13 +604,13 @@ const Requirements: React.FC = () => {
 
               <div className="flex items-center justify-between mt-4">
                 <button
-                  className="text-sm bg-blue-600 text-white px-5 h-9 rounded-md hover:bg-blue-700 transition"
+                  className="text-sm bg-red-600 text-white px-5 h-9 rounded-md hover:bg-red-700 transition cursor-pointer"
                   onClick={handleApplyFilters}
                 >
                   Apply
                 </button>
                 <button
-                  className="text-sm bg-gray-200 text-gray-800 px-5 h-9 rounded-md hover:bg-gray-300 transition"
+                  className="text-sm bg-gray-200 text-gray-800 px-5 h-9 rounded-md hover:bg-gray-300 transition cursor-pointer"
                   onClick={handleResetFilters}
                 >
                   Reset

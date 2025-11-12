@@ -36,9 +36,9 @@ export default function SettingSidebar({
 
   const links = [
     { name: "Profile", path: "/settings/profile" },
-    { name: "My Listing", path: "/settings/listings" },
+    { name: "My Listings", path: "/settings/listings" },
     { name: "Add Car", path: "/sell" },
-    { name: "My Enqueries", path: "/settings/enquiries" },
+    { name: "My Enquires", path: "/settings/enquiries" },
    ...(role === "Dealer"
     ? [{ name: "Interested Buyers List", path: "/settings/interested-buyers" }]
     : []),

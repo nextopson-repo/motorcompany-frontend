@@ -513,7 +513,7 @@ const CarDetails = () => {
                     <div className="flex items-center gap-2 py-2">
                       <div className="flex items-center justify-center w-28 h-20 rounded-full overflow-hidden object-contain">
                         <img
-                          src={ownerImage || "/user-img.png"}
+                          src={ownerImage || "/default-men-logo.jpg"}
                           alt="seller img"
                         />
                       </div>
@@ -557,7 +557,7 @@ const CarDetails = () => {
                         className="flex items-center justify-center gap-3 w-full hover:font-semibold text-sm p-2 border rounded-sm cursor-pointer active:text-white active:bg-[#24272c]"
                         // onClick={handleWhatsAppClick}
                       >
-                        <FaWhatsapp className=" h-5 w-5" /> What's app
+                        <FaWhatsapp className=" h-5 w-5" /> WhatsApp
                       </button>
                     </div>
                   </div>
@@ -762,7 +762,7 @@ const CarDetails = () => {
                       <div className="flex items-center gap-2">
                         <div className="flex items-center justify-center w-28 h-16 rounded-full overflow-hidden object-contain">
                           <img
-                            src={ownerImage || "/user-img.png"}
+                            src={ownerImage || "/default-men-logo.jpg"}
                             alt="seller img"
                             className="w-full h-full object-cover"
                           />
@@ -804,7 +804,7 @@ const CarDetails = () => {
                           <Phone className=" h-4.5 w-4.5" /> Phone
                         </button>
                         <button className="flex items-center justify-center gap-3 w-full hover:font-semibold text-sm p-1.5 border rounded-sm cursor-pointer hover:text-white hover:bg-[#24272c]">
-                          <FaWhatsapp className=" h-5 w-5" /> What'sApp
+                          <FaWhatsapp className=" h-5 w-5" /> WhatsApp
                         </button>
                       </div>
                     </div>

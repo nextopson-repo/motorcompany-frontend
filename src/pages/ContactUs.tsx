@@ -169,7 +169,7 @@ export default function ContactUs() {
                   name="firstName"
                   value={data.firstName}
                   onChange={handleChange}
-                  placeholder="Jhon"
+                  placeholder="John"
                   className="bg-gray-100 text-xs rounded p-1.5 px-2 md:px-4 w-full placeholder:text-[10px]"
                   required
                 />

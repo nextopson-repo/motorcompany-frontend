@@ -50,6 +50,7 @@ const BuyPackages: React.FC = () => {
   const selectedPlan = getSelectedPlan();
   const gst = selectedPlan ? Math.round(selectedPlan.price * 0.18) : 0;
   const total = selectedPlan ? selectedPlan.price * quantity + gst : 0;
+  console.log(total);
 
   return (
     <>
@@ -59,7 +60,7 @@ const BuyPackages: React.FC = () => {
           Buy Packages
         </h2>
         <p className=" hidden md:block text-gray-500 text-xs mt-2">
-          Lorem Ipsum Dolor Sit Amet Consectetur. Adipisicing Morbi Tellu
+          Boost your car’s reach and sell faster with DhikCar premium packages.
         </p>
 
         {/* Sections */}
@@ -89,7 +90,9 @@ const BuyPackages: React.FC = () => {
                           <input
                             type="checkbox"
                             checked={isSelected}
-                            onChange={() => setSelected(id)}
+                            onChange={() => {
+                              setSelected((prev) => (prev === id ? null : id));
+                            }}
                             className="w-3 md:w-4 h-3 md:h-4 cursor-pointer accent-gray-800"
                           />
                         </span>
@@ -178,12 +181,12 @@ const BuyPackages: React.FC = () => {
                 </div>
                 <div className="flex justify-between text-xs md:text-sm">
                   <span>GST (18%)</span>
-                  <span>₹ {gst}</span>
+                  <span>Included</span>
                 </div>
                 <hr className="my-2" />
                 <div className="flex justify-between text-sm md:text-base font-semibold text-[#cb202d]">
                   <span>Total Amount</span>
-                  <span>₹ {total}</span>
+                  <span>₹ {selectedPlan.price * quantity}</span>
                 </div>
               </div>
 

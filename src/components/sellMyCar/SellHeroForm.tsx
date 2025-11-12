@@ -4,7 +4,7 @@ import ImageUploadOverlay from "../ImageUploadOverlay";
 import useGCarSheetData from "../../hooks/useGCarSheetData";
 import toast from "react-hot-toast";
 
-interface DropdownProps {
+export interface DropdownProps {
   label: string;
   placeholder: string;
   options: string[];
@@ -15,7 +15,7 @@ interface DropdownProps {
 }
 
 // Dropdown component remains unchanged, keeping it concise here
-function Dropdown({
+export function Dropdown({
   label,
   placeholder,
   options,
@@ -142,7 +142,7 @@ export default function SellHeroForm({
   const {
     data: carSheetData,
     loading: carSheetLoading,
-    // error: carSheetError,
+    error: carSheetError,
   } = useGCarSheetData(sheetId, carRange, apiKey);
 
   // Build nested locationData object from Google Sheet
@@ -288,7 +288,7 @@ export default function SellHeroForm({
               setModel("");
               setVariant("");
             }}
-            value={brand || carSheetLoading}
+            value={brand || carSheetLoading || carSheetError}
           />
           <Dropdown
             label="Model"
@@ -300,7 +300,7 @@ export default function SellHeroForm({
                   )
                 : []
             }
-            value={model || carSheetLoading}
+            value={model || carSheetLoading || carSheetError}
             isOpen={openDropdown === "model"}
             onToggle={() =>
               setOpenDropdown(openDropdown === "model" ? null : "model")
@@ -318,7 +318,7 @@ export default function SellHeroForm({
                 ? [...carDataNested[brand][model]]
                 : []
             }
-            value={variant || carSheetLoading}
+            value={variant || carSheetLoading || carSheetError}
             isOpen={openDropdown === "variant"}
             onToggle={() =>
               setOpenDropdown(openDropdown === "variant" ? null : "variant")

@@ -271,6 +271,17 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
           >
             Sell my car <ChevronRight className="h-5 w-5" />
           </NavLink>
+           <NavLink
+            to="/requirements"
+            className={({ isActive }) =>
+              isActive
+                ? "text-[#EE1422] text-md flex items-center justify-between"
+                : "text-black text-md flex items-center justify-between"
+            }
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Requirements <ChevronRight className="h-5 w-5" />
+          </NavLink>
           <NavLink
             to="/settings/saved"
             className={({ isActive }) =>

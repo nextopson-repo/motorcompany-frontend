@@ -21,7 +21,7 @@ interface DropdownProps {
   onChange: (v: string) => void;
 }
 
-function Dropdown({
+export function Dropdown({
   label,
   placeholder,
   options,

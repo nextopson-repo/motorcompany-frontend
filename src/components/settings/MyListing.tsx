@@ -92,7 +92,7 @@ export const MyListing = () => {
             <SearchIcon className="w-3 md:w-4 h-3 md:h-4 text-black" />
             <input
               type="text"
-              placeholder="Search for Cars, Brands, Model..."
+              placeholder="Search by Brands, Model..."
               className="w-full focus:outline-none text-[10px] md:text-xs text-black placeholder:text-black"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}

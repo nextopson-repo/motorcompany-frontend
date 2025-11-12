@@ -3,36 +3,37 @@ import { ChevronDown } from "lucide-react";
 
 const faqs = [
   {
-    question: "How to post a car on Dhikcar.com?",
+    question: "What is DhikCar.com?",
     answer:
-      "Yes. You can post the property for free on DhikCar.com. However, there is a limit on the number of cars you can post for free depending on your profile type. Free listings also have limited access to buyer enquiries.",
+      "DhikCar.com is an online platform where you can buy, sell, or resell cars easily. Whether you're a car owner looking to sell or a buyer searching for verified listings, DhikCar connects you with genuine users and smooth deals.",
   },
   {
-    question: "Can I post a car for free?",
+    question: "How can I post my car for sale?",
     answer:
-      "Yes, you can post cars for free depending on your account type. Free accounts have certain limitations compared to premium ones.",
+      "To post your car, simply sign in to your DhikCar account, click on 'Sell Car', and fill in all required details like brand, model, year, price, and upload high-quality images. Once submitted, your listing goes live after quick verification.",
   },
   {
-    question: "What are the benefits of posting a property on Housing.com?",
+    question: "How long does it take for my listing to go live?",
     answer:
-      "You get maximum visibility, verified leads, and better chances of selling your property faster with premium tools.",
+      "After submission, your car listing is reviewed for quality and authenticity. Usually, it goes live within 1 to 3 hours during working hours.",
   },
   {
-    question: "When do I start getting enquiries on my property?",
+    question: "When will I start getting buyer enquiries?",
     answer:
-      "Once your listing is live, enquiries typically start within 24-48 hours depending on demand and location.",
+      "Once your listing is live, you may start receiving enquiries within 24–48 hours. Response time depends on your car’s demand, price, and condition.",
   },
   {
-    question: "When do I start getting enquiries on my property?",
+    question: "How do I contact a seller or buyer on DhikCar?",
     answer:
-      "Once your listing is live, enquiries typically start within 24-48 hours depending on demand and location.",
+      "You can directly contact sellers or buyers using the contact options available on each listing page. Verified users get access to direct chat or call options for smoother communication.",
   },
   {
-    question: "When do I start getting enquiries on my property?",
+    question: "Does DhikCar charge any commission on car sales?",
     answer:
-      "Once your listing is live, enquiries typically start within 24-48 hours depending on demand and location.",
+      "No, DhikCar doesn’t take any commission. The entire transaction happens directly between the buyer and the seller.",
   },
 ];
+
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -42,13 +43,13 @@ export default function FAQ() {
   };
 
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 relative -z-0 pb-10 overflow-hidden">
+    <section className="w-full max-w-7xl mx-auto px-4 relative z-0 pb-10 overflow-hidden">
       {/* Heading */}
       <div className="max-w-2xl mx-auto text-center mb-4 lg:mb-8">
          <p className="text-[#EE1422] text-[10px] lg:text-xs font-semibold flex items-center justify-center gap-2 lg:gap-4">
-          <span className="w-7 lg:w-10 h-[1px] lg:h-[1.4px] bg-[#EE1422]/80"></span>
+          <span className="w-7 lg:w-10 h-px lg:h-[1.4px] bg-[#EE1422]/80"></span>
           FAQ
-          <span className="w-7 lg:w-10 h-[1px] lg:h-[1.4px] bg-[#EE1422]/80"></span>
+          <span className="w-7 lg:w-10 h-px lg:h-[1.4px] bg-[#EE1422]/80"></span>
         </p>
         <h2 className="text-sm lg:text-[23px]  lg:leading-7.5 font-bold mt-2 lg:mt-4">
           Got Questions? We've Got Answers

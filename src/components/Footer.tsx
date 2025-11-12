@@ -10,7 +10,7 @@ const Footer = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const carForSaleCities = [
-    { title: "Ahemdabad" },
+    { title: "Ahmedabad" },
     { title: "Chandigarh" },
     { title: "Delhi" },
     { title: "Hyderabad" },
