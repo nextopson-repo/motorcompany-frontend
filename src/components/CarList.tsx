@@ -5,18 +5,14 @@ import CarListHeader from "./CarListHeader";
 import type { AppDispatch, RootState } from "../store/store";
 import { fetchCars } from "../store/slices/carSlice";
 import { useCallback, useRef } from "react";
+import toast from "react-hot-toast";
 
 export default function CarList() {
   const dispatch = useDispatch<AppDispatch>();
-  const { cars, hasMore, page, loading } = useSelector(
+  const { cars, hasMore, page, loading, error } = useSelector(
     (state: RootState) => state.cars
   );
   const limit = 12;
-
-  // const handleLoadMore = async () => {
-  //   if (!hasMore || loading) return;
-  //   await dispatch(fetchCars({ page: page + 1, limit }));
-  // };
 
   // Reference for observer
   const observer = useRef<IntersectionObserver | null>(null);
@@ -37,10 +33,16 @@ export default function CarList() {
     [loading, hasMore, dispatch, page]
   );
 
-  // toast.error(error, {id: "priceRange error"}); // baad me chalu karna hai
+  if (error) {
+    toast.error(error, { id: "priceRange error" });
+  }
+
+  const uniqueCars = Array.from(
+    new Map(cars.map((car) => [car.id, car])).values()
+  );
 
   return (
-    <div className="h-full w-full overflow-hidden lg:pl-1 pb-2">
+    <div className="h-full w-full overflow-y-auto lg:pl-1 pb-2 ">
       <div className="w-full lg:max-w-7xl mx-auto">
         {/* Header */}
         <CarListHeader carCount={cars.length} />
@@ -56,9 +58,8 @@ export default function CarList() {
               No cars found
             </p>
           ) : (
-            cars.map((car, idx) => {
-              // Last grid item pe ref lagao for auto-load
-              if (idx === cars.length - 1) {
+            uniqueCars.map((car, idx) => {
+              if (idx === uniqueCars.length - 1) {
                 return (
                   <div ref={lastCarRef} key={car.id}>
                     <CarCard car={car} />
@@ -70,19 +71,6 @@ export default function CarList() {
             })
           )}
         </div>
-
-        {/* ✅ Load More Button */}
-        {/* {cars.length > 0 && hasMore && (
-          <div className="flex justify-center mt-4">
-            <button
-              onClick={handleLoadMore}
-              disabled={loading}
-              className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition disabled:opacity-60"
-            >
-              {loading ? "Loading..." : "Load More"}
-            </button>
-          </div>
-        )} */}
       </div>
     </div>
   );

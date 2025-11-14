@@ -4,14 +4,12 @@ import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "../store/store";
 import { setLocation } from "../store/slices/locationSlice";
 import { updateSelectedFilter } from "../store/slices/carSlice";
-// import { useNavigate } from "react-router-dom";
 
 interface LocationModalProps {
   isOpen: boolean;
   onClose: () => void;
   onLocationChange?: (loc: string) => void;
   citySearch: string;
-  // setCitySearch: (val: string) => void;
     setCitySearch: React.Dispatch<React.SetStateAction<string>>;
 }
 
@@ -23,8 +21,6 @@ const LocationModal: React.FC<LocationModalProps> = ({
   setCitySearch,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
-  // const Navigate = useNavigate();
-
   const locationOptions = useSelector(
     (state: RootState) => state.location.locations
   );
@@ -57,22 +53,19 @@ const LocationModal: React.FC<LocationModalProps> = ({
   if (!isOpen) return null;
 
   const handleSelectCity = (city: string) => {
-    dispatch(setLocation(city));
-    dispatch(updateSelectedFilter({ key: "location", value: [city] }));
-    // Navigate('/buy-car');
-    if (onLocationChange) {
-      onLocationChange(city);
-    }
-    onClose();
-  };
+  dispatch(setLocation(city));
+  dispatch(updateSelectedFilter({ key: "location", value: [city] }));
+  // callback to parent
+  if (onLocationChange) {
+    onLocationChange(city);
+  }
+  onClose();
+};
+
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
-      {/* backdrop */}
-      <div
-        className="absolute inset-0 bg-black/40 backdrop-blur-[0.5px]"
-        // onClick={onClose}
-      />
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-[0.5px]" />
 
       {/* modal */}
       <div className="relative overflow-hidden mx-auto h-[82%] sm:h-[50%] lg:h-[82%] mt-14 w-[95%] sm:w-[75%] lg:w-[50%] max-w-5xl bg-white rounded-md md:rounded-xl shadow-xl z-0">

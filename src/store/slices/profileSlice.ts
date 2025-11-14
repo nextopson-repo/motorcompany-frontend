@@ -20,6 +20,7 @@ export interface UserProfile {
   city: string;
   pin: string;
   userProfileUrl: string;
+  subscriptionsType?: string;
 }
 
 interface ProfileState {

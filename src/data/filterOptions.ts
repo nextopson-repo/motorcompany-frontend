@@ -1,16 +1,16 @@
-export const brandOptions = [
-  "Toyota",
-  "Hyundai",
-  "Maruti",
-  "Tata",
-  "Honda",
-  "Skoda",
-  "Mahindra",
-  "Kia",
-];
+// export const brandOptions = [
+//   "Toyota",
+//   "Hyundai",
+//   "Maruti",
+//   "Tata",
+//   "Honda",
+//   "Skoda",
+//   "Mahindra",
+//   "Kia",
+// ];
 
 
-export const fuelOptions = ["Petrol", "Diesel", "CNG", "Electric", "Hybrid"];
+export const fuelOptions = ["Petrol", "Diesel","Electric", "CNG",  "Hybrid", "LPG"];
 
 export const transmissionOptions = ["Manual", "Automatic"];
 
@@ -21,13 +21,13 @@ export const bodyTypeOptions = [
   "MUV",
   "Coupe",
   "Convertible",
+  "Wagon"
 ];
 
 export const ownershipOptions = [
   "1st",
   "2nd",
-  "3rd",
-  "4th",
+  "3rd+",
 ];
 
 // export const stateOptions = [

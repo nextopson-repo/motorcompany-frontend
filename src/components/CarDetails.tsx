@@ -58,7 +58,7 @@ const CarDetails = () => {
 
   const [showSellerPopup, setShowSellerPopup] = useState(false);
   const [mainImageIndex, setMainImageIndex] = useState(0);
-  const [isContain, setIsContain] = useState(true); 
+  const [isContain, setIsContain] = useState(true);
 
   // safe: use selectedCar first, else try find in cars array; never call .find on non-array
   const car: any =
@@ -677,7 +677,7 @@ const CarDetails = () => {
                 </p>
                 {/* <p className="text-orange-600 font-semibold text-[10px] mb-1">
                 Make Your Offer
-              </p> */}
+                </p> */}
               </div>
 
               {/* <div className="font-semibold text-[10px]">
@@ -685,7 +685,7 @@ const CarDetails = () => {
               <span className="font-normal text-green-500 hover:underline cursor-pointer">
                 @ Rs. 6203/mo
               </span>
-            </div> */}
+              */}
 
               {/* Dashed line */}
               <div className="custom-dash"></div>
@@ -810,9 +810,26 @@ const CarDetails = () => {
                     </div>
 
                     {/* Note */}
-                    <div className="">
-                      <p></p>
-                    </div>
+                    {/* <div className="py-3 px-8 border-t border-gray-400 max-h-44 overflow-y-auto">
+                      <p>
+                        Important Information Do NOT pay advancemoney via
+                        Wallet/UPI/Bank transfer or other means to the seller
+                        without physical inspection of vehicle and proper
+                        verification of ownership documents Avoid sellers who
+                        refuse to allow physical inspection of the vehicle and
+                        original documents before the purchase Beware that the
+                        Seller may impersonate himself/herself as Army/Police or
+                        other Government Official or belonging to the noble
+                        profession to win your trust and thereby commit fraud
+                        upon you Cardekho shall not be responsible and liable
+                        for any advance money paid by you to the seller Cardekho
+                        is not responsible for the details and description of
+                        the vehicle provided by the Seller on the website If you
+                        found any suspicious listing on our website or someone
+                        asks you for advance payment, please inform us
+                        immediately on support@cardekho.com
+                      </p>
+                    </div> */}
                   </div>
                 </div>
               )}

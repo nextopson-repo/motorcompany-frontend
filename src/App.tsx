@@ -18,7 +18,6 @@ import ScrollToTop from "./components/scrollToTop";
 import AppInitializer from "./components/AppInitializer";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "./store/store";
-import { fetchCars } from "./store/slices/carSlice";
 import { closeLogin } from "./store/slices/authSlices/loginModelSlice";
 import TermsConditions from "./pages/TermsConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -30,7 +29,6 @@ import { setSuccessMessage } from "./store/slices/toastSlice";
 const App = () => {
   const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [citySearch, setCitySearch] = useState("");
@@ -46,10 +44,6 @@ const App = () => {
       dispatch(setSuccessMessage(null));
     }
   }, [successMessage, dispatch]);
-
-  useEffect(() => {
-    dispatch(fetchCars(BACKEND_URL));
-  }, [BACKEND_URL, dispatch]);
 
   useEffect(() => {
     const anyModalOpen = isOpen || isLocationModalOpen;
@@ -82,7 +76,7 @@ const App = () => {
           <Route path="/buy-car" element={<BuyCars />} />
           <Route path="/buy-car/:id" element={<CarDetail />} />
           <Route path="/saved" element={<Saved />} />
-          <Route path="sell" element={<Sell />} />
+          <Route path="/sell" element={<Sell />} />
           <Route path="/requirements" element={<Requirements />} />
           <Route path="/create-requirement" element={<CreateRequirement />} />
           <Route path="/settings/*" element={<Setting />} />

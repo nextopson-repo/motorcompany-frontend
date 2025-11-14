@@ -109,7 +109,6 @@ const Hero: React.FC = () => {
   const selectedFilters = useSelector(
     (state: RootState) => state.cars.selectedFilters
   );
-  // const brandList = useSelector((state: RootState) => state.cars.filters.brand);
   const dispatch = useDispatch<AppDispatch>();
 
   const navigate = useNavigate();
@@ -146,7 +145,7 @@ const Hero: React.FC = () => {
         dispatch(
           updateSelectedFilter({
             key: "priceRange",
-            value: [0, maxPrice],
+            value: [1, maxPrice],
           })
         );
         dispatch(
@@ -162,13 +161,13 @@ const Hero: React.FC = () => {
     navigate("/buy-car");
   };
 
-  useEffect(() => {
-    if (searchMode === "brand" && selectedBrands) {
-      setQuery(selectedBrands);
-    } else if (searchMode === "budget" && selectedBudget) {
-      setQuery(selectedBudget);
-    }
-  }, [selectedBrands, selectedBudget, searchMode]);
+  // useEffect(() => {
+  //   if (searchMode === "brand" && selectedBrands) {
+  //     setQuery(selectedBrands);
+  //   } else if (searchMode === "budget" && selectedBudget) {
+  //     setQuery(selectedBudget);
+  //   }
+  // }, [selectedBrands, selectedBudget, searchMode]);
 
   // google car(brand, model, variant)
   const sheetId = import.meta.env.VITE_SHEET_ID;

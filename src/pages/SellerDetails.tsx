@@ -22,7 +22,55 @@ import {
   formatShortNumber,
   formatTimeAgo,
 } from "../utils/formatPrice";
-// import { setSelectedCar } from "../store/slices/carSlice";
+
+const SellerSkeleton = () => {
+  return (
+    <div className="grid lg:grid-cols-4 gap-8 mt-20 max-w-5xl mx-auto animate-pulse">
+      {/* Left Side Skeleton */}
+      <div className="col-span-1 bg-white p-4 space-y-4">
+        <div className="flex items-center gap-3">
+          <div className="w-16 h-16 bg-gray-300 rounded-full" />
+          <div className="flex flex-col gap-2">
+            <div className="h-4 w-32 bg-gray-300 rounded" />
+            <div className="h-3 w-20 bg-gray-300 rounded" />
+          </div>
+        </div>
+
+        <div className="h-3 w-24 bg-gray-300 rounded" />
+
+        <div className="space-y-2 mt-4">
+          <div className="h-3 w-40 bg-gray-300 rounded" />
+          <div className="h-3 w-36 bg-gray-300 rounded" />
+          <div className="h-3 w-32 bg-gray-300 rounded" />
+        </div>
+
+        <div className="flex gap-3 mt-4">
+          <div className="h-8 w-full bg-gray-300 rounded" />
+          <div className="h-8 w-full bg-gray-300 rounded" />
+        </div>
+      </div>
+
+      {/* Right Side Car Skeletons */}
+      <div className="col-span-3 space-y-4">
+        {[1, 2, 3].map((i) => (
+          <div
+            key={i}
+            className="flex gap-4 bg-white p-3 border rounded shadow animate-pulse"
+          >
+            <div className="w-40 h-28 bg-gray-300 rounded" />
+            <div className="flex-1 space-y-3">
+              <div className="h-4 w-48 bg-gray-300 rounded" />
+              <div className="h-3 w-60 bg-gray-300 rounded" />
+              <div className="h-3 w-32 bg-gray-300 rounded" />
+            </div>
+            <div className="h-6 w-14 bg-gray-300 rounded self-start" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 
 export default function SellerDetails() {
   const { userId } = useParams<{ userId: string }>();
@@ -39,12 +87,8 @@ export default function SellerDetails() {
   }, [dispatch, userId]);
 
   if (seller.loading) {
-    return (
-      <div className="p-6 text-center text-gray-600 mt-20">
-        Loading seller details…
-      </div>
-    );
-  }
+  return <SellerSkeleton />;
+}
 
   if (seller.error) {
     return (

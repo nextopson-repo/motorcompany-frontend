@@ -1,6 +1,6 @@
  export const brandLogos = [
     {
-      Brand: "Tata",
+      Brand: "TATA",
       logo: "/CarsLogo/tata-motors.png",
     },
     {
@@ -12,7 +12,7 @@
       logo: "/CarsLogo/mahindra.png",
     },
     {
-      Brand: "Hyundai",
+      Brand: "HYUNDAI",
       logo: "/CarsLogo/hyundai.png",
     },
     {
@@ -28,8 +28,24 @@
       logo: "/CarsLogo/maruti-suzuki.png",
     },
     {
-      Brand: "Suzuki",
-      logo: "/CarsLogo/suzuki.avif",
+      Brand: "Renault",
+      logo: "/CarsLogo/Renault.png",
+    },
+    {
+      Brand: "Skoda",
+      logo: "/CarsLogo/skoda.png",
+    },
+    // {
+    //   Brand: "Chevrolet",
+    //   logo: "/public/CarsLogo/",
+    // },
+    {
+      Brand: "Kia",
+      logo: "/CarsLogo/kia.jpg",
+    },
+    {
+      Brand: "Toyota",
+      logo: "/CarsLogo/toyota.png",
     },
     {
       Brand: "Audi",
@@ -39,18 +55,22 @@
       Brand: "BMW",
       logo: "/CarsLogo/BMW.png",
     },
+       {
+      Brand: "Mercedes",
+      logo: "/CarsLogo/Mercedes.png",
+    },
     {
       Brand: "Range Rover",
       logo: "/CarsLogo/RangeRover.png",
     },
-    {
-      Brand: "Ferrari",
-      logo: "/CarsLogo/Ferrari.png",
-    },
-    {
-      Brand: "Lamborghini",
-      logo: "/CarsLogo/Lamborghini.png",
-    },
+    // {
+    //   Brand: "Ferrari",
+    //   logo: "/CarsLogo/Ferrari.png",
+    // },
+    // {
+    //   Brand: "Lamborghini",
+    //   logo: "/CarsLogo/Lamborghini.png",
+    // },
   ];
 
  export  const bodyTypes = [

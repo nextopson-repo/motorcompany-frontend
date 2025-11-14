@@ -345,7 +345,7 @@ const Requirements: React.FC = () => {
     <div className="p-4 sm:p-6 lg:p-10 max-w-7xl mx-auto my-12 transition-all duration-300">
       {/* HEADER BUTTONS */}
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3 mb-5">
-        <div className="flex items-center justify-between lg:flex-none">
+        <div className="flex items-center justify-between lg:flex-col lg:items-start">
           <h2 className="text-xl sm:text-2xl font-semibold">Requirements</h2>
           <p className="text-sm text-gray-500">Total: {totalCount}</p>
         </div>

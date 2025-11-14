@@ -264,3 +264,13 @@ body {
 .scrollbar-light::-webkit-scrollbar-button {
     display: none;
 }
+
+
+.body-no-scroll {
+  overflow: hidden !important;
+  pointer-events: none !important;
+}
+
+.body-no-scroll * {
+  pointer-events: none !important;
+}

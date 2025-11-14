@@ -1,4 +1,4 @@
-import { CameraIcon, X } from "lucide-react";
+import { CameraIcon, Crown, X } from "lucide-react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../../context/useAuth";
@@ -8,6 +8,7 @@ interface SettingSidebarProps {
   role: string;
   imageUrl: string;
   onUploadImage: (file: File) => void;
+  subscriptionType?: string;
 }
 
 export default function SettingSidebar({
@@ -15,6 +16,7 @@ export default function SettingSidebar({
   role,
   imageUrl,
   onUploadImage,
+  subscriptionType,
 }: SettingSidebarProps) {
   const location = useLocation();
   const { logout } = useAuth();
@@ -39,9 +41,14 @@ export default function SettingSidebar({
     { name: "My Listings", path: "/settings/listings" },
     { name: "Add Car", path: "/sell" },
     { name: "My Enquires", path: "/settings/enquiries" },
-   ...(role === "Dealer"
-    ? [{ name: "Interested Buyers List", path: "/settings/interested-buyers" }]
-    : []),
+    ...(role === "Dealer"
+      ? [
+          {
+            name: "Interested Buyers List",
+            path: "/settings/interested-buyers",
+          },
+        ]
+      : []),
     { name: "Saved", path: "/settings/saved" },
     { name: "Buy Packages", path: "/settings/buy-packages" },
     { name: "Bought Packages & Billing", path: "/settings/bought-packages" },
@@ -82,8 +89,12 @@ export default function SettingSidebar({
             </div>
           </div>
 
-          <h2 className="mt-3 font-semibold capitalize">{name}</h2>
-          <p className="text-gray-500 text-sm">{role}</p>
+          <h2 className="mt-3 font-semibold capitalize flex items-center gap-2"> {subscriptionType === "Premium Active" && (
+              <span className="px-2 py-0.5 text-[10px] rounded-full bg-gray-200 text-black font-semibold flex items-center gap-1">
+              <Crown className="h-5 w-5 text-yellow-500"/>
+              </span>
+            )}{name}</h2>
+          <p className="text-gray-500 text-sm ">{role} </p>
 
           <div className="flex justify-center w-full mt-2">
             <div className="border-b border-dashed border-gray-800 w-full custom-dash"></div>

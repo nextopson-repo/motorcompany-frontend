@@ -59,7 +59,7 @@ const HeroCategories: React.FC<HeroCategoriesProps> = ({ getTotalCount }) =>  {
               <p className="font-semibold text-xs md:text-xs">{type.name}</p>
               <span className="text-gray-500 text-[10px] md:text-[10px]">
                 {/* {count} Vehicles */}
-                {getTotalCount("body", type.name)} Vehicles
+                {getTotalCount("bodyType", type.name)} Vehicles
               </span>
             </span>
           </div>

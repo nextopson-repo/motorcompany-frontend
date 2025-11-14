@@ -39,7 +39,7 @@ export type CarWithOwner = CarRecord & {
 };
 
 export type CarsState = {
-  allCars: CarWithOwner[];
+  filterCounts: CarWithOwner[];
   cars: CarWithOwner[];
   loading: boolean;
   error: string | null;
@@ -66,7 +66,7 @@ export type CarsState = {
 
 // ---------- Initial State ----------
 const initialState: CarsState = {
-  allCars: [],
+  filterCounts: [],
   cars: [],
   loading: false,
   error: null,
@@ -161,7 +161,8 @@ const buildBody = (payload?: {
     if (sf.fuelType?.length) body.fuelType = sf.fuelType;
     if (sf.transmission?.length) body.transmissionType = sf.transmission;
     if (sf.ownership?.length) body.ownership = sf.ownership;
-    if (sf.location?.length) body.location = sf.location;
+    // if (sf.location?.length) body.location = sf.location;
+    if (sf.location?.length) body.location = [...sf.location.map((c) => c)];
 
     // Validate priceRange and yearRange as objects with min and max numbers
     const priceValid =
@@ -204,6 +205,7 @@ export const fetchCars = createAsyncThunk<
   {
     cars: CarWithOwner[];
     page: number;
+    filterCounts?: CarWithOwner[];
   },
   | {
       selectedFilters?: SelectedFilters;
@@ -244,11 +246,14 @@ export const fetchCars = createAsyncThunk<
       owner: car.owner ?? undefined,
     }));
 
-    return { cars, page };
+    // console.log("filterCounts in data:", data.filterCounts)
+
+    return { cars, page, filterCounts: data.filterCounts };
   } catch (err: any) {
     return rejectWithValue(err.message || "Unknown error");
   }
 });
+
 // ---------- Fetch car by ID (unique) ----------
 export const fetchSelectedCarById = createAsyncThunk<
   CarWithOwner,
@@ -314,7 +319,11 @@ const carSlice = createSlice({
       action: PayloadAction<{ key: keyof SelectedFilters; value: any }>
     ) {
       const { key, value } = action.payload;
-      (state.selectedFilters as any)[key] = value;
+      // (state.selectedFilters as any)[key] = value;
+      (state.selectedFilters as any)[key] = Array.isArray(value)
+        ? [...value]
+        : value;
+
       state.page = 1; // ✅ reset to first page whenever filter updates
       state.hasMore = true;
     },
@@ -366,7 +375,7 @@ const carSlice = createSlice({
       })
       .addCase(fetchCars.fulfilled, (state, action) => {
         state.loading = false;
-        const { cars, page } = action.payload;
+        const { cars, page, filterCounts } = action.payload;
 
         // ✅ Pagination logic
         if (page === 1) {
@@ -375,19 +384,39 @@ const carSlice = createSlice({
           state.cars = [...state.cars, ...cars];
         }
 
+        // Check if default request
+        const body = buildBody({
+          selectedFilters: state.selectedFilters,
+          searchTerm: state.searchTerm,
+          sortOption: state.sortOption,
+        });
+
+        const isDefaultCall =
+          Object.keys(body).length === 1 && body.sort === "newest";
+
+        // Store ALL cars ONLY on first page & no filters applied
+        if (isDefaultCall && page === 1) {
+          state.filterCounts = cars;
+        }
+
+        // store full list only when sort=newest
+        if (page === 1 && state.sortOption === "newest" && filterCounts) {
+          state.filterCounts = filterCounts;
+        }
+
         // ✅ Stop loading when no more data
         state.page = page;
         state.hasMore = cars.length >= 12;
 
         // ✅ Filter logic only applies on first page (not while loading more)
-        const isFiltered =
-          Object.keys(buildBody({ selectedFilters: state.selectedFilters }))
-            .length > 0;
+        // const isFiltered =
+        //   Object.keys(buildBody({ selectedFilters: state.selectedFilters }))
+        //     .length > 0;
 
-        if (isFiltered && page === 1) {
-          state.cars = cars;
-          state.allCars = cars;
-        }
+        // if (isFiltered && page === 1) {
+        //   state.cars = cars;
+        //   state.filterCounts = cars;
+        // }
       })
       .addCase(fetchCars.rejected, (state, action) => {
         state.loading = false;

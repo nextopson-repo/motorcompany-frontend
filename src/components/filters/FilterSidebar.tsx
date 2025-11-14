@@ -83,6 +83,9 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
   const brandModelMap = useSelector(
     (state: RootState) => (state.cars.filters as any).brandModelsMap || {}
   );
+  const filterCount = useSelector(
+    (state: RootState) => state.cars.filterCounts
+  );
 
   const [brandSearch, setBrandSearch] = useState("");
   const [sectionStates, setSectionStates] = useState({
@@ -101,38 +104,37 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
   const apiKey = import.meta.env.VITE_API_KEY;
   const { data, loading, error } = useGCarSheetData(sheetId, range, apiKey);
 
- useEffect(() => {
-  if (!loading && !error && data.length > 0) {
-    // Safe column getters
-    const getBrand = (row: any) => row["Brand"] || row["A"];
-    const getModel = (row: any) => row["Model"] || row["B"];
+  useEffect(() => {
+    if (!loading && !error && data.length > 0) {
+      // Safe column getters
+      const getBrand = (row: any) => row["Brand"] || row["A"];
+      const getModel = (row: any) => row["Model"] || row["B"];
 
-    // Unique brand list
-    const carBrands = [
-      ...new Set(data.map((i: any) => getBrand(i)).filter(Boolean)),
-    ];
+      // Unique brand list
+      const carBrands = [
+        ...new Set(data.map((i: any) => getBrand(i)).filter(Boolean)),
+      ];
 
-    // ✅ Properly type the accumulator
-    const brandModelsMap = data.reduce<Record<string, string[]>>(
-      (acc, row) => {
-        const brand = getBrand(row);
-        const model = getModel(row);
-        if (!brand || !model) return acc;
-        if (!acc[brand]) acc[brand] = [];
-        if (!acc[brand].includes(model)) acc[brand].push(model);
+      // ✅ Properly type the accumulator
+      const brandModelsMap = data.reduce<Record<string, string[]>>(
+        (acc, row) => {
+          const brand = getBrand(row);
+          const model = getModel(row);
+          if (!brand || !model) return acc;
+          if (!acc[brand]) acc[brand] = [];
+          if (!acc[brand].includes(model)) acc[brand].push(model);
 
-        return acc;
-      },
-      {} 
-    );
+          return acc;
+        },
+        {}
+      );
 
-    // console.log("✅ Brand→Model map:", brandModelsMap);
+      // console.log("✅ Brand→Model map:", brandModelsMap);
 
-    dispatch(setBrandOptions(carBrands));
-    dispatch(setBrandModelMap(brandModelsMap));
-  }
-}, [data, loading, error]);
-
+      dispatch(setBrandOptions(carBrands));
+      dispatch(setBrandModelMap(brandModelsMap));
+    }
+  }, [data, loading, error]);
 
   const toggleSection = (section: keyof typeof sectionStates) => {
     setSectionStates((prev) => ({
@@ -195,25 +197,12 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
     muv: "/CarCategories/muv.png",
   };
 
-  // const getTotalCount = (type: string, value: string) =>
-  //   (Array.isArray(allCars) ? allCars : []).filter((car) => {
-  //     switch (type) {
-  //       case "brand":
-  //         return car.brand === value;
-  //       case "fuel":
-  //         return car.fuelType === value;
-  //       case "transmission":
-  //         return car.transmission === value;
-  //       case "body":
-  //         return car.bodyType === value;
-  //       case "ownership":
-  //         return car.ownership === value;
-  //       case "location":
-  //         return car.address?.city === value;
-  //       default:
-  //         return false;
-  //     }
-  //   }).length;
+  const getTotalCount = (type: string, value: string) => {
+    if (!filterCount || typeof filterCount !== "object") return 0;
+    const category = (filterCount as any)[type];
+    if (!category) return 0;
+    return category[value] || 0; // return count OR 0
+  };
 
   return (
     <aside className="py-4 w-48 lg:w-60 ">
@@ -454,15 +443,18 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                             }}
                           />
                           <span className="font-semibold">{brand}</span>
+                          <span className="ml-auto text-[10px] text-gray-500">
+                            {getTotalCount("brand", brand)}
+                          </span>
                         </label>
 
                         {/* 🧠 Show models only if brand selected */}
                         {selectedFilters.brand.includes(brand) && (
-                          <div className="ml-4 border-l pl-2 border-gray-300 space-y-1 max-h-28 overflow-y-auto">
+                          <div className="mx-2.5 space-y-1 max-h-28 overflow-y-auto">
                             {brandModels.map((model: any) => (
                               <label
                                 key={model}
-                                className="flex items-center gap-2 text-[9px] cursor-pointer"
+                                className="flex items-center gap-2 text-[9px] cursor-pointer pr-2"
                               >
                                 <input
                                   type="checkbox"
@@ -486,6 +478,9 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                                   }}
                                 />
                                 <span>{model}</span>
+                                <span className="ml-auto text-[10px] text-gray-500">
+                                  {getTotalCount("model", model)}
+                                </span>
                               </label>
                             ))}
                           </div>
@@ -591,9 +586,9 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                       className="w-10 h-6 object-contain"
                     />
                     <span className="font-semibold">{body}</span>
-                    {/* <span className="ml-auto text-[10px] text-gray-500">
-                      {getTotalCount("body", body)}
-                    </span> */}
+                    <span className="ml-auto text-[10px] text-gray-500">
+                      {getTotalCount("bodyType", body)}
+                    </span>
                   </label>
                 );
               })}
@@ -635,9 +630,9 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                     }
                   />
                   <span className="font-semibold">{fuel}</span>
-                  {/* <span className="ml-auto text-[10px] text-gray-500">
-                    {getTotalCount("fuel", fuel)}
-                  </span> */}
+                  <span className="ml-auto text-[10px] text-gray-500">
+                    {getTotalCount("fuelType", fuel)}
+                  </span>
                 </label>
               ))}
             </div>
@@ -682,9 +677,9 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                     }
                   />
                   <span className="font-semibold">{trans}</span>
-                  {/* <span className="ml-auto text-[10px] text-gray-500">
+                  <span className="ml-auto text-[10px] text-gray-500">
                     {getTotalCount("transmission", trans)}
-                  </span> */}
+                  </span>
                 </label>
               ))}
             </div>
@@ -725,9 +720,9 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                     }
                   />
                   <span className="font-semibold">{owner}</span>
-                  {/* <span className="ml-auto text-[10px] text-gray-500">
+                  <span className="ml-auto text-[10px] text-gray-500">
                     {getTotalCount("ownership", owner)}
-                  </span> */}
+                  </span>
                 </label>
               ))}
             </div>

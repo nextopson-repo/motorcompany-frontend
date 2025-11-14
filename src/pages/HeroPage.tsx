@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Hero from "../components/Hero";
 import FeaturedCars from "../components/FeaturedCars";
 import HeroCategories from "../components/HeroCategories";
@@ -8,24 +8,58 @@ import LocationModal from "../components/LocationModal";
 import FindDealers from "../components/FindDealers";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../store/store";
-import { fetchCars } from "../store/slices/carSlice";
+import { fetchCars, updateSelectedFilter } from "../store/slices/carSlice";
 
 const HeroPage = () => {
-  const { cars, allCars } = useSelector((state: RootState) => state.cars);
-  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
-  const [citySearch, setCitySearch] = useState("");
-  const didFetchRef = useRef(false);
+
   const dispatch = useDispatch<AppDispatch>();
 
+  const {
+    filterCounts,
+    selectedFilters,
+    searchTerm,
+    sortOption,
+  } = useSelector((state: RootState) => state.cars);
+
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+  const [citySearch, setCitySearch] = useState("All City");
+
+  // ------------------------------
+  // UPDATE LIST WHEN FILTERS CHANGE
+  // ------------------------------
   useEffect(() => {
-    if (didFetchRef.current) return;
-    didFetchRef.current = true;
+    // check if no filters applied
+    const noFiltersApplied =
+      selectedFilters.brand.length === 0 &&
+      selectedFilters.model.length === 0 &&
+      selectedFilters.bodyType.length === 0 &&
+      selectedFilters.fuelType.length === 0 &&
+      selectedFilters.transmission.length === 0 &&
+      selectedFilters.ownership.length === 0 &&
+      selectedFilters.location.length === 0 &&
+      selectedFilters.userType === "EndUser" &&
+      searchTerm === "";
 
-    if (!cars || cars.length === 0) {
+    if (noFiltersApplied) {
+      // load ALL cars only once
       dispatch(fetchCars({ page: 1, limit: 12 }));
+    } else {
+      // load filtered cars
+      dispatch(
+        fetchCars({
+          selectedFilters,
+          searchTerm,
+          sortOption,
+          page: 1,
+          limit: 12,
+        })
+      );
     }
-  }, [dispatch, cars]);
+  }, [selectedFilters, searchTerm, sortOption]);
 
+  // ------------------------------
+  // AUTO SHOW LOCATION MODAL FIRST TIME
+  // ------------------------------
   useEffect(() => {
     const alreadyShown = sessionStorage.getItem("locationModalShown");
     if (!alreadyShown) {
@@ -33,33 +67,30 @@ const HeroPage = () => {
         setIsLocationModalOpen(true);
         sessionStorage.setItem("locationModalShown", "true");
       }, 5000);
+
       return () => clearTimeout(timer);
     }
   }, []);
 
-  const handleClose = () => {
+  // ------------------------------
+  // LOCATION CHANGE HANDLER
+  // ------------------------------
+  const handleLocationChange = (city: string) => {
+    dispatch(updateSelectedFilter({ key: "location", value: [city] }));
     setIsLocationModalOpen(false);
   };
 
-  const getTotalCount = (type: string, value: string) =>
-    (Array.isArray(allCars) ? allCars : []).filter((car) => {
-      switch (type) {
-        case "brand":
-          return car.brand === value;
-        case "fuel":
-          return car.fuelType === value;
-        case "transmission":
-          return car.transmission === value;
-        case "body":
-          return car.bodyType === value;
-        case "ownership":
-          return car.ownership === value;
-        case "location":
-          return car.address?.city === value;
-        default:
-          return false;
-      }
-    }).length;
+  // ------------------------------
+  // CATEGORY FILTER COUNT
+  // ------------------------------
+  const getTotalCount = (type: string, value: string) => {
+    if (!filterCounts || typeof filterCounts !== "object") return 0;
+
+    const group = (filterCounts as any)[type];
+    if (!group) return 0;
+
+    return group[value] || 0;
+  };
 
   return (
     <div className="mt-14 lg:mt-24 min-h-screen max-w-7xl mx-auto">
@@ -70,12 +101,13 @@ const HeroPage = () => {
       <BrandLogoCards getTotalCount={getTotalCount} />
       <PopularCities getTotalCount={getTotalCount} />
 
-      {/* Location Modal (shared) */}
+      {/* Location Modal */}
       <LocationModal
         isOpen={isLocationModalOpen}
-        onClose={handleClose}
+        onClose={() => setIsLocationModalOpen(false)}
         citySearch={citySearch}
         setCitySearch={setCitySearch}
+        onLocationChange={handleLocationChange}
       />
     </div>
   );

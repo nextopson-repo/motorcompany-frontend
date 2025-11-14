@@ -13,11 +13,11 @@ const features = [
     icon: "/sellPage/instant-down-pyment.png",
     title: (
       <p className="tracking-tight md:tracking-normal">
-        Instant <br className="hidden lg:block" /> Down Payment
+        Best <br className="hidden lg:block" /> Market Price
       </p>
     ),
     description:
-      "The amount is transferred directly to your bank account within minutes",
+      "Get the most competitive price for your car from verified buyers across India — all in one place.",
   },
   {
     icon: "/sellPage/doc.png",
@@ -47,9 +47,9 @@ export default function WhyChooseUs() {
       <div className="max-w-6xl mx-auto text-center">
         {/* Small title */}
         <p className="text-[10px] lg:text-xs text-[#EE1422] font-semibold flex items-center justify-center gap-3 lg:gap-5 mb-2 lg:mb-4">
-          <span className="w-7 lg:w-10 h-[1px] lg:h-[1.25px] bg-[#EE1422]/80"></span>
+          <span className="w-7 lg:w-10 h-px lg:h-[1.25px] bg-[#EE1422]/80"></span>
           Why Choose Us
-          <span className="w-7 lg:w-10 h-[1px] lg:h-[1.25px] bg-[#EE1422]/80"></span>
+          <span className="w-7 lg:w-10 h-px lg:h-[1.25px] bg-[#EE1422]/80"></span>
         </p>
 
         {/* Main title */}
@@ -78,7 +78,7 @@ export default function WhyChooseUs() {
                   className="h-10 lg:h-18 w-10 lg:w-18 mb-2 lg:mb-4"
                 />
               </div>
-              <h3 className="font-[600] text-xs lg:text-2xl text-gray-900 mb-2 lg:mb-4 leading-tight">
+              <h3 className="font-semibold text-xs lg:text-2xl text-gray-900 mb-2 lg:mb-4 leading-tight">
                 {feature.title}
               </h3>
               <p className="sm:max-w-[75%] lg:max-w-full text-black text-[9px] md:text-[10px] lg:text-[16px] leading-3 lg:leading-5.5">

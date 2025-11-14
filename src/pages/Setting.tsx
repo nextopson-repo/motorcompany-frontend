@@ -53,6 +53,7 @@ const Setting = () => {
             role={profile?.userType || ""}
             imageUrl={profile?.userProfileUrl || "/default-men-logo.jpg"}
             onUploadImage={handleImageUpload}
+             subscriptionType={profile?.subscriptionsType}  
           />
 
           {/* Main Content */}

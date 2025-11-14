@@ -54,9 +54,9 @@ export default function BuyCars() {
       };
       dispatch(fetchCars(arg));
     }
-  }, [selectedFilters, searchTerm, sortOption, location, dispatch]);
+  }, [selectedFilters, searchTerm, sortOption, dispatch]);
 
-  console.log("setSelectedFilter log:", selectedFilters);
+  // console.log("setSelectedFilter log:", selectedFilters);
 
   const handleFilterChange = (newFilters: SelectedFilters) => {
     dispatch(setSelectedFilters(newFilters));
@@ -86,11 +86,11 @@ export default function BuyCars() {
         />
       )}
 
-      {/* --- Page content below (blurry/disabled background if modal open) --- */}
-      <div className="relative flex gap-6 lg:pl-8 lg:pr-4">
-        {/* Sidebar */}
+      {/* --- PAGE LAYOUT WITH SEPARATE SCROLLS --- */}
+      <div className="relative flex gap-6 lg:pl-8 lg:pr-4 h-[calc(100vh-100px)]">
+        {/* Sidebar with own scroll */}
         <div className="w-fit hidden lg:block">
-          <div className="sticky top-20">
+          <div className="h-full overflow-y-auto pr-2">
             <FilterSidebar
               selectedFilters={selectedFilters}
               onSelectedFiltersChange={handleFilterChange}
@@ -98,8 +98,8 @@ export default function BuyCars() {
           </div>
         </div>
 
-        {/* Car List */}
-        <div className="w-full py-4 sm:px-6 lg:px-2">
+        {/* Car list with own scroll */}
+        <div className="w-full py-4 sm:px-6 lg:px-2 h-full overflow-y-auto">
           <CarList />
         </div>
       </div>

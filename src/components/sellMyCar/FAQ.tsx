@@ -15,7 +15,7 @@ const faqs = [
   {
     question: "How long does it take for my listing to go live?",
     answer:
-      "After submission, your car listing is reviewed for quality and authenticity. Usually, it goes live within 1 to 3 hours during working hours.",
+      "After submission, your car listing is reviewed for quality and authenticity. Usually, it goes live within 1hours to 30 Minuets during working hours.",
   },
   {
     question: "When will I start getting buyer enquiries?",
