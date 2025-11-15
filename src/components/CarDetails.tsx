@@ -394,20 +394,20 @@ const CarDetails = () => {
           {/*mobile Car Details Card */}
           <div className="lg:hidden bg-white border border-gray-200 p-4 py-6 rounded-2xl space-y-3 shadow z-40 -mt-10">
             <div className="flex justify-between">
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 <div className="flex items-start justify-between">
                   <h1 className="text-lg font-bold">{title}</h1>
                 </div>
 
-                <div className="text-[10px] font-semibold">
+                <div className="text-[10px] font-semibold -mt-1">
                   <span>
-                    {kms ? `${kms} kms ` : "0 kms"} | {bodyType}{" "}
+                    {kms ? `${Number(kms).toLocaleString()} Kms` : "0 kms"} | {bodyType}{" "}
                     {seats ? `${seats} seater` : ""} | {fuelType} |{" "}
                     {transmission}
                   </span>
                 </div>
 
-                <div className="flex items-end gap-2 mb-2">
+                <div className="flex items-end gap-2 mt-1">
                   <p className="text-lg font-bold">
                     Rs. {formatPriceToLakh(price)}
                   </p>
@@ -573,12 +573,12 @@ const CarDetails = () => {
 
           {/*mobile Car Overview Table */}
           <div
-            className=" lg:hidden bg-white lg:pt-4 border-b border-gray-100 pb-2 rounded-2xl border"
+            className=" lg:hidden bg-white lg:pt-6 border-b border-gray-100 pb-3 rounded-2xl border"
             style={{
               boxShadow: "0 1px 5px 1px rgb(0, 0, 0, 0.15)",
             }}
           >
-            <h2 className="text-md md:text-xl font-bold px-4 py-2">
+            <h2 className="text-xl md:text-xl font-bold px-4 py-2 mt-2">
               Car Overview
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:px-6">
@@ -586,42 +586,42 @@ const CarDetails = () => {
                 {
                   label: "Year of Manufacture",
                   value: manufactureYear || "N/A",
-                  icon: <CalendarPlus className="h-4 w-4" />,
+                  icon: <CalendarPlus className="h-5 w-5" />,
                 },
                 {
                   label: "Year of Registration",
                   value: registrationYear || "N/A",
-                  icon: <CalendarCheck2 className="h-4 w-4" />,
+                  icon: <CalendarCheck2 className="h-5 w-5" />,
                 },
                 {
                   label: "Seats",
                   value: seats ? `${seats} Seats` : "N/A",
-                  icon: <GiCarSeat className="h-4 w-4" />,
+                  icon: <GiCarSeat className="h-5 w-5" />,
                 },
                 {
                   label: "Kms Driven",
                   value: kms ? `${Number(kms).toLocaleString()} Kms` : "N/A",
-                  icon: <TbRoad className="h-4 w-4" />,
+                  icon: <TbRoad className="h-5 w-5" />,
                 },
                 {
                   label: "Fuel Type",
                   value: fuelType || "N/A",
-                  icon: <Fuel className="h-4 w-4" />,
+                  icon: <Fuel className="h-5 w-5" />,
                 },
                 {
                   label: "Transmission",
                   value: transmission || "N/A",
-                  icon: <TbManualGearbox className="h-4 w-4" />,
+                  icon: <TbManualGearbox className="h-5 w-5" />,
                 },
                 {
                   label: "Body Type",
                   value: bodyType ? bodyType : "N/A",
-                  icon: <Car className="h-4 w-4" />,
+                  icon: <Car className="h-5 w-5" />,
                 },
                 {
                   label: "Car Ownership",
                   value: ownership ? ownership : "N/A",
-                  icon: <Users className="h-4 w-4" />,
+                  icon: <Users className="h-5 w-5" />,
                 },
               ].map((item, i, arr) => {
                 const isLastRow = i >= arr.length - 2;
@@ -632,11 +632,11 @@ const CarDetails = () => {
                   ${(i + 1) % 2 !== 0 ? "md:border-r border-gray-200" : ""}
                   ${!isLastRow ? "md:border-b border-gray-200" : ""}`}
                   >
-                    <span className="w-[70%] text-left flex items-center gap-2">
-                      {item.icon} <p className="text-gray-700">{item.label}</p>
+                    <span className="w-[70%] text-left flex items-center gap-3.5">
+                      {item.icon} <p className="text-gray-700 text-xs">{item.label}</p>
                     </span>
                     <span className="w-[30%] text-left">
-                      <p className="text-gray-900 font-semibold text-right">
+                      <p className="text-gray-900 font-semibold text-right text-xs">
                         {item.value}
                       </p>
                     </span>
@@ -943,7 +943,7 @@ const CarDetails = () => {
       {/* similar cars slider */}
       <div className="pb-3 lg:p-6 rounded-2xl lg:rounded-none border lg:border-none border-gray-100 shadow-[0_1px_10px_1px_rgba(0,0,0,0.15)] lg:shadow-none">
         <div className="flex items-center justify-between mt-4 lg:mt-6 px-4 lg:px-0">
-          <h2 className="text-md lg:text-2xl font-semibold py-3 ">
+          <h2 className="text-xl lg:text-2xl font-semibold py-3 ">
             Similar Cars
           </h2>
           <button

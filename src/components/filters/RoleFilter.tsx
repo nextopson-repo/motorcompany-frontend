@@ -6,11 +6,12 @@ interface RoleFilterProps {
   userType: "EndUser" | "Dealer" | "Owner";
   onSelectedFiltersChange: (filters: SelectedFilters) => void;
   selectedFilters: SelectedFilters;
+  buttonRef: any;
 }
 
-const RoleFilter = ({ userType,  selectedFilters, onSelectedFiltersChange }: RoleFilterProps) => {
+const RoleFilter = ({ userType,  selectedFilters, onSelectedFiltersChange, buttonRef }: RoleFilterProps) => {
   const [openFilter, setOpenFilter] = useState(false);
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  // const buttonRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0 });
 

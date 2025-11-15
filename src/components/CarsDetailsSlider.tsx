@@ -13,7 +13,7 @@ interface CarsDetailsSlider {
     <div className="w-full pb-2">
       <Swiper
         modules={[ Pagination, Autoplay]}
-        spaceBetween={20}
+        spaceBetween={16}
         slidesPerView={1.2}
         pagination={{ clickable: true }}
         autoplay={{
@@ -24,13 +24,13 @@ interface CarsDetailsSlider {
           1280: { slidesPerView: 4, spaceBetween: 32 },
           1140: { slidesPerView: 4, spaceBetween: 32 },
           1024: { slidesPerView: 3.3, spaceBetween: 26 },
-          640: { slidesPerView: 2.5, spaceBetween: 20 },
-          475: { slidesPerView: 1.2, spaceBetween: 20 },
+          640: { slidesPerView: 2.5, spaceBetween: 16 },
+          475: { slidesPerView: 1.2, spaceBetween: 16 },
         }}
         loop={true}
       >
         {carsData.map((car, index) => (
-              <SwiperSlide key={index} className="py-2 ">
+              <SwiperSlide key={index} className="py-2 px-2 ">
                 <CarCard car={car} />
               </SwiperSlide>
             ))}

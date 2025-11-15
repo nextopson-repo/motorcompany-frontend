@@ -1,118 +1,282 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../store/store";
-import LocationFilter from "./LocationFilter";
+
+import { ChevronDown, ListFilter, X } from "lucide-react";
+
 import BrandModelFilter from "./BrandModelFilter";
-import { ChevronDown, ListFilter } from "lucide-react";
-import ModelYearFilter from "./ModelYearFilter";
 import BodyTypeFilter from "./BodyTypeFilter";
 import AllFilters from "./AllFilters";
 import RoleFilter from "./RoleFilter";
+
 import {
   setSelectedFilters,
+  setSortOption,
   type SelectedFilters,
 } from "../../store/slices/carSlice";
+
+import { sortOptions } from "../../data/filterOptions";
 
 const FilterBar = () => {
   const [openFilter, setOpenFilter] = useState<null | string>(null);
   const dispatch = useDispatch();
-  // const userType = useSelector((state: RootState) => state.filters.ownership);
-  const {
-    selectedFilters,
-    // loading,
-    // error,
-    // searchTerm,
-    // sortOption,
-  } = useSelector((state: RootState) => state.cars);
-  const city = useSelector((state: RootState) => state.filters.city);
 
-  const toggleFilter = (name: string) => {
+  const { selectedFilters } = useSelector((state: RootState) => state.cars);
+  const filterCount = useSelector(
+    (state: RootState) => state.cars.filterCounts
+  );
+  const sortOption = useSelector((state: RootState) => state.cars.sortOption);
+
+  // 🔥 REF TYPES FIXED
+  const sortRef = useRef<HTMLButtonElement | null>(null);
+  const userTypeRef = useRef<HTMLDivElement | null>(null);
+  const brandRef = useRef<HTMLButtonElement | null>(null);
+  const bodyTypeRef = useRef<HTMLButtonElement | null>(null);
+
+  // open/close handler
+  const toggleFilter = (name: string) =>
     setOpenFilter(openFilter === name ? null : name);
-  };
 
+  // apply filters
   const handleFilterChange = (newFilters: SelectedFilters) => {
     dispatch(setSelectedFilters(newFilters));
+    setOpenFilter(null);
   };
 
+  const removeChip = (key: keyof SelectedFilters, value?: string) => {
+    const updated: SelectedFilters = { ...selectedFilters };
+
+    // --- ARRAY KEYS ---
+    const arrayKeys: (keyof SelectedFilters)[] = [
+      "brand",
+      "model",
+      "bodyType",
+      "fuelType",
+      "transmission",
+      "ownership",
+      "location",
+    ];
+
+    if (arrayKeys.includes(key)) {
+      updated[key] = (updated[key] as string[]).filter(
+        (v) => v !== value
+      ) as any;
+    }
+
+    // --- PRICE RANGE RESET ---
+    if (key === "priceRange") {
+      updated.priceRange = { min: 1, max: 10000000 };
+    }
+
+    // --- YEAR RANGE RESET ---
+    if (key === "yearRange") {
+      updated.yearRange = { min: 2000, max: new Date().getFullYear() };
+    }
+
+    // --- USER TYPE RESET ---
+    if (key === "userType") {
+      updated.userType = "EndUser"; // default
+    }
+
+    dispatch(setSelectedFilters(updated));
+  };
+
+  // get counts
+  const getTotalCount = (type: string, value: string) => {
+    if (!filterCount || typeof filterCount !== "object") return 0;
+    const category = (filterCount as any)[type];
+    return category?.[value] || 0;
+  };
+
+  // 🔥 outside click/scroll close
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        sortRef.current &&
+        !sortRef.current.contains(e.target as Node) &&
+        userTypeRef.current &&
+        !userTypeRef.current.contains(e.target as Node) &&
+        brandRef.current &&
+        !brandRef.current.contains(e.target as Node) &&
+        bodyTypeRef.current &&
+        !bodyTypeRef.current.contains(e.target as Node)
+      ) {
+        setOpenFilter(null);
+      }
+    };
+
+    const handleScroll = () => setOpenFilter(null);
+
+    document.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  // chip style
+  const chipStyle =
+    "flex items-center text-blue-500 border border-blue-500 rounded-full py-0.5 px-3 text-xs gap-1 whitespace-nowrap";
+
   return (
-    <div className="w-full flex gap-2 py-2 overflow-x-auto">
-      {/* Filters */}
-      <div className="whitespace-nowrap">
+    <div className="w-full flex flex-col gap-2 py-2">
+      {/* ------------------- TOP BUTTONS ------------------- */}
+      <div className="flex gap-2 overflow-x-auto scroll-hide">
+        {/* Filters */}
         <button
           className="px-3 py-2 border border-gray-200 rounded-sm text-xs flex items-center gap-2"
           onClick={() => toggleFilter("allFilters")}
         >
-          <ListFilter className="h-4 w-4" /> Filters{" "}
+          <ListFilter className="h-4 w-4" /> Filters
           <ChevronDown className="h-4 w-4" />
         </button>
-        {openFilter === "allFilters" && (
-          <AllFilters onClose={() => setOpenFilter(null)} />
-        )}
-      </div>
 
-      {/* Ownership Dropdown */}
-      <div className="whitespace-nowrap">
-        <RoleFilter
-          userType={selectedFilters.userType}
-          selectedFilters={{
-            ...selectedFilters,
-          }}
-          onSelectedFiltersChange={handleFilterChange}
-        />
-      </div>
+        {/* Role Filter */}
+        <div ref={userTypeRef} className="whitespace-nowrap">
+          <RoleFilter
+            userType={selectedFilters.userType}
+            selectedFilters={selectedFilters}
+            buttonRef={userTypeRef}
+            onSelectedFiltersChange={handleFilterChange}
+          />
+        </div>
 
-      {/* City Selector */}
-      <div className="whitespace-nowrap">
+        {/* Sort */}
         <button
-          className="px-3 py-[7.5px] border border-blue-500 text-blue-500 rounded-sm text-xs flex items-center gap-1 active:bg-gray-300 transition-all duration-300"
-          onClick={() => toggleFilter("city")}
+          ref={sortRef}
+          className="px-3 py-2 border border-gray-200 rounded-sm text-xs flex items-center gap-1 whitespace-nowrap"
+          onClick={() => toggleFilter("sort")}
         >
-          {city ? city : "City "}
-          <ChevronDown className="h-4 w-4 " />
+          Sort
+          <ChevronDown className="h-4 w-4" />
         </button>
-        {openFilter === "city" && (
-          <LocationFilter onClose={() => setOpenFilter(null)} />
-        )}
-      </div>
 
-      {/* Brand + Models */}
-      <div className="whitespace-nowrap">
+        {/* Brand + Model */}
         <button
-          className="px-2 py-2 border border-gray-200 rounded-sm text-xs flex items-center gap-2"
+          ref={brandRef}
+          className="px-2 py-2 border border-gray-200 rounded-sm text-xs flex items-center gap-2 whitespace-nowrap"
           onClick={() => toggleFilter("brand")}
         >
-          Brand + Models <ChevronDown className="h-4 w-4" />
+          Brand + Model <ChevronDown className="h-4 w-4" />
         </button>
-        {openFilter === "brand" && (
-          <BrandModelFilter onClose={() => setOpenFilter(null)} />
-        )}
-      </div>
 
-      {/* Model Year */}
-      <div className="whitespace-nowrap">
+        {/* Body Type */}
         <button
-          className="px-2 py-2 border border-gray-200 rounded-sm text-xs flex items-center gap-2"
-          onClick={() => toggleFilter("modelYear")}
-        >
-          Models Year <ChevronDown className="h-4 w-4" />
-        </button>
-        {openFilter === "modelYear" && (
-          <ModelYearFilter onClose={() => setOpenFilter(null)} />
-        )}
-      </div>
-
-      {/* body type */}
-      <div className="whitespace-nowrap">
-        <button
-          className="px-3 py-2 border border-gray-200 rounded-sm text-xs flex items-center gap-2"
+          ref={bodyTypeRef}
+          className="px-3 py-2 border border-gray-200 rounded-sm text-xs flex items-center gap-2 whitespace-nowrap"
           onClick={() => toggleFilter("bodyType")}
         >
           Body Type <ChevronDown className="h-4 w-4" />
         </button>
-        {openFilter === "bodyType" && (
-          <BodyTypeFilter onClose={() => setOpenFilter(null)} />
-        )}
       </div>
+
+      {/* ------------------- CHIPS ------------------- */}
+      <div className="flex gap-2 overflow-x-auto scroll-hide">
+        {selectedFilters.location.map((city) => (
+          <span key={city} className={chipStyle}>
+            {city}
+            <X size={12} onClick={() => removeChip("location", city)} />
+          </span>
+        ))}
+
+        {selectedFilters.brand.map((b) => (
+          <span key={b} className={chipStyle}>
+            {b}
+            <X size={12} onClick={() => removeChip("brand", b)} />
+          </span>
+        ))}
+
+        {selectedFilters.model.map((m) => (
+          <span key={m} className={chipStyle}>
+            {m}
+            <X size={12} onClick={() => removeChip("model", m)} />
+          </span>
+        ))}
+
+        {(selectedFilters.priceRange.min !== 1 ||
+          selectedFilters.priceRange.max !== 10000000) && (
+          <span className={chipStyle}>
+            ₹{selectedFilters.priceRange.min.toLocaleString()} - ₹
+            {selectedFilters.priceRange.max.toLocaleString()}
+            <X size={12} onClick={() => removeChip("priceRange")} />
+          </span>
+        )}
+
+        {(selectedFilters.yearRange.min !== 2000 ||
+          selectedFilters.yearRange.max !== new Date().getFullYear()) && (
+          <span className={chipStyle}>
+            {selectedFilters.yearRange.min} - {selectedFilters.yearRange.max}
+            <X size={12} onClick={() => removeChip("yearRange")} />
+          </span>
+        )}
+
+        {selectedFilters.bodyType.map((bt) => (
+          <span key={bt} className={chipStyle}>
+            {bt}
+            <X size={12} onClick={() => removeChip("bodyType", bt)} />
+          </span>
+        ))}
+      </div>
+
+      {/* ------------------- POPUPS ------------------- */}
+
+      {openFilter === "allFilters" && (
+        <AllFilters
+          selectedFilters={selectedFilters}
+          onSelectedFiltersChange={handleFilterChange}
+          onClose={() => setOpenFilter(null)}
+          getTotalCount={getTotalCount}
+        />
+      )}
+
+      {openFilter === "sort" && (
+        <div
+          className="fixed z-50 bg-white shadow rounded w-32 border border-gray-200"
+          style={{
+            top:
+              sortRef.current?.getBoundingClientRect().bottom! +
+              window.scrollY +
+              4,
+            left:
+              sortRef.current?.getBoundingClientRect().left! + window.scrollX,
+          }}
+        >
+          {sortOptions.map((opt) => (
+            <button
+              key={opt.value}
+              className={`block w-full text-left px-3 py-2 hover:bg-gray-100 text-sm ${
+                sortOption === opt.value ? "bg-gray-100 font-semibold" : ""
+              }`}
+              onClick={() => {
+                dispatch(setSortOption(opt.value));
+                setOpenFilter(null);
+              }}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {openFilter === "brand" && (
+        <BrandModelFilter
+          selectedFilters={selectedFilters}
+          onSelectedFiltersChange={handleFilterChange}
+          onClose={() => setOpenFilter(null)}
+          getTotalCount={getTotalCount}
+        />
+      )}
+
+      {openFilter === "bodyType" && (
+        <BodyTypeFilter
+          selectedFilters={selectedFilters}
+          onSelectedFiltersChange={handleFilterChange}
+          onClose={() => setOpenFilter(null)}
+          getTotalCount={getTotalCount}
+        />
+      )}
     </div>
   );
 };

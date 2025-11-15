@@ -74,12 +74,12 @@
   ];
 
  export  const bodyTypes = [
-  { name: "Hatchback", img: "/CarCategories/hatchback.png" },
-  { name: "SUV", img: "/CarCategories/suv.png" },
-  { name: "Sedan", img: "/CarCategories/sedan.png" },
-  { name: "MUV", img: "/CarCategories/muv.png" },
-  { name: "Convertible", img: "/CarCategories/convertable.png" },
-  { name: "Coupe", img: "/CarCategories/coupe1.png" },
+  { id: 1, name: "Hatchback", img: "/CarCategories/hatchback.png" },
+  { id: 2, name: "SUV", img: "/CarCategories/suv.png" },
+  { id: 3, name: "Sedan", img: "/CarCategories/sedan.png" },
+  { id: 4, name: "MUV", img: "/CarCategories/muv.png" },
+  { id: 5, name: "Convertible", img: "/CarCategories/convertable.png" },
+  { id: 6, name: "Coupe", img: "/CarCategories/coupe1.png" },
 ];
 
 export const cities = [
@@ -115,5 +115,147 @@ export const fourCards = [
     title: "Compare",
     img: "/compare.png",
     description: "Decode the right car",
+  },
+];
+
+
+export const brands = [
+  {
+    title: "HYUNDAI",
+    logo: "/CarsLogo/hyundai.png",
+    models: [
+      "i20",
+      "Creta",
+      "Grand i10",
+      "Verna",
+      "i10",
+      "Venue",
+      "Santro",
+      "Grand i10 Nios",
+      "EON",
+      "Xcent",
+      "Aura",
+    ],
+  },
+  {
+    title: "Maruti Suzuki",
+    logo: "/CarsLogo/maruti-suzuki.png",
+    models: [
+      "Swift",
+      "Baleno",
+      "Wagon R",
+      "Dzire",
+      "Alto",
+      "Brezza",
+      "Ertiga",
+      "Celerio",
+      "XL6",
+      "S-Cross",
+    ],
+  },
+  {
+    title: "TATA",
+    logo: "/CarsLogo/tata-motors.png",
+    models: [
+      "Altroz",
+      "Nexon",
+      "Harrier",
+      "Punch",
+      "Tiago",
+      "Safari",
+      "Tigor",
+    ],
+  },
+  {
+    title: "Mahindra",
+    logo: "/CarsLogo/mahindra.png",
+    models: [
+      "XUV700",
+      "Scorpio N",
+      "Bolero",
+      "Thar",
+      "XUV300",
+      "Scorpio Classic",
+      "KUV100",
+    ],
+  },
+  {
+    title: "Honda",
+    logo: "/CarsLogo/honda.png",
+    models: [
+      "All Cars ",
+      "City",
+      "Amaze",
+      "WR-V",
+      "Jazz",
+      "Civic",
+      "Accord",
+    ],
+  },
+  {
+    title: "Toyota",
+    logo: "/CarsLogo/toyota.png",
+    models: [
+      "All Cars ",
+      "Innova Crysta",
+      "Fortuner",
+      "Glanza",
+      "Urban Cruiser Hyryder",
+      "Camry",
+      "Corolla",
+    ],
+  },
+  {
+    title: "Kia",
+    logo: "/CarsLogo/kia.jpg",
+    models: ["All Cars ", "Seltos", "Sonet", "Carens", "Carnival", "EV6"],
+  },
+  {
+    title: "Renault",
+    logo: "/CarsLogo/Renault.png",
+    models: ["All Cars ", "Kwid", "Triber", "Kiger", "Duster", "Lodgy"],
+  },
+  {
+    title: "Skoda",
+    logo: "/CarsLogo/skoda.png",
+    models: [
+      "All Cars ",
+      "Slavia",
+      "Kushaq",
+      "Octavia",
+      "Superb",
+      "Rapid",
+      "Kodiaq",
+    ],
+  },
+  {
+    title: "Nissan",
+    logo: "/CarsLogo/nissan.png",
+    models: ["All Cars ", "Magnite", "Kicks", "Micra", "Sunny", "Terrano"],
+  },
+  {
+    title: "Ford",
+    logo: "/CarsLogo/ford.png",
+    models: [
+      "All Cars ",
+      "Ecosport",
+      "Endeavour",
+      "Figo",
+      "Aspire",
+      "Freestyle",
+    ],
+  },
+  {
+    title: "Volkswagen",
+    logo: "/CarsLogo/volkswagon.png",
+    models: [
+      "All Cars ",
+      "Polo",
+      "Vento",
+      "Taigun",
+      "Virtus",
+      "Tiguan",
+      "Passat",
+    ],
   },
 ];

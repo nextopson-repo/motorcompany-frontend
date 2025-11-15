@@ -1,25 +1,22 @@
 import { useDispatch } from "react-redux";
 import { resetFilters, setCity } from "../../store/slices/filterSlice";
 import { useState } from "react";
+import type { SelectedFilters } from "../../store/slices/carSlice";
+import { cities } from "../../data/Data";
 
 interface Props {
   onClose: () => void;
+  selectedFilters: SelectedFilters;
+  onSelectedFiltersChange: (filters: SelectedFilters) => void;
+  getTotalCount: (field: string, value: string) => number;
 }
 
-const cities = [
-  { name: "Chandigarh", cars: 2023, img: "/Cities/Chandigarh.png" },
-  { name: "Ahmedabad", cars: 2023, img: "/Cities/Ahemdabad.png" },
-  { name: "Pune", cars: 2023, img: "/Cities/pune.png" },
-  { name: "Hyderabad", cars: 2023, img: "/Cities/hyderabad.png" },
-  { name: "Kanpur", cars: 2023, img: "/Cities/Kanpur.png" },
-  { name: "Indore", cars: 2023, img: "/Cities/Indore.png" },
-  { name: "Lucknow", cars: 2023, img: "/Cities/Lucknow.png" },
-  { name: "Delhi", cars: 2023, img: "/Cities/Delhi.png" },
-  { name: "Bhopal", cars: 2023, img: "/Cities/Bhopal.png" },
-  { name: "Jaipur", cars: 2023, img: "/Cities/jaipur.png" },
-];
-
-const LocationFilter: React.FC<Props> = ({ onClose }) => {
+const LocationFilter: React.FC<Props> = ({
+  onClose,
+  onSelectedFiltersChange,
+  selectedFilters,
+  getTotalCount,
+}) => {
   const dispatch = useDispatch();
 
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -28,7 +25,8 @@ const LocationFilter: React.FC<Props> = ({ onClose }) => {
   const totalSlides = Math.ceil(cities.length / citiesPerSlide);
 
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % totalSlides);
-  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
+  const prevSlide = () =>
+    setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
   const goToSlide = (slideIndex: number) => setCurrentSlide(slideIndex);
 
   const getCurrentCities = () => {
@@ -39,6 +37,10 @@ const LocationFilter: React.FC<Props> = ({ onClose }) => {
   const handleShowCars = () => {
     if (selectedCity) {
       dispatch(setCity(selectedCity));
+      onSelectedFiltersChange({
+        ...selectedFilters,
+        location: [selectedCity],
+      });
     }
     onClose();
   };
@@ -66,7 +68,7 @@ const LocationFilter: React.FC<Props> = ({ onClose }) => {
               </div>
               <p className="font-semibold text-[9px]">{city.name}</p>
               <span className="text-gray-400 text-[7px] mt-1">
-                {city.cars} Cars Available
+                {getTotalCount("location", city.name)} Cars Available
               </span>
             </div>
           ))}

@@ -2,32 +2,35 @@ import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../../store/store";
 import { toggleBrand, resetFilters } from "../../store/slices/filterSlice";
 import { useState } from "react";
+import type { SelectedFilters } from "../../store/slices/carSlice";
+import { bodyTypes } from "../../data/Data";
 
 interface Props {
   onClose: () => void;
+  selectedFilters: SelectedFilters;
+  onSelectedFiltersChange: (filters: SelectedFilters) => void;
+  getTotalCount: (field: string, value: string) => number;
 }
 
-const bodyTypes = [
-  { id: 1, name: "Hatchback", vehicles: 26, img: "/CarCategories/hatchback.png" },
-  { id: 2, name: "SUV", vehicles: 26, img: "/CarCategories/suv.png" },
-  { id: 3, name: "Sedan Car", vehicles: 26, img: "/CarCategories/sedan.png" },
-  { id: 4, name: "MUV", vehicles: 125, img: "/CarCategories/muv.png" },
-  { id: 5, name: "Convertible", vehicles: 132, img: "/CarCategories/convertable.png" },
-  { id: 6, name: "Coupe", vehicles: 26, img: "/CarCategories/coupe1.png" },
-];
-
-const BodyTypeFilter: React.FC<Props> = ({ onClose }) => {
-  const selectedBodyTypes = useSelector((state: RootState) => state.filters.brand);
+const BodyTypeFilter: React.FC<Props> = ({
+  onClose,
+  onSelectedFiltersChange,
+  selectedFilters,
+  getTotalCount,
+}) => {
+  const selectedBodyTypes = useSelector(
+    (state: RootState) => state.filters.brand
+  );
   const dispatch = useDispatch();
 
   const [currentSlide, setCurrentSlide] = useState(0);
   const bodyTypesPerSlide = 6; // 2 rows × 3 columns
   const totalSlides = Math.ceil(bodyTypes.length / bodyTypesPerSlide);
 
-  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % totalSlides);
+  // const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % totalSlides);
   const prevSlide = () =>
     setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
-  const goToSlide = (index: number) => setCurrentSlide(index);
+  // const goToSlide = (index: number) => setCurrentSlide(index);
 
   const getCurrentBodyTypes = () => {
     const startIndex = currentSlide * bodyTypesPerSlide;
@@ -35,6 +38,10 @@ const BodyTypeFilter: React.FC<Props> = ({ onClose }) => {
   };
 
   const handleShowCars = () => {
+    onSelectedFiltersChange({
+      ...selectedFilters,
+      bodyType: selectedBodyTypes,
+    });
     onClose();
   };
 
@@ -54,7 +61,7 @@ const BodyTypeFilter: React.FC<Props> = ({ onClose }) => {
                   : ""
               }`}
             >
-              <div className="w-16 mb-2">
+              <div className="w-16 h-8 mb-2">
                 <img
                   src={bodyTypes.img}
                   alt={bodyTypes.name}
@@ -63,7 +70,8 @@ const BodyTypeFilter: React.FC<Props> = ({ onClose }) => {
               </div>
               <p className="font-semibold text-[9px]">{bodyTypes.name}</p>
               <p className="text-gray-500 text-[9px] mt-1">
-                {bodyTypes.vehicles}
+                {/* {bodyTypes.vehicles} */}
+                {getTotalCount("bodyType", bodyTypes.name)} cars Available
               </p>
             </div>
           ))}
@@ -88,7 +96,7 @@ const BodyTypeFilter: React.FC<Props> = ({ onClose }) => {
           </button>
 
           {/* Dots Indicator */}
-          <div className="flex justify-center gap-2">
+          {/* <div className="flex justify-center gap-2">
             {Array.from({ length: totalSlides }).map((_, index) => (
               <button
                 key={index}
@@ -98,8 +106,8 @@ const BodyTypeFilter: React.FC<Props> = ({ onClose }) => {
                 }`}
               />
             ))}
-          </div>
-
+          </div> */}
+          {/* 
           <button
             onClick={nextSlide}
             className="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors active:scale-95"
@@ -116,7 +124,7 @@ const BodyTypeFilter: React.FC<Props> = ({ onClose }) => {
             >
               <path d="M8.59 16.09l4.58-4.59-4.58-4.59L10 5.5l6 6-6 6z" />
             </svg>
-          </button>
+          </button> */}
         </div>
 
         {/* Filter Buttons */}

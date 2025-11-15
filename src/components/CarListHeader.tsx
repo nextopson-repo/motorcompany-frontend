@@ -177,7 +177,7 @@ const CarListHeader: React.FC<CarListHeaderProps> = ({ carCount = 0 }) => {
       </div>
 
       {/* Middle Section */}
-      <div className="px-4 md:px-0 py-2 rounded-xs lg:rounded-md flex items-center justify-between gap-1.5 lg:gap-3 relative">
+      <div className="hidden px-4 md:px-0 pb-1.5 rounded-xs lg:rounded-md lg:flex items-center justify-between gap-1.5 lg:gap-3 relative">
         <h2 className="w-full text-xs md:text-xs lg:text-[1rem] font-semibold flex items-center gap-1 truncate overflow-ellipsis">
           {carCount} Cars in {location || "All Locations"}
         </h2>
@@ -251,7 +251,7 @@ const CarListHeader: React.FC<CarListHeaderProps> = ({ carCount = 0 }) => {
           return values.map((val) => (
             <div
               key={`${filterType}-${val}`}
-              className="flex items-center gap-2 px-2 py-1 rounded-xs border border-blue-400 w-fit"
+              className="flex items-center gap-2 px-2 py-1 rounded-xs lg:border lg:border-blue-400 w-fit"
             >
               <p className="text-[10px] font-semibold text-blue-500">{val}</p>
               <button

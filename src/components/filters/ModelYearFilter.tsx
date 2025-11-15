@@ -3,15 +3,18 @@ import type { RootState } from "../../store/store";
 import { setModelYearRange, resetFilters } from "../../store/slices/filterSlice";
 import { useState, useEffect } from "react";
 import { Range, getTrackBackground } from "react-range";
+import type { SelectedFilters } from "../../store/slices/carSlice";
 
 interface Props {
   onClose: () => void;
+  selectedFilters: SelectedFilters;
+  onSelectedFiltersChange: (filters: SelectedFilters) => void;
 }
 
-const ModelYearFilter: React.FC<Props> = ({ onClose }) => {
+const ModelYearFilter: React.FC<Props> = ({ onClose, onSelectedFiltersChange, selectedFilters }) => {
   const dispatch = useDispatch();
   const selectedYearRange = useSelector(
-    (state: RootState) => state.filters.modelYearRange
+    (state: RootState) => state.filters.yearRange
   );
 
   const currentYear = new Date().getFullYear();
@@ -25,6 +28,10 @@ const ModelYearFilter: React.FC<Props> = ({ onClose }) => {
 
   const handleShowCars = () => {
     dispatch(setModelYearRange(values));
+    onSelectedFiltersChange({
+        ...selectedFilters,
+        yearRange: { min: minYear, max: currentYear }
+      });
     onClose();
   };
 

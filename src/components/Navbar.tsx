@@ -7,7 +7,7 @@ import {
   UserRound,
   X,
 } from "lucide-react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import LoginModal from "../pages/LoginModal";
 import { useAuth } from "../context/useAuth";
@@ -49,6 +49,14 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
   };
 
   const location = useSelector((state: RootState) => state.location.location);
+
+  useEffect(() => {
+    if (isMobileMenuOpen || isRightSidebarOpen) {
+      document.body.style.overflow = "hidden"; // disable scroll
+    } else {
+      document.body.style.overflow = ""; // restore scroll
+    }
+  }, [isMobileMenuOpen, isRightSidebarOpen]);
 
   return (
     <nav className="w-full h-12 md:h-auto bg-white shadow-md fixed top-0 left-0 z-50">
@@ -204,11 +212,11 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
               className="flex flex-col items-center gap-2 cursor-pointer select-none"
               onClick={openSetting}
             >
-                <img
-                  src={user.userProfileUrl || "/default-men-logo.jpg"}
-                  alt="User Avatar"
-                  className="w-7 h-7 rounded-full border-1 object-cover"
-                />
+              <img
+                src={user.userProfileUrl || "/default-men-logo.jpg"}
+                alt="User Avatar"
+                className="w-7 h-7 rounded-full border-1 object-cover"
+              />
             </div>
           ) : (
             <button
@@ -226,127 +234,157 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
       </div>
 
       {/* Mobile left Sidebar Menu */}
-      <div
-        className={`fixed top-0 left-0 h-full w-[80%] sm:w-[35%] bg-white shadow-lg transform transition-transform duration-300 z-50 ${
-          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-      >
-        <div className="flex items-center justify-between p-4">
-          <img src="/Brand-logo.png" alt="Logo" className="h-6" />
-          <button onClick={() => setIsMobileMenuOpen(false)}>
-            <X className="w-5 h-5 text-black" />
-          </button>
-        </div>
-
-        <div className="flex flex-col p-4 gap-3">
-          <NavLink
-            to="/"
-            end
-            className={({ isActive }) =>
-              isActive ? "text-[#EE1422] text-md" : "text-black text-md"
-            }
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            Home
-          </NavLink>
-          <NavLink
-            to="/buy-car"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className={({ isActive }) =>
-              isActive
-                ? "text-[#EE1422] text-md flex items-center justify-between"
-                : "text-black text-md flex items-center justify-between"
-            }
-          >
-            Browse Cars <ChevronRight className="h-5 w-5" />
-          </NavLink>
-          <NavLink
-            to="/sell"
-            className={({ isActive }) =>
-              isActive
-                ? "text-[#EE1422] text-md flex items-center justify-between"
-                : "text-black text-md flex items-center justify-between"
-            }
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            Sell my car <ChevronRight className="h-5 w-5" />
-          </NavLink>
-           <NavLink
-            to="/requirements"
-            className={({ isActive }) =>
-              isActive
-                ? "text-[#EE1422] text-md flex items-center justify-between"
-                : "text-black text-md flex items-center justify-between"
-            }
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            Requirements <ChevronRight className="h-5 w-5" />
-          </NavLink>
-          <NavLink
-            to="/settings/saved"
-            className={({ isActive }) =>
-              isActive
-                ? "text-[#EE1422] text-md flex items-center justify-between"
-                : "text-black text-md flex items-center justify-between"
-            }
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            Wishlist <ChevronRight className="h-5 w-5" />
-          </NavLink>
-        </div>
-      </div>
-
-      {/* Mobile right Sidebar Menu */}
-      <div
-        className={`fixed top-0 right-0 h-full w-[75%] sm:w-[35%] bg-white shadow-lg transform transition-transform duration-300 z-50 ${
-          isRightSidebarOpen ? "translate-x-0" : "translate-x-full"
-        }`}
-      >
-        <div className="flex items-center justify-between p-4 bg-[#EE1422] text-white">
+      {(isMobileMenuOpen || isRightSidebarOpen) && (
+        <div
+          className=""
+          onClick={() => {
+            setIsMobileMenuOpen(false);
+            setIsRightSidebarOpen(false);
+          }}
+        >
           <div
-            className="flex items-center gap-2"
-            onClick={() => {
-              if (!user) {
-                setIsLoginOpen(true);
-              }
-            }}
+            className={`fixed top-0 left-0 h-full w-[80%] sm:w-[35%] bg-white shadow-lg transform transition-transform duration-300 z-100 ${
+              isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+            }`}
           >
-            <img
-              src={user?.userProfileUrl || "/default-men-logo.jpg"}
-              alt="User"
-              className="w-10 h-10 rounded-full border"
-            />
-            <div className="flex flex-col">
-              <span className="text-md font-semibold">
-                {user?.fullName || "Login / Signup"}
-              </span>
+            <div className="flex items-center justify-between p-4">
+              <img src="/Brand-logo.png" alt="Logo" className="h-6" />
+              <button onClick={() => setIsMobileMenuOpen(false)}>
+                <X className="w-5 h-5 text-black" />
+              </button>
+            </div>
+
+            <div className="flex flex-col p-4 gap-3">
+              <NavLink
+                to="/"
+                end
+                className={({ isActive }) =>
+                  isActive ? "text-[#EE1422] text-md" : "text-black text-md"
+                }
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Home
+              </NavLink>
+              <NavLink
+                to="/buy-car"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-[#EE1422] text-md flex items-center justify-between"
+                    : "text-black text-md flex items-center justify-between"
+                }
+              >
+                Browse Cars <ChevronRight className="h-5 w-5" />
+              </NavLink>
+              <NavLink
+                to="/sell"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-[#EE1422] text-md flex items-center justify-between"
+                    : "text-black text-md flex items-center justify-between"
+                }
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Sell my car <ChevronRight className="h-5 w-5" />
+              </NavLink>
+              <NavLink
+                to="/requirements"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-[#EE1422] text-md flex items-center justify-between"
+                    : "text-black text-md flex items-center justify-between"
+                }
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Requirements <ChevronRight className="h-5 w-5" />
+              </NavLink>
+              <NavLink
+                to="/settings/saved"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-[#EE1422] text-md flex items-center justify-between"
+                    : "text-black text-md flex items-center justify-between"
+                }
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Wishlist <ChevronRight className="h-5 w-5" />
+              </NavLink>
             </div>
           </div>
-          <button onClick={() => setIsRightSidebarOpen(false)}>
-            <X className="w-5 h-5" />
-          </button>
         </div>
+      )}
+      {/* Mobile right Sidebar Menu */}
+      {(isMobileMenuOpen || isRightSidebarOpen) && (
+        <div
+          className=""
+          onClick={() => {
+            setIsMobileMenuOpen(false);
+            setIsRightSidebarOpen(false);
+          }}
+        >
+          <div
+            className={`fixed top-0 right-0 h-full w-[75%] sm:w-[35%] bg-white shadow-lg transform transition-transform duration-300 z-100 ${
+              isRightSidebarOpen ? "translate-x-0" : "translate-x-full"
+            }`}
+          >
+            <div className="flex items-center justify-between p-4 bg-[#EE1422] text-white">
+              <div
+                className="flex items-center gap-2"
+                onClick={() => {
+                  if (!user) {
+                    setIsLoginOpen(true);
+                  }
+                }}
+              >
+                <img
+                  src={user?.userProfileUrl || "/default-men-logo.jpg"}
+                  alt="User"
+                  className="w-10 h-10 rounded-full border"
+                />
+                <div className="flex flex-col">
+                  <span className="text-md font-semibold">
+                    {user?.fullName || "Login / Signup"}
+                  </span>
+                </div>
+              </div>
+              <button onClick={() => setIsRightSidebarOpen(false)}>
+                <X className="w-5 h-5" />
+              </button>
+            </div>
 
-        <div className="flex flex-col p-4 gap-4">
-          <NavLink
-            to="/settings/profile"
-            className={({ isActive }) =>
-              isActive ? "text-[#EE1422] text-md flex items-center gap-2" : "text-black text-md flex items-center gap-2"
-            }
-            onClick={() => setIsRightSidebarOpen(false)}
-          >
-            <span className="h-5 w-5"><img src="/mobile sidebar logo/solar_user-broken.png" alt="icon"/></span> Profile Settings
-          </NavLink>
-          <NavLink
-            to="/settings/listings"
-            className={({ isActive }) =>
-              isActive ? "text-[#EE1422] text-md flex items-center gap-2" : "text-black text-md flex items-center gap-2"
-            }
-            onClick={() => setIsRightSidebarOpen(false)}
-          >
-            <span className="h-5 w-5"><img src="/mobile sidebar logo/my_listings.png" alt="icon"/></span> My Listing
-          </NavLink>
-          {/* <NavLink
+            <div className="flex flex-col p-4 gap-4">
+              <NavLink
+                to="/settings/profile"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-[#EE1422] text-md flex items-center gap-2"
+                    : "text-black text-md flex items-center gap-2"
+                }
+                onClick={() => setIsRightSidebarOpen(false)}
+              >
+                <span className="h-5 w-5">
+                  <img
+                    src="/mobile sidebar logo/solar_user-broken.png"
+                    alt="icon"
+                  />
+                </span>{" "}
+                Profile Settings
+              </NavLink>
+              <NavLink
+                to="/settings/listings"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-[#EE1422] text-md flex items-center gap-2"
+                    : "text-black text-md flex items-center gap-2"
+                }
+                onClick={() => setIsRightSidebarOpen(false)}
+              >
+                <span className="h-5 w-5">
+                  <img src="/mobile sidebar logo/my_listings.png" alt="icon" />
+                </span>{" "}
+                My Listing
+              </NavLink>
+              {/* <NavLink
             to="/settings/my-leads"
             className={({ isActive }) =>
               isActive ? "text-[#EE1422] text-md flex items-center gap-2" : "text-black text-md flex items-center gap-2"
@@ -355,75 +393,109 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
           >
            <span className="h-5 w-5"><img src="/mobile sidebar logo/" alt="icon"/></span> My Leads
           </NavLink> */}
-          <NavLink
-            to="/sell"
-            className={({ isActive }) =>
-              isActive ? "text-[#EE1422] text-md flex items-center gap-2" : "text-black text-md flex items-center gap-2"
-            }
-            onClick={() => setIsRightSidebarOpen(false)}
-          >
-           <span className="h-5 w-5"><img src="/mobile sidebar logo/add_car.png" alt="icon"/></span> Add Car
-          </NavLink>
-          <NavLink
-            to="/settings/interested-buyers"
-            className={({ isActive }) =>
-              isActive ? "text-[#EE1422] text-md flex items-center gap-2" : "text-black text-md flex items-center gap-2"
-            }
-            onClick={() => setIsRightSidebarOpen(false)}
-          >
-           <span className="h-5 w-5"><img src="/mobile sidebar logo/" alt="icon"/></span> Interested Buyers
-          </NavLink>
-          <NavLink
-            to="/settings/enquiries"
-            className={({ isActive }) =>
-              isActive ? "text-[#EE1422] text-md flex items-center gap-2" : "text-black text-md flex items-center gap-2"
-            }
-            onClick={() => setIsRightSidebarOpen(false)}
-          >
-           <span className="h-5 w-5"><img src="/mobile sidebar logo/my_enquery.png" alt="icon"/></span> My Enquiries
-          </NavLink>
-          <NavLink
-            to="/settings/saved"
-            className={({ isActive }) =>
-              isActive ? "text-[#EE1422] text-md flex items-center gap-2" : "text-black text-md flex items-center gap-2"
-            }
-            onClick={() => setIsRightSidebarOpen(false)}
-          >
-           <span className="h-5 w-5"><img src="/mobile sidebar logo/saved_cars.png" alt="icon"/></span> Saved Cars
-          </NavLink>
-          <NavLink
-            to="/settings/buy-packages"
-            className={({ isActive }) =>
-              isActive ? "text-[#EE1422] text-md flex items-center gap-2" : "text-black text-md flex items-center gap-2"
-            }
-            onClick={() => setIsRightSidebarOpen(false)}
-          >
-           <span className="h-5 w-5"><img src="/mobile sidebar logo/buy_package.png" alt="icon"/></span> Buy Packages
-          </NavLink>
-          <NavLink
-            to="/settings/bought-packages"
-            className={({ isActive }) =>
-              isActive ? "text-[#EE1422] text-md flex items-center gap-2" : "text-black text-md flex items-center gap-2"
-            }
-            onClick={() => setIsRightSidebarOpen(false)}
-          >
-           <span className="h-5 w-5"><img src="/mobile sidebar logo/brought_packages.png" alt="icon"/></span> Bought Packages
-          </NavLink>
+              <NavLink
+                to="/sell"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-[#EE1422] text-md flex items-center gap-2"
+                    : "text-black text-md flex items-center gap-2"
+                }
+                onClick={() => setIsRightSidebarOpen(false)}
+              >
+                <span className="h-5 w-5">
+                  <img src="/mobile sidebar logo/add_car.png" alt="icon" />
+                </span>{" "}
+                Add Car
+              </NavLink>
+              <NavLink
+                to="/settings/interested-buyers"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-[#EE1422] text-md flex items-center gap-2"
+                    : "text-black text-md flex items-center gap-2"
+                }
+                onClick={() => setIsRightSidebarOpen(false)}
+              >
+                <span className="h-5 w-5">
+                  <img src="/mobile sidebar logo/" alt="icon" />
+                </span>{" "}
+                Interested Buyers
+              </NavLink>
+              <NavLink
+                to="/settings/enquiries"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-[#EE1422] text-md flex items-center gap-2"
+                    : "text-black text-md flex items-center gap-2"
+                }
+                onClick={() => setIsRightSidebarOpen(false)}
+              >
+                <span className="h-5 w-5">
+                  <img src="/mobile sidebar logo/my_enquery.png" alt="icon" />
+                </span>{" "}
+                My Enquiries
+              </NavLink>
+              <NavLink
+                to="/settings/saved"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-[#EE1422] text-md flex items-center gap-2"
+                    : "text-black text-md flex items-center gap-2"
+                }
+                onClick={() => setIsRightSidebarOpen(false)}
+              >
+                <span className="h-5 w-5">
+                  <img src="/mobile sidebar logo/saved_cars.png" alt="icon" />
+                </span>{" "}
+                Saved Cars
+              </NavLink>
+              <NavLink
+                to="/settings/buy-packages"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-[#EE1422] text-md flex items-center gap-2"
+                    : "text-black text-md flex items-center gap-2"
+                }
+                onClick={() => setIsRightSidebarOpen(false)}
+              >
+                <span className="h-5 w-5">
+                  <img src="/mobile sidebar logo/buy_package.png" alt="icon" />
+                </span>{" "}
+                Buy Packages
+              </NavLink>
+              <NavLink
+                to="/settings/bought-packages"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-[#EE1422] text-md flex items-center gap-2"
+                    : "text-black text-md flex items-center gap-2"
+                }
+                onClick={() => setIsRightSidebarOpen(false)}
+              >
+                <span className="h-5 w-5">
+                  <img
+                    src="/mobile sidebar logo/brought_packages.png"
+                    alt="icon"
+                  />
+                </span>{" "}
+                Bought Packages
+              </NavLink>
 
-          {user && (
-            <button
-              onClick={() => {
-                setShowDialog(true);
-                setIsRightSidebarOpen(false);
-              }}
-              className="w-full py-1.5 mt-2 cursor-pointer text-sm transition text-red-500 border border-red-400 rounded-xs hover:bg-gray-200 active:scale-95 active:bg-red-500 active:text-white"
-            >
-              Logout
-            </button>
-          )}
+              {user && (
+                <button
+                  onClick={() => {
+                    setShowDialog(true);
+                    setIsRightSidebarOpen(false);
+                  }}
+                  className="w-full py-1.5 mt-2 cursor-pointer text-sm transition text-red-500 border border-red-400 rounded-xs hover:bg-gray-200 active:scale-95 active:bg-red-500 active:text-white"
+                >
+                  Logout
+                </button>
+              )}
+            </div>
+          </div>
         </div>
-      </div>
-
+      )}
       {/* Logout Confirmation Dialog */}
       {showDialog && (
         <div className="h-screen fixed inset-0 flex items-center justify-center z-50 bg-black/50 px-4">
@@ -478,6 +550,13 @@ const Navbar: React.FC<NavbarProps> = ({ onSelectCityClick }) => {
             </div>
           </div>
         </div>
+      )}
+
+      {isMobileMenuOpen && (
+        <div
+          className="h-screen fixed inset-0 bg-black/50 z-40"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
       )}
 
       {/* ✅ Backdrop for Right Sidebar */}
