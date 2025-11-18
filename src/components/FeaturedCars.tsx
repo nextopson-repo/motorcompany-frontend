@@ -16,6 +16,8 @@ const FeaturedCars: React.FC = () => {
     (state: RootState) => state.cars
   );
 
+  console.log(featuredCars)
+
   const skeletons = Array.from({ length: 4 }, (_, i) => (
     <SwiperSlide key={`skeleton-${i}`} className="pb-4 md:pb-5">
       <CarCardSkeleton />

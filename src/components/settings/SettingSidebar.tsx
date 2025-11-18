@@ -1,4 +1,4 @@
-import { CameraIcon, Crown, X } from "lucide-react";
+import { CameraIcon, X } from "lucide-react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../../context/useAuth";
@@ -16,7 +16,7 @@ export default function SettingSidebar({
   role,
   imageUrl,
   onUploadImage,
-  subscriptionType,
+  // subscriptionType,
 }: SettingSidebarProps) {
   const location = useLocation();
   const { logout } = useAuth();
@@ -89,11 +89,14 @@ export default function SettingSidebar({
             </div>
           </div>
 
-          <h2 className="mt-3 font-semibold capitalize flex items-center gap-2"> {subscriptionType === "Premium Active" && (
+          <h2 className="mt-3 font-semibold capitalize flex items-center gap-2">
+            {/* {subscriptionType === "Premium Active" && (
               <span className="px-2 py-0.5 text-[10px] rounded-full bg-gray-200 text-black font-semibold flex items-center gap-1">
-              <Crown className="h-5 w-5 text-yellow-500"/>
+                <Crown className="h-5 w-5 text-yellow-500" />
               </span>
-            )}{name}</h2>
+            )} */}
+            {name}
+          </h2>
           <p className="text-gray-500 text-sm ">{role} </p>
 
           <div className="flex justify-center w-full mt-2">

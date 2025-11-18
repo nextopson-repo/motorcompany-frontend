@@ -5,19 +5,29 @@ import { useSelector, useDispatch } from "react-redux";
 import type { AppDispatch, RootState } from "../../store/store";
 import {
   fetchSavedCars,
+  removeSaveCar,
   setSearchTerm,
   setSortOption,
 } from "../../store/slices/savedSlice";
 import { AiFillHeart } from "react-icons/ai";
 import { formatShortNumber } from "../../utils/formatPrice";
+import toast from "react-hot-toast";
 
 const Saved: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { cars = [], searchTerm, sortOption, loading, error } = useSelector(
-    (state: RootState) => state.saved
-  );
+  const {
+    cars = [],
+    searchTerm,
+    sortOption,
+    loading,
+    error,
+  } = useSelector((state: RootState) => state.saved);
 
-  // console.log("saved cars :",cars)
+  if (cars.length !== 0) {
+    toast.success("Fetched saved cars successfully!", {
+      id: "fetch-saved",
+    });
+  }
 
   const [isSortOpen, setIsSortOpen] = useState(false);
 
@@ -43,6 +53,8 @@ const Saved: React.FC = () => {
           return 0;
       }
     });
+
+    console.log(filteredCars)
 
   const sortOptions = [
     { value: "popularity", label: "Popularity" },
@@ -125,7 +137,9 @@ const Saved: React.FC = () => {
 
       {/* 🌀 Loading & Error */}
       {loading && (
-        <p className="text-center text-gray-500 py-6 text-sm">Loading cars...</p>
+        <p className="text-center text-gray-500 py-6 text-sm">
+          Loading cars...
+        </p>
       )}
       {error && (
         <p className="text-center text-red-500 py-6 text-sm">{error}</p>
@@ -156,7 +170,11 @@ const Saved: React.FC = () => {
                 {/* Left Image */}
                 <div className="h-fit w-28 sm:w-36 shrink-0 relative">
                   <img
-                    src={car.carImages?.[0]?.imageUrl || car.carImages?.[0]?.imageKey || "/fallback-car-img.png"}
+                    src={
+                      car.carImages?.[0]?.imageUrl ||
+                      car.carImages?.[0]?.imageKey ||
+                      "/fallback-car-img.png"
+                    }
                     alt="car image"
                     className="w-full h-22 sm:h-26 object-cover rounded-xs"
                   />
@@ -180,8 +198,20 @@ const Saved: React.FC = () => {
                     </div>
 
                     <div className="flex flex-col items-end justify-between p-1">
-                      <span className="p-[3px] bg-gray-100 rounded-xs active:scale-95 active:bg-white transition-all duration-300">
-                        <AiFillHeart className="w-3 h-3 text-green-600" />
+                      <span
+                        className="p-[3px] bg-gray-100 rounded-xs active:scale-95 active:bg-white transition-all duration-300"
+                        onClick={() => {
+                          if(car.savedCarId){
+                            dispatch(removeSaveCar(String(car.id)));
+                            window.location.reload()
+                          }
+                        }}
+                      >
+                        <AiFillHeart
+                          className={`w-3 h-3 ${
+                            car.savedCarId ? "text-green-600" : "text-gray-400"
+                          }`}
+                        />
                       </span>
                     </div>
                   </div>

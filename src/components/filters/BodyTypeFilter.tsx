@@ -23,13 +23,13 @@ const BodyTypeFilter: React.FC<Props> = ({
   );
   const dispatch = useDispatch();
 
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentSlide] = useState(0);
   const bodyTypesPerSlide = 6; // 2 rows × 3 columns
-  const totalSlides = Math.ceil(bodyTypes.length / bodyTypesPerSlide);
+  // const totalSlides = Math.ceil(bodyTypes.length / bodyTypesPerSlide);
 
   // const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % totalSlides);
-  const prevSlide = () =>
-    setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
+  // const prevSlide = () =>
+  //   setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
   // const goToSlide = (index: number) => setCurrentSlide(index);
 
   const getCurrentBodyTypes = () => {
@@ -47,9 +47,9 @@ const BodyTypeFilter: React.FC<Props> = ({
 
   return (
     <div className="fixed left-0 bottom-0 w-full bg-white shadow-lg rounded-t-lg px-4 py-4 z-20 border border-gray-200">
-      <h3 className="font-semibold mb-2">Select a Car Brand</h3>
+      <h3 className="font-semibold mb-2">Select a Car Body Type</h3>
 
-      <div className="lg:hidden relative pt-2 pb-4">
+      <div className="lg:hidden relative pt-2 pb-4 border-t border-gray-200 mt-2">
         <div className="grid grid-cols-3 gap-2 gap-y-4 max-w-xs sm:max-w-xl mx-auto">
           {getCurrentBodyTypes().map((bodyTypes) => (
             <div
@@ -70,7 +70,6 @@ const BodyTypeFilter: React.FC<Props> = ({
               </div>
               <p className="font-semibold text-[9px]">{bodyTypes.name}</p>
               <p className="text-gray-500 text-[9px] mt-1">
-                {/* {bodyTypes.vehicles} */}
                 {getTotalCount("bodyType", bodyTypes.name)} cars Available
               </p>
             </div>
@@ -79,7 +78,7 @@ const BodyTypeFilter: React.FC<Props> = ({
 
         <div className="w-full flex items-center justify-around px-24 sm:px-44 mt-6">
           {/* Navigation Arrows */}
-          <button
+          {/* <button
             onClick={prevSlide}
             className="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors active:scale-95"
             disabled={currentSlide === 0}
@@ -93,7 +92,7 @@ const BodyTypeFilter: React.FC<Props> = ({
             >
               <path d="M15.41 16.09l-4.58-4.59 4.58-4.59L14 5.5l-6 6 6 6z" />
             </svg>
-          </button>
+          </button> */}
 
           {/* Dots Indicator */}
           {/* <div className="flex justify-center gap-2">

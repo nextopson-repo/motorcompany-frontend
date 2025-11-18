@@ -97,7 +97,7 @@ const BrandModelFilter: React.FC<Props> = ({
                     className={`
                       flex flex-col items-center text-center cursor-pointer 
                       hover:scale-105 transition-transform p-2
-                      ${isSelected ? "shadow-md scale-[1.05]" : ""}
+                      ${isSelected ? "shadow-md bg-gray-100 scale-[0.90]" : ""}
                       ${(index + 1) % 3 !== 0 ? "border-r border-gray-200" : ""}
                       ${index < 6 ? "border-b border-gray-200" : ""}
                     `}

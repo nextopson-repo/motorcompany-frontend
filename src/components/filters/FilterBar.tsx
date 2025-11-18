@@ -30,8 +30,6 @@ const FilterBar = () => {
   // 🔥 REF TYPES FIXED
   const sortRef = useRef<HTMLButtonElement | null>(null);
   const userTypeRef = useRef<HTMLDivElement | null>(null);
-  const brandRef = useRef<HTMLButtonElement | null>(null);
-  const bodyTypeRef = useRef<HTMLButtonElement | null>(null);
 
   // open/close handler
   const toggleFilter = (name: string) =>
@@ -90,28 +88,11 @@ const FilterBar = () => {
 
   // 🔥 outside click/scroll close
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        sortRef.current &&
-        !sortRef.current.contains(e.target as Node) &&
-        userTypeRef.current &&
-        !userTypeRef.current.contains(e.target as Node) &&
-        brandRef.current &&
-        !brandRef.current.contains(e.target as Node) &&
-        bodyTypeRef.current &&
-        !bodyTypeRef.current.contains(e.target as Node)
-      ) {
-        setOpenFilter(null);
-      }
-    };
-
     const handleScroll = () => setOpenFilter(null);
-
-    document.addEventListener("mousedown", handleClickOutside);
     window.addEventListener("scroll", handleScroll);
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      // document.removeEventListener("mousedown", handleClickOutside);
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
@@ -155,7 +136,6 @@ const FilterBar = () => {
 
         {/* Brand + Model */}
         <button
-          ref={brandRef}
           className="px-2 py-2 border border-gray-200 rounded-sm text-xs flex items-center gap-2 whitespace-nowrap"
           onClick={() => toggleFilter("brand")}
         >
@@ -164,7 +144,6 @@ const FilterBar = () => {
 
         {/* Body Type */}
         <button
-          ref={bodyTypeRef}
           className="px-3 py-2 border border-gray-200 rounded-sm text-xs flex items-center gap-2 whitespace-nowrap"
           onClick={() => toggleFilter("bodyType")}
         >

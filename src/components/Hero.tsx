@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../store/store";
 import {
   fetchCars,
-  setSearchTerm,
   updateSelectedFilter,
 } from "../store/slices/carSlice";
 import { useNavigate } from "react-router-dom";
@@ -110,10 +109,8 @@ const Hero: React.FC = () => {
     (state: RootState) => state.cars.selectedFilters
   );
   const dispatch = useDispatch<AppDispatch>();
-
   const navigate = useNavigate();
   const [searchMode, setSearchMode] = useState<"brand" | "budget">("brand");
-  const [query, setQuery] = useState("");
 
   // ⬇️ Add these right below
   const [selectedBudget, setSelectedBudget] = useState("");
@@ -135,39 +132,47 @@ const Hero: React.FC = () => {
   ];
 
   const handleSearch = () => {
-    if (!query.trim()) return;
     if (searchMode === "brand") {
-      dispatch(setSearchTerm(query));
-      dispatch(fetchCars({ searchTerm: query }));
+      if (!selectedBrands) return;
+
+      dispatch(
+        updateSelectedFilter({
+          key: "brand",
+          value: [selectedBrands],
+        })
+      );
+
+      dispatch(
+        fetchCars({
+          selectedFilters: {
+            ...selectedFilters,
+            brand: [selectedBrands],
+          },
+        })
+      );
     } else {
-      const maxPrice = Number(query);
-      if (!isNaN(maxPrice)) {
-        dispatch(
-          updateSelectedFilter({
-            key: "priceRange",
-            value: [1, maxPrice],
-          })
-        );
-        dispatch(
-          fetchCars({
-            selectedFilters: {
-              ...selectedFilters,
-              priceRange: {min: 0, max: maxPrice},
-            },
-          })
-        );
-      }
+      const selected = budgetOptions.find((b) => b.label === selectedBudget);
+      if (!selected) return;
+
+      dispatch(
+        updateSelectedFilter({
+          key: "priceRange",
+          value: selected.value,
+        })
+      );
+
+      dispatch(
+        fetchCars({
+          selectedFilters: {
+            ...selectedFilters,
+            priceRange: selected.value,
+          },
+        })
+      );
     }
+
     navigate("/buy-car");
   };
-
-  // useEffect(() => {
-  //   if (searchMode === "brand" && selectedBrands) {
-  //     setQuery(selectedBrands);
-  //   } else if (searchMode === "budget" && selectedBudget) {
-  //     setQuery(selectedBudget);
-  //   }
-  // }, [selectedBrands, selectedBudget, searchMode]);
 
   // google car(brand, model, variant)
   const sheetId = import.meta.env.VITE_SHEET_ID;
@@ -214,11 +219,6 @@ const Hero: React.FC = () => {
               searchMode === "brand" ? !selectedBrands : !selectedBudget
             }
             onClick={() => {
-              if (searchMode === "brand" && selectedBrands) {
-                setQuery(selectedBrands);
-              } else if (selectedBudget) {
-                setQuery(selectedBudget);
-              }
               handleSearch();
             }}
             className={`ml-2.5 h-4 w-4 flex items-center justify-center transition-colors duration-200 ${
@@ -230,7 +230,7 @@ const Hero: React.FC = () => {
           >
             <Search className="h-5 w-5" />
           </button>
-          
+
           <div className="flex justify-between items-center w-full bg-white rounded-sm px-1 py-2.5 relative">
             <div
               className="flex items-center w-full cursor-pointer"
@@ -408,7 +408,12 @@ const Hero: React.FC = () => {
                 onToggle={() => setIsBrandsOpen(!isBrandsOpen)}
                 onChange={(val: string) => {
                   setSelectedBrands(val);
-                  setQuery(val); // ✅ sync dropdown with query
+                  dispatch(
+                    updateSelectedFilter({
+                      key: "brand",
+                      value: [val],
+                    })
+                  );
                 }}
               />
             ) : (
@@ -423,9 +428,13 @@ const Hero: React.FC = () => {
                   const selected = budgetOptions.find((b) => b.label === label);
                   if (selected) {
                     setSelectedBudget(label);
-                    setQuery(`${selected.value.min}-${selected.value.max}`); // actual numeric range
-                    // ya agar tu min/max alag alag bhejna chahta hai:
-                    // setQuery(selected.value)
+
+                    dispatch(
+                      updateSelectedFilter({
+                        key: "priceRange",
+                        value: selected.value,
+                      })
+                    );
                   }
                 }}
               />

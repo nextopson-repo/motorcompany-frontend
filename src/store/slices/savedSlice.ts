@@ -1,15 +1,12 @@
-import {
-  createSlice,
-  createAsyncThunk,
-  type PayloadAction,
-} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { CarRecord } from "../../types/car";
 import axios from "axios";
 import toast from "react-hot-toast";
 
 interface SavedState {
   cars: CarRecord[];
-  savedCarIds: string[];
+  savedCarIds: string[]; // saved table IDs
+  savedCarIdsByCarId: string[]; // actual CAR IDs
   searchTerm: string;
   sortOption: string;
   loading: boolean;
@@ -19,16 +16,18 @@ interface SavedState {
 const initialState: SavedState = {
   cars: [],
   savedCarIds: [],
+  savedCarIdsByCarId: [],
   searchTerm: "",
   sortOption: "popularity",
   loading: false,
   error: null,
 };
 
-// 🧠 API base URL
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-// ✅ Fetch saved cars API call
+/* ---------------------------------------------------------
+   FETCH SAVED CARS
+--------------------------------------------------------- */
 export const fetchSavedCars = createAsyncThunk(
   "saved/fetchSavedCars",
   async (_, { rejectWithValue }) => {
@@ -36,7 +35,10 @@ export const fetchSavedCars = createAsyncThunk(
       const userData = localStorage.getItem("user");
       const user = userData ? JSON.parse(userData) : null;
       const token = localStorage.getItem("token");
-      if (!user || !token) throw new Error("User not logged in");
+
+      if (!user || !token) {
+        return { savedCars: [], savedCarIds: [], savedCarIdsByCarId: [] };
+      }
 
       const response = await axios.post(
         `${BACKEND_URL}/api/v1/dashboard/get-saved-cars`,
@@ -49,12 +51,13 @@ export const fetchSavedCars = createAsyncThunk(
         }
       );
 
-      // console.log("response :", response.data.result.savedCars);
+      const list = response.data.result.savedCars || [];
 
-      const savedCars: CarRecord[] = response.data.result.savedCars
+      const savedCars: CarRecord[] = list
         .map((item: any) => {
           const car = item.property;
-          if(!car) return null;
+          if (!car) return null;
+
           return {
             id: car.id,
             brand: car.brand,
@@ -67,54 +70,51 @@ export const fetchSavedCars = createAsyncThunk(
             carPrice: car.carPrice,
             manufacturingYear: car.manufacturingYear,
             kmDriven: car.kmDriven,
-            address: { state: car.state, city: car.city || car.address?.city },
+
+            address: {
+              state: car.state,
+              city: car.city || car.address?.city,
+            },
+
             carImages: car.carImages?.map((img: any) => ({
               imageKey: img,
               imageUrl: img,
             })),
-            // ✅ Owner info
+
             user: {
-              // fullName: item.savedCar?.fullName || "Unknown",
               fullName: user.fullName || "Unknown",
               userType: user.userType || "unknown",
             },
-            updatedAt: car.updatedAt,
-            createdAt: car.createdAt,
+
             savedCarId: item.savedCar.id,
+            createdAt: car.createdAt,
+            updatedAt: car.updatedAt,
           };
         })
         .filter(Boolean);
 
-      const savedCarIds = response.data.result.savedCars.map(
-        (item: any) => item.savedCar.id
-      );
+      const savedCarIds = list.map((i: any) => String(i.savedCar.id));
+      const savedCarIdsByCarId = list.map((i: any) => String(i.property?.id));
 
-      // console.log("carId:", savedCarIds)
-
-      toast.success("fetched saved cars successfully!", {
-        id: "fetch saved cars",
-      });
-      return { savedCars, savedCarIds };
+      return { savedCars, savedCarIds, savedCarIdsByCarId };
     } catch (err: any) {
-      toast.error(err.response?.data?.message || err.message, {
-        id: "error saved cars",
-      });
+      toast.error(err.response?.data?.message || err.message);
       return rejectWithValue(err.response?.data?.message || err.message);
     }
   }
 );
 
-// ✅ Save car API
+/* ---------------------------------------------------------
+   SAVE CAR
+--------------------------------------------------------- */
 export const createSaveCar = createAsyncThunk(
   "saved/createSaveCar",
   async (carId: string, { rejectWithValue }) => {
     try {
-      const userData = localStorage.getItem("user");
-      const user = userData ? JSON.parse(userData) : null;
+      const user = JSON.parse(localStorage.getItem("user")!);
       const token = localStorage.getItem("token");
-      if (!user || !token) throw new Error("User not logged in");
 
-      await axios.post(
+      const res = await axios.post(
         `${BACKEND_URL}/api/v1/dashboard/create-saved-car`,
         { userId: user.id, carId },
         {
@@ -125,27 +125,28 @@ export const createSaveCar = createAsyncThunk(
         }
       );
 
-      toast.success("Car saved successfully!");
+      console.log("res create saved car:", res.data);
 
-      return carId;
+      const savedCarId = res.data.newCar.id;
+      toast.success("Car saved!");
+
+      return { savedCarId: String(savedCarId), carId: String(carId) };
     } catch (err: any) {
-      toast.error(
-        err.response?.data?.message || err.message || "Failed to save car"
-      );
+      toast.error(err.response?.data?.message || err.message);
       return rejectWithValue(err.response?.data?.message || err.message);
     }
   }
 );
 
-// ✅ Unsave car API
+/* ---------------------------------------------------------
+   REMOVE SAVED CAR
+--------------------------------------------------------- */
 export const removeSaveCar = createAsyncThunk(
   "saved/removeSaveCar",
   async (carId: string, { rejectWithValue }) => {
     try {
-      const userData = localStorage.getItem("user");
-      const user = userData ? JSON.parse(userData) : null;
+      const user = JSON.parse(localStorage.getItem("user")!);
       const token = localStorage.getItem("token");
-      if (!user || !token) throw new Error("User not logged in");
 
       await axios.post(
         `${BACKEND_URL}/api/v1/dashboard/remove-saved-car`,
@@ -158,68 +159,107 @@ export const removeSaveCar = createAsyncThunk(
         }
       );
 
-      toast.success("Removed saved car successfully!");
+      toast.success("Removed saved car!");
 
       return carId;
     } catch (err: any) {
-      toast.error(
-        err.response?.data?.message ||
-          err.message ||
-          "Failed to Remove saved car"
-      );
+      toast.error(err.response?.data?.message || err.message);
       return rejectWithValue(err.response?.data?.message || err.message);
     }
   }
 );
 
+/* ---------------------------------------------------------
+   SLICE
+--------------------------------------------------------- */
 const savedSlice = createSlice({
   name: "saved",
   initialState,
   reducers: {
-    setSearchTerm: (state, action: PayloadAction<string>) => {
+    setSearchTerm(state, action) {
       state.searchTerm = action.payload;
     },
-    setSortOption: (state, action: PayloadAction<string>) => {
+    setSortOption(state, action) {
       state.sortOption = action.payload;
     },
   },
+
   extraReducers: (builder) => {
     builder
+      /* FETCH */
       .addCase(fetchSavedCars.fulfilled, (state, action) => {
         state.cars = action.payload.savedCars;
         state.savedCarIds = action.payload.savedCarIds;
+        state.savedCarIdsByCarId = action.payload.savedCarIdsByCarId;
       })
+
+      /* SAVE — optimistic */
+      // .addCase(createSaveCar.pending, (state, action) => {
+      //   const carId = action.meta.arg;
+      //   if (!state.savedCarIdsByCarId.includes(carId)) {
+      //     state.savedCarIdsByCarId.push(carId);
+      //   }
+      // })
+
       .addCase(createSaveCar.fulfilled, (state, action) => {
-        if (!state.savedCarIds.includes(action.payload))
-          state.savedCarIds.push(action.payload);
-      })
-      .addCase(removeSaveCar.fulfilled, (state, action) => {
-        state.savedCarIds = state.savedCarIds.filter(
-          (id) => id !== action.payload
-        );
-      })
-      .addCase(createSaveCar.pending, (state, action) => {
-        // 🟢 Heart turant green show karne ke liye
-        if (!state.savedCarIds.includes(action.meta.arg)) {
-          state.savedCarIds.push(action.meta.arg);
+        const { savedCarId, carId } = action.payload;
+
+        if (!state.savedCarIdsByCarId.includes(carId)) {
+          state.savedCarIdsByCarId.push(carId);
         }
+
+        if (!state.savedCarIds.includes(savedCarId)) {
+          state.savedCarIds.push(savedCarId);
+        }
+
+        // ⭐ store entry inside savedCars array
+        state.cars.push({
+          id: carId, // actual carId
+          savedCarId: savedCarId, // table id saved for unsave
+        } as any);
       })
+
       .addCase(createSaveCar.rejected, (state, action) => {
-        // ❌ Agar API fail ho gaya to rollback
-        state.savedCarIds = state.savedCarIds.filter(
-          (id) => id !== action.meta.arg
+        const carId = action.meta.arg;
+        state.savedCarIdsByCarId = state.savedCarIdsByCarId.filter(
+          (id) => id !== carId
         );
       })
+
       .addCase(removeSaveCar.pending, (state, action) => {
-        // 🟢 Heart turant gray show karne ke liye
-        state.savedCarIds = state.savedCarIds.filter(
-          (id) => id !== action.meta.arg
+        const carId = action.meta.arg;
+
+        // remove from savedCarIdsByCarId instantly
+        state.savedCarIdsByCarId = state.savedCarIdsByCarId.filter(
+          (id) => id !== carId
         );
+
+        // remove savedCars instantly
+        state.cars = state.cars.filter((c) => String(c.id) !== carId);
+
+        // remove savedCarIds (table ids may remain but optional)
+        state.savedCarIds = state.savedCarIds.filter((id) => id !== carId);
       })
+
+      .addCase(removeSaveCar.fulfilled, (state, action) => {
+        const carId = action.payload;
+
+        state.savedCarIdsByCarId = state.savedCarIdsByCarId.filter(
+          (id) => id !== String(carId)
+        );
+
+        state.cars = state.cars.filter((c) => String(c.id) !== String(carId));
+
+        state.savedCarIds = state.savedCarIds.filter((id) => id !== carId);
+      })
+
+      /* REMOVE — rollback */
       .addCase(removeSaveCar.rejected, (state, action) => {
-        // ❌ Agar API fail to rollback
-        if (!state.savedCarIds.includes(action.meta.arg)) {
-          state.savedCarIds.push(action.meta.arg);
+        const carId = action.meta.arg;
+
+        // rollback add carId back
+        if (!state.savedCarIdsByCarId.includes(carId)) {
+          state.savedCarIdsByCarId.push(carId);
         }
       });
   },

@@ -10,7 +10,7 @@ interface LocationModalProps {
   onClose: () => void;
   onLocationChange?: (loc: string) => void;
   citySearch: string;
-    setCitySearch: React.Dispatch<React.SetStateAction<string>>;
+  setCitySearch: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const LocationModal: React.FC<LocationModalProps> = ({
@@ -53,15 +53,14 @@ const LocationModal: React.FC<LocationModalProps> = ({
   if (!isOpen) return null;
 
   const handleSelectCity = (city: string) => {
-  dispatch(setLocation(city));
-  dispatch(updateSelectedFilter({ key: "location", value: [city] }));
-  // callback to parent
-  if (onLocationChange) {
-    onLocationChange(city);
-  }
-  onClose();
-};
-
+    dispatch(setLocation(city));
+    dispatch(updateSelectedFilter({ key: "location", value: [city] }));
+    // callback to parent
+    if (onLocationChange) {
+      onLocationChange(city);
+    }
+    onClose();
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
@@ -94,9 +93,39 @@ const LocationModal: React.FC<LocationModalProps> = ({
         </div>
 
         {/* cities grid */}
-        <div className="w-full overflow-y-auto p-2 md:p-4 md:px-5 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 z-[10]">
-          {filteredLocations.length > 0 ? (
+        {/* <div className="w-full overflow-y-auto p-2 md:p-4 md:px-5 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 z-[10]">
+          {(citySearch === "All City" || filteredLocations.length > 0) ? (
             filteredLocations.map((loc) => (
+              <button
+                key={loc}
+                onClick={() => handleSelectCity(loc)}
+                className="h-fit w-fit md:mx-2 hover:bg-gray-400/30 cursor-pointer p-1 rounded-xs md:rounded-md"
+              >
+                <img
+                  src={cityImage(loc)}
+                  alt={loc}
+                  className="w-24 h-20 lg:w-22 lg:h-18 lg:object-cover object-cover rounded-sm md:rounded-lg mx-auto"
+                />
+                <div className="mt-1 md:mt-2 text-[11px] md:text-xs font-semibold text-center">
+                  {loc.split(",")[0]}
+                </div>
+              </button>
+            ))
+          ) : (
+            <div className="col-span-full text-center text-sm md:text-base text-gray-500 mt-4">
+              Coming Soon in your City!
+            </div>
+          )}
+        </div> */}
+        <div className="w-full overflow-y-auto p-2 md:p-4 md:px-5 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 z-[10]">
+          {(citySearch.trim().toLowerCase() === "all city"
+            ? locationOptions
+            : filteredLocations
+          ).length > 0 ? (
+            (citySearch.trim().toLowerCase() === "all city"
+              ? locationOptions
+              : filteredLocations
+            ).map((loc) => (
               <button
                 key={loc}
                 onClick={() => handleSelectCity(loc)}

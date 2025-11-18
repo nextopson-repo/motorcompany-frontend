@@ -6,7 +6,7 @@ interface LocationState {
 }
 
 const initialState: LocationState = {
-  location: "All City",
+  location: "",
   locations: [],
 };
 

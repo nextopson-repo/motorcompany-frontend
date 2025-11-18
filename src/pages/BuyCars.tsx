@@ -21,7 +21,7 @@ export default function BuyCars() {
   );
   const [citySearch, setCitySearch] = useState("");
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(
-    location === "All City"
+    location === ""
   );
   // Jab location change ho, modal close karo agar city select ho gayi to
   useEffect(() => {
@@ -74,7 +74,7 @@ export default function BuyCars() {
   }, [isLocationModalOpen]);
 
   return (
-    <main className="max-w-7xl mx-auto mt-10 md:mt-16 lg:mt-20 min-h-screen relative">
+    <main className="max-w-7xl mx-auto mt-10 md:mt-16 lg:mt-16 min-h-screen relative">
       {/* --- MODAL OVERLAY --- */}
       {isLocationModalOpen && (
         <LocationModal
@@ -87,10 +87,10 @@ export default function BuyCars() {
       )}
 
       {/* --- PAGE LAYOUT WITH SEPARATE SCROLLS --- */}
-      <div className="relative flex gap-6 lg:pl-8 lg:pr-4 h-[calc(100vh-100px)]">
+      <div className="relative flex gap-6 lg:pl-8 lg:pr-4 lg:mb-10 h-[calc(100vh-40px)] scroll-hide">
         {/* Sidebar with own scroll */}
         <div className="w-fit hidden lg:block">
-          <div className="h-full overflow-y-auto pr-2">
+          <div className="h-full overflow-y-auto pr-2 lg:mt-2 scroll-hide">
             <FilterSidebar
               selectedFilters={selectedFilters}
               onSelectedFiltersChange={handleFilterChange}
@@ -99,12 +99,12 @@ export default function BuyCars() {
         </div>
 
         {/* Car list with own scroll */}
-        <div className="w-full py-4 sm:px-6 lg:px-2 h-full overflow-y-auto">
+        <div className="w-full pt-4 sm:px-6 lg:px-2 h-full overflow-y-auto scroll-hide">
           <CarList />
         </div>
       </div>
 
-      <div className="my-10 ">
+      <div className="mb-10 ">
         <FindDealers />
       </div>
     </main>

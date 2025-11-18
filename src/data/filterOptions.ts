@@ -1,15 +1,3 @@
-// export const brandOptions = [
-//   "Toyota",
-//   "Hyundai",
-//   "Maruti",
-//   "Tata",
-//   "Honda",
-//   "Skoda",
-//   "Mahindra",
-//   "Kia",
-// ];
-
-
 export const fuelOptions = ["Petrol", "Diesel","Electric", "CNG",  "Hybrid", "LPG"];
 
 export const transmissionOptions = ["Manual", "Automatic"];
@@ -30,14 +18,6 @@ export const ownershipOptions = [
   "3rd+",
 ];
 
-// export const stateOptions = [
-//   "Madhya Pradesh",
-//   "Maharashtra",
-//   "Delhi",
-//   "Karnataka",
-//   "Gujarat",
-// ];
-
 export const cityOptions = [
   "Ahmedabad",
   "Chandigarh",
@@ -53,7 +33,6 @@ export const cityOptions = [
 
 export const userTypeOptions = ["All", "Owner", "Dealer"];
 
-// export const sortOptions = ["popular", "newest", "oldest", "price_low", "price_high"];
 export const sortOptions = [
     { value: "popular", label: "Popularity" },
     { value: "newest", label: "Newest First" },

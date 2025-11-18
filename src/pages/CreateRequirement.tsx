@@ -296,6 +296,23 @@ const CreateRequirement: React.FC = () => {
               </div>
             </div>
           </div>
+
+          {/* Description Box Section */}
+          <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200 lg:col-span-2">
+            <h2 className="text-lg font-semibold mb-2.5">Description</h2>
+            <div className="gap-4 lg:max-w-[70%]">
+              <div>
+                <label className="block text-sm mb-2">About Car</label>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  placeholder="e.g., Brand New Condition Car Without Scratch. Include key features, history, and condition here for a more detailed listing."
+                  className="w-full h-24 p-2 border border-gray-200 rounded-sm text-xs focus:ring-0 focus:outline-none"
+                ></textarea>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Submit Buttons */}

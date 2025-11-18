@@ -42,7 +42,7 @@ export default function CarList() {
   );
 
   return (
-    <div className="h-full w-full overflow-y-auto lg:pl-1 pb-2 ">
+    <div className="h-full w-full overflow-y-auto lg:pl-1 scroll-hide">
       <div className="w-full lg:max-w-7xl mx-auto">
         {/* Header */}
         <CarListHeader carCount={cars.length} />
