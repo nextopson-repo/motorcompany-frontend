@@ -71,14 +71,16 @@ const SellerSkeleton = () => {
   );
 };
 
-
 export default function SellerDetails() {
   const { userId } = useParams<{ userId: string }>();
   const dispatch = useDispatch<AppDispatch>();
   const seller = useSelector((state: RootState) => state.SellerDetails);
-  // console.log("seller data:",seller)
+
+  console.log("seller data:", seller);
   const [viewMode, setViewMode] = useState<"list" | "card">("list");
   // const handleViewMore = () => dispatch(setSelectedCar(seller.cars.));
+  const [sortOpen, setSortOpen] = useState(false);
+  const [sortType, setSortType] = useState("Latest");
 
   useEffect(() => {
     if (userId) {
@@ -87,8 +89,8 @@ export default function SellerDetails() {
   }, [dispatch, userId]);
 
   if (seller.loading) {
-  return <SellerSkeleton />;
-}
+    return <SellerSkeleton />;
+  }
 
   if (seller.error) {
     return (
@@ -97,6 +99,39 @@ export default function SellerDetails() {
       </div>
     );
   }
+
+  const sortCars = (cars: any) => {
+    const sorted = [...cars];
+
+    switch (sortType) {
+      case "Latest":
+        sorted.sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        break;
+
+      case "Oldest":
+        sorted.sort(
+          (a, b) =>
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
+
+        break;
+
+      case "Price Low":
+        sorted.sort((a, b) => a.price - b.price);
+        break;
+
+      case "Price High":
+        sorted.sort((a, b) => b.price - a.price);
+        break;
+    }
+
+    return sorted;
+  };
+
+  const sortedCars = sortCars(seller.cars);
 
   // share profile link
   const handleShareProfile = async () => {
@@ -160,9 +195,10 @@ export default function SellerDetails() {
           {seller.phone && (
             <p className="text-[10px] sm:text-sm lg:text-[10px] flex items-center justify-between">
               <span className="flex items-center gap-1">
-                <Phone className="h-3 w-3" />{" "} <span>+91</span>
+                <Phone className="h-3 w-3" /> <span>+91</span>
                 {seller.phone
-                  ? seller.phone.replace(/(?<=\d{5})\d/g, "*") //back few number masked
+                  ? seller.phone
+                      .replace(/(?<=\d{5})\d/g, "*") //back few number masked
                       // .replace(/.(?=.{5})/g, "*") //front few number masked
                       .replace(/(.{5})(.{5})/, "$1 $2")
                   : "N/A"}
@@ -280,7 +316,7 @@ export default function SellerDetails() {
         <div className="flex items-center gap-2">
           <span className="flex items-center border border-gray-500 rounded-sm">
             <button
-              className={`p-1 rounded-l-sm ${
+              className={`p-1 rounded-l-xs ${
                 viewMode === "list"
                   ? "bg-black text-white"
                   : "bg-white text-black"
@@ -290,7 +326,7 @@ export default function SellerDetails() {
               <List className="h-5 w-5" />
             </button>
             <button
-              className={`p-1 rounded-r-sm ${
+              className={`p-1 rounded-r-xs ${
                 viewMode === "card"
                   ? "bg-black text-white"
                   : "bg-white text-black"
@@ -300,16 +336,40 @@ export default function SellerDetails() {
               <IdCard className="h-5 w-5" />
             </button>
           </span>
-          <button className="text-sm px-4 py-1.5 bg-black text-white flex items-center rounded-sm gap-2">
-            Latest <ChevronDown className="text-white h-4 w-4" />
-          </button>
+          <div className="relative">
+            <button
+              className="text-sm px-4 py-1.5 bg-black text-white flex items-center rounded-sm gap-2"
+              onClick={() => setSortOpen(!sortOpen)}
+            >
+              {sortType} <ChevronDown className="text-white h-4 w-4" />
+            </button>
+
+            {sortOpen && (
+              <div className="absolute right-0 mt-2 bg-white shadow-md border rounded-sm w-36 z-50">
+                {["Latest", "Oldest", "Price Low", "Price High"].map((type) => (
+                  <button
+                    key={type}
+                    onClick={() => {
+                      setSortType(type);
+                      setSortOpen(false);
+                    }}
+                    className={`w-full text-left px-3 py-2 text-sm hover:bg-gray-200 ${
+                      sortType === type ? "bg-gray-100 font-semibold" : ""
+                    }`}
+                  >
+                    {type}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
       {viewMode === "list" ? (
         // List View
         <div className="block lg:hidden space-y-2 sm:space-y-4 px-4">
-          {seller.cars.map((car) => (
+          {sortedCars.map((car) => (
             <div
               key={car.id}
               className="flex flex-row rounded-sm border border-gray-100 p-1"
@@ -369,9 +429,8 @@ export default function SellerDetails() {
           )}
         </div>
       ) : (
-        // Card View
         <div className="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-4 px-4">
-          {seller.cars.map((car) => (
+          {sortedCars.map((car) => (
             <div className="bg-white rounded-md shadow-lg overflow-hidden flex flex-col w-auto relative mb-3 lg:mb-0">
               <div className="relative">
                 <img

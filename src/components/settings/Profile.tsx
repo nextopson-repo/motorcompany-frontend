@@ -82,9 +82,9 @@ export default function Profile({
   if (loading) {
     return <SkeletonProfile />;
   }
-  if(success === true){
+  if (success === true) {
     toast.success("Profile fetched successfully!", { id: "profile-fetch" });
-    console.log("Profile fetched successfully!")
+    console.log("Profile fetched successfully!");
   }
 
   // if (!user) {
@@ -111,7 +111,9 @@ export default function Profile({
   const handleEmailVerification = () => {
     toast.error("Verify link send on your email.", { id: "verify email" });
     if (!user.email) {
-      toast.error("Please enter a valid email before verifying.", { id: "error on verifying" });
+      toast.error("Please enter a valid email before verifying.", {
+        id: "error on verifying",
+      });
       return;
     }
   };
@@ -123,7 +125,9 @@ export default function Profile({
       };
       await dispatch(updateUserProfile(payload)).unwrap();
     } catch (err) {
-      toast.error(`Failed to update profile : ${err}`, { id: "error in update" });
+      toast.error(`Failed to update profile : ${err}`, {
+        id: "error in update",
+      });
     }
   };
 
@@ -238,11 +242,11 @@ export default function Profile({
                     {/* Tooltip Badge */}
                     <div
                       className="absolute top-full left-1/2 -translate-x-1/2 mt-2 
-      bg-white text-black text-[10px] rounded-md shadow-md border border-gray-200 
-      px-2 py-1.5 w-max max-w-[150px] 
-      opacity-0 pointer-events-none scale-90 
-      group-hover:opacity-100 group-hover:scale-100 
-      transition-all duration-200 z-20"
+                                 bg-white text-black text-[10px] rounded-md shadow-md border border-gray-200 
+                                 px-2 py-1.5 w-max max-w-[150px] 
+                                 opacity-0 pointer-events-none scale-90 
+                                 group-hover:opacity-100 group-hover:scale-100 
+                                 transition-all duration-200 z-20"
                     >
                       <p className="text-[8px] text-center">
                         Your email is not verified. <br /> For verify click on
@@ -380,10 +384,10 @@ const Field = ({
         name={name}
         value={value}
         onChange={onChange}
-        className="border rounded-xs md:rounded px-3 py-2 my-2 text-xs md:text-sm bg-gray-100 capitalize"
+        className="border rounded-xs md:rounded px-3 py-2 my-2 text-xs md:text-sm bg-gray-100 h-8 capitalize"
       />
     ) : (
-      <span className="text-gray-700 text-xs md:text-sm bg-gray-100 rounded px-3 py-2 my-2 capitalize">
+      <span className="text-gray-700 text-xs md:text-sm bg-gray-100 rounded px-3 py-2 my-2 h-8 capitalize">
         {value}
       </span>
     )}

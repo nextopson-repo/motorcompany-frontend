@@ -37,7 +37,7 @@ export function Dropdown({
 
   return (
     <div className="mb-1 relative">
-      <label className="text-[10px] md:text-xs">{label}</label>
+      <label className="text-xs md:text-xs">{label}</label>
       <input
         type="text"
         value={search || value}
@@ -47,7 +47,7 @@ export function Dropdown({
           onChange("");
         }}
         placeholder={placeholder}
-        className="w-full rounded mt-1 px-4 py-1.5 md:py-2 text-[10px] md:text-xs border border-gray-200 placeholder:text-[10px] focus:ring-1 focus:ring-gray-800/50 outline-none"
+        className="w-full rounded mt-1 px-4 py-1.5 md:py-2 text-xs md:text-xs border border-gray-200 placeholder:text-xs focus:ring-1 focus:ring-gray-800/50 outline-none"
       />
 
       {open && (
@@ -204,6 +204,7 @@ const handleFinalSubmit = async (carData: any) => {
     addressCity: city || editCar?.address?.city || "",
     addressState: state || editCar?.address?.state || "c",
     addressLocality: locality || editCar?.address?.locality || "c",
+    isActive: true,
   }).forEach(([key, value]) => formData.append(key, value || ""));
 
   try {
@@ -239,7 +240,7 @@ const handleFinalSubmit = async (carData: any) => {
   }, [success, dispatch, navigate]);
 
   return (
-    <section className="relative w-full max-w-7xl mx-auto h-fit lg:h-screen sm:bg-black/50 mb-5 sm:mb-0 mt-12 lg:mt-0 lg:pt-10 ">
+    <section className="relative w-full max-w-7xl mx-auto h-fit lg:h-screen sm:bg-black/50 mb-10 sm:mb-0 mt-12 lg:mt-0 lg:pt-10 ">
       {/* Background Image */}
       <div
         className="h-[326px] sm:h-[326px] lg:h-[88vh] absolute inset-0 bg-no-repeat bg-cover mb-1 lg:mt-10"
@@ -263,7 +264,7 @@ const handleFinalSubmit = async (carData: any) => {
           <h1 className="max-w-full w-full lg:max-w-[80%] text-md lg:text-3xl font-semibold lg:font-bold mb-3 lg:mb-5 leading-tight">
             Sell your car faster, easier and hassle-free with DhikCar.com
           </h1>
-          <p className="font-light lg:font-semibold text-[10px] lg:text-base text-gray-200 lg:mb-7">
+          <p className="font-light lg:font-semibold text-xs lg:text-base text-gray-200 lg:mb-7">
             India's trusted platform for quick and profitable car sales. List
             today and watch buyers come to you!
           </p>
@@ -335,7 +336,7 @@ const handleFinalSubmit = async (carData: any) => {
 
           {!showForm && !editCar && (
             <div>
-              <h2 className="text-xs lg:text-sm mb-2 lg:mb-3">
+              <h2 className="text-sm lg:text-sm mb-2 lg:mb-3">
                 New to <span className="font-semibold">Dhikcar</span>? Let's get
                 you started
               </h2>
@@ -343,10 +344,10 @@ const handleFinalSubmit = async (carData: any) => {
               {/* User Type conditional*/}
               {user?.userType === "EndUser" && (
                 <div className="mb-3">
-                  <label htmlFor="userType" className="text-[10px] md:text-xs">
+                  <label htmlFor="userType" className="text-xs md:text-xs">
                     User Type
                   </label>
-                  <div className="grid grid-cols-3 gap-3 md:gap-5 mb-2 md:mb-4 text-[10px] md:text-xs mt-1">
+                  <div className="grid grid-cols-3 gap-3 md:gap-5 mb-2 md:mb-4 text-xs md:text-xs mt-1">
                     <button
                       onClick={() =>
                         dispatch(

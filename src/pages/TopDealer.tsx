@@ -11,6 +11,7 @@ import { openLogin } from "../store/slices/authSlices/loginModelSlice";
 import toast from "react-hot-toast";
 
 const TopDealer: React.FC = () => {
+  const userLocation = useSelector((state: any) => state.location.location);
   const { dealers, selectedCity, cities, loading } = useAppSelector(
     (state) => state.dealers
   );
@@ -34,6 +35,12 @@ const TopDealer: React.FC = () => {
     }
     console.log("User logged in, allow to view seller");
   };
+
+  useEffect(() => {
+  if (userLocation && !selectedCity) {
+    dispatch(setSelectedCity(userLocation));
+  }
+}, [userLocation, dispatch, selectedCity]);
 
   // Fetch dealers when component mounts or city changes
   useEffect(() => {
@@ -142,9 +149,9 @@ const TopDealer: React.FC = () => {
               onClick={() => setOpen(!open)}
               className="gap-4 bg-gray-800 text-white border border-gray-700 rounded-xs lg:rounded-sm text-[10px] lg:text-base px-2 lg:px-4 py-1.5 lg:py-2.5 flex justify-between items-center"
             >
-              <span className="flex items-center gap-2 ">
+              <span className="flex items-center gap-2 whitespace-nowrap ">
                 <MapPin className="hidden lg:block h-4 w-4" />
-                {selectedCity}
+                {selectedCity || userLocation || "Select City"}
               </span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -185,7 +192,7 @@ const TopDealer: React.FC = () => {
       </div>
 
       {/* dealers list */}
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto lg:min-h-[40vh]">
         <h2 className="text-gray-400 text-[10px] lg:text-base font-medium lg:ml-6 py-2">
           Recommended
         </h2>

@@ -1,5 +1,6 @@
 import { createSlice, type PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { cityData } from "../../data/cityData";
 
 // --------------------
 // Types
@@ -25,8 +26,8 @@ interface DealerState {
 // --------------------
 const initialState: DealerState = {
   dealers: [] as any[],
-  cities: ["Chandigarh", "Mumbai", "Delhi", "Ahemdabad", "Jaipur", "Kanpur", "Hyderabad", "Surat", "Pune", "Lucknow"],
-  selectedCity: "Chandigarh",
+  cities: cityData,
+  selectedCity: "",
   loading: false,
   error: null,
 };
@@ -34,23 +35,6 @@ const initialState: DealerState = {
 // --------------------
 // Async Thunk (API Call)
 // --------------------
-// export const fetchDealersByCity = createAsyncThunk(
-//   "dealers/fetchDealersByCity",
-//   async (city: string, { rejectWithValue }) => {
-//      const backend = import.meta.env.VITE_BACKEND_URL || "";
-//     try {
-//       const res = await axios.post(`${backend}/api/v1/dashboard/top-dealers`, {
-//         city,
-//         limit: 10,
-//       });
-//       return res.data.data || [];
-//     } catch (err: any) {
-//       console.error("Error fetching dealers:", err);
-//       return rejectWithValue(err.response?.data || "Failed to fetch dealers");
-//     }
-//   }
-// );
-
 export const fetchDealersByCity = createAsyncThunk(
   "dealers/fetchDealersByCity",
   async (city: string, { rejectWithValue }) => {

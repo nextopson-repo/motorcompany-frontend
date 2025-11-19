@@ -49,7 +49,9 @@ const LeadCard: React.FC<LeadCardProps> = ({
       window.location.href = `tel:${phoneDigits}`;
       toast.success(`Calling ${name}...`);
     } else {
-      const whatsAppMsg = encodeURIComponent(`Hello, let's talk about the car.`);
+      const whatsAppMsg = encodeURIComponent(
+        `Hello, let's talk about the car.`
+      );
       window.open(`https://wa.me/${phoneDigits}?text=${whatsAppMsg}`, "_blank");
       toast.success(`Messaging ${name}...`);
     }
@@ -64,7 +66,7 @@ const LeadCard: React.FC<LeadCardProps> = ({
 
   return (
     <div
-      className={`flex justify-between items-center py-3 px-4 bg-white rounded-md shadow-sm border border-gray-100 transition-all ${
+      className={`flex justify-between items-center py-3 px-2 lg:px-4 bg-white rounded-md shadow-sm border border-gray-100 transition-all ${
         isLocked ? "opacity-40 blur-[1px]" : "hover:bg-gray-50"
       }`}
     >
@@ -75,12 +77,12 @@ const LeadCard: React.FC<LeadCardProps> = ({
           className="w-12 h-12 rounded-full object-cover"
         />
 
-        <div className="gap-1">
+        <div className="flex flex-col items-start gap-1">
           <h3 className="font-medium text-gray-800 text-sm md:text-base">
             {name}
           </h3>
 
-          <p className="text-xs text-gray-500 flex items-center gap-3">
+          <p className="text-xs text-gray-500 flex flex-col lg:flex-row items-start gap-0.5 lg:gap-3">
             <span>{carName}</span>
             <span className="flex items-center gap-1">
               <MapPin className="h-3.5 w-3.5" /> {city}
@@ -89,17 +91,23 @@ const LeadCard: React.FC<LeadCardProps> = ({
         </div>
       </div>
 
-      <div className="flex items-center gap-6">
-        <p className="text-[10px] md:text-xs text-gray-500">{timeAgo}</p>
+      <div className="flex items-center gap-4 lg:gap-6">
+        <div className="flex flex-col lg:flex-row-reverse items-end lg:items-center lg:gap-4">
+          {/* VIEW BUTTON */}
+          <a
+            href={`/buy-car/${carId}`}
+            onClick={handleViewClick}
+            className={
+              isLocked
+                ? "text-gray-400 cursor-not-allowed"
+                : "text-blue-600 hover:underline"
+            }
+          >
+            view
+          </a>
 
-        {/* VIEW BUTTON */}
-        <a
-          href={`/buy-car/${carId}`}
-          onClick={handleViewClick}
-          className={isLocked ? "text-gray-400 cursor-not-allowed" : "text-blue-600 hover:underline"}
-        >
-          view
-        </a>
+          <p className="text-[10px] md:text-xs text-gray-500">{timeAgo}</p>
+        </div>
 
         {/* CALL BUTTON */}
         <button
@@ -118,8 +126,6 @@ const LeadCard: React.FC<LeadCardProps> = ({
 };
 
 export default LeadCard;
-
-
 
 // import React from "react";
 // import { MapPin, Phone } from "lucide-react";

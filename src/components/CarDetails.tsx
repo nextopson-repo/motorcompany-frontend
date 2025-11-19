@@ -19,7 +19,7 @@ import {
   Users,
   X,
 } from "lucide-react";
-import { formatPriceToLakh } from "../utils/formatPrice";
+import { formatPriceToLakh, formatShortNumber } from "../utils/formatPrice";
 import CarsDetailsSlider from "./CarsDetailsSlider";
 import FindDealers from "./FindDealers";
 import { useDispatch, useSelector } from "react-redux";
@@ -38,7 +38,9 @@ const CarDetails = () => {
   );
   const currentUser = useSelector((state: RootState) => state.auth.user?.id);
   const selectedCar = carsState?.selectedCar ?? null;
-  const cars = Array.isArray(carsState?.cars) ? carsState!.cars : [];
+
+  // const cars = Array.isArray(carsState?.cars) ? carsState!.cars : [];
+  // console.log("cars:", cars);
 
   useEffect(() => {
     if (id) {
@@ -47,7 +49,6 @@ const CarDetails = () => {
   }, [id, dispatch]);
 
   const { user, token } = useSelector(selectAuth);
-
   const handleAccess = () => {
     if (!user || !token) {
       dispatch(openLogin());
@@ -61,9 +62,11 @@ const CarDetails = () => {
   const [isContain, setIsContain] = useState(true);
 
   // safe: use selectedCar first, else try find in cars array; never call .find on non-array
-  const car: any =
-    selectedCar ??
-    (cars.length ? cars.find((c: any) => String(c.id) === String(id)) : null);
+  // const car: any =
+  //   selectedCar ??
+  //   (cars.length ? cars.find((c: any) => String(c.id) === String(id)) : null);
+
+  const car = selectedCar;
 
   if (!car) {
     return (
@@ -120,8 +123,6 @@ const CarDetails = () => {
   const fuelType = car.fuelType ?? car.fuel ?? "";
   const transmission = car.transmission ?? "";
   const address = car.address ?? {};
-  // const carUser = car.user ?? {};
-  // const userId = carUser.id ?? "";
 
   // OWNER DETAILS
   const owner = car.owner ?? {};
@@ -158,16 +159,11 @@ const CarDetails = () => {
 
   const handlePhoneClick = async () => {
     try {
-      console.log("📞 Phone button clicked");
-
-      console.log(car.id, "and", currentUser);
-
       if (!car?.id || !currentUser) {
         console.warn("Missing carId or userId for enquiry");
         return;
       }
 
-      // 🔹 1. Send enquiry API call
       const enquiryPayload = {
         carId: car.id,
         userId: currentUser,
@@ -199,6 +195,51 @@ const CarDetails = () => {
       }
     } catch (err) {
       console.error("⚠️ handlePhoneClick error:", err);
+    }
+  };
+
+  const handleWhatsAppClick = async () => {
+    try {
+      if (!car?.id || !currentUser) {
+        console.warn("Missing carId or userId for enquiry");
+        return;
+      }
+
+      // 🔹 1. Send enquiry API call (whatsapp true)
+      const enquiryPayload = {
+        carId: car.id,
+        userId: currentUser,
+        calling: true,
+      };
+
+      const result = await dispatch(createEnquiry(enquiryPayload));
+
+      if (createEnquiry.fulfilled.match(result)) {
+        console.log("✅ WhatsApp enquiry created:", result.payload);
+      } else {
+        console.error("❌ Enquiry creation failed:", result.payload);
+      }
+
+      // 🔹 2. Open WhatsApp (mobile or desktop)
+      const phoneDigits = car.owner?.mobileNumber?.replace(/[^+\d]/g, "");
+      if (!phoneDigits) return;
+
+      const msg = encodeURIComponent(
+        `Hello, I'm interested in your car listing on https://www.dhikcar.com/buy-car/${car.id}`
+      );
+
+      if (isMobile()) {
+        // Mobile → direct WhatsApp app
+        window.location.href = `https://wa.me/${phoneDigits}?text=${msg}`;
+      } else {
+        // Desktop → WhatsApp Web
+        window.open(
+          `https://web.whatsapp.com/send?phone=${phoneDigits}&text=${msg}`,
+          "_blank"
+        );
+      }
+    } catch (err) {
+      console.error("⚠️ handleWhatsAppClick error:", err);
     }
   };
 
@@ -401,8 +442,8 @@ const CarDetails = () => {
 
                 <div className="text-[10px] font-semibold -mt-1">
                   <span>
-                    {kms ? `${Number(kms).toLocaleString()} Kms` : "0 kms"} | {bodyType}{" "}
-                    {seats ? `${seats} seater` : ""} | {fuelType} |{" "}
+                    {kms ? `${formatShortNumber(Number(kms))} Kms` : "0 kms"} |{" "}
+                    {bodyType} {seats ? `${seats} seater` : ""} | {fuelType} |{" "}
                     {transmission}
                   </span>
                 </div>
@@ -555,7 +596,7 @@ const CarDetails = () => {
                       </button>
                       <button
                         className="flex items-center justify-center gap-3 w-full hover:font-semibold text-sm p-2 border rounded-sm cursor-pointer active:text-white active:bg-[#24272c]"
-                        // onClick={handleWhatsAppClick}
+                        onClick={handleWhatsAppClick}
                       >
                         <FaWhatsapp className=" h-5 w-5" /> WhatsApp
                       </button>
@@ -633,7 +674,8 @@ const CarDetails = () => {
                   ${!isLastRow ? "md:border-b border-gray-200" : ""}`}
                   >
                     <span className="w-[70%] text-left flex items-center gap-3.5">
-                      {item.icon} <p className="text-gray-700 text-xs">{item.label}</p>
+                      {item.icon}{" "}
+                      <p className="text-gray-700 text-xs">{item.label}</p>
                     </span>
                     <span className="w-[30%] text-left">
                       <p className="text-gray-900 font-semibold text-right text-xs">
@@ -803,7 +845,10 @@ const CarDetails = () => {
                         >
                           <Phone className=" h-4.5 w-4.5" /> Phone
                         </button>
-                        <button className="flex items-center justify-center gap-3 w-full hover:font-semibold text-sm p-1.5 border rounded-sm cursor-pointer hover:text-white hover:bg-[#24272c]">
+                        <button
+                          onClick={handleWhatsAppClick}
+                          className="flex items-center justify-center gap-3 w-full hover:font-semibold text-sm p-1.5 border rounded-sm cursor-pointer hover:text-white hover:bg-[#24272c]"
+                        >
                           <FaWhatsapp className=" h-5 w-5" /> WhatsApp
                         </button>
                       </div>
@@ -956,7 +1001,7 @@ const CarDetails = () => {
             <ChevronRight className="h-3 lg:h-4 w-3 lg:w-4 text-white" />
           </button>
         </div>
-        <CarsDetailsSlider carsData={cars} />
+        <CarsDetailsSlider />
       </div>
 
       {/* top dealer container */}

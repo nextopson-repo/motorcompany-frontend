@@ -33,7 +33,7 @@ const HeroPage = () => {
     if (user && token) {
       dispatch(fetchSavedCars());
     }
-  }, []);
+  }, [dispatch]);
 
   /* ----------------------------------------------
        STEP 2: Fetch cars ONLY by location
@@ -58,7 +58,7 @@ const HeroPage = () => {
         limit: 12,
       })
     );
-  }, [locationFilter, savedCarIdsByCarId]);
+  }, [locationFilter, savedCarIdsByCarId, dispatch]);
 
   /* ----------------------------------------------
        AUTO SHOW LOCATION MODAL FIRST TIME

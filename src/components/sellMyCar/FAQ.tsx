@@ -43,18 +43,18 @@ export default function FAQ() {
   };
 
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 relative z-0 pb-10 overflow-hidden">
+    <section className="w-full max-w-7xl mx-auto px-4 relative z-0 pb-12 overflow-hidden">
       {/* Heading */}
-      <div className="max-w-2xl mx-auto text-center mb-4 lg:mb-8">
-         <p className="text-[#EE1422] text-[10px] lg:text-xs font-semibold flex items-center justify-center gap-2 lg:gap-4">
-          <span className="w-7 lg:w-10 h-px lg:h-[1.4px] bg-[#EE1422]/80"></span>
-          FAQ
-          <span className="w-7 lg:w-10 h-px lg:h-[1.4px] bg-[#EE1422]/80"></span>
+      <div className="max-w-2xl mx-auto text-center mb-6 lg:mb-8">
+         <p className="text-[#EE1422] text-xs lg:text-xs font-semibold flex items-center justify-center gap-2 lg:gap-4">
+          <span className="w-8 lg:w-10 h-px lg:h-[1.4px] bg-[#EE1422]/80"></span>
+          Frequently Ask Questions
+          <span className="w-8 lg:w-10 h-px lg:h-[1.4px] bg-[#EE1422]/80"></span>
         </p>
-        <h2 className="text-sm lg:text-[23px]  lg:leading-7.5 font-bold mt-2 lg:mt-4">
-          Got Questions? We've Got Answers
+        <h2 className="text-lg lg:text-[23px] leading-6 lg:leading-7.5 font-bold mt-3.5 lg:mt-4 ">
+          Got Questions? <br className="block lg:hidden" /> We've Got Answers
         </h2>
-        <p className="text-[9px] md:text-[10px] lg:text-[16px] max-w-xl mx-auto mt-2 lg:mt-4 text-gray-800 leading-3 lg:leading-5.5 px-4">
+        <p className="text-xs md:text-xs lg:text-[16px] max-w-xl mx-auto mt-3 lg:mt-4 text-gray-800  lg:leading-5.5 px-4">
           Have questions? We've gathered the most common ones to help you get
           the answers you need—fast and easy.
         </p>
@@ -70,7 +70,7 @@ export default function FAQ() {
           >
             <button
               onClick={() => toggle(i)}
-              className="flex lg:items-center justify-between gap-2 w-full p-2 lg:p-5 text-left text-[11px] md:text-xs lg:text-base md:font-medium focus:outline-none"
+              className="flex lg:items-center justify-between gap-2 w-full p-2.5 lg:p-5 text-left text-xs md:text-xs lg:text-base md:font-medium focus:outline-none"
             >
               <span className=" text-black">{faq.question}</span>
               <span className="w-fit">
@@ -83,7 +83,7 @@ export default function FAQ() {
             </button>
             
             <div
-              className={`px-2 lg:px-5 pb-4 text-gray-600 text-[9px] md:text-[10px] lg:text-sm tracking-tight transition-all duration-300 ${
+              className={`px-2 lg:px-5 pb-4 text-gray-600 text-xs md:text-xs lg:text-sm tracking-tight transition-all duration-300 ${
                 openIndex === i ? "block" : "hidden"
               }`}
             >

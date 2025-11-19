@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "../store/store";
 import { setLocation } from "../store/slices/locationSlice";
 import { updateSelectedFilter } from "../store/slices/carSlice";
+import { setSelectedCity } from "../store/slices/dealerSlice";
 
 interface LocationModalProps {
   isOpen: boolean;
@@ -54,6 +55,7 @@ const LocationModal: React.FC<LocationModalProps> = ({
 
   const handleSelectCity = (city: string) => {
     dispatch(setLocation(city));
+    dispatch(setSelectedCity(city));
     dispatch(updateSelectedFilter({ key: "location", value: [city] }));
     // callback to parent
     if (onLocationChange) {

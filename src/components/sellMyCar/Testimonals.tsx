@@ -94,21 +94,21 @@ const testimonials = [
 
 const Testimonials: React.FC = () => {
   return (
-    <section className="w-full mx-auto md:pt-12 pb-4 md:pb-6 font-roboto mb-4 relative ">
+    <section className="w-full mx-auto md:pt-12 pb-4 md:pb-6 mb-4 relative">
       {/* Heading */}
-      <div className="text-xs text-center mb-2 md:mb-4 px-4">
-        <p className="text-[#EE1422] text-[10px] md:text-xs font-semibold flex items-center justify-center gap-2 md:gap-4">
-          <span className="w-7 md:w-10  h-px md:h-[1.4px] bg-[#EE1422]/80"></span>
+      <div className="text-xs text-center mb-4 md:mb-4 px-4">
+        <p className="text-[#EE1422] text-xs md:text-xs font-semibold flex items-center justify-center gap-2 md:gap-4">
+          <span className="w-8 md:w-10  h-px md:h-[1.4px] bg-[#EE1422]/80"></span>
           Testimonials
-          <span className="w-7 md:w-10  h-px md:h-[1.4px] bg-[#EE1422]/80"></span>
+          <span className="w-8 md:w-10  h-px md:h-[1.4px] bg-[#EE1422]/80"></span>
         </p>
-        <h2 className="text-sm lg:text-2xl font-bold mt-2 md:mt-4">
+        <h2 className="text-lg lg:text-2xl font-bold mt-3.5 md:mt-4 leading-6 lg:leading-normal">
           Real Stories. Real Experiences. Real
           <br />
           Satisfaction.
         </h2>
-        <p className="text-[9px] lg:text-[16px] lg:max-w-2xl mx-auto mt-2 lg:mt-4 text-black leading-2.7 md:leading-5.5 tracking-tight md:tracking-none md:px-4">
-          Hear from our happy customers! Discover how our products/services have
+        <p className="text-xs lg:text-[16px] lg:max-w-2xl mx-auto mt-3 lg:mt-4 text-black leading-2.7 md:leading-5.5 tracking-tight md:tracking-none md:px-4">
+          Hear from our happy customers! Discover how our products/ services have
           made a difference in their lives.
         </p>
       </div>
@@ -155,10 +155,10 @@ const Testimonials: React.FC = () => {
                     className="w-11 h-11 rounded-full object-cover"
                   />
                   <div className="space-y-1">
-                    <p className="font-medium text-xs lg:text-sm whitespace-nowrap truncate text-ellipsis">
+                    <p className="font-medium text-sm lg:text-sm whitespace-nowrap truncate text-ellipsis">
                       {t.name}
                     </p>
-                    <p className="text-gray-500 text-thin text-[8px] lg:text-[10px]">
+                    <p className="text-gray-500 text-thin text-[9px] lg:text-[10px]">
                       {t.date} | {t.location}
                     </p>
                   </div>
@@ -187,12 +187,12 @@ const Testimonials: React.FC = () => {
               </div>
 
               {/* Title */}
-              <h3 className="text-[11px] lg:text-xs mb-2 line-clamp-2 text-black font-medium">
+              <h3 className="text-sm lg:text-xs mb-2 line-clamp-2 text-black font-medium">
                 {t.text}
               </h3>
 
               {/* Review Text */}
-              <p className="text-black text-[10px] lg:text-[11px] relative z-10 flex-1 tracking-tight">
+              <p className="text-black text-xs lg:text-xs relative z-10 flex-1 tracking-tight">
                 {t.description}
               </p>
 

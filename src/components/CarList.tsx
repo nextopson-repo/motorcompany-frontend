@@ -9,28 +9,47 @@ import toast from "react-hot-toast";
 
 export default function CarList() {
   const dispatch = useDispatch<AppDispatch>();
-  const { cars, hasMore, page, loading, error } = useSelector(
-    (state: RootState) => state.cars
-  );
+  const {
+    cars,
+    hasMore,
+    page,
+    loading,
+    error,
+    selectedFilters,
+    searchTerm,
+    sortOption,
+  } = useSelector((state: RootState) => state.cars);
   const limit = 12;
 
   // Reference for observer
   const observer = useRef<IntersectionObserver | null>(null);
   const lastCarRef = useCallback(
     (node: HTMLDivElement | null) => {
-      if (loading) return;
+      if (!hasMore) return;
+      // if (loading) return;
       if (observer.current) observer.current.disconnect();
       observer.current = new window.IntersectionObserver(
         (entries) => {
-          if (entries[0].isIntersecting && hasMore) {
-            dispatch(fetchCars({ page: page + 1, limit }));
+          if (entries[0].isIntersecting && hasMore && !loading) {
+            dispatch(
+              fetchCars({
+                page: page + 1,
+                limit,
+                selectedFilters,
+                searchTerm,
+                sortOption,
+              })
+            );
           }
         },
-        { threshold: 1 }
+        {
+          threshold: 0,
+          rootMargin: "300px",
+        }
       );
       if (node) observer.current.observe(node);
     },
-    [loading, hasMore, dispatch, page]
+    [hasMore, dispatch, page, selectedFilters, searchTerm, sortOption, loading]
   );
 
   if (error) {

@@ -46,19 +46,19 @@ export default function WhyChooseUs() {
     <section className="lg:py-6 bg-white px-4 lg:px-0">
       <div className="max-w-6xl mx-auto text-center">
         {/* Small title */}
-        <p className="text-[10px] lg:text-xs text-[#EE1422] font-semibold flex items-center justify-center gap-3 lg:gap-5 mb-2 lg:mb-4">
-          <span className="w-7 lg:w-10 h-px lg:h-[1.25px] bg-[#EE1422]/80"></span>
+        <p className="text-xs lg:text-xs text-[#EE1422] font-semibold flex items-center justify-center gap-3 lg:gap-5 mb-3.5 lg:mb-4">
+          <span className="w-8 lg:w-10 h-px lg:h-[1.25px] bg-[#EE1422]/80"></span>
           Why Choose Us
-          <span className="w-7 lg:w-10 h-px lg:h-[1.25px] bg-[#EE1422]/80"></span>
+          <span className="w-8 lg:w-10 h-px lg:h-[1.25px] bg-[#EE1422]/80"></span>
         </p>
 
         {/* Main title */}
-        <h2 className="text-sm lg:text-2xl font-bold mb-2 lg:mb-4">
+        <h2 className="text-lg lg:text-2xl font-bold mb-3 lg:mb-4">
           Why sell car to DhikCar?
         </h2>
 
         {/* Sub text */}
-        <p className="text-[9px] lg:text-base text-gray-900 max-w-xl mx-auto mb-4 lg:mb-8 leading-3 lg:leading-5.5">
+        <p className="text-xs lg:text-base text-gray-900 max-w-xl mx-auto mb-6 lg:mb-8 lg:leading-5.5">
           Discover what sets us apart — trusted expertise, exceptional service,
           and a commitment to your success.
         </p>
@@ -78,10 +78,10 @@ export default function WhyChooseUs() {
                   className="h-10 lg:h-18 w-10 lg:w-18 mb-2 lg:mb-4"
                 />
               </div>
-              <h3 className="font-semibold text-xs lg:text-2xl text-gray-900 mb-2 lg:mb-4 leading-tight">
+              <h3 className="font-semibold text-sm lg:text-2xl text-gray-900 mb-2 lg:mb-4 leading-tight">
                 {feature.title}
               </h3>
-              <p className="sm:max-w-[75%] lg:max-w-full text-black text-[9px] md:text-[10px] lg:text-[16px] leading-3 lg:leading-5.5">
+              <p className="sm:max-w-[75%] lg:max-w-full text-black text-[11px] md:text-[10px] lg:text-[16px] leading-3.5 lg:leading-5.5">
                 {feature.description}
               </p>
             </div>
